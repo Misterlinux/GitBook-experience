@@ -32,9 +32,64 @@ To access your keybind in VScode use **F1**, normally it should be handled by th
 
 Remember to use **Tab** at the end of the Emmet line.
 
-### What makes a web page?
+### Syntax and special uses
 
-**Separation of Concerns:** In computer science, separation of concerns \(SoC\) is a design principle for separating a computer program into distinct sections, so that each section addresses a separate concern \([Wikipedia](https://en.wikipedia.org/wiki/Separation_of_concerns)\).
+```css
+form.form-inline.mb-3>input:t.form-control.mr-2+input:s.btn.btn-dark^ul.list-group>li.list-group-item*3   
+
+tag#id.class>child_tag*multiply+sibling^back_to_parent
+ul>(li+p)*3 to multiply patterns
+input:t(ext) / input:email / input:s(ubmit)
+h1>p.underline[style="color:red"]
+
+input:t(ype)
+input:s(ubmit)
+
+<form action="" class="form-inline mb-3">
+    <input type="text" name="" id="" class="form-control mr-2">
+    <input type="submit" value="" class="btn btn-dark"></form>
+<ul class="list-group">
+    <li class="list-group-item"></li>
+    <li class="list-group-item"></li>
+
+</ul>
+```
+
+### HTML Head and meta
+
+Head tag is for a **link, meta** , and **title** in the window
+
+```css
+<head>
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+    <!-- remember to use this to comment -->
+ 
+   <title>Document</title>
+</head>
+```
+
+### Images and others tags
+
+You can call width / height in HTML tag
+
+```css
+img[width="200px" height="150px]
+h2[style="margin-left:400px"]
+```
+
+```css
+    <dt>Coffee</dt>
+      <dd>- black hot drink</dd>
+      <dd>- black hot drink</dd>
+    <dt>Milk</dt>
+      <dd>- white cold drink</dd>
+```
+
+![Indented list                                                    ](../.gitbook/assets/cattura1.png)
+
+**HTML** means HyperText Markup Language
 
 ### HTML Syntax
 
