@@ -2,19 +2,9 @@
 description: What is needed for the starting structure
 ---
 
----
-
-## Contents
-
-- [Semantic HTML tags](#HTML-EMMET-SHORTCUT)
-- [CSS selectors, CSS cascade, Pseudo-classes such as `:hover`/`:focus`](#css-selectors)
-- [Box model: `margin`/`padding`/`border` etc...](#box-model)
-
----
-
 # HTML 1
 
-# HTML EMMET SHORTCUTS
+**HTML EMMET SHORTCUTS**
 
 In VS code to get basic use  **! + enter**
 
