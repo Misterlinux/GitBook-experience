@@ -17,14 +17,26 @@ link
 **Cascading style sheets** files .CSS is organized in:
 
 ```sql
+-external
+<link rel="stylesheet" type="text/css" href="style.css">
+(rel stands for relantionship)
+
+-internal
 Selectors {
   properties: values !important;
 }
+
+-inline
+<p style="color:red"> indeed </p>
 
 id# > class. > tag
 ```
 
 Selectors mirror html tags for priority
+
+
+
+
 
 
 
