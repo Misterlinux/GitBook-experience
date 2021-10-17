@@ -6,7 +6,7 @@ description: Templates and shortcuts to more HTML
 
 ## EMMET shortcuts
 
-In VS code to get basic use  **! + enter**
+To start using shortcuts in VS code:  **! + enter**
 
 ```css
 <!DOCTYPE html>
@@ -24,26 +24,26 @@ In VS code to get basic use  **! + enter**
 </html>
 ```
 
-To access your keybind in VScode use **F1**, normally it should be handled by the **tab** but in case go to **File&gt;Preferences&gt;Settings** and search this setting
+To access your keybind in VScode use** F1**, normally it should be handled by the **tab **but in case go to **File>Preferences>Settings **and search this setting
 
 ```css
 "emmet.triggerExpansionOnTab": true
 ```
 
-Remember to use **Tab** at the end of the Emmet line.
+Remember to use **Tab **at the end of the Emmet line.
 
 ### Syntax and special uses
 
 ```css
-form.form-inline.mb-3>input:t.form-control.mr-2+input:s.btn.btn-dark^ul.list-group>li.list-group-item*3   
-
 tag#id.class>child_tag*multiply+sibling^back_to_parent
 ul>(li+p)*3 to multiply patterns
-input:t(ext) / input:email / input:s(ubmit)
+input:text / input:email / input:submit
 h1>p.underline[style="color:red"]
 
-input:t(ype)
-input:s(ubmit)
+input:t (ype)
+input:s (ubmit)
+
+form.form-inline.mb-3>input:t.form-control.mr-2+input:s.btn.btn-dark^ul.list-group>li.list-group-item*3   
 
 <form action="" class="form-inline mb-3">
     <input type="text" name="" id="" class="form-control mr-2">
@@ -57,7 +57,7 @@ input:s(ubmit)
 
 ### HTML Head and meta
 
-Head tag is for a **link, meta** , and **title** in the window
+Head tag is for a **link, meta **, and **title **in the window
 
 ```css
 <head>
@@ -87,9 +87,9 @@ h2[style="margin-left:400px"]
       <dd>- white cold drink</dd>
 ```
 
-![Indented list                                                    ](../.gitbook/assets/cattura1.png)
+![Indented list                                                    ](../.gitbook/assets/Cattura1.PNG)
 
-**HTML** means HyperText Markup Language
+**HTML **means HyperText Markup Language
 
 ### HTML Syntax
 
@@ -146,7 +146,7 @@ We'll cover the following semantic tags and talk about their use on the [BBC New
 
 There are more than 100 semantic tags. If you would like, you can [review several semantic tags](https://developer.mozilla.org/en-US/docs/Glossary/Semantics#Semantic_elements).
 
-> **Group Discussion**: How does semantic HTML relate to the [Separation of Concerns]() that we discussed at the start of the class?
+> **Group Discussion**: How does semantic HTML relate to the [Separation of Concerns](broken-reference) that we discussed at the start of the class?
 
 ### Add CSS and JavaScript
 
@@ -175,7 +175,7 @@ To use all of the files together, we have to tell the HTML code to load the othe
 
 The `<link>` tag must be placed in the `<head>` element. Usually, the `<script>` tag appears near the end of the `<body>` element of the HTML page:
 
-> **Group Discussion**: How do these files relate to the [Separation of Concerns]() that we discussed at the start of the class?
+> **Group Discussion**: How do these files relate to the [Separation of Concerns](broken-reference) that we discussed at the start of the class?
 
 #### File Paths
 
@@ -247,4 +247,3 @@ Use the following resources to learn more about the topics we covered this week.
 4. [Box Model - MDN](https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Box_model)
 5. [Box Model, box-sizing: border-box - CSS Tricks](https://css-tricks.com/international-box-sizing-awareness-day/)
 6. [CSS specificity - MDN](https://developer.mozilla.org/en/docs/Web/CSS/Specificity)
-

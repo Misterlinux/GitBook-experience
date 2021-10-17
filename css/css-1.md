@@ -14,7 +14,7 @@ link
 <link rel="stylesheet" type="text/css" href="style.css">
 ```
 
-**Cascading style sheets** files .CSS is organized in:
+**Cascading style sheets **files .CSS is organized in:
 
 ```sql
 -external
@@ -40,7 +40,7 @@ Selectors mirror html tags for priority
 
 
 
-**Task** Download and install [Postman](https://www.getpostman.com/).
+**Task** Download and install [Postman](https://www.getpostman.com).
 
 Now let us all try Postman by GETting from `http://localhost:8080/api/customers`, as is shown next.
 
@@ -50,7 +50,7 @@ Now let us all try Postman by GETting from `http://localhost:8080/api/customers`
 
 **Use case** When a user does a GET request to /customers it should return customer titles, first names, surnames.
 
-**User acceptance test**: Do a GET request and get back \[{"title": "mr", "firstname": "Donald", "surname": "Trump"}, {"title": "Mrs", "firstname": "Hillary", "surname": "Clinton"}\]
+**User acceptance test**: Do a GET request and get back \[{"title": "mr", "firstname": "Donald", "surname": "Trump"}, {"title": "Mrs", "firstname": "Hillary", "surname": "Clinton"}]
 
 Remove the code that is returning a JSON object on end point `/customers`, and use what you have learned about to SQL to fill in the query that fetches all the customers from the database.
 
@@ -95,7 +95,7 @@ knex.raw(sqlStatement).then(function (data) {
 });
 ```
 
-This is [the library](https://knexjs.org/) we will use for building queries. `Knex` provides helpers for creating queries so we normally won't use `knex.raw` in real applications, but we will use it today to practice SQL more, and write "raw" SQL statements.
+This is [the library](https://knexjs.org) we will use for building queries. `Knex` provides helpers for creating queries so we normally won't use `knex.raw` in real applications, but we will use it today to practice SQL more, and write "raw" SQL statements.
 
 ## Exercise 1
 
@@ -106,7 +106,7 @@ This is [the library](https://knexjs.org/) we will use for building queries. `Kn
 * select and filter by id
 * hint: simple select and filter by ID
 
-STRETCH GOAL \(OPTIONAL\) : If you get a request of /customers/notanumber \(anything that isn't a number\) it should return an HTTP 400 bad request.
+STRETCH GOAL (OPTIONAL) : If you get a request of /customers/notanumber (anything that isn't a number) it should return an HTTP 400 bad request.
 
 ## LESSON 2 : LIKE, WHATEVER
 
@@ -148,7 +148,7 @@ This will. Why?
 
 **User Acceptance test**: Take the data being POSTed to the `/customers` endpoint check it is inserted into the database.
 
-STRETCH GOAL \(OPTIONAL\): If a bad request is made to customers - first name is missing, for instance, return an HTTP 400 Bad reqest.
+STRETCH GOAL (OPTIONAL): If a bad request is made to customers - first name is missing, for instance, return an HTTP 400 Bad reqest.
 
 ## HOMEWORK 4
 
@@ -164,9 +164,9 @@ In the next image you can see Postman doing a POST request. Highlighed areas ind
 
 * update table
 * remember your previous lesson
-* hint: in the javascript code, instead of db.all\(\) you will need ... what?
+* hint: in the javascript code, instead of db.all() you will need ... what?
 
-## HOMEWORK 4 : STRETCH GOAL \(OPTIONAL\)
+## HOMEWORK 4 : STRETCH GOAL (OPTIONAL)
 
 The end point should properly detect which customer properties are being updated, and generate the appropriate SQL update statement.
 
@@ -180,7 +180,7 @@ Create and end-point to post a new reservation to `/reservations/`.
 * create the endpoint from scratch
 * which HTTP method should you use?
 
-STRETCH GOAL \(OPTIONAL\) : Return {"status": "error": "reason": "reason..."} if _anything_ was wrong with the request.
+STRETCH GOAL (OPTIONAL) : Return {"status": "error": "reason": "reason..."} if _anything_ was wrong with the request.
 
 ## LESSON 6 : I WISH I COULD DELETE HIM IN REAL LIFE
 
@@ -194,7 +194,7 @@ delete from customers where surname ilike '%trump%';
 
 There are several things you need to worry about when you delete data and what you do about them will depend entirely upon what it is you are trying to do:
 
-* What happens to the data that depends upon the data you deleted? -- What if Trump had a reservation? Either a\) delete the reservation as well? or b\) raise an error and force the user to delete the data manually if they really want him gone.
+* What happens to the data that depends upon the data you deleted? -- What if Trump had a reservation? Either a) delete the reservation as well? or b) raise an error and force the user to delete the data manually if they really want him gone.
 * What if you want to undo the deletion?
 * What if you want to mark some data as deleted but you might still want to refer to it?
 * Often it's a good idea to give data the 'status' deleted instead of actually deleting it.
@@ -243,4 +243,3 @@ Create and end-point to get from `/reservations/active-on/:date` all the reserva
 
 * multiple filtering.
 * create the enpoint from scratch
-
