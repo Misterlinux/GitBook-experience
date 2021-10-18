@@ -4,6 +4,9 @@ description: Templates and shortcuts to more HTML
 
 # HTML 1
 
+* [Syntax and special uses](html-1-1.md#syntax-and-special-uses-1)
+* [HTML head, meta and images](html-1-1.md#html-head-and-meta)
+
 ## EMMET shortcuts
 
 To start using shortcuts in VS code:  **! + enter**
