@@ -6,6 +6,8 @@ description: Templates and shortcuts to more HTML
 
 * [Syntax and special uses](html-1-1.md#syntax-and-special-uses-1)
 * [HTML head, meta and images](html-1-1.md#html-head-and-meta)
+* [HTML features and format](html-1-1.md#vs-features-for-html)
+* [Link CSS file](html-1-1.md#link-css-to-html-file)
 
 ## EMMET shortcuts
 
@@ -98,7 +100,25 @@ h2[style="margin-left:400px"]
 
 The last opened tag can be closed with<mark style="background-color:blue;">`</`</mark>. **Suggestions **appear while coding and can be forced with **crtl+space**. Vs code includes a color picker.
 
+To format messy code use **crtl+k** then **crtl+f.**
+
 ![works with the HEX code](../.gitbook/assets/color-picker-html.png)
+
+### Link CSS to HTML file
+
+Inside the head tag we can **link** an external CSS file.
+
+```
+<head>
+    <!--in EMMET just a link+tab to create-->
+    
+    <link rel="styleshet" href="./css.css" />
+</head>
+```
+
+
+
+
 
 > **Exercise**: Which parts are the **Tags** and which parts are the **Attributes**.
 
