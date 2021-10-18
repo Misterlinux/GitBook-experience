@@ -1,5 +1,5 @@
 ---
-description: Boilerplate for syntax
+description: Syntax and properties
 ---
 
 # CSS 1
@@ -97,9 +97,11 @@ knex.raw(sqlStatement).then(function (data) {
 
 This is [the library](https://knexjs.org) we will use for building queries. `Knex` provides helpers for creating queries so we normally won't use `knex.raw` in real applications, but we will use it today to practice SQL more, and write "raw" SQL statements.
 
-## Exercise 1
+## Transition and transform
 
-**User Story:** As a staff member I need to check the details of a given customer given its id.
+**Transition **is based on the starter and ending properties and will take action on change (hover in this case)
+
+
 
 **User Acceptance test**: Complete the end-point `/customers/:id`, so that it extracts that customer information from the database, and replies back with that information as JSON.
 
@@ -154,7 +156,7 @@ STRETCH GOAL (OPTIONAL): If a bad request is made to customers - first name is m
 
 **Notes on Postman**
 
-In the next image you can see Postman doing a POST request. Highlighed areas indicate the fields that need to be changed and/or information that needs to be added. The arrow points to a tab where you will need to set the type of content of this request. As denoted by the arrow legend, you will need to set `Content-Type` to `application/json`. 
+In the next image you can see Postman doing a POST request. Highlighed areas indicate the fields that need to be changed and/or information that needs to be added. The arrow points to a tab where you will need to set the type of content of this request. As denoted by the arrow legend, you will need to set `Content-Type` to `application/json`.&#x20;
 
 **User Story:** As a guest, I noticed that there is a typo on my details and wish to correct it.
 
@@ -203,7 +205,7 @@ There are several things you need to worry about when you delete data and what y
 
 **User Story:** As a staff member, I want to delete a canceled reservation from the database.
 
-**Notes on Postman** The delete request is actually pretty straight forward. We only need to select the type and provide the url: 
+**Notes on Postman** The delete request is actually pretty straight forward. We only need to select the type and provide the url:&#x20;
 
 Create an end-point to delete a given reservation from `/reservation/:id/`.
 
