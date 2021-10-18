@@ -9,7 +9,7 @@ description: Templates and shortcuts to more HTML
 
 ## EMMET shortcuts
 
-To start using shortcuts in VS code:  **! + enter**
+To start using EMMET shortcuts in VS code:  **! + enter. **To open the palette and check other languages use **crtl+shift+p.**
 
 ```css
 <!DOCTYPE html>
@@ -94,19 +94,11 @@ h2[style="margin-left:400px"]
 
 **HTML **means HyperText Markup Language
 
-### HTML Syntax
+### VS features for HTML
 
-You learned HTML code during your application process. If you want to refresh your memory, read this [quick guide to the HTML syntax](http://marksheet.io/html-syntax.html).
+The last opened tag can be closed with<mark style="background-color:blue;">`</`</mark>. **Suggestions **appear while coding and can be forced with **crtl+space**. Vs code includes a color picker.
 
-All together, let's review the basic syntax in the following example:
-
-```markup
-<article>
-    <h1>Learning HTML</h1>
-    <p>Get to know the HTML basics.</p>
-    <a href="http://html5rocks.com">Read Article</a>
-</article>
-```
+![works with the HEX code](../.gitbook/assets/color-picker-html.png)
 
 > **Exercise**: Which parts are the **Tags** and which parts are the **Attributes**.
 
