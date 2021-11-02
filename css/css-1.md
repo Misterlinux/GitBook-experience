@@ -44,9 +44,37 @@ check this example:
 animation on html/css page
 {% endembed %}
 
-Now let us all try Postman by GETting from `http://localhost:8080/api/customers`, as is shown next.
+We used animations/transition/canvas and pixel art.
 
-## LESSON 1: SELECT ALL THE THINGS!
+#### Transitions and animations
+
+So, to modify CSS properties trought different states we can use:
+
+```
+.box{
+  background: blueviolet;
+  width: 200px;
+  height: 150px;
+  transition: 1s;
+}
+
+.box:hover{
+  width: 300px;
+}
+
+.type{
+  border-right: .1em solid green;
+  animation: color 1s step-end infinite;
+}
+
+@keyframes color{
+  0% { border-color: green; }
+  50% { border-color: transparent; }
+  100% { border-color: green; }
+}
+```
+
+LESSON 1: SELECT ALL THE THINGS!
 
 **User Story:** As a staff member, I want to be able to view a list of customers so that I can see who has visited our hotel.
 
