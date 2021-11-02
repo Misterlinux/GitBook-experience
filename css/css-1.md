@@ -4,6 +4,8 @@ description: Syntax and properties
 
 # CSS 1
 
+* [Position, Canvas and Animation](css-1.md#undefined)
+
 ## Get the css working
 
 **In the HTML file by EMMET**
@@ -32,15 +34,15 @@ Selectors {
 id# > class. > tag
 ```
 
-Selectors mirror html tags for priority
+Selectors mirror html tags for priority ( tag > id# > .class )
 
+### **Position, Canvas and Animation**
 
+check this example:
 
-
-
-
-
-**Task** Download and install [Postman](https://www.getpostman.com).
+{% embed url="https://codepen.io/misterlinux/project/editor/XrJJyL" %}
+animation on html/css page
+{% endembed %}
 
 Now let us all try Postman by GETting from `http://localhost:8080/api/customers`, as is shown next.
 
