@@ -4,7 +4,7 @@ description: Syntax and properties
 
 # CSS 1
 
-* [Position, Canvas and Animation](css-1.md#undefined)
+* [Position, Canvas and Animation](css-1.md#position-canvas-and-animation)
 
 ## Get the css working
 
@@ -93,6 +93,8 @@ We can use **Tranform** for more properties and multiple animations:
     transition-delay: 1s
 }
 
+//to multiple or add a transform to a transition
+
 .box:hover{
     width: 200px;
     height: 150px;
@@ -101,26 +103,113 @@ We can use **Tranform** for more properties and multiple animations:
 
 ```
 
-**Use case** When a user does a GET request to /customers it should return customer titles, first names, surnames.
+To animate the sprite pixel art (and the text on the title) we used **steps()**:
 
-**User acceptance test**: Do a GET request and get back \[{"title": "mr", "firstname": "Donald", "surname": "Trump"}, {"title": "Mrs", "firstname": "Hillary", "surname": "Clinton"}]
+```
+animation: left 8s steps( 10,start) infinite;
 
-Remove the code that is returning a JSON object on end point `/customers`, and use what you have learned about to SQL to fill in the query that fetches all the customers from the database.
-
-You will need to install a package to deal with sqlite `npm install --save sqlite3` then add this code before the routes in `class2.js`
-
-```javascript
-// Add these lines before the routes definition
-const filename = './database/database.sqlite'
-const knex = require('knex')({
-  client: 'sqlite3',
-  connection: {
-    filename
-  }
-})
+steps( start, end)
 ```
 
-* select everything
+which allows to divide the animating sequence in parts and choose which frame at the **start/end.**
+
+To use pixel art we use it as **background**:
+
+```
+.rotate{
+    background:url("image") 0 0 no-repeat;
+    width: 32px;
+    height: 64px;
+    animation: example 8s steps(21) infinite;
+}
+
+background :url("./yosi3.png") -730px 0px;
+
+//and we can choose the frame of start by changing x/y
+```
+
+and for our **animated text** and effect we had:
+
+```
+<h2 class="type"> This line is (almost) automatically animated </h2>
+
+.type{
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: .1em solid green;
+    
+    transition: all 5s steps( 35, end);
+    animation: color 1s step-end infinite;
+    
+}
+
+body:hover .type{
+    width: 30em;
+}
+
+@keyframes color{
+    0% { border-color: green; }
+    50% { border-color: transparent; }
+    100% { border-color: green; }
+}
+```
+
+Here we have the text expanding, with steps for each letter, also for the buttons we can use the \~ :
+
+```
+first-sequence ~ second-sequence {
+  /* property:value; */
+}
+
+//the 2 siblings tags dont have to be close, just in sequence
+```
+
+Instead of importing an image for the egg, we used **Canvas** to "code" the image:
+
+```
+<body>
+    <canvas id="egg" width="300px" height="350px" style="border:solid transparent 2px">
+    </canvas>
+
+</body>
+
+<script>
+  var c = document.getElementById("myCanvas");
+  var ctx = c.getContext("2d");
+  ctx.beginPath();
+  ctx.arc(100, 75, 50, 0, 2 * Math.PI);
+  ctx.stroke();
+</script> 
+
+//we get the id, we set the "2d" and we beging tracing
+we draw a circle with (Xposition, Yposition, Ray,
+starting radiant, end radiant) we can also set rotation. 
+```
+
+we set up a space with the **\<canvas>** tag with id, width and height to then script the image in. For our exercise, we also needed to draw an ellipse:
+
+```
+inn.ellipse( 95, 100, 10, 15, 0, 0, Math.PI*2);
+
+//half an ellipse with 10/15 as different axis measures
+the 5^ value is for rotation
+```
+
+we can also script **gradients** for the canvas:
+
+```javascript
+var grd = ctx.createLinearGradient(0, 0, 200, 0);
+grd.addColorStop(0, "red");
+grd.addColorStop(1, "white");
+
+//we create a gradient with x1,y1,x2,y2 and then we add the colors
+in state 0 or 1, to then add it to the existing shape
+
+ctx.fillStyle = grd;
+ctx.fill();
+```
+
+
 
 ```javascript
 // This is the route we will need to update
