@@ -80,7 +80,7 @@ after a :hover, but we have to use transform to do more like rotate()
 some elements can't be animated
 ```
 
-The syntax  is all 0.5s ease / **\[target]\[time]\[way]**.
+The syntax  is \[all]\[0.5s]\[ease] / **\[target]\[time]\[way]**.
 
 We can use **Tranform** for more properties and multiple animations:
 
@@ -140,8 +140,11 @@ and for our **animated text** and effect we had:
     
     transition: all 5s steps( 35, end);
     animation: color 1s step-end infinite;
-    
 }
+
+//nowrap is to have it all text in one line
+while hidden is to have the text limited by the starter width
+(to then animate the final 30em width)
 
 body:hover .type{
     width: 30em;
