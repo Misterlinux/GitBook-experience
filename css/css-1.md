@@ -62,6 +62,9 @@ So, to modify CSS properties trought different states we can use:
   width: 300px;
 }
 
+//we transition in 1second the box's width from 200 to 300 
+after a :hover, but we have to use transform to do more like rotate()
+
 .type{
   border-right: .1em solid green;
   animation: color 1s step-end infinite;
@@ -72,11 +75,31 @@ So, to modify CSS properties trought different states we can use:
   50% { border-color: transparent; }
   100% { border-color: green; }
 }
+
+//we animate the border to intermit in 1 second, infinite
+some elements can't be animated
 ```
 
-LESSON 1: SELECT ALL THE THINGS!
+The syntax  is all 0.5s ease / **\[target]\[time]\[way]**.
 
-**User Story:** As a staff member, I want to be able to view a list of customers so that I can see who has visited our hotel.
+We can use **Tranform** for more properties and multiple animations:
+
+```
+.box{
+    background: blueviolet;
+    width: 50px;
+    height: 50px;
+    transition: height 1s linear, width 4s ease-out, transform 3s;
+    transition-delay: 1s
+}
+
+.box:hover{
+    width: 200px;
+    height: 150px;
+    transform: rotate(180deg);
+}
+
+```
 
 **Use case** When a user does a GET request to /customers it should return customer titles, first names, surnames.
 
