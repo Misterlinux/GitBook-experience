@@ -36,6 +36,29 @@ id# > class. > tag
 
 Selectors mirror html tags for priority ( tag > id# > .class )
 
+To adapt elements for different screens we use **media queries**:
+
+```
+@media only screen and (max-width: 400px) {
+    .head > h1{
+        font-size: 1.1em;
+    }
+    .type{
+        font-size: 80%;
+    }
+    @keyframes left {
+        0% { background-position: -805px 0; }
+        100% { background-position: 0px 0; 
+               left:5%;}
+    }
+}
+  
+//like we choose a smaller font for an H1, and the complete 
+keyframe statuses
+```
+
+Also, the properties are inherited and so we have to change only the different ones.
+
 ### **Position, Canvas and Animation**
 
 check this example:
