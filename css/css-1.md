@@ -36,6 +36,34 @@ id# > class. > tag
 
 Selectors mirror html tags for priority ( tag > id# > .class )
 
+### CSS Selectors
+
+Consider the following **example**:
+
+{% embed url="https://codepen.io/misterlinux/pen/qBXYpZb" %}
+
+So, the syntax for them is:
+
+```
+<plate> 
+  <orange/>
+  <orange/>
+  <orange/>
+</plate>
+
+plate > * (for every tag inside <plate)
+#x.y (to select with both tag x AND class y)
+.x, .y (to select classes with x OR x)
+x + .y (to select only the first .y to follow the x [children not included])
+x > y (to select children on parent tag)
+plate:only-child/first-child/last-child (to select specific positions)
+*[for] (all properties with the attribute selector)
+p[for]:not([for="non"]) (to exclude a specific attribute selector)
+input[type="checkbox"] (or even with specific)
+[class*="heading"] (to select classes with "heading" in the name)
+:nth-child(1) (using numbers for position)
+```
+
 To adapt elements for different screens we use **media queries**:
 
 ```
