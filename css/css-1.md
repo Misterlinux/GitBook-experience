@@ -5,6 +5,8 @@ description: Syntax and properties
 # CSS 1
 
 * [Position, Canvas and Animation](css-1.md#position-canvas-and-animation)
+* [Buttons and effects](css-1.md#buttons-and-effects)
+* [CSS Effects](css-1.md#undefined)
 
 ## Get the css working
 
@@ -62,6 +64,7 @@ p[for]:not([for="non"]) (to exclude a specific attribute selector)
 input[type="checkbox"] (or even with specific)
 [class*="heading"] (to select classes with "heading" in the name)
 :nth-child(1) (using numbers for position)
+
 ```
 
 To adapt elements for different screens we use **media queries**:
@@ -263,48 +266,76 @@ ctx.fillStyle = grd;
 ctx.fill();
 ```
 
+### Buttons and effects
 
+In this exercise we can see new CSS:
 
-```javascript
-// This is the route we will need to update
-router.get('/customers', function(req, res) {
-  res.status(200).json({
-    customers: [{
-      id: 2,
-      title: 'Mr',
-      firstname: 'Laurie',
-      surname: 'Ainley',
-      email: 'laurie@ainley.com'
-    }
-  ]});
-})
+{% embed url="https://codepen.io/misterlinux/pen/yLoGqKd" %}
+A carousel of buttons
+{% endembed %}
+
+We are gonna start with the **gradient Background:**
+
+```
+background:
+repeating-linear-gradient(10deg, red, yellow 30%, green 50%);
+
+//we can set degree(or just (To bottom/top left/right)
+//colors and percentages (the last % is for the total of the gradient
+//and the % colors before (except the first) has to be minor
+//also "repeating-" allows us to do more
 ```
 
-Who can tell me what this is currently doing? What do we need to make it do?
-
-So, the answer is here:
+and for the **text** with the linear background we use **background-clip**:
 
 ```javascript
-const sqlStatement = 'select * from customers';
-knex.raw(sqlStatement).then(function (data) {
-  res.json(data);
-});
+background: linear-gradient(170deg, pink,purple, pink , purple);
+background-clip: text;
+-webkit-background-clip: text;
+color: rgba(0,0,0,.1);
+
+//I had to include the -webkit to make it work
+//background-clip affect the text and it needs less than 1 opacity 
+or color
+//Background-clip can be used on images.
+//and in order of area we can use
+//Content-box / Padding-box / border-box
 ```
 
-This is [the library](https://knexjs.org) we will use for building queries. `Knex` provides helpers for creating queries so we normally won't use `knex.raw` in real applications, but we will use it today to practice SQL more, and write "raw" SQL statements.
+**Link to section**, we can create links for a section of the page:
 
-## Transition and transform
+```
+<a href="primo"> button </div>
+<div id="#primo"> section </div>
 
-**Transition **is based on the starter and ending properties and will take action on change (hover in this case)
+//it will have the text from the top of the screen
+//we can also use links for Phone and Email
 
+<a href="tel:+4733378901">+47 333 78 901</a>
+<a href="mailto:someone@example.com">Send email</a>
+```
 
+and to **import** css icons and custom fonts:
 
-**User Acceptance test**: Complete the end-point `/customers/:id`, so that it extracts that customer information from the database, and replies back with that information as JSON.
+```
+Google fonts can be installed in the HTML:
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@1,300&display=swap" rel="stylesheet">
 
-* select and filter by id
-* hint: simple select and filter by ID
+or imported in the CSS:
+@import url('https://fonts.googleapis.com/css2?family=Montagu+Slab:wght@200&display=swap');
 
-STRETCH GOAL (OPTIONAL) : If you get a request of /customers/notanumber (anything that isn't a number) it should return an HTTP 400 bad request.
+to then use as:
+font-family: 'Montagu Slab', serif;
+
+for icons we can use in HTML:
+<script src="https://kit.fontawesome.com/f107dae9c2.js" crossorigin="anonymous"></script>
+
+<i class="fab fa-angellist"></i>
+```
+
+### CSS effects
+
+**User **
 
 ## LESSON 2 : LIKE, WHATEVER
 
