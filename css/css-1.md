@@ -6,7 +6,7 @@ description: Syntax and properties
 
 * [Position, Canvas and Animation](css-1.md#position-canvas-and-animation)
 * [Buttons and effects](css-1.md#buttons-and-effects)
-* C[SS Effects and .before:after](css-1.md#css-effects)
+* [CSS effects and :before:after](css-1.md#css-effects-and-before-after)
 
 ## Get the css working
 
@@ -375,7 +375,7 @@ it's after.
 //we set up the background of the layer effect on the button
 ```
 
-To insert multiple **layers** of CSS to the buttons we use **:before,:after **selectors:
+To insert multiple **layers** of CSS to the buttons we use **:before:after **selectors:
 
 ```
 //We already used this on the previous exercise
@@ -434,7 +434,7 @@ to get the **expanded background** effect remember that:
 
 This happens for most similar effects, it changes the center of animation.
 
-Regarding the selectors priority:
+Regarding the selectors and animation direction/background:
 
 ```
 .vis2{
@@ -458,17 +458,25 @@ Regarding the selectors priority:
 	transition: all 0.4s cubic-bezier(0.215, 0.61, 0.355, 1) 0s;
 }
 
-//both this and .vis2:hover::after happen at the end of hover
+//we can set the ending point for the :hover (left/top 0%)
+//and the starting point from the bottom 0%, including the auto top
+//and to cover all the button (height 100%) 
 
+.vis2:hover::after{
+  	bottom: 0%;
+	top: auto;
+	height: 100%;
+}
 
+//and to set a background color in between while hover/hover-off
+
+.vis2:hover{
+	background: rgba(161, 19, 161, 0.767);
+}
 
 ```
 
-```sql
-select * from customers where surname like '%lint%';
-```
-
-This returns all of the customers who have the name 'lint' in their names.
+This&#x20;
 
 ```sql
 select * from customers where surname like '%clint%';
