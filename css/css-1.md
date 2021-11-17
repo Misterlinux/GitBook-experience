@@ -6,7 +6,7 @@ description: Syntax and properties
 
 * [Position, Canvas and Animation](css-1.md#position-canvas-and-animation)
 * [Buttons and effects](css-1.md#buttons-and-effects)
-* [CSS Effects](css-1.md#undefined)
+* C[SS Effects and .before:after](css-1.md#css-effects)
 
 ## Get the css working
 
@@ -333,17 +333,136 @@ for icons we can use in HTML:
 <i class="fab fa-angellist"></i>
 ```
 
-### CSS effects
+### CSS effects and :before:after
 
-**User **
+For our buttons in the exercise we had to **position:**
 
-## LESSON 2 : LIKE, WHATEVER
+```
+.more{
+  border: 2px rgba(161, 19, 161, 0.767) solid;
+  padding: 1em 3em;
+  color: antiquewhite;
+  position: relative;
+  overflow: hidden;
+  background: purple;
+}
 
-So, now we're going to deal with one of the most common issues with hotel databases: the guest's name being misspelled.
+//the position Relative allows the button to follow the flex columns
+it's into
+//and for the effects to be visible only on the button we use overflow
+hidden
+```
 
-So, "Hilary Clinten" is added to the database. She calls up on the phone asking about her reservation and spells her name correctly on the phone. The hotel staff knows what _some of her name_ sounds like but not all of it and they want to find her as a customer on the system.
+While for the effects we use **position** absolute:
 
-For this problem where we want to search in _part_ of a string we use the LIKE command:
+```
+.more::after{
+  content: '';
+  width: 1.5em;
+  height: 8em;
+  background: yellow;
+  opacity: 30%;
+  transform: rotate(-45deg);
+
+  position: absolute;
+
+  top: -2em;
+  left: -2.6em;
+}
+
+//so, we use absolute to have the effect linked to the relative
+it's after.
+//we set up the background of the layer effect on the button
+```
+
+To insert multiple **layers** of CSS to the buttons we use **:before,:after **selectors:
+
+```
+//We already used this on the previous exercise
+
+.colonna > .invisible:before{
+    content: "this line wasnt done with HTML";
+    color: brown;
+}
+
+//we put text in the previous layer
+//for our buttons we put layers of colors and animations
+
+.more::after{
+  content: '';
+  width: 1.5em;
+  height: 8em;
+  background: yellow;
+  opacity: 30%;
+  transform: rotate(-45deg);
+  position: absolute;
+  top: -2em;
+  left: -2.6em;
+}
+
+.more:hover:after{
+  left: 140%;
+  transition: all 600ms linear;
+   -webkit-transition: all 600ms cubic-bezier(0.3, 1, 0.2, 1);
+}
+
+//so, this layer of color is positioned (top/left) outside the button
+to then be transitioned to the left (left: 140%) to get the shining
+```
+
+to get the **expanded background** effect remember that:
+
+```
+.vis::after{
+	content: "";
+	position: absolute;
+	height: 0%;
+	width: 150%;
+  	z-index: -1;
+	background: rgba(161, 19, 161, 0.767) ;
+	transition: all 1s ease 0s;
+}
+
+//so, any :after to be visible needs a content, even if empty
+//the expansion effect starts from the center so to cover both sides
+//at the same time
+
+.vis:hover::after{
+  height: 250%;
+}
+```
+
+This happens for most similar effects, it changes the center of animation.
+
+Regarding the selectors priority:
+
+```
+.vis2{
+	background: pink;
+	border: 2px solid rgba(161, 19, 161, 0.767);
+	color: rgba(161, 19, 161, 0.767);
+	z-index: 1;
+	transition: all 1s linear;
+}
+
+//starting condition
+
+.vis2::after{
+	content: '';
+	left: 0%;
+	top: 0%;
+	height: 0px;
+	width: 150%;
+	z-index: -1;
+	background: rgba(161, 19, 161, 0.767);
+	transition: all 0.4s cubic-bezier(0.215, 0.61, 0.355, 1) 0s;
+}
+
+//both this and .vis2:hover::after happen at the end of hover
+
+
+
+```
 
 ```sql
 select * from customers where surname like '%lint%';
