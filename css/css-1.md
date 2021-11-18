@@ -7,7 +7,7 @@ description: Syntax and properties
 * [Position, Canvas and Animation](css-1.md#position-canvas-and-animation)
 * [Buttons and effects](css-1.md#buttons-and-effects)
 * [CSS effects and :before:after](css-1.md#css-effects-and-before-after)
-* [Flex layout](css-1.md#undefined)
+* [Flex layout](css-1.md#flex-and-media-query)
 
 ## Get the css working
 
