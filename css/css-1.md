@@ -7,6 +7,7 @@ description: Syntax and properties
 * [Position, Canvas and Animation](css-1.md#position-canvas-and-animation)
 * [Buttons and effects](css-1.md#buttons-and-effects)
 * [CSS effects and :before:after](css-1.md#css-effects-and-before-after)
+* [Flex layout](css-1.md#undefined)
 
 ## Get the css working
 
@@ -730,14 +731,27 @@ fort the **animated border effect:**
 //so, here we animate the border on hover, setting delays to make
 //the transitions in order, while in the after we animate the 
 //also the border color to make it appear at the start of hover:after
-//then we total delay of (0.6s+0.4=1s4
+//then we total delay of (0.6s+0.4=1s)
 ```
 
-we se
+for the **glow** effect:
 
-**Use Case**: I go to '/customers/:id' endpoint and send updated data for each customer parameter: title, firstname, surname.
+```
+.vis12:hover {
+  	box-shadow: 10px 10px 99px 6px pink;
+}
 
-**User acceptance test**: PUT title=mr, firstname=donald, surname=trump on /customers/:id and check that the database was updated.
+//the glow is by contrast with the background
+//box-shadow is X / Y(space)/ blur / spread and color
+```
+
+### Flex and media query
+
+Check this **Flex layout**:
+
+{% embed url="https://codepen.io/misterlinux/pen/abyaQJy?editors=1100" %}
+
+**User **
 
 * update table
 * remember your previous lesson
