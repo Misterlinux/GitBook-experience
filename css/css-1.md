@@ -476,31 +476,57 @@ Regarding the selectors and animation direction/background:
 
 ```
 
-This&#x20;
+For the **animated border:**&#x20;
 
 ```sql
-select * from customers where surname like '%clint%';
+//to animate only 1 border and avoid the default we put none
+
+.vis7{
+	border: none;
+	color: rgba(161, 19, 161, 0.767);
+}
+
+//we set ending position (bottom,right) and set height
+
+.vis7::after{
+	position: absolute;
+	content: '';
+	width: 0;
+	bottom: 0;
+	right: 0;
+	height: 3px;
+	background: rgb(114, 7, 114);
+	transition: all 0.3s ease;
+}
+
+//we set starting position left and width
+
+.vis7:hover::after{
+	width: 100%;
+	left: 0;
+}
 ```
 
-This won't return anything at all. Why not?
+For the bubble effect we need to know **radial gradient**:
 
 ```sql
-select * from customers where surname ilike '%clint%';
+background-image: 
+radial-gradient(circle, red 30%, yellow 45%, green 100%);
+
+//like the normal gradient, the percentages define the blur and 
+//closeness of the color areas
+//unless we define the circle, it comes as ellipse
+
+  background-image: 
+  repeating-radial-gradient(red 10%, yellow 20%, green 35%);
+
+//in case of repeating, the last percentage is the total 
+//of the gradients on 100% of the screen, like the example below.
 ```
 
-This will. Why?
+![check here for more](../.gitbook/assets/Cattura.PNG)
 
-## EXERCISE 2A
-
-**User Story:** As a staff member I want to search for a customer through its `surname`, but we don't know that it might be misspelled.
-
-**User Acceptance test**: Complete the end-point `/customers/:surname`, so that it extracts that customer information from the database, and replies back with that information as JSON.
-
-* select and filter through like
-
-## EXERCISE 3
-
-**User Story:** As a guest, I want to register my details in the system so that I can check availability for my stay.
+continuing
 
 **User Acceptance test**: Take the data being POSTed to the `/customers` endpoint check it is inserted into the database.
 
