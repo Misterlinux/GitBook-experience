@@ -4,7 +4,8 @@ description: Syntax and properties
 
 # CSS 1
 
-* [Position, Canvas and Animation](css-1.md#position-canvas-and-animation)
+ss[Position, Canvas and Animation](css-1.md#position-canvas-and-animation)
+
 * [Buttons and effects](css-1.md#buttons-and-effects)
 * [CSS effects and :before:after](css-1.md#css-effects-and-before-after)
 * [Flex layout](css-1.md#flex-and-media-query)
@@ -751,7 +752,59 @@ Check this **Flex layout**:
 
 {% embed url="https://codepen.io/misterlinux/pen/abyaQJy?editors=1100" %}
 
-**User **
+Flex allows us to create templates that adapt automatically to the page, with the structure of **row>column**:
+
+{% tabs %}
+{% tab title="HTML" %}
+```
+<div class='row'>
+  <div class='column'>
+    <div class='orange-column'>
+      Some Text in Column One
+    </div>
+  </div>
+  <div class='column'>
+    <div class='blue-column'>
+      Some Text in Column Two
+    </div>
+  </div>
+  <div class='column'>
+    <div class='green-column'>
+      Some Text in Column Three
+    </div>
+  </div>
+</div>
+```
+
+This structure allow us to use the row
+{% endtab %}
+
+{% tab title="CSS" %}
+```
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+}
+//to use any flex property we need the Display the elements inside in a row
+.column {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 1;
+}
+//we have to display again and affects all the elements inside the column
+//flex:1 is to set it proportion with other flex and teh basis 
+.orange-column {
+  background-color: orange;
+  height: 100px;
+}
+```
+
+
+{% endtab %}
+{% endtabs %}
 
 * update table
 * remember your previous lesson
