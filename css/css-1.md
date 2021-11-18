@@ -434,7 +434,7 @@ to get the **expanded background** effect remember that:
 
 This happens for most similar effects, it changes the center of animation.
 
-Regarding the selectors and animation direction/background:
+On more complex button color **transformation**:
 
 ```
 .vis2{
@@ -526,19 +526,214 @@ radial-gradient(circle, red 30%, yellow 45%, green 100%);
 
 ![check here for more](../.gitbook/assets/Cattura.PNG)
 
-continuing
+So, for the **circles' background** fade-in/out effect:
 
-**User Acceptance test**: Take the data being POSTed to the `/customers` endpoint check it is inserted into the database.
+```
+.vis8{
+background: radial-gradient(circle, purple 0.35em, pink 0.25em) center/ 1.5em 1.2em;
+}
 
-STRETCH GOAL (OPTIONAL): If a bad request is made to customers - first name is missing, for instance, return an HTTP 400 Bad reqest.
+```
 
-## HOMEWORK 4
+{% tabs %}
+{% tab title="Gradient" %}
+In the gradient part, we define how much space the color occupy and blur
 
-**Notes on Postman**
+```
+radial-gradient(circle, purple 0.35em, pink 0.25em)
+```
+{% endtab %}
 
-In the next image you can see Postman doing a POST request. Highlighed areas indicate the fields that need to be changed and/or information that needs to be added. The arrow points to a tab where you will need to set the type of content of this request. As denoted by the arrow legend, you will need to set `Content-Type` to `application/json`.&#x20;
+{% tab title="Centers" %}
+To define X/Y spaces for the radiant circles, **we can also get stripes** by closing them up.
 
-**User Story:** As a guest, I noticed that there is a typo on my details and wish to correct it.
+```
+center/ 1.5em 1.2em;}
+```
+{% endtab %}
+{% endtabs %}
+
+And about the animation:
+
+```
+.vis8:hover{
+background: radial-gradient(circle, pink 0.25em, rgba(161, 19, 161, 0.767) 0.45em) center/0.1em 0.1em;
+}
+
+//we inverted the colors to have a pink ending background
+//the center is animated too and the small circles' blend 
+//in the background
+```
+
+For the **double layer** effect on the coming soon button:
+
+```
+<button class="vis9">
+  <a>
+    Coming soon
+  </a>
+</button>
+
+//we will need the extra tag for the text to be visible
+
+.vis9 a{
+	position: absolute;
+	z-index: 2;
+}
+
+```
+
+{% tabs %}
+{% tab title=":before:after" %}
+We create them at the same time:
+
+```
+.vis9::before,
+.vis9::after{
+	top: 0;
+	left: -7em;
+	right: 0;
+	bottom: 0;
+	margin: auto;
+	
+	transition: box-shadow 0.5s ease-out;
+	transition-delay: 0.75s;
+}
+```
+
+we set where the effect gonna start by centering with **top,right,bottom and left** , the delay is gonna take place when hover-off on the **:before layer**.
+
+```
+.vis9::after{l
+	transition-delay: 0.25s;
+}
+```
+
+while this is the hover-off of the **:after layer**
+{% endtab %}
+
+{% tab title="@keyframe and box-shadow" %}
+for the text we used @keyframes:
+
+```
+.vis9:hover{
+	color: #fff;
+	animation: minn 1.5s ease;
+}
+
+@keyframes minn {
+	0% {
+	  color: #d3b7f7;
+	}
+	50% {
+	  color: #50514f;
+	}
+	100% {
+	  color: #fff;
+	}
+}
+```
+
+this will place independently from the :after:before on hover.
+
+```
+.vis9:hover::before{
+	box-shadow: inset 0 0 0 11em palevioletred;
+	transition-delay: 0.05s;
+}
+
+.vis9:hover::after{
+	box-shadow: inset 0 0 0 11em purple;
+	transition-delay: 0.5s;
+}
+```
+
+**inset** spreads the color/shadow on the inside of the button, and the **transition **set will be "shared" between the 2 layers in hover with the dalay, the before layer delay sets how visible its gonna be from the after layer delay.
+{% endtab %}
+{% endtabs %}
+
+for the **incoming** button effect:
+
+```
+.vis10::before{
+  color: white;
+  width: 1%;
+  height: 100%;
+  background: rgb(182, 25, 182);
+  top: 0;
+  left: 0;
+  transition: all 0.8s cubic-bezier(0.7, -0.5, 0.2, 2);
+  mix-blend-mode: hue;
+}
+
+//so, at the start we have a "border" set to the left.
+//we use the mix-blend-mode here to get the color visible trought
+//the effect, this mix will work on hover-off
+
+.vis10:hover:before {
+	color: white;
+  	background: rgb(182, 25, 182);
+  	width: 100%;
+  	mix-blend-mode: hue;
+}
+
+//we extend the border and mix the color
+```
+
+fort the **animated border effect:**
+
+```
+.vis11{
+  border: 0;
+  padding: 10px 20px;
+}
+
+//we start from an invisible border so we don't use none
+
+.vis11:before, .vis11:after{
+  box-sizing: border-box;
+  border: 3px solid transparent;
+  width: 0;
+  height: 0;
+}
+
+//we set 2 layers, the border that has to be colored yet 
+//so it's transparent, and the width/height of the border 
+//we set the starting points of the 2 "sections" he
+.vis11::before {
+  top: 0;
+  left: 0;
+}
+
+.vis11::after {
+  bottom: 0;
+  right: 0;
+}
+
+.vis11:hover::before, .vis11:hover::after {
+  width: 100%;
+  height: 100%;
+}
+
+.vis11:hover::before {
+  border-top-color: rgba(161, 19, 161, 0.767);
+  border-right-color: rgba(161, 19, 161, 0.767);
+  transition: width 0.3s ease-out, height 0.3s ease-out 0.3s;
+}
+
+.vis11:hover::after {
+  border-bottom-color: rgba(161, 19, 161, 0.767);
+  border-left-color: rgba(161, 19, 161, 0.767);
+  transition: border-color 0s ease-out 0.6s, width 0.3s ease-out 0.6s, height 0.3s ease-out 1s;
+}
+
+//so, here we animate the border on hover, setting delays to make
+//the transitions in order, while in the after we animate the 
+//also the border color to make it appear at the start of hover:after
+//then we total delay of (0.6s+0.4=1s4
+```
+
+we se
 
 **Use Case**: I go to '/customers/:id' endpoint and send updated data for each customer parameter: title, firstname, surname.
 
