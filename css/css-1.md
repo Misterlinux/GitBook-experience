@@ -883,9 +883,60 @@ Then in the flex-col we set 2 columns **flex-left/flex-center** each one contain
 {% endtab %}
 
 {% tab title="CSS" %}
+```
+.contained {
+	display: flex;
+	flex-direction: row;
+}
 
+.flex-col {
+	display: flex;
+	flex-direction: row;
+
+	flex: 70%; 
+}
+
+.flex-long{
+	display: flex;
+
+	flex: 33%;
+}
+
+.flex-col .flex-left {
+	flex: 33%;
+}
+  
+.flex-col .flex-center{
+	flex: 33%;
+}
+
+.flex-long .flex-right {
+	padding-top: 1em;
+	flex: 33%;
+}
+
+```
+
+we are gonna have a bigger flex row and the 2 columns with flex proportions and a flex row for the columns left/center.
+
+for the @media-query:
+
+```
+@media (max-width: 800px) {
+	
+	.contained {
+		flex-direction: column;
+		display: flex;
+	}
+
+}
+```
+
+to have our layout we just change the .contained direction to **column **considering the HTML structure and pre-existent selectors, to have text below the 2 columns.
 {% endtab %}
 {% endtabs %}
+
+are we done?
 
 ## HOMEWORK 5
 
