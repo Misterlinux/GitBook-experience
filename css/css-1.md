@@ -795,24 +795,97 @@ This structure allow us to use the row
   flex: 1;
 }
 //we have to display again and affects all the elements inside the column
-//flex:1 is to set it proportion with other flex and teh basis 
+//flex:1 is to set it proportion with other flex and the basis 
 .orange-column {
   background-color: orange;
   height: 100px;
 }
 ```
 
-
+Considering the HTML structure this allows us to add multiple .orange-column that are gonna adapt automatically to the screen no matter the number, needing only the height.
 {% endtab %}
 {% endtabs %}
 
-* update table
-* remember your previous lesson
-* hint: in the javascript code, instead of db.all() you will need ... what?
+How to use **flex** to create bigger columns:
 
-## HOMEWORK 4 : STRETCH GOAL (OPTIONAL)
+```
+<div class='row'>
+    <div class='column'>
+        <div class='blue-column'>
+            Some Text in Column Two
+        </div>
+    </div>
+    <div class='triple-column'>
+        <div class='blue-column'>
+            Some Text in Column Three
+        </div>
+    </div>
+</div>
 
-The end point should properly detect which customer properties are being updated, and generate the appropriate SQL update statement.
+//we change the column CSS flex
+
+.triple-column {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 3;
+}
+
+//everything is the same as .column except for flex, with the color of blue-column
+```
+
+now, about our "custom" design flex design:
+
+{% embed url="https://codepen.io/misterlinux/pen/yLoGqKd" %}
+on the button **columns** and text&#x20;
+{% endembed %}
+
+{% tabs %}
+{% tab title="HTML" %}
+```
+<div class="contained">
+
+  <div class="flex-col">
+  
+    <div class="flex-left">
+      <div class="secondo">
+          <button class="more"> 
+              shine
+          </button>
+      </div>
+    </div>
+    <div class="flex-center">
+      <div class="secondo">
+        <button class="vis6"> Melt </button>
+      </div>
+
+    </div>
+  </div>
+  
+  <div class="flex-long">
+    <div class="flex-right">
+      a line below wraps/break lines
+    <br>
+      Press the buttons to be directed to a different paragraph.
+    <hr>
+      while here we have a line
+    </div>
+  </div>
+  
+</div>
+```
+
+Under a .contained we set 2 columns **flex-col, flex-long. **
+
+Then in the flex-col we set 2 columns **flex-left/flex-center** each one containing all the buttons with **.secondo** for the position.
+
+**Flex-long** will have only one column inside **flex-right** which will go with flex.left and flex-center
+{% endtab %}
+
+{% tab title="CSS" %}
+
+{% endtab %}
+{% endtabs %}
 
 ## HOMEWORK 5
 
