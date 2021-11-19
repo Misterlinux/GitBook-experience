@@ -4,8 +4,7 @@ description: Syntax and properties
 
 # CSS 1
 
-ss[Position, Canvas and Animation](css-1.md#position-canvas-and-animation)
-
+* [Position, Canvas and Animation](css-1.md#position-canvas-and-animation)
 * [Buttons and effects](css-1.md#buttons-and-effects)
 * [CSS effects and :before:after](css-1.md#css-effects-and-before-after)
 * [Flex layout](css-1.md#flex-and-media-query)
@@ -317,7 +316,7 @@ or color
 <a href="mailto:someone@example.com">Send email</a>
 ```
 
-and to **import** css icons and custom fonts:
+and to **import** css icons and custom **fonts**:
 
 ```
 Google fonts can be installed in the HTML:
@@ -328,6 +327,11 @@ or imported in the CSS:
 
 to then use as:
 font-family: 'Montagu Slab', serif;
+
+//remember that not all imported fonts will be edited width, unless you download the specific weight
+
+font-style: italic
+font-weight: 100-900/lighter/bold/bolder
 
 for icons we can use in HTML:
 <script src="https://kit.fontawesome.com/f107dae9c2.js" crossorigin="anonymous"></script>
@@ -936,78 +940,44 @@ to have our layout we just change the .contained direction to **column **conside
 {% endtab %}
 {% endtabs %}
 
-are we done?
+### Some flex syntax
 
-## HOMEWORK 5
+The **flex property** can allow us to:
 
-**User Story:** As a staff member, I want to create a new reservation.
+```
+.container {
+  displa:flex
+  flex-direction: row | row-reverse | column | column-reverse;
+}
 
-Create and end-point to post a new reservation to `/reservations/`.
+//to order the elements inside the .container
+//and to justify orizontal (row) content 
 
-* insert into
-* create the endpoint from scratch
-* which HTTP method should you use?
+justify-content: center/flex-start (left)/flex-end/ space-between (them) /space-around (total space including borders)
 
-STRETCH GOAL (OPTIONAL) : Return {"status": "error": "reason": "reason..."} if _anything_ was wrong with the request.
+//and for vertical (column) elements
 
-## LESSON 6 : I WISH I COULD DELETE HIM IN REAL LIFE
+align-items: center/flex-start (top)/flex-end/baseline(share common Y center)
 
-We've currently done inserting data and updating data, but sometimes inserting data was just a mistake and it needs to go.
+//row-reverse and column reverse change the starting point 
 
-It's a fairly simple command that looks like select, you just specify the table and a predicate and it wipes:
+ order: 0/1 (to the left)/-1 (right)
+ align-self: 0/1/etc.
+ 
+//in case to change one of multiple elements order
 
-```sql
-delete from customers where surname ilike '%trump%';
+flex-wrap: nowrap (no using extra rows), wrap ,wrap-reverse(starting from bottom)
+
+//on how to handle multiple elements, by putting them in the same line or use extra rows (wrap)
+//we can use both direction + wrap
+
+flex-flow: column wrap
+
+//we can use for the width of columns elements
+
+flex-basis: 100%/auto/etc.
 ```
 
-There are several things you need to worry about when you delete data and what you do about them will depend entirely upon what it is you are trying to do:
+in case you need more [check this again.](https://flexboxfroggy.com/#it)
 
-* What happens to the data that depends upon the data you deleted? -- What if Trump had a reservation? Either a) delete the reservation as well? or b) raise an error and force the user to delete the data manually if they really want him gone.
-* What if you want to undo the deletion?
-* What if you want to mark some data as deleted but you might still want to refer to it?
-* Often it's a good idea to give data the 'status' deleted instead of actually deleting it.
-
-## HOMEWORK 6
-
-**User Story:** As a staff member, I want to delete a canceled reservation from the database.
-
-**Notes on Postman** The delete request is actually pretty straight forward. We only need to select the type and provide the url:&#x20;
-
-Create an end-point to delete a given reservation from `/reservation/:id/`.
-
-* delete
-
-## HOMEWORK 7
-
-**User Story:** As a staff member, I want to get a list of all the existing reservations.
-
-Create an end-point to get from `/reservations` all existing reservations.
-
-* create the endpoint from scratch
-
-## HOMEWORK 8
-
-**User Story:** As a customer, I want to check the details of a reservation.
-
-Create and end-point to get from `/reservations/:id` the details of a resrevation through its `id`.
-
-* simple filtering
-* create the enpoint from scratch
-
-## HOMEWORK 9
-
-**User Story:** As a staff member, I want to get a list of all the reservations that start at a given date.
-
-Create and end-point to get from `/reservations/starting-on/:startDate` all the reservations that start at a given date.
-
-* simple filtering
-* create the enpoint from scratch
-
-## HOMEWORK 10
-
-**User Story:** As a staff member, i want to get a list of all the reservations that are active at a given date.
-
-Create and end-point to get from `/reservations/active-on/:date` all the reservations that are active on a given date - some customer has a room reserved on that day.
-
-* multiple filtering.
-* create the enpoint from scratch
+****
