@@ -125,4 +125,8 @@ box-shadow: 0px -20px 20px -20px #001f9c inset; (bottom)
             0px -20px -20px black inset; (right)
             0px 20px 20px -20px #001f9c inset; (top)
             20px 0px 20px -20px #001f9c inset; (left)
+            
+//we can set the side of the shadow with the X/Y position, also using inset for the intern shadow
+//remember: X / Y(space)/ blur / spread and color
 ```
+
