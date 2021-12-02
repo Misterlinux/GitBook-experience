@@ -40,6 +40,12 @@ For the **Sidebar** setting of the page we have:
 .resto{
     flex: 4;
 }
+.sidenav ul li{
+    display: flex;
+    color: white;
+}
+
+//for the sidebar elements as a column we just use flex
 .foot{
     display: flex;
     flex-direction: row;
@@ -130,3 +136,136 @@ box-shadow: 0px -20px 20px -20px #001f9c inset; (bottom)
 //remember: X / Y(space)/ blur / spread and color
 ```
 
+How to **flex** space and **style borders** on icons:
+
+```
+<ul class="ombra">
+    <li>
+        <i class="fas fa-laptop-code"></i>
+        <h1>Icons and</h1>
+        <p>
+            Lorem 
+        </p>
+    </li>
+        <li>
+        <i class="fas fa-laptop-code"></i>
+        <h1>Double </h1>
+        <p>
+            This
+        </p>
+    </li>
+    <li>
+        <i class="fas fa-laptop-code"></i>
+        <h1>Border effect </h1>
+        <p>
+            The
+        </br>
+            Lorem
+        </p>
+    </li>
+</ul>
+
+//line of 3 elements with equal space, also </br> is to break the line
+//to style the icons in li with a double border:
+
+.ombra{
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+}
+
+.ombra li{
+    flex: 1;
+}
+
+/*first border and setting the ray with padding */
+.ombra i{
+    border: 1px brown solid;
+    padding: 0.6em;
+    border-radius: 100%;
+    color: #C80815;
+}
+
+//we use :before for the second layer
+.ombra i::before{
+    display: inline-block;
+    padding: 1em;
+    border-radius: 100%;
+    border: 1px rgba(165, 42, 42, 0.6) solid;
+}
+
+//To rotate a square border you will need 2 transforms:
+
+.square li{
+    border: 1px pink solid;
+    padding: 1em;
+    transform: rotate(-45deg);
+}
+
+.square li i{
+    transform: rotate(45deg)
+}
+
+```
+
+Adaptive **Row** with centered text and button:
+
+```
+<div class="incluso1">
+    <div class="dentro">
+        <img src="./img.png" alt="">
+    </div>
+    <div class="dentro">
+        <h2>Title </h2>
+        <p>
+            Text on
+        </p>
+        <button>Buttoned </button>
+    </div>
+</div>
+
+//we both need align for the text to be in the same line and the justify for space them
+
+.incluso1{
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.dentro{
+    text-align: center;
+}
+
+.dentro img{
+    width: 100%;
+}
+
+//setting width 100% will adapt it to its flex space, also for smaller screens we simply
+
+.incluso1{
+    flex-direction: column;
+}
+.incluso img{
+    width: 50%;
+}
+//the width is just to leave some margin on the sides
+```
+
+&#x20;Also check the difference in **the use of flex** n/% on the grid and colorband:
+
+```
+<div class="griglia">
+    <div>
+    <i class="fas fa-volleyball-ball"></i>
+    <h2>Using the </h2>
+    <p>Lorem </p>
+    </div>
+</div>
+
+
+
+
+
+
+```
