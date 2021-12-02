@@ -102,7 +102,7 @@ And for the smallest screen we:
 //here we give each navbar element its line and the footer adapts the other flex row it had
 ```
 
-About **how to position the images** (both in sidebar and content), including **text**:
+About **how to background-position the images** (both in sidebar and content), including **text**:
 
 ```
 <div class="title">
@@ -121,6 +121,26 @@ About **how to position the images** (both in sidebar and content), including **
 //here we have text over image, a set height space, and the flex to align the text on the bottom with align-item
 //background-position= X%/Y% or left-right/top-bottom/center
 //simply allows us to set the starting point of image display
+//Also in case you want a precise centered text:
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+```
+
+About [**Background-size**](https://www.w3schools.com/csSref/playit.asp?filename=playcss\_background-size\&preval=contain):
+
+```
+//we haven't used it much prefering width/flex 
+
+background-size:contain;
+background-size:cover; 
+
+//contain gets and adapts the entire image in but can result in smaller or bigger result
+//cover uses the entire space, considering our image was big already its not usable
+
 ```
 
 Remember some rules for the use of **box-shadow** use:
@@ -186,7 +206,7 @@ How to **flex** space and **style borders** on icons:
     color: #C80815;
 }
 
-//we use :before for the second layer
+//we use :before for the second layer and display inline-block
 .ombra i::before{
     display: inline-block;
     padding: 1em;
@@ -321,4 +341,74 @@ And for the style of **list** , icons, and spacing:
 ```
 
 Also **to make fonts-awesome spin we use** fa-spin like up here.
+
+For **centering**, remember that **text-align** works with images too, **justify** on flex works only when multiple elements as children and you can also use **margin:auto**.
+
+For each flex-direction: row we **don't need** to set the children as columns.
+
+And, that the **href=""** in the \<a> tag stops some **animation** for showing.We can use the **calc()** to calculate some properties like:
+
+```
+max-width: calc(100% - 4em);
+```
+
+we didn't need to use **overflow** for the sidebar, in case:
+
+```
+overflow: visible (lets the content exceeding visible)
+          hidden  (cuts the content by the space it has)
+          scroll  (adds the scroll to fit the space)
+          auto    (adds scroll only if necessary on content) 
+          
+```
+
+About the **CSS Reset** , in case we need to have a standard css without browser inconsistencies, for smaller projects go:
+
+```
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+```
+
+But to handle bigger projects and more efficiently we use in the **CSS file**:
+
+```
+html,body,div,form,fieldset,h1,h2,h3,h4,h5,h6,p,blockquote,pre
+{
+    font-size: 100%;
+    font-weight: normal;
+
+    margin: 0;
+    padding: 0;
+
+    vertical-align: baseline;
+
+    border: 0;
+    outline: 0;
+    background: transparent;
+}
+
+table
+{
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+th,
+td
+{
+    text-align: left;
+    vertical-align: top;
+}
+
+img
+{
+    border: 0;
+}
+
+```
 
