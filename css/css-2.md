@@ -257,15 +257,68 @@ Adaptive **Row** with centered text and button:
 ```
 <div class="griglia">
     <div>
-    <i class="fas fa-volleyball-ball"></i>
-    <h2>Using the </h2>
-    <p>Lorem </p>
+        <i class="fas fa-volleyball-ball"></i>
+        <h2>Using the </h2>
+        <p>Lorem </p>
     </div>
 </div>
 
+//Using % on flex elements and Wrap allows us to organize rows of 3 elements styling only the li elements
 
+.griglia{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
 
+.griglia div{
+    flex: 33%;
+}
 
+//in case we want to have all elements in a line using flex:n we:
 
+<ul class="colorato">
+    <li> 
+        <i class="fas fa-hamburger"></i>
+        <p>Here we have the </p>
+    </li>
+    etc...
+</ul>
+
+.colorato{
+    display: flex;
+    flex-direction: row;
+}
+
+.colorato li{
+    flex: 1;
+}
+
+//with this, the elements added will be kept all in the same line, for smaller screens we just flex it as columns
+```
+
+And for the style of **list** , icons, and spacing:
 
 ```
+<ul class="fa-ul">
+    <h2>Contacts </h2>
+    <li>
+        <div>
+            Email
+            <i class="fa-li fa-spin fas fa-spinner"></i>
+        </div>
+        <div>Lorem ipsum dolor sit amet. </div>
+    </li>
+</ul>
+
+//We use the FA-UL to set a list with the icons and the FA-LI to set the list icon 
+//and we space the icon+text from the Lorem
+
+.fine ul li{
+    display: flex;
+    justify-content: space-between;
+}
+```
+
+Also **to make fonts-awesome spin we use** fa-spin like up here.
+
