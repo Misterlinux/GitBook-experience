@@ -1,6 +1,7 @@
 # CSS 2
 
 * [Image gallery and Carousel](css-2.md#image-galleries-and-carousels)
+* [Dropdown and Hover effects](css-2.md#dropdown-and-hover-on-navbars)
 
 ## Navbar and Flex use
 
@@ -772,3 +773,70 @@ For the **hover** effect.
 
 ```
 
+Some notes for the **Responsive**
+
+To position Nav elements on **different sides** of the navbar we use flex
+
+```
+<nav>
+    <ul class="naviga">
+        <div class="lati">
+            <li><a href="">Lorem.</a></li>   
+                     
+        </div>
+        <div class="lati">
+            <li><a href="">Quibusdam!</a></li>
+            <li><a href="">Nisi!</a></li>
+
+        </div>
+    </ul>
+</nav>
+
+nav .naviga{
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+//we need extra div for the flex to work and the justify content to position the nav LI
+
+.naviga .lati{
+    display: flex;
+}
+
+//this is just to display the 2 groups of NAV li as a row
+```
+
+How do the dropdown and hover content **change** with a row navbar.
+
+```
+.cliccato{
+    position: absolute;
+}
+
+#cli:checked + .cliccato, .cliccato{
+    margin-top: 1.3em;
+    margin-left: -0.8em;
+}
+
+//we need the position:absolute to have it render outside the navbar 
+//while the rest is css to center more the content 
+
+.overato{
+    position: absolute;
+}
+.over:hover .overato div{
+    margin-left: -0.6em;
+}
+
+//basically the same with the hover content
+```
+
+The footer is almost similar to the last exercise but we removed the arrows on carousel:
+
+```
+.contenuto11 div .allay1{
+    display: none;
+}
+
+//for screens so small its being used a mobile device that have already the touch scroll
+```
