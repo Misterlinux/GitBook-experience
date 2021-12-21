@@ -565,8 +565,210 @@ To navigate throught images we will use **side arrows** on each image and a list
 
 ```
 
-And for the buttons to jump throught images on the bottom:
+And for the **buttonbar** to jump throught images on the bottom:
 
 ```
-// Some code
+<div class="riga">
+    <div class="colato1">
+        <div class="contenuto1">
+        ...
+        </div>
+        <ul class="botonera">
+            <a href="#eco1">
+                <li>
+                    1
+                </li>
+            </a>
+            <a href="#eco2">
+                <li>
+                    2
+                </li>
+            </a>
+        </ul>
+        ...
+    </div>
+</div>
+
+//it's located as a row outside the image and arrows, and to style thinks
+
+.botonera{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.botonera li{
+    background-color: brown;
+    border-radius: 50%;
+    margin: 0px 3px;
+    padding: 0.3em 0.6em;
+}
+
+//the justify-content will work on the entire flex space, not relative to the carousel
+
 ```
+
+And for a carousel with an entire row and **different sized** images:
+
+```
+.bigger{
+    display: flex;
+    justify-content: center;
+}
+
+//we needed a bigger div to position it at the center without it changing the image display
+
+.contenuto11 div div{
+    margin: 0em 2em;
+    justify-content: center;
+}
+
+//we add margins to the images to have more space for smaller screens and we also need justify center 
+
+.contenuto11 div div .rede{
+    height: 38%;
+    margin-top: 30%;
+}
+
+//in case of different sized images we just need to modify the height and margin-top
+
+```
+
+### Dropdown and Hover on navbars
+
+The structure of the navbar is similar to the last exercise but we included **dropdown** button  and **hover** showing hidden content:
+
+```
+<nav>
+    <ul class="naviga">
+        <div class="lati">
+            <li><a href="">Lorem.</a></li>
+
+            <label for="cli">
+                <li class="cliccare">
+                    <div>
+                        <a >Ipsam! </a>
+                        <i class="fas fa-chevron-down"></i>   
+                    </div>
+                    
+                    <input type="checkbox" id="cli">
+                    <div class="cliccato">
+                        <div><a href="">Lorem.</a></div>
+                        <div><a href="">Et.</a></div>
+                        <div><a href="">Similique.</a></div>
+                        <div><a href="">Obcaecati.</a></div>
+                        <div><a href="">In.</a></div>
+                    </div>
+                </li>
+            </label>
+        </div>
+        <div class="lati">
+        ...
+        </div>
+    </ul>
+</nav>
+
+//we have a checkbox that includes the entire LI nav element (id + for) with the label
+//to display the arrow icon at the side of the LI sidenav
+
+.cliccare{
+    display: flex;
+    flex-direction: column;
+}
+
+//to have the scrolled content show below the LI nav
+
+.cliccare + div{
+    flex-direction: row;
+    display: flex;
+}
+
+//specifically for the LI nav and the icon
+//and to avoid the checkbox to occupy space 
+
+#cli{
+    height: 0px;
+    width: 0px;
+}
+```
+
+To style and animate the **dropdown content** after the checkbox click:
+
+```
+.cliccato{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 0em;
+    padding: 0px;
+    overflow: hidden;
+  
+    transition: 
+      0.8s height linear,
+      0.6s padding linear;
+}
+
+//here we are gonna animate the height and padding from 0
+//position: Relative to have it occupy space on the sidebar with the others nav LI
+
+.cliccato div a{
+    text-decoration: none;
+    color: white;
+}
+
+//to modify the text we have to modify the link
+//to activate on click with the checkbox
+
+#cli:checked + .cliccato, .cliccato div{
+    height: 10em;
+    padding: 6px;
+}
+
+//label includes the entirety of nav Li but the id="cli" has inside before the hidden content
+//when clicked the height and padding gets animated
+
+```
+
+For the **hover** effect.
+
+```
+<li><a href="">Quibusdam!</a></li>
+
+<li class="over">
+    <div>
+        <a href="" class="toover">Recusandae.</a>
+    </div>
+    <div class="overato">
+        <div><a href="">Lorem.</a></div>
+        <div><a href="">Eaque!</a></div>
+        <div><a href="">Alias?</a></div>
+        <div><a href="">Consectetur?</a></div>
+    </div>
+</li>
+
+.overato{
+    display: flex;
+    flex-direction: column;
+}
+
+.overato div{
+    display: none;
+    background-color: rgb(206, 127, 31);
+}
+
+//a simpler structure passing from a display:none to flex
+
+.over:hover .overato div{
+    display: flex;
+    padding: 10px;
+}
+
+//after hovering the nav LI with also extra padding for the elements
+//Extra effect with the border before the :hover effect
+
+.over:not(:hover) .toover{
+    border-bottom: 1.2px solid wheat;
+}
+
+```
+
