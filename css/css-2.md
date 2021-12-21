@@ -1,5 +1,7 @@
 # CSS 2
 
+* [Image gallery and Carousel](css-2.md#image-galleries-and-carousels)
+
 ## Navbar and Flex use
 
 Check this flex-sample webpage:
@@ -412,3 +414,58 @@ img
 
 ```
 
+### Image galleries and Carousels
+
+{% embed url="https://codepen.io/misterlinux/pen/KKXwerR?editors=1100" %}
+
+In this exercise, we created multiple columns of images, we added **hover effects** for each and used CSS **counter:**
+
+```
+.completo{
+    display: flex;
+    counter-reset: oll;
+}
+
+.completo p::after{
+    counter-increment: oll;
+    content: "il " counter(oll);
+}
+
+//counter-reset is used to start the VARiable, setting the selector from which it will work 
+//counter-increment is to set the repeated selector which will increase the counter
+//content: its not linked to counter BUT we can use it to display the counter as text with counter(Var) 
+
+```
+
+For the **Zoom** effect on images:
+
+```
+.colonna img{
+    width: 100%;
+
+    z-index: 0;
+    transition: transform .2s;
+    mix-blend-mode: luminosity;
+}
+
+//transform is a property we use during transition
+//position relative is used to overlap the Zoomed image to the others
+
+.colonna img:hover{
+    position: relative;
+    transform: scale(1.5);
+    mix-blend-mode: normal;
+    z-index: 1;
+}
+
+//mix-blends is for the color effect with the background, transform scale is for the Zoome effect
+
+```
+
+And now for the **carousel structure**, we start with the carousel window and the scroll property for mobile:
+
+```
+
+
+
+```
