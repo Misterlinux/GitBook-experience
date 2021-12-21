@@ -462,10 +462,111 @@ For the **Zoom** effect on images:
 
 ```
 
-And now for the **carousel structure**, we start with the carousel window and the scroll property for mobile:
+And now for the **carousel structure**, we start with the carousel **window** and the **scroll** property for mobile:
+
+```
+.contenuto1{
+    display: flex;
+    width: 13.3em;
+    height: 8em;
+
+    overflow-x: scroll;
+    overflow-y: hidden;
+
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+}
+
+//we haven't found a way to use % on the width/height
+//scroll-behavior to pass smoothly between the images
+//scroll-snap-type won't allow the carousel to stop midway during scroll
 
 ```
 
+We also add some -webkit to style the scroll:
 
+```
+.contenuto1::-webkit-scrollbar{
+    height: 8px;
+}
 
+.contenuto1::-webkit-scrollbar-thumb{
+    background: chocolate;
+    border-radius: 25%;
+}
+
+//we set the height of the scrollbar while thumb for color and round
+
+```
+
+And now we handle the images within:
+
+```
+.contenuto1 div div{
+    display: flex;
+
+    width: 100%;
+    height: 100%;
+
+    scroll-snap-align: center;
+    -webkit-overflow-scrolling: touch;
+}
+
+//we don't modify the img directly
+//scoll-snap-align is used to set the point of image view 
+//the webkit-overflow is used on mobile view to scroll with touch
+
+```
+
+To navigate throught images we will use **side arrows** on each image and a list of **buttons** on the bottom:
+
+```
+<div class="contenuto1">
+    <div id="eco1">
+        <div>
+            <img src="./img.png" alt="">
+        </div>
+
+        <div class="allay">
+            <a href="#eco2" class="previsto">
+                <i class="fas fa-arrow-circle-left"></i>
+            </a>
+            <a href="#eco2" class="nexto">
+                <i class="fas fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+    ...
+</div>
+
+//each button has a href to direct it to the ID card image
+//we use some flex to display the arrows, we also need overflow-y to avoid the space of the buttons showing in the image
+
+.contenuto1 div .allay{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+//we use the space-between to space them at the sides of it
+
+.previsto,
+.nexto{
+    position: relative;
+    bottom: 55%;
+    background-color: transparent;
+    width: 1.5rem;
+    height: 1.5rem;
+  
+    border-radius: 50%;
+}
+
+//then we just position the area of the A tag to coincide with the arrow icon from the button to have it show in the middle of the image
+
+```
+
+And for the buttons to jump throught images on the bottom:
+
+```
+// Some code
 ```
