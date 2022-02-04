@@ -12,6 +12,7 @@
 
 * [CSS 1](css/css-1.md)
 * [CSS 2](css/css-2.md)
+* [CSS 3](css/css-3.md)
 
 ## JS
 
@@ -38,4 +39,3 @@
 ## OTHER
 
 * [Untitled](other/untitled.md)
-
