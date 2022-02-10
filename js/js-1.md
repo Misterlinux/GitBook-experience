@@ -1,6 +1,6 @@
 # JS 1
 
-* [Math Operations and Arrays](js-1.md#math-operations-and-arrays.)
+* [Math Operations, Booleans and Arrays](js-1.md#math-operations-and-arrays.)
 * [Js in HTML implementation](js-1.md#undefined)
 
 ### Var, const, and functions.
@@ -95,7 +95,7 @@ lol(4, 8);
 //parameters are LOCAL to the function, defined inside of it, including extra local variables-
 ```
 
-### Math Operations and Arrays.
+### Math Operations, Booleans and Arrays.
 
 Most Math operations work the same in Javascript **+, -, \* and /** following the **Pendas** priority system.
 
@@ -178,6 +178,16 @@ oltre[0].toUpperCase() + oltre.splice(1) == Minimal
 
 //also for last, arrays its a .typeof()
 typeof longi == arrays
+```
+
+**Booleans** are a type of data and we obtain it after **logical operators**:
+
+```
+true && true == true //logical AND returns true if BOTH
+true || !true == true //logical OR, returns true if one of is true
+2 !== 3 //is 2 NOT equal to 3? true
+
+
 ```
 
 ### Js in HTML implementation
