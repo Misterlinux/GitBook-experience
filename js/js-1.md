@@ -54,6 +54,8 @@ function sum(){
 sum()
 // result 27
 ```
+
+**return will stop execution** and return values.
 {% endtab %}
 
 {% tab title="Arrow function" %}
@@ -73,7 +75,7 @@ tut();
 {% endtab %}
 {% endtabs %}
 
-**Parameters** are arguments that are passed to the function and can be used locally in the function:
+**Parameters** are values that are passed to the function and can be used locally in the function:
 
 ```
 //we can use multiple values for the function operations
@@ -93,3 +95,81 @@ lol(4, 8);
 ```
 
 ### Math Operations and Arrays.
+
+Most Math operations work the same in Javascript **+, -, \* and /** following the **Pendas** priority system.
+
+```
+//We can also define pow with:
+3 ** 2 == 9 //will be true
+Math.pow(3,2) == 9
+
+// = is used for assigment while == for comparison
+//and we can get the modulus (the rest after division)
+10 % 3 == 1 ( 3*3 +1 )
+
+//we can also use shorthand on operations
+3 += 5 (result 8)
+20 %= 3 (will be 2)
+```
+
+We can also perform **Math.()** operations, Math.() is a **Global Built-In** Object for Mathematics, for example **Math.round()**:
+
+```
+Math.round(12.3) == 12 
+Math.floor(12.3) == 12 
+Math.ceil(12.3) == 13 
+
+//round() will round up the number based on the decimal
+//ceil() and floor() round up and down without checking the decimal
+//and even numbers like P greek
+function degToRad(degrees) {
+    return degrees * (Math.PI / 180);
+};
+
+function radToDeg(rad) {
+  return rad / (Math.PI / 180);
+};
+```
+
+**Arrays** are variables that can hold more than one value and one _typeof()_ data:
+
+```
+var list = [1, 2, 3]
+
+//elements can be edited by their index(starting from 0)
+list[1] = "new" //[1, "new", 3]
+
+list.length == 2 
+//strings are considered arrays of letters and so
+"welcomed"[3] == "c" / "welcomed".length == 8
+
+```
+
+With **.length** we can check **Properties** of the array.
+
+**Methods** on the other hand are **actions** on objects:
+
+```
+"  its m i n us ".toUpperCase().trim()
+//to uppercase and remove spaces at start,end
+//"ITS M I N US"
+//And on arrays we have:
+
+let row = [12]
+row.push(13) == [12,13] //.push() at the end of array
+row.pop() == 13 //pop will cut and return only the last element but not the shortened array
+row.shift() == 12 //will cut and return only the first element in the array
+row.unshift(10, 11) == [10,11,12,13] //will ADD and return the .length of the arrau
+
+//.splice allows us to precise cut or substitute array elements
+let longi = [1,2,3,4,5]
+longi.splice(3, 1, "indeed") == [1,2,3,"indeed",5]
+//it goes .splice([index of where to start], number of elements cut, element added)
+longi.splice(1, 2, "we change", "two") == [1,2,"we change","two",5]
+//AND we can just cut content if we dont use the third paramether
+
+//Others like .includes(), .startsWidth() will return if true/false on the array
+longi.includes(1) == true
+
+
+```
