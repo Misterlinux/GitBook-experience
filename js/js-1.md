@@ -1,6 +1,7 @@
 # JS 1
 
 * [Math Operations and Arrays](js-1.md#math-operations-and-arrays.)
+* [Js in HTML implementation](js-1.md#undefined)
 
 ### Var, const, and functions.
 
@@ -171,5 +172,13 @@ longi.splice(1, 2, "we change", "two") == [1,2,"we change","two",5]
 //Others like .includes(), .startsWidth() will return if true/false on the array
 longi.includes(1) == true
 
+let oltre = "minimal"
+oltre[0].toUpperCase() + oltre.splice(1) == Minimal
+//we can ALSO use the .splice(1) to get all the elements from index[1] included
 
+//also for last, arrays its a .typeof()
+typeof longi == arrays
 ```
+
+### Js in HTML implementation
+
