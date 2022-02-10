@@ -182,3 +182,53 @@ typeof longi == arrays
 
 ### Js in HTML implementation
 
+To link our external .js file to the html page we use:
+
+```
+<body>
+    <script src="./script.js">  
+    </script>
+</body>
+
+//this will allow us to call function on page interaction like
+
+<a href="#" onClick="alert('text!');">Alert button</a> 
+//here we call on the click event on a link for an alert directly on HTML
+
+<input type="button" value="uno" onclick="add()"/> 
+//so, here we reference the function add in the .js file onclickEvent
+
+function add(){
+  alert("welcomed")
+}
+
+```
+
+To make the _content appear_ i the HTML :
+
+```
+//we want to add additional <li> content on button click
+
+<ul id="myList">
+    <li>Coffee</li>
+    <li>Tea</li>
+</ul>
+
+<button onclick="myFunction()">Append</button>
+
+//on the .js we have
+
+function myFunction() {
+  oll = "terzo"
+  const node = document.createElement("li");
+  const textnode = document.createTextNode(oll);
+  node.appendChild(textnode);
+  document.getElementById("myList").appendChild(node);
+}
+
+//so, we can create HTML tags elements with document.createElement()
+//then we need to add text to the empty tag with document.createTextNode("a string can do)
+//then we take the Tag and append to it the (content), Tag.appendChild(text)
+//THEN to make it appear in the DOM html we need to get the ID of a tag and append the tag (now filled with content
+
+```
