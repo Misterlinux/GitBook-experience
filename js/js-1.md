@@ -95,6 +95,8 @@ lol(4, 8);
 //parameters are LOCAL to the function, defined inside of it, including extra local variables-
 ```
 
+**Console** is where we run scripts and commands.
+
 ### Math Operations, Booleans and Arrays.
 
 Most Math operations work the same in Javascript **+, -, \* and /** following the **Pendas** priority system.
@@ -185,8 +187,10 @@ typeof longi == arrays
 ```
 true && true == true //logical AND returns true if BOTH
 true || !true == true //logical OR, returns true if one of is true
-2 !== 3 //is 2 NOT equal to 3? true
-
+2 !== 3 //is 2 NOT equal to 3? True
+2 == "2" // True, we check equality on value
+2 === "2" //False, it check strict equality on both value and typeof
+"a" == "A" //False, equality checks caps
 
 ```
 
@@ -214,7 +218,7 @@ function add(){
 
 ```
 
-To make the _content appear_ i the HTML :
+To make the _content appear_ in the HTML :
 
 ```
 //we want to add additional <li> content on button click
@@ -242,3 +246,23 @@ function myFunction() {
 //THEN to make it appear in the DOM html we need to get the ID of a tag and append the tag (now filled with content
 
 ```
+
+How to use **var** and **arrays** in the Dom:
+
+```
+<button onclick="myFunction()">Append</button>
+
+var popp = "new element n."
+var counter = 0
+
+function myFunction() {
+  counter++
+  const node = document.createElement("li");
+  const textnode = document.createTextNode(popp + counter);
+  node.appendChild(textnode);
+  document.getElementById("myList").appendChild(node);
+}
+
+//we can use variables from the .js in the functions AND we can use counters and modify on the function
+```
+
