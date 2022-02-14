@@ -266,3 +266,66 @@ function myFunction() {
 //we can use variables from the .js in the functions AND we can use counters and modify on the function
 ```
 
+Check **this exercise**:
+
+{% embed url="https://codepen.io/misterlinux/pen/ZEaJdKg" %}
+JS on DOM
+{% endembed %}
+
+On the JS. part we have **Math.random()** and arrays on DOM:
+
+```
+//so, first to have the random numbers at 2 digits and floor them to the lower
+//also, we get the ID 
+
+  var oul = Math.floor( Math.random()*100 ) ;
+  var pro = Math.floor( Math.random()*100 ) ;
+
+```
+
+As long as the page is not refreshed we can store **arrays** with the input:
+
+```
+//we keep the empty array outside the function and fill it by the click event
+//using .length to place at the latest index when increasing
+var filone = []
+
+function rando() {
+  filone[filone.length] = oul;
+    
+  var textnode = document.createTextNode(oul);
+  document.getElementById("primo").appendChild(textnode);
+}
+
+//ALSO, to avoid the entire array being visible each click we "reset" the HTML content with
+
+  var propt = document.getElementById("primo")
+  propt.innerHTML = ""
+
+```
+
+We also wanted the **numbers** and the **sum** to happen separately:
+
+```
+function summin(){
+
+  var erm = filone[filone.length-1] + filona[filona.length-1];
+
+  const terzo = document.createTextNode(erm);
+  document.getElementById("terzi").appendChild(terzo);
+}
+
+//with this we sum the last random generated numbers, in case none we have NaN
+
+```
+
+So, then to show the complete arrays we:
+
+```
+//can simply add it with the content:
+
+  var riga = document.createTextNode("[ " + filone + " ]");
+  document.getElementById("colla1").appendChild(riga);
+
+```
+
