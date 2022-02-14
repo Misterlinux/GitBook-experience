@@ -1,7 +1,8 @@
 # JS 1
 
 * [Math Operations, Booleans and Arrays](js-1.md#math-operations-and-arrays.)
-* [Js in HTML implementation](js-1.md#undefined)
+* [Js in HTML implementation](js-1.md#js-in-html-implementation)
+* [Js in Dom with array and events](js-1.md#undefined)
 
 ### Var, const, and functions.
 
@@ -265,6 +266,8 @@ function myFunction() {
 
 //we can use variables from the .js in the functions AND we can use counters and modify on the function
 ```
+
+### JS in DOM with arrays and event
 
 Check **this exercise**:
 
