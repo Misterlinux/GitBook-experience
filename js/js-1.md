@@ -26,6 +26,8 @@ console.log(uno)
 
 //and we can declare multiple let
 let primo= 1, secondo= 2, terzo= 3;
+
+//ALSO, we can only use _ or - on let names
 ```
 {% endtab %}
 
@@ -198,6 +200,8 @@ true || !true == true //logical OR, returns true if one of is true
 "a" == "A" //False, equality checks caps
  
  == being the equality operator
+ // && will be executed first
+ 
 ```
 
 ### Js in HTML implementation
