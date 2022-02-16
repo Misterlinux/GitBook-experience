@@ -20,6 +20,29 @@ Here are some more notes:
 //with charCodeAt we get the unique code of the digit pressed 
 ```
 
+And we can use more same **methods** to modify strings:
+
+```
+//.slice(x, y) will include the x index but not the y
+//and negative values will start at the end of the string/array
+let str = "Apple, Banana, Kiwi";
+str.slice(7 , str.length)    //"Banana, Kiwi"
+str.slice(6, -2);            //" Banana, Ki"
+str.slice(5)                 //", Banana, Kiwi"
+
+//.slice() can work on arrays too, while .substring can't
+//.subString(x, y) we can create a new string starting at x and being Y digits ong
+
+str.substring(0, 5)          //"Apple"
+
+//Having 2 string we can .concat() them instead of using the + 
+
+let primo = "this is the one"
+let secondo = "this is the two"
+
+primo.concat(" AND", secondo)    //"this is the one ANDthis is the two
+```
+
 But this **doesn**'**t mean that array and string are the same type:**
 
 ```
@@ -76,6 +99,41 @@ switch (5) {
 	return console.log("sdell")
 }
 
+//in case we need more cases for a single block
+//we can use this method to get the month of the year
+const month = new Date().getMonth();
+
+//we can also use getDay() that starts in Sunday at 0 to 7
+const day = new Date().getDay();
+
+switch (month) {
+	// January, February, March
+	case 0:
+	case 1:
+	case 2:
+		console.log("Winter");
+		break;
+	// April, May, June
+	case 3:
+	case 4:
+	case 5:
+		console.log("Spring");
+		break;
+	// July, August, September
+	case 6:
+	case 7:
+	case 8:
+		console.log("Summer");
+		break;
+	// October, November, December
+	case 9:
+	case 10:
+	case 11:
+		console.log("Autumn");
+		break;
+	default:
+		console.log("Something went wrong.");
+}
 ```
 
 For both these statements the **falsy** values will be **false** in boolean:
@@ -91,3 +149,15 @@ For both these statements the **falsy** values will be **false** in boolean:
 
 ```
 
+**Ternary operator** is a simplified conditional operator:
+
+```
+//we don't need to have a constant linked to it still
+//usable for if/else
+
+let greeting = ( condition) ? 
+	'string returned if condition' 
+	: 
+	'string returned if false';
+
+```
