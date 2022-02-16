@@ -23,6 +23,9 @@ console.log(uno)
 /*result*/
 
 "The javascript is coming"
+
+//and we can declare multiple let
+let primo= 1, secondo= 2, terzo= 3;
 ```
 {% endtab %}
 
