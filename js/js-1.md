@@ -151,7 +151,7 @@ list.length == 2
 
 With **.length** we can check **Properties** of the array.
 
-**Methods** on the other hand are **actions** on objects:
+**Methods** on the other hand are **actions** on objects, and they need () because they are function:
 
 ```
 "  its m i n us ".toUpperCase().trim()
@@ -168,6 +168,7 @@ row.unshift(10, 11) == [10,11,12,13] //will ADD and return the .length of the ar
 //.splice allows us to precise cut or substitute array elements
 let longi = [1,2,3,4,5]
 longi.splice(3, 1, "indeed") == [1,2,3,"indeed",5]
+
 //it goes .splice([index of where to start], number of elements cut, element added)
 longi.splice(1, 2, "we change", "two") == [1,2,"we change","two",5]
 //AND we can just cut content if we dont use the third paramether
@@ -192,7 +193,8 @@ true || !true == true //logical OR, returns true if one of is true
 2 == "2" // True, we check equality on value
 2 === "2" //False, it check strict equality on both value and typeof
 "a" == "A" //False, equality checks caps
-
+ 
+ == being the equality operator
 ```
 
 ### Js in HTML implementation
