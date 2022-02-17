@@ -1,6 +1,6 @@
 # JS 2
 
-* First element on
+* [Let, Var and differences](js-2.md#undefined)
 
 ### Methods on arrays and strings
 
@@ -147,6 +147,8 @@ For both these statements the **falsy** values will be **false** in boolean:
 - undefined
 - NaN
 
+//and in case you are curious about the typeof , null being an object is a bug but still
+typeof null + " " + typeof undefined    //object, undefined
 ```
 
 **Ternary operator** is a simplified conditional operator:
@@ -161,3 +163,59 @@ let greeting = ( condition) ?
 	'string returned if false';
 
 ```
+
+### Let, Var and differences
+
+In 2015 the **let** keyword for variables was introduced:
+
+```
+//the main difference is on the scope of the variable
+
+var z = 'hello';
+var z = 'world';     //will allow to re-declare the variable
+let j = 'hello';
+let j = 'world';     //will give Syntax error on re-declaring teh same let to modify it
+
+//being it that var will have a global scope while let will be limted to its block of code
+
+let greeter = "hey hi";  
+let times = 5;  
+if (times > 3) {  
+   var hello = "Say Hello JavaTpoint";   
+   console.log(hello) 
+}  
+console.log(hello)    //should be hello not declared Error with let
+
+//being var global scope it can be called out of his block, and this can cause Erros 
+//that's why const is used most of the times, to avoid accidental change of values
+
+```
+
+and on functions it would be:
+
+```
+//here for example when calling the cb to see how the var=i changes in the for loop
+//BUT being var global scoping it will change to 5 before the .push 
+
+var callbacks = [];
+(function() {
+  var i;
+  for (i = 0; i < 5; i++) {
+    console.log("when does " + i + " change")
+    callbacks.push( 
+      function() { return i; } 
+      );
+  }
+  console.log("is this " + i)
+})();
+
+console.log(callbacks.map( 
+  function(cb) { return cb(); }  //resulting in [5, 5, 5, 5, 5]
+  )
+);
+
+//if we had let the for loop would have increased and pushed the [1,2,3,4,5] instead
+
+```
+
+###
