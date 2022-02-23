@@ -83,6 +83,22 @@ else{
 
 ```
 
+For multiple **conditions** we can use **logical** operators:
+
+```
+if ((x === 5 || y > 3 || x <= 10) && (loggedIn || userName === 'Steve')) {
+  // run the code
+}
+
+//remember to repeat the variable in case you use it multiple times
+//for example in case of 3<x<10 separate the conditions 
+
+if(x>3 && x<10){
+  //code here
+}
+
+```
+
 We can also use **switch** to use cases:
 
 ```
@@ -220,4 +236,32 @@ console.log(callbacks.map(
 
 ### Regex and string matching
 
-so, lets check some content
+We use **regular expressions** as patterns to analyze Strings
+
+```
+let pattern = /Lorem/i    
+//we have the pattern in /slashes/ and letters for different modifyers, i(for case-insensitive) and g(to match with the whole content)
+
+vipsum.search(pattern)    //will return the index of the first match 
+
+```
+
+To search **more specific patterns** with regex we can use:
+
+```
+//we can search a range of specific letters 
+vipsum.match(/[qvgk]/g)    //will return an array with all the matching single letters in []
+
+//we can match the first of 2 values (if we use g then it's just as [])
+vipsum.match( /[q|x]/ )    //will return the first of q|x matching
+
+//we can also check for whitespaces/new lines 
+vipsum.match( /\s/g )    //with \s we check both "" and \n in an array (with g)
+vipsum.match( /\n/g )    //matches only the new lines
+
+//we can also match strings that have at least 1
+vipsum.match( /s+/g )    //will return an array of "s" or "ss+"
+
+
+
+```
