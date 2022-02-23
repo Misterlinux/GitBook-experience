@@ -154,7 +154,7 @@ typeof null + " " + typeof undefined    //object, undefined
 **Ternary operator** is a simplified conditional operator:
 
 ```
-//we don't need to have a constant linked to it still
+//we don't need to have a constant linked to it
 //usable for if/else
 
 let greeting = ( condition) ? 
@@ -218,4 +218,6 @@ console.log(callbacks.map(
 
 ```
 
-###
+### Regex and string matching
+
+so, lets check some content
