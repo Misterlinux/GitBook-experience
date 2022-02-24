@@ -308,3 +308,113 @@ More about **label** for the inputs:
 
 ```
 
+To access the **form** we can use:
+
+```
+//we can use the ID to access name/value of inputs for example
+
+<form id="krip">
+    <input type="text" name="fname" value="Donald" id="uno">
+    <input type="text" name="lname" value="Duck" id="due">
+    <input type="submit" value="Submit">
+</form> 
+    
+<p id="demoman">
+    //Donald uno / Duck due / submit
+</p>
+
+//the <input> are treated as elements of an array so to access .value/.id in the tags
+
+let testo = "";
+const init = document.getElementById("krip")
+
+for (let i = 0; i < isit.length; i++) {
+  testo +=  init[i].value + " " + init[i].id  + "<br>" ;
+}
+document.getElementById("demoman").innerHTML = testo;
+
+```
+
+About **AppendChild()** and **innerText** difference in DOM:
+
+```
+//We can also use <button> instead of<input value="ADD" type="submit">
+
+<input type="text" name="name" id="txt_name" > 
+<button onclick="kek()">
+    ADD
+</button>
+
+<p id="demo"></p>
+<p id="demani"></p>
+
+//in the first DOM html #demo, we createTextNode with the value in <input> 
+//to then append in #demo, THIS will add a new Text for each click on the Append
+
+function kek(){
+  let inside = document.getElementById("txt_name").value
+  
+  let textnode = document.createTextNode(inside+ " ");
+  document.getElementById("demo").appendChild(textnode);
+
+  let text;
+  if (isNaN(inside) || inside < 1 || inside > 10) {
+    text = "Input not valid";
+  } else {
+    text = inside + " I guess";
+  }
+  document.getElementById("demani").innerHTML = text;
+}
+
+//in the innerHTML we can put a text in the #demani BUT only once no matter how many clicks
+
+```
+
+We can use **select** for value too:
+
+```
+//we can use label + select HTML
+
+<label for="weather">Select the weather type today: </label>
+<select id="weather">
+    <option value="">--Make a choice--</option>
+    <option value="black">Sunny</option>
+    <option value="white">Ameno</option>
+</select>
+
+<p id="well"></p>
+
+//Here we didn't just added a textContent to the #well
+
+const select = document.querySelector('#weather');
+const para = document.querySelector('#well');
+
+//we can also put the function separate from eventlistener
+select.addEventListener('change', setWeather);
+
+function setWeather() {
+  const choice = select.value;
+
+  function update(bgColor, textColor) {
+    para.style.backgroundColor = bgColor;
+    para.style.color = textColor;
+  }
+
+  switch (choice) {
+    case 'black':
+      para.textContent = 'Text black on white space';
+      update('white','black')
+      break;
+    case 'white':
+      para.textContent = 'white text on black space';
+      update('black','white')
+      break;
+    default:
+      para.textContent = '';
+  }
+}
+
+//Here we didn't just add a textContent to the #well but used a function update() to style its new CSS
+//AND also the '' in case of default the space of the tag becomes null
+```
+
