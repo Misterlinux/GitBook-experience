@@ -262,6 +262,8 @@ vipsum.match( /\n/g )    //matches only the new lines
 //we can also match strings that have at least 1
 vipsum.match( /s+/g )    //will return an array of "s" or "ss+"
 
-
-
 ```
+
+### HTML forms and JS validation
+
+so, for the exercise we need
