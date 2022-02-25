@@ -418,11 +418,12 @@ function setWeather() {
 //AND also the '' in case of default the space of the tag becomes null
 ```
 
-For the **submit** button event to be listened we can have:
+For the **submit** button event to be listened we can various **options**:
 
 ```
 <input type="text" id="scritto">
 <button id="btn">javascript click</button>              //or we can also use
+
 <input type="submit" value="javascript tick" id="btn">
 
 //In javascript we can have a button with onClick event OR
@@ -448,6 +449,70 @@ btn.addEventListener("submit", (event) =>{
 })
 
 //here we have the form ID on .addEventListener("", () =>{})
+//we need an (event) and .preventDefault() to avoid the submit after the event
+//we can also use a "Click" EventListener for a button
+
+<button id="btnado">Get Selected Colors</button>
+bottone.addEventListener('click', (event) => {});   
 
 ```
 
+To select on **checkbox** and **radio** button form:
+
+```
+<form id="formula" method="post">
+    <input type="radio" id="html" name="fav_language" value="HTML">
+    <label for="html">HTML</label><br>
+    
+    <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+    <label for="vehicle1"> I have a bike</label><br>
+
+    <input type="submit" value="submit">
+</form>
+
+//we can get the .checked() or just .value() from the form
+
+ const formato = document.getElementById('formula');
+
+formato.addEventListener("submit", (event) => {
+  event.preventDefault();
+  let gippin = document.querySelector("#javascript")
+  console.log( gippin.checked )                 //Both radio,checkbox can be true/false if checked
+  let dess = document.querySelector("#vehicle2")
+  console.log( dess.value)                      //while value will display if checked or ot
+}) 
+
+```
+
+And to handle the **checkbox/radio** we can:
+
+```
+<form action="" id="parap">
+	<label for="c1"> 
+	    <input type="checkbox" name="color" value="red" id="c1">Red
+	</label>
+	<label for="c2">
+	    <input type="checkbox" name="color" value="green" id="c2"> Green
+	</label>
+	<label for="c3">
+	    <input type="checkbox" name="color" value="blue" id="c3">Blue
+	</label>
+
+	<input type="submit" value="selected" id="btnado">
+</form> 
+
+//with querySelectorAll we select all input with names that ends up pseudoclass checked
+//we can have an array with the checkboxes AND THEN get the forEach() to get an array pushed elements
+
+const btnadoo = document.querySelector('#parap');
+btnadoo.addEventListener('submit', (event) => {
+    event.preventDefault()
+    let checkboxes = document.querySelectorAll('input[name="color"]:checked');
+    let values = [];
+
+    checkboxes.forEach((checkbox) => {
+        values.push(checkbox.value);
+    });
+});   
+
+```
