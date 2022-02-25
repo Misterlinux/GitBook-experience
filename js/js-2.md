@@ -418,3 +418,36 @@ function setWeather() {
 //AND also the '' in case of default the space of the tag becomes null
 ```
 
+For the **submit** button event to be listened we can have:
+
+```
+<input type="text" id="scritto">
+<button id="btn">javascript click</button>              //or we can also use
+<input type="submit" value="javascript tick" id="btn">
+
+//In javascript we can have a button with onClick event OR
+
+const btn = document.querySelector('#btn');
+btn.onclick = () => {
+   let java = document.getElementById("scritto").value
+   console.log(java)
+};
+
+//have a form that responds on submit, with the ID on form
+
+<form action="" id="btn">
+    <input type="text" id="scritto">
+    <input type="submit" value="javascript tick" >
+</form>
+
+const btn = document.querySelector('#btn');
+btn.addEventListener("submit", (event) =>{
+  event.preventDefault();
+  let java = document.getElementById("scritto").value
+  console.log(java)
+})
+
+//here we have the form ID on .addEventListener("", () =>{})
+
+```
+
