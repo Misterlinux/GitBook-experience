@@ -415,7 +415,6 @@ We can use **select** in the DOM for .value too:
 <p id="well"></p>
 
 //Here we didn't just added a textContent to the #well
-
 const select = document.querySelector('#weather');
 const para = document.querySelector('#well');
 
@@ -430,6 +429,7 @@ function setWeather() {
     para.style.color = textColor;
   }
 
+//the function works with the "value" property in <option>
   switch (choice) {
     case 'black':
       para.textContent = 'Text black on white space';
