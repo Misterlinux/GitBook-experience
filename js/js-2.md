@@ -243,7 +243,8 @@ let pattern = /Lorem/i
 //we have the pattern in /slashes/ and letters for different modifyers, i(for case-insensitive) and g(to match with the whole content)
 
 vipsum.search(pattern)    //will return the index of the first match 
-
+vipsum.search(/loreM/i)   //we can also put directly
+/lOrem/i.test("Lorem Ipsum")     //in other cases 
 ```
 
 To search **more specific patterns** with regex we can use:
@@ -269,13 +270,14 @@ For the _methods,_ we have __ **.test()** and **.exec():**
 ```
 //We .test the Pattern to the String returning true/false if present
 let html = document.getElementById("lorem").innerText;
-const text = /lorem/i;
-console.log( text.test(html) );    //true
+const primo= /lorem/i;
+console.log( primo.test(html) );    //true
 
 //.Exec() will return an array with index and input including the text
 let yull = /ipsum/gi.exec(html)
 console.log(yull)                  //ipsum or null in case not matching
 
+//they have _____.text/exec(html) pattern first
 ```
 
 Then we have the **.search()** and **.match() :**
@@ -286,7 +288,10 @@ let visit = "Plant a tree!";
 let n = visit.search(/plants/i);
 console.log(n)                    //if no match then -1 return
 
+//.match will return an array like exec.() but can contain multiple matches
+console.log( "best is best".match(/best/g) )    //[best, best]
 
+//here we have html.search/match(___) when pattern is in ()
 ```
 
 ### HTML forms and JS validation
