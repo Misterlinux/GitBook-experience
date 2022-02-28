@@ -236,7 +236,7 @@ console.log(callbacks.map(
 
 ### Regex and string matching
 
-We use **regular expressions** as patterns to analyze Strings
+We use **Regular Expression Search Methods** to search **patterns** in strings:
 
 ```
 let pattern = /Lorem/i    
@@ -261,6 +261,31 @@ vipsum.match( /\n/g )    //matches only the new lines
 
 //we can also match strings that have at least 1
 vipsum.match( /s+/g )    //will return an array of "s" or "ss+"
+
+```
+
+For the _methods,_ we have __ **.test()** and **.exec():**
+
+```
+//We .test the Pattern to the String returning true/false if present
+let html = document.getElementById("lorem").innerText;
+const text = /lorem/i;
+console.log( text.test(html) );    //true
+
+//.Exec() will return an array with index and input including the text
+let yull = /ipsum/gi.exec(html)
+console.log(yull)                  //ipsum or null in case not matching
+
+```
+
+Then we have the **.search()** and **.match() :**
+
+```
+//.search() will return the index of the match if present
+let visit = "Plant a tree!";
+let n = visit.search(/plants/i);
+console.log(n)                    //if no match then -1 return
+
 
 ```
 
@@ -370,7 +395,7 @@ function kek(){
 
 ```
 
-We can use **select** for value too:
+We can use **select** in the DOM for .value too:
 
 ```
 //we can use label + select HTML
@@ -427,7 +452,6 @@ For the **submit** button event to be listened we can various **options**:
 <input type="submit" value="javascript tick" id="btn">
 
 //In javascript we can have a button with onClick event OR
-
 const btn = document.querySelector('#btn');
 btn.onclick = () => {
    let java = document.getElementById("scritto").value
@@ -435,7 +459,6 @@ btn.onclick = () => {
 };
 
 //have a form that responds on submit, with the ID on form
-
 <form action="" id="btn">
     <input type="text" id="scritto">
     <input type="submit" value="javascript tick" >
@@ -455,6 +478,12 @@ btn.addEventListener("submit", (event) =>{
 <button id="btnado">Get Selected Colors</button>
 bottone.addEventListener('click', (event) => {});   
 
+//or have the Onlick() on the html to reference the javascript and then use the input etc...
+<button onclick="clock()">
+</button>
+
+function clock(){
+}
 ```
 
 To select on **checkbox** and **radio** button form:
