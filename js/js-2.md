@@ -653,9 +653,20 @@ if (!intervallato) {
   intervallato = setInterval(myTimer, 1000);
 }
 
-//the function doesn't need to have the interval ID
+//the function doesn't need to have the interval ID, this is an if statement to get the seconds
 function myTimer(){
   contare += 1;
+  if(contare < 10 ){
+    document.getElementById("timo").innerHTML = minuti + " " + "0" + contare;
+  }else if( contare >= 10){
+    document.getElementById("timo").innerHTML = minuti + " " + contare;
+    if(contare >= 60){
+      minuti += 1;
+      document.getElementById("timo").innerHTML = minuti + " " + "00";
+      contare= 0;
+    }
+  }
+
 }
 
 //this function will be the timer, to stop it in another function
