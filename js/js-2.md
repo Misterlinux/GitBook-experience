@@ -559,6 +559,10 @@ function clock(){
 }
 
 //In any case, is possible to add an onClick() to more than input/button
+//AND having it directly in javascript
+
+document.getElementById("start").addEventListener("click", changeColor);
+function changeColor(){}
 ```
 
 To select on **checkbox** and **radio** button form:
@@ -619,4 +623,74 @@ btnadoo.addEventListener('submit', (event) => {
     });
 });   
 
+```
+
+### About SetInterval() on button
+
+So, to start the _Timer_ we are gonna use an **interval ID** on the .js file:
+
+```
+//It won't be for the seconds, we just need to start the timer
+let intervallato;        //undefined
+
+//the variable gets setInterval with the function and millisecond delay
+if (!intervallato) {
+  intervallato = setInterval(myTimer, 1000);
+}
+
+//the function doesn't need to have the interval ID
+function myTimer(){
+  contare += 1;
+}
+
+//this function will be the timer, to stop it in another function
+function stopping(){
+  clearTimeout(intervallato) 
+  contare = 0;
+  intervallato = null; 
+
+}
+//We don't just clearTimeout() of the interval ID, we also reset the timer AND re-set the interval ID at null
+//we will have these 2 functions onClick() buttons, we can put them both with ,
+
+<span class="clickeirio" onclick="mate(), stopping()">
+
+//With this we have a timing function that stops the setInterval and resets the timer
+//we also null the interval ID so we won't get any still running time in the background
+```
+
+### Text filter in DOM with Javascript
+
+In the exercise, we will use **Regex** and **Javascript** to filter, modify and substitute content in the DOM:
+
+```
+//First we .split() the html DOM with the regex, .split() will put the regex as ODD index
+//and will be at 1 minimun
+const regex =  new RegExp( "(" + oltre + ")", 'ig');
+const kok = html.innerHTML.split( regex ); 
+
+//THEN we modify the .innerHTML by .join("") the array elements after .map() each one of them
+if( kok.length > 1){
+    html.innerHTML = kok.map( (str,i) => 
+      (i%2== 1) ? `<span class="highlight">${str}</span>` : str
+    ).join('')
+}
+
+//the .map() will take 2 parameters, always, the str/string first and the i/index second
+//we use a ternary operator for each element of kok array, for each ODD index we add the class highlight
+//while keeping the string for the even ones and then joining
+```
+
+some extra about the **Selectors()**:
+
+```
+//to be sure to select all the HTML tags we will use getElementsByClassName() instead of queryselector
+
+let droll = document.getElementsByClassName("clickeirio");
+//which will be get as an array, and we can modify it with the index
+
+for(let rinn= 0; rinn< droll.length; rinn++){
+	results.push( droll[rinn])
+  droll[rinn].style.backgroundColor = "red"
+}
 ```
