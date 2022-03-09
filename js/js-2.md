@@ -710,7 +710,7 @@ for(let rinn= 0; rinn< droll.length; rinn++){
 }
 ```
 
-some about **indexes after the string**:
+some about the space **randomizer** and .split()ting every single word in the HTML :
 
 ```
 //for the random text position option I had to first check the number of whitespaces and words
