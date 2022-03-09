@@ -334,12 +334,22 @@ console.log( "best is best".match(/best/g) )    //[best, best]
 About **new regex** for variables:
 
 ```
-//we ca get a value from the input to then create a new RegExp
+//we can get a value from the input to then create a new RegExp
 let oltre = document.getElementById("cosa").value 
 
 const regex =  new RegExp( "(" + oltre + ")", 'ig');
 const kok = html.innerHTML.split( regex ); 
 //we also need "" for the extra syntax AND , and additional and then operate with
+```
+
+About **stricter** filters:
+
+```
+//we havent studied it much yet BUT .split() every single word we check for spaces
+let spaced = html.innerHTML.split( /(\s)/ )
+
+//while if we want to check if the input is only white spaces we do this
+primo.match(/^\s*$/)
 ```
 
 ### HTML forms and JS validation
@@ -698,4 +708,33 @@ for(let rinn= 0; rinn< droll.length; rinn++){
 	results.push( droll[rinn])
   droll[rinn].style.backgroundColor = "red"
 }
+```
+
+some about **indexes after the string**:
+
+```
+//for the random text position option I had to first check the number of whitespaces and words
+//in the .innterHTML, where the odd indexes will be the whitespaces that we need to put the new element in
+//if we do it in the even indexes we could get the wrong strings in the DOM
+
+let spaced = html.innerHTML.split( /(\s)/ )
+let sono =  spaced.length
+
+//THEN we start generating the random number, 
+if(spaced.length > 1 ){
+    let rando = Math.random()
+    
+    function trim(uno, due){
+        if( Math.floor(uno * due)%2 == 1 ){
+          return Math.floor(uno * due)
+        }else{
+          return Math.floor(uno * due) + 1
+        }
+    }
+    posizi.shift()
+    posizi.push( trim(rando, sono) )
+}
+
+//we clean the past array element, we create a function to push the trim() returned odd elements
+//the trim() function just multiplies the random with the .lenth to get an odd random number within the .length
 ```
