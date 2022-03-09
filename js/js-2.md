@@ -180,6 +180,12 @@ let greeting = ( condition) ?
 
 ```
 
+### Text filter javascript and DOM exercise
+
+Check this code implementing **regex, forms, and setInterval**:
+
+{% embed url="https://codepen.io/misterlinux/pen/BamEzPj" %}
+
 ### Let, Var and differences
 
 In 2015 the **let** keyword for variables was introduced:
@@ -231,6 +237,32 @@ console.log(callbacks.map(
 );
 
 //if we had let the for loop would have increased and pushed the [1,2,3,4,5] instead
+
+```
+
+In the **exercise** we declare both **let and const**:
+
+```
+//we start declaring an "empty" variable that is gonna default at undefined
+let intervallato;
+
+//and then use it as opposite condition for the setInterval !undefined = true
+if (!intervallato) {
+}
+
+//which then we re-set after the clearInterval()
+intervallato = null; 
+ 
+//ALSO we used 2 querySelectors
+const reset = document.getElementById("lorem").innerHTML
+let html = document.querySelector("#lorem")
+
+//when we need to remove the extra content and "reset" the HTML but also
+//want to select and modify it afterward we use let and const 
+
+html.innerHTML = reset 
+html.innerHTML = lol.map( (str,i) => )
+//considering how we break and join it back later we need the innerHTML to be from a let
 
 ```
 
@@ -294,9 +326,20 @@ console.log( "best is best".match(/best/g) )    //[best, best]
 //here we have html.search/match(___) when pattern is in ()
 ```
 
+About **new regex** for variables:
+
+```
+//we ca get a value from the input to then create a new RegExp
+let oltre = document.getElementById("cosa").value 
+
+const regex =  new RegExp( "(" + oltre + ")", 'ig');
+const kok = html.innerHTML.split( regex ); 
+//we also need "" for the extra syntax AND , and additional and then operate with
+```
+
 ### HTML forms and JS validation
 
-We use **forms** to collect user input:
+We use **forms** to collect user **input**:
 
 ```
 //We use <form> as a container for the inputs and buttons, we will use its ID to also access the tags inside
@@ -335,6 +378,20 @@ More about **label** for the inputs:
 
 <input type="radio" id="javascript" name="fav_language" value="JavaScript">
 <label for="javascript">JavaScript</label>
+
+```
+
+More about **value** on **input**:
+
+```
+//Add always a value to the inputs, even if starting empty
+<input type="text" id="cambiare" value="">
+
+//that then we can extract the new inserted value
+let primo = document.querySelector("#cambiare").value
+
+//and then reset after the submit happens
+document.getElementById("cambiare").value = "";
 
 ```
 
@@ -400,6 +457,17 @@ function kek(){
 
 ```
 
+More on the **innerHTML or replace():**
+
+```
+//we may need to use the .innerHTML and `` to just change the DOM 
+let ipsum = document.getElementById("lorem")
+let gulp =  ipsum.innerHTML.replace(/MagNi/gi, "Picoolo") 
+ipsum.innerHTML = `<span >` +  gulp + `</span>` 
+
+//or also use the replace with Regex
+```
+
 We can use **select** in the DOM for .value too:
 
 ```
@@ -452,8 +520,8 @@ For the **submit** button event to be listened we can various **options**:
 
 ```
 <input type="text" id="scritto">
-<button id="btn">javascript click</button>              //or we can also use
-
+<button id="btn">javascript click</button>              
+//&&
 <input type="submit" value="javascript tick" id="btn">
 
 //In javascript we can have a button with onClick event OR
@@ -489,6 +557,8 @@ bottone.addEventListener('click', (event) => {});
 
 function clock(){
 }
+
+//In any case, is possible to add an onClick() to more than input/button
 ```
 
 To select on **checkbox** and **radio** button form:
