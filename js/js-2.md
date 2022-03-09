@@ -1,6 +1,11 @@
 # JS 2
 
 * [Let, Var and differences](js-2.md#undefined)
+* [Text filter exercise](js-2.md#text-filter-javascript-and-dom-exercise)
+* [Regex and string matching](js-2.md#regex-and-string-matching)
+* [HTML forms and JS validation](js-2.md#html-forms-and-js-validation)
+* [SetInterval in javascript](js-2.md#about-setinterval-on-button)
+* [More on Text filter](js-2.md#undefined)
 
 ### Methods on arrays and strings
 
