@@ -1,6 +1,6 @@
 # JS 1
 
-* [Math Operations, Booleans and Arrays](js-1.md#math-operations-and-arrays.)
+* [Math Operations, Booleans and Arrays methods](js-1.md#math-operations-booleans-and-arrays.)
 * [Js in HTML implementation](js-1.md#js-in-html-implementation)
 * [Js in Dom with array and events](js-1.md#undefined)
 
@@ -103,7 +103,7 @@ lol(4, 8);
 
 **Console** is where we run scripts and commands.
 
-### Math Operations, Booleans and Arrays.
+### Math Operations, Booleans, and Arrays methods.
 
 Most Math operations work the same in Javascript **+, -, \* and /** following the **Pendas** priority system.
 
