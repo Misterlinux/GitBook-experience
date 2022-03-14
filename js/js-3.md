@@ -44,3 +44,11 @@ const unicovo = anni.filter( (x) =>
 console.log( "these people can drive " + unicovo)    //these people can drive 1964,1999,1978,1985,1919
 
 ```
+
+before we start with objects let's check the **for() and while() loop**
+
+```
+//for() is a more specific 
+
+
+```
