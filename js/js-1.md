@@ -198,6 +198,11 @@ let ginn = ["ar","ac", "kr", "qu", "ab", "ri"]
 ginn.sort()            //['ab', 'ac', 'ar', 'kr', 'qu', 'ri']
 ginn.reverse()         //['ri', 'qu', 'kr', 'ar', 'ac', 'ab']
 
+//for numbers its a bit tricky, considering it takes the typo code, you will need a function
+let numeronia = [4,6,8,2,4,1]
+numeronia.sort( (x,y)=> x - y)        //[ 1, 2, 4, 4, 6, 8 ]
+numeronia.sort( (x,y)=> y - x)        //[ 8, 6, 4, 4, 2, 1 ]
+
 //strings aren't arrays but you return one with Array.from()
 Array.from("welcomed")    //['w', 'e', 'l','c','o','m','e','d']
 Array.from("welcomed".toUpperCase() ).map( (x)=> "this is the letter " + x )    //['this the letter W',...]
