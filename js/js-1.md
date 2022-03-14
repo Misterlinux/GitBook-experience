@@ -23,6 +23,11 @@ console.log(uno)
 /*result*/
 
 "The javascript is coming"
+
+//and we can declare multiple let
+let primo= 1, secondo= 2, terzo= 3;
+
+//ALSO, we can only use _ or - on let names
 ```
 {% endtab %}
 
@@ -184,6 +189,27 @@ oltre[0].toUpperCase() + oltre.splice(1) == Minimal
 typeof longi == arrays
 ```
 
+More **methods:**
+
+```
+//we can use .sort() to sort array elements alphabetically, and .reverse() for the opposite
+let ginn = ["ar","ac", "kr", "qu", "ab", "ri"]
+ginn.sort()            //['ab', 'ac', 'ar', 'kr', 'qu', 'ri']
+ginn.reverse()         //['ri', 'qu', 'kr', 'ar', 'ac', 'ab']
+
+//strings aren't arrays but you return one with Array.from()
+Array.from("welcomed")    //['w', 'e', 'l','c','o','m','e','d']
+Array.from("welcomed".toUpperCase() ).map( (x)=> "this is the letter " + x )    //['this the letter W',...]
+
+//we use .includes(), .startsWith(), .endsWith() to check for values in a string
+let sting = "welcoming stuff work I guess";
+console.log( sting.includes("guess") );        //true
+console.log( sting.startsWith("guess") );      //false
+console.log( sting.endsWith("guess") );        //true
+//we can't use Regula expression Regex (/guess/i) here 
+
+```
+
 **Booleans** are a type of data and we obtain it after **logical operators**:
 
 ```
@@ -195,6 +221,8 @@ true || !true == true //logical OR, returns true if one of is true
 "a" == "A" //False, equality checks caps
  
  == being the equality operator
+ // && will be executed first
+ 
 ```
 
 ### Js in HTML implementation
