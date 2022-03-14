@@ -179,6 +179,7 @@ longi.splice(1, 2, "we change", "two") == [1,2,"we change","two",5]
 //AND we can just cut content if we dont use the third paramether
 
 //Others like .includes(), .startsWidth() will return if true/false on the array
+//we can't use Regular expression Regex (/guess/i) here 
 longi.includes(1) == true
 
 let oltre = "minimal"
@@ -201,12 +202,7 @@ ginn.reverse()         //['ri', 'qu', 'kr', 'ar', 'ac', 'ab']
 Array.from("welcomed")    //['w', 'e', 'l','c','o','m','e','d']
 Array.from("welcomed".toUpperCase() ).map( (x)=> "this is the letter " + x )    //['this the letter W',...]
 
-//we use .includes(), .startsWith(), .endsWith() to check for values in a string
-let sting = "welcoming stuff work I guess";
-console.log( sting.includes("guess") );        //true
-console.log( sting.startsWith("guess") );      //false
-console.log( sting.endsWith("guess") );        //true
-//we can't use Regula expression Regex (/guess/i) here 
+//we can't use Regular expression Regex (/guess/i) here 
 
 ```
 
