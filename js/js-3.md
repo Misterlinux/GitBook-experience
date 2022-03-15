@@ -48,7 +48,36 @@ console.log( "these people can drive " + unicovo)    //these people can drive 19
 before we start with objects let's check the **for() and while() loop**
 
 ```
-//for() is a more specific 
+//for() is a more specific loop with a set counter and stop limit
+for(let tin= 0; tin < limes.length; tin++ ){
+    console.log( tin)        //0,1,2,3,4,(limes.length-1)
+}
 
+//but sometimes you may need a looser condition for the loop, also some object keys in advance
+//we can get the values for properties in the wedges, object["string"] = number
+
+function limesToCut4(wedgesNeeded, limes) {
+    let index = 0;
+    const wedges = {
+        'small': 6,
+        'medium': 8,
+        'large': 10
+      }
+    while(wedgesNeeded > 0 && index < limes.length){
+        if(limes[index]) {
+            wedgesNeeded -= wedges[limes[index]] ;
+            index++;
+        } else {
+            return index;
+        }
+    }
+    return index;
+}
+
+console.log( limesToCut(0, ['small', 'large', 'medium']) )        //we get 0
+
+//while( condition ) we can modify the index somewhere else and then close it with else
 
 ```
+
+about objects and keys
