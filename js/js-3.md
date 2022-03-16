@@ -82,7 +82,7 @@ console.log( limesToCut(0, ['small', 'large', 'medium']) )        //we get 0
 
 ### Objects, methods, and keys
 
-**Objects** are variables that can contain more data, stored in **property: value** pair:
+**Objects** are variables that contain a collection of named values, stored in **property: value** pair:
 
 ```
 //and when we want to extract the property/value we:
@@ -92,6 +92,45 @@ const car = {
   color:"white",
 };
 
-car.type      //Fiat
+car.type              //Fiat
+Object.keys(car)      //['type', 'model', 'color']  as an array we can also get
+Object.keys(car)[0]   //type
+
+```
+
+Objects can be **edited** by assigning a new property:value:
+
+```
+//we don't need keywords 
+car.type = "BMW"     //it changes the "Fiat" 
+car.age = 50;        //will add a new property age: 50
+
+//also we can add different types of data
+car.nuovo = [1,2,3]            //like array
+car.altro = {uno: [1,2,3,4,5], due: [1,2,3,4,5], tre: [1,2,3,4,5]}        //and objects of arrays
+
+//we can also use this on an empty object
+const person = {};
+person.firstName = "John";
+person.lastName = "Doe";
+
+```
+
+with different types of data, we can use **Object.keys()** on them:
+
+```
+//and we can use it on the array
+
+Object.keys(car.nuovo)        //will return the indexes as an array ['0', '1', '2']
+Object.keys(car.altro)        //will return properties [ 'uno', 'due', 'tre' ]
+Object.keys(car.altro.due)    //will be of the array inside the object ['0', '1', '2', '3', '4']
+
+```
+
+**Object Methods** are functions stored in the object:
+
+```
+// Some code
+
 
 ```
