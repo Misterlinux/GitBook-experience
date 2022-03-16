@@ -80,4 +80,18 @@ console.log( limesToCut(0, ['small', 'large', 'medium']) )        //we get 0
 
 ```
 
-about objects and keys
+### Objects, methods, and keys
+
+**Objects** are variables that can contain more data, stored in **property: value** pair:
+
+```
+//and when we want to extract the property/value we:
+const car = {
+  type:"Fiat", 
+  model:"500", 
+  color:"white",
+};
+
+car.type      //Fiat
+
+```
