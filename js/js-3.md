@@ -165,9 +165,24 @@ for (let x in person) {                  //key        object[key]=value
   console.log( x + ": " + person[x] )    //firstName: John,             lastName: second
 }
 
-//as for the array, its keys would be the index, we can also go beyond
+//as for the array, its keys would be the index, we can also go beyond for nested properties
+for (let i in myObj.cars) {
+  yy = myObj.cars[i].name + " " ;
+  console.log( yy )                  //this will print the "Ford" name but
+  
+  for (let j in myObj.cars[i].models) {
+    y = myObj.cars[i].models[j] + " ";
+    console.log( y )                 //also the array elements of the name[i] "Fiesta Focus Mustang" 
 
+  }
+}
 
+```
+
+This can help us for more precise loops of if statemets:
+
+```
+// Some code
 
 
 ```
