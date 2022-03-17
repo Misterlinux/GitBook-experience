@@ -32,7 +32,7 @@ numeronia.map( (x)=> x+2 ).forEach( (x) => console.log( "the number is " + x))  
 
 ```
 
-**.filter()** will allow to get the first matching:
+**.filter()** will return an array with only the ones that satisfy:
 
 ```
 //It will create a new array with only the passed elements if we store it with
@@ -42,6 +42,14 @@ const unicovo = anni.filter( (x) =>
 )
 
 console.log( "these people can drive " + unicovo)    //these people can drive 1964,1999,1978,1985,1919
+
+```
+
+**.find()** on the other hand, will return the _first_ element matching:
+
+```
+
+
 
 ```
 
