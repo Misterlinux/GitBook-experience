@@ -114,6 +114,8 @@ const person = {};
 person.firstName = "John";
 person.lastName = "Doe";
 
+//To delete properties and values we use the keywords
+delete car.color;
 ```
 
 with different types of data, we can use **Object.keys()** on them:
@@ -127,10 +129,45 @@ Object.keys(car.altro.due)    //will be of the array inside the object ['0', '1'
 
 ```
 
-**Object Methods** are functions stored in the object:
+**Object Methods** are functions stored in the object that can use **.this** for properties in the object:
 
 ```
-// Some code
+//the function stored in the fullo method can use the property:values of the object it's in
+const car = {
+  type:"Fiat", 
+  model:"500", 
+  color:"white",
+  fullo: function() {
+    return this.type + " " + this.model;
+  }
+};
+
+person.fullo()    //Fiat 500 
+person.fullo      //[Function (anonymous)]
+
+```
+
+We can use the **for()** loop with both properties and values of an object:
+
+```
+const person = {
+  firstName: 'John',
+  lastName: 'second',
+  cars: [
+    {name:"Ford", models:["Fiesta", "Focus", "Mustang"] },
+    {name:"BMW", models:["320", "X3", "X5"] },
+    {name:"Fiat", models:["500", "Panda"] }
+  ]
+}
+
+//with for(), we set the counter/Object.keys IN object and also use it for vlues too
+for (let x in person) {                  //key        object[key]=value
+  console.log( x + ": " + person[x] )    //firstName: John,             lastName: second
+}
+
+//as for the array, its keys would be the index, we can also go beyond
+
+
 
 
 ```
