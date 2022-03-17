@@ -179,10 +179,26 @@ for (let i in myObj.cars) {
 
 ```
 
-This can help us for more precise loops of if statemets:
+This can help us for more precise loops of if statement:
 
 ```
-// Some code
+const prepTime = {
+    'Pure Strawberry Joy': 0.5,
+    'Energizer': 1.5,
+    'Green Garden': 1.5,
+    'Tropical Island': 3,
+    'All or Nothing': 5
+  }
 
+//IF between the properties/keys is present the parameter we return the VALUE of the property
+function timeToMixJuice(name) {
+    if(Object.keys(prepTime).includes(name)) {
+      return prepTime[name]
+    } else {
+      return 2.5;
+    }
+}
+
+//timeToMixJuice("Energizer")            //1.5
 
 ```
