@@ -48,8 +48,85 @@ console.log( "these people can drive " + unicovo)    //these people can drive 19
 **.find()** on the other hand, will return the _first_ element matching:
 
 ```
+var product1 = {
+  id: 1,
+  name: "Toaster X56 Plus",
+  price: 12.98,
+  stock: 105,
+};
 
+var products = [product1, ... ];
+//we use find() not only to return the first element mattching but also to not have an array
+//products.find()would return    { id: 4, name: 'Star Ship', price: 100, stock: 5 }
+//products.filter() would return [ { id: 4, name: 'Star Ship', price: 100, stock: 5 } ]
+function add(x){
+    let scelto = products.find((xx)=>{
+        return xx.id == x
+    })
+}
 
+add(1)    //we check the array products for objects with property id ==(1) and get returned just the object
+
+```
+
+**Map() and filter()** can be different when returning properties and objects:
+
+```
+let quatt = {
+    cosa: [2, 9 ,6, 2 ]
+}
+
+//they return different values
+quatt.cosa.filter( (x)=> x<10 )    //[ 2, 9, 6, 2 ]
+quatt.cosa.map( (x)=> x<10 )       //[ true, true, true, true ]
+
+//and to chain you will have to use filter()
+quatt.cosa.filter( (x)=> x<10 ).forEach( (x) =>  console.log( "This shoudl work with " + x ) )    //This shoudld work with 2 
+
+//having an array of objects and properties with arrays 
+let terzo = {
+    name: "terzo",
+    totali: 30,
+    already: 8,
+    dove: {
+        citta: "naples",
+        posto: "sud"
+    },
+    cosa: [ 10,5,6, 3]
+}
+
+let quatt = {
+    name: "quatt",
+    totali: 12,
+    already: 8,
+    dove: {
+        citta: "roma",
+        posto: "centro"
+    },
+    cosa: [2, 9 ,6,2 ]
+}
+
+let tutti = [primo, secondo, terzo, quatt]
+//we can have an object with methods 
+let app = {
+    cibo: function(x){
+        let fin = []
+        tutti.map((xx) =>{
+            if(xx.cosa.includes(x) ){
+                return fin.push( xx.name )
+            }
+        })
+        return fin
+    },
+//with map we need an extra array to push the specific properties of the if()
+    filto: function(zona){
+        return tutti.filter( (x)=> x.dove.posto == zona ).length
+    }
+//filter() returns the objects as an array and we get the length
+}
+
+console.log( app.cibo(10) )            //[ 'terzo' ]
+console.log( app.filto("centro")  )    // 1 ,we get the length of the array of objects filtered
 
 ```
 
@@ -208,5 +285,93 @@ function timeToMixJuice(name) {
 }
 
 //timeToMixJuice("Energizer")            //1.5
+
+```
+
+**Methods** can edit and return other properties:
+
+```
+let univa ={
+    name: "wallace",
+    molti: ["uno", 2, 3, 45],
+    money: 0,
+    aggiung: function(inn){
+        this.nuovo = inn
+    },
+    ancori: function(on){
+        this.nuovo += " " + on
+    },
+    yunn: function(oll){
+        this.molti.push(oll) 
+    },
+    spicc: function(we){
+        this.money += we
+    },
+    compra: function(){
+        if(this.money > 10){
+            return "finally, you got it"
+        }else{
+            return "no money ;(?"
+        }
+    }
+}
+
+univa.aggiung("this")     //we first add a new property this.nuovo and then we set its value 
+univa.ancori("new")       //at "this", then with ancori method we change it with "this new"
+univa.yunn( 23 )          //we can have the argument be added at an array property, this.molti.push(oll) 
+univa.spicc(24)           //univa.compra() would return "finally, you got it" with money 24 > 10
+univa.spicc(-16)          //"no money ;(?"  with money=8< 10
+
+```
+
+### ES6 syntax and more objects
+
+We can use a **Default parameter** in a function:
+
+```
+function defaultParameter(name = "sam") {
+  return console.log( name);
+}
+
+defaultParameter("oltre")    //"oltre"
+defaultParameter()           //"sam"
+
+```
+
+We can also use the **spread operator** for arrays and objects:
+
+```
+//Allows us to .concat() the arrays in the order present in the array
+function combineArrays(arr1, arr2, arr3) {
+  return [...arr3 , ...arr2, ...arr1];
+}
+combineArrays( [12, 34], [23, 45], [100] )    //[ 100, 23, 45, 12, 34 ]
+
+//We also can use it for Math. operations, without loops or filters
+let maximus = Math.max( ...mat )              //100 
+
+```
+
+And in _objects_ we can edit the properties:
+
+```
+const dog = {
+  name: "Lucas",
+  age: 7,
+  breed: "cocker"
+}
+
+const dogOwner = { ...dog, owner: "Juan", breed: "cocker spaniel"}
+//we changed the breed and added a "OWNER" property in the new object
+console.log( dogOwner )          //{ name: 'Lucas', age: 7, breed: 'cocker spaniel', owner: 'Juan' }
+
+//and we can use it on functions as parameter
+function destructuring(obj) {
+  const { name, age, breed } = obj      //here we need the same names from the object to use the properties values
+  return age;
+}
+//for example here we can use the argument for an object and then extract a property
+//we return the property selected
+destructuring( dogOwner )
 
 ```
