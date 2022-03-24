@@ -1,6 +1,12 @@
 # JS 3
 
-* Filter(), map() ,and forEach() on arrays
+* [Objects, methods, and keys](js-3.md#objects-methods-and-keys)
+* [ES6 syntax and more objects](js-3.md#es6-syntax-and-more-objects)
+* [Object constructor and extends](js-3.md#object-constructor-and-extends)
+
+### Filter(), map(), find() and forEach() on arrays
+
+Filter(), map() ,and forEach() on arrays find(
 
 Some **methods** can implement arrow **functions** for better results, like **.map()**:
 
