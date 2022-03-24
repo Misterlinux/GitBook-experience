@@ -542,3 +542,72 @@ myFather.minimal(10) , myFather.age, myFather.summary(12)    //10 maybe, 10, blu
 
 ```
 
+Using **Prototype** we can add properties and methods to already objects:
+
+```
+//the property added won't be visible in console.log( myFather )
+Person.prototype.bahamas = "volottato"
+console.log( myFather.bahamas )        //"volottato" can still be called
+
+//we add the properties and methods to the constructor BUT has to be called on the new
+Person.prototype.masuda = function(yoga){
+    return this.age + " and also " + this.minimal(yoga)
+}
+//both methods use this.age but masuda() uses the this.age 12 THEN minimal() changes it to 900
+myFather.masuda( 900 )                 //123 and also 900 maybe
+
+```
+
+We can use **extends** to extend pre-existing function constructor:
+
+```
+function Animal(name){
+    this.name = name,
+    this.speak =  function speak(){
+        console.log(`${this.name} makes a noise.`);
+    }
+}
+//we put the new objects FIRST extends (old object)
+class Dog extends Animal {
+  constructor(surname, altro) {
+    super(surname); // call the super class constructor and pass in the NAME parameter
+    this.more = altro
+  }
+                    //and if we want to add methods we them outside constructor
+  speak() {
+    console.log(`${this.name} barks.`);
+  }
+}
+
+let d = new Dog('Mitzie', "maybe");    //Dog { name: 'Mitzie', speak: [Function: speak], more: 'maybe' }
+//Dog takes 2 arguments that will be used in contructor() and super('Mitzie') will be Animal(name)
+
+```
+
+We can also use **get()** for methods and more _super_:
+
+```
+function Quada(alte, larg){
+  this.alte = alte,
+  this.larg = larg
+}
+
+const triang = new Quada(200, 100)
+
+class Vast extends Quada{
+  constructor(quado, all ,moe){
+    super(quado, all)      //with 2 arguments we can put at super() from Quada(alte, larg)
+    this.moe = moe
+  }
+  get minus(){return this.alte + this.larg}
+  getAge() {
+    return "winning " + this.alte
+  }
+}
+//the difference between get minus()/getAge()
+
+const parall = new Vast(100, 200, "bilanciato)
+console.log( parall.minus )                      //300 we dont need the () for get
+console.log( parall.getAge() + parall.moe)       //300 bilanciato
+
+```
