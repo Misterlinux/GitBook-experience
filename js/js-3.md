@@ -374,6 +374,9 @@ We can use **destructuring assignment** on arrays and objects:
 const x = [1,2,3,4,5] 
 const [well, lol] = x
 console.log( well )            // 1
+//and in case we want to skip some we useempty comma
+let [ , , ,wen] = x
+console.log( wen )             //4
 
 let horse = {
   name: "uni",
@@ -424,6 +427,7 @@ let scato = {
   listato: [123, 456],
   alto: true
 }
+
 //so, we can assign object properties {yuse} and array [listato]
 let {
   yuse: {
@@ -432,18 +436,51 @@ let {
   },
   listato: [unato, duato]
 } = scato
+
 //and we can call an objects and array element
 console.log( unato + " " + mode)    //123 wannabe
 
 ```
 
-And in **function** parameters:
+In **functions** we can also return assigns:
 
 ```
+function guiss(q,w){
+    let tron = q+w
+    let bron = q-w
+    return [tron, bron]
+}
+
+let [gui, pui] = guiss(5,1)        //the returns will be in array order
+console.log( gui, pui )            //6, 4
+
+```
+
+And in **function parameters**:
+
+```
+let obb = {
+    type: "working",
+    uno: 123,
+}
+//here we need to use the same name in the objects
+const dritto = ( {type, uno } ) => (type, uno)
+console.log( dritto(obb) )                      //working 123
+
+//we can nest a new object to the existing object
+obb.new = {
+    citta: "unova",
+    number: 34
+}
+//and to call it in the parameter we just need an extra {} for the object
+const dentro = ( {new:{number} } ) => console.log(number + " this is the nested values")
+dentro(obb)                  //34 this is the nested values
+
 let options = {
   title: "Js book",
   items: ["Item1", "Item2"]
 };
+
 //we create a default property in the function parameter
 function showBook({
   title = "Javascript",
@@ -454,8 +491,54 @@ function showBook({
   console.log(`${title} ${species} ${pages}`); // Javascript programming 200
   console.log(items); // Item1, Item2
 }
+
 showBook(options);  //setting the object used
 
+```
 
+And we can also get **.entries()** for property/key-value pairs:
 
 ```
+//for arrays we have
+let frut = [123, "wall", "proll"]   //we get index and value
+const f = frut.entries()            //[ 0, 123 ],[ 1, 'wall' ],[ 2, 'proll' ]
+
+//for Objects we would need a loop to show the array iteration object
+let ultron = {
+  doing: "firsto",
+  dell: "secondo"
+}
+Object.entries(ultron)      //[ [ 'doing', 'firsto' ], [ 'dell', 'secondo' ] ]
+//we get the an array with arrays of pairs
+
+const l = Object.entries(ultron)
+for(let x of l){
+  console.log( x )          //  ['doing', 'firsto'], ['dell','secondo']
+}
+
+```
+
+### Object constructor and extends
+
+We can create a template for objects with **function constructor:**
+
+```
+function Person(first, last, age, eye) {            //we set the properties/VALUES
+    this.firstName = first;                         //we assign its internal properties with the parameter value
+    this.lastName = last;                    
+    this.age = age;
+    this.eyeColor = eye;
+    this.minimal = function(age){                   //methods that can modify the this.properties
+        this.age = age
+        return this.age + " maybe"                  //and then return 
+    };
+    this.summary = function(){                      
+        return this.eyeColor + " " + this.firstName
+    }
+}
+               //we need to call a new function constructor
+let myFather = new Person("John", "Doe", 50, "blue");
+myFather.minimal(10) , myFather.age, myFather.summary(12)    //10 maybe, 10, blue John
+
+```
+
