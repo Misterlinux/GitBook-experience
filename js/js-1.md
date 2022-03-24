@@ -186,6 +186,10 @@ let oltre = "minimal"
 oltre[0].toUpperCase() + oltre.splice(1) == Minimal
 //we can ALSO use the .splice(1) to get all the elements from index[1] included
 
+//also we can use it with indexOf() and splice(, 1) to cut a specific element
+carrello.comprati.indexOf( 'Star Ship' )        //["uno", "Star Ship", "tre"] [1]
+carrello.comprati.splice( index, 1 )            //["uno", "tre"]
+
 //also for last, arrays its a .typeof()
 typeof longi == arrays
 ```
