@@ -365,13 +365,97 @@ const dogOwner = { ...dog, owner: "Juan", breed: "cocker spaniel"}
 //we changed the breed and added a "OWNER" property in the new object
 console.log( dogOwner )          //{ name: 'Lucas', age: 7, breed: 'cocker spaniel', owner: 'Juan' }
 
-//and we can use it on functions as parameter
-function destructuring(obj) {
-  const { name, age, breed } = obj      //here we need the same names from the object to use the properties values
-  return age;
+```
+
+We can use **destructuring assignment** on arrays and objects:
+
+```
+//we can assign variable to array elements on order
+const x = [1,2,3,4,5] 
+const [well, lol] = x
+console.log( well )            // 1
+
+let horse = {
+  name: "uni",
+  age: 10,
+  breed: "winn"
 }
-//for example here we can use the argument for an object and then extract a property
-//we return the property selected
-destructuring( dogOwner )
+
+//we keep the objects property name on objects as parameters
+function destructuring(obj) {
+  let { name, age, breed } = obj
+  return age ;
+}
+destructuring(horse)              //10
+
+let {name, breed} = horse
+console.log( breed )              //"winn"
+```
+
+We can use in different ways:
+
+```
+let [firstName, surname] = "John Doe oltre".split(' ');    //the .split returnes [ 'John', 'Doe', 'oltre' ]
+console.log( firstName, surname )    //"John Doe" we can assign the first 2 values 
+
+//we can add properties to pre-existent objects
+let novo = { 
+  tent: 1,
+  cove: 2
+}
+let {
+  missin= "more", 
+  ultras="verona", 
+  tent
+} = novo
+console.log( novo )      //{ tent: 1, cove: 2 } even if added 
+console.log( missin )    //"more" we cant see the property on object but we can call it
+
+```
+
+And for _nested objects,_ we can assign:
+
+```
+let scato = {
+  yuse: {
+    mode: "wannabe",
+    ultro: 1234
+  },
+  listato: [123, 456],
+  alto: true
+}
+//so, we can assign object properties {yuse} and array [listato]
+let {
+  yuse: {
+    mode, 
+    ultro
+  },
+  listato: [unato, duato]
+} = scato
+//and we can call an objects and array element
+console.log( unato + " " + mode)    //123 wannabe
+
+```
+
+And in **function** parameters:
+
+```
+let options = {
+  title: "Js book",
+  items: ["Item1", "Item2"]
+};
+//we create a default property in the function parameter
+function showBook({
+  title = "Javascript",
+  pages = 200,
+  species  = "programming",
+  items = []    //we get the default things EXCEPT THE ITEMS THAT ARE GONNA BE FROM OBJECT
+}) {
+  console.log(`${title} ${species} ${pages}`); // Javascript programming 200
+  console.log(items); // Item1, Item2
+}
+showBook(options);  //setting the object used
+
+
 
 ```
