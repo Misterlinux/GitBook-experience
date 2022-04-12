@@ -19,7 +19,7 @@ link
 <link rel="stylesheet" type="text/css" href="style.css">
 ```
 
-**Cascading style sheets **files .CSS is organized in:
+**Cascading style sheets** files .CSS is organized in:
 
 ```sql
 -external
@@ -334,7 +334,7 @@ font-style: italic
 font-weight: 100-900/lighter/bold/bolder
 
 for icons we can use in HTML:
-<script src="https://kit.fontawesome.com/f107dae9c2.js" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/331132e12f.js" crossorigin="anonymous"></script>
 
 <i class="fab fa-angellist"></i>
 ```
@@ -381,7 +381,7 @@ it's after.
 //we set up the background of the layer effect on the button
 ```
 
-To insert multiple **layers** of CSS to the buttons we use **:before:after **selectors:
+To insert multiple **layers** of CSS to the buttons we use **:before:after** selectors:
 
 ```
 //We already used this on the previous exercise
@@ -654,7 +654,7 @@ this will place independently from the :after:before on hover.
 }
 ```
 
-**inset** spreads the color/shadow on the inside of the button, and the **transition **set will be "shared" between the 2 layers in hover with the dalay, the before layer delay sets how visible its gonna be from the after layer delay.
+**inset** spreads the color/shadow on the inside of the button, and the **transition** set will be "shared" between the 2 layers in hover with the dalay, the before layer delay sets how visible its gonna be from the after layer delay.
 {% endtab %}
 {% endtabs %}
 
@@ -879,7 +879,7 @@ on the button **columns** and text&#x20;
 </div>
 ```
 
-Under a .contained we set 2 columns **flex-col, flex-long. **
+Under a .contained we set 2 columns **flex-col, flex-long.**&#x20;
 
 Then in the flex-col we set 2 columns **flex-left/flex-center** each one containing all the buttons with **.secondo** for the position.
 
@@ -936,7 +936,7 @@ for the @media-query:
 }
 ```
 
-to have our layout we just change the .contained direction to **column **considering the HTML structure and pre-existent selectors, to have text below the 2 columns.
+to have our layout we just change the .contained direction to **column** considering the HTML structure and pre-existent selectors, to have text below the 2 columns.
 {% endtab %}
 {% endtabs %}
 
