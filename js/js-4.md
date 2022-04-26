@@ -11,6 +11,44 @@ Check the following exercise:
 BlackJack for 1/2 players
 {% endembed %}
 
+#### How we start the game
+
+First, we need to select the number of players on the left menu:
+
+```
+contaplay.addEventListener("submit", (event)=>{
+    event.preventDefault()
+    
+    if(numplayer.value=="uno"){
+        ableButton()
+
+        pescare()
+        bancare()
+
+        gioca = 1;
+        document.getElementById("cont").disabled = true;
+    }
+    
+    //if one player modee we draw 1 for bank/player, set the gioca counter at 1 (player)
+    //we disable the menu to avoid overlap playmodes and ablebutton() the player buttons to play
+})
+
+else if(numplayer.value=="due"){
+        pescare1()
+        disableButton1()
+
+        gioca = 2
+        giocatore2.setAttribute("class", "giocatore2")
+        giocatore2.style.display = "block"
+
+        document.getElementById("cont").disabled = true;
+    //so, we add the pescare1() to draw the second player first card, AND disable player 2 buttons 
+    //waiting for player 1 to play first, ALSO, we change the DISPLAY value to make player 2 visible in HTML
+
+}
+
+```
+
 #### How we created a deck and random draw
 
 So, first, we start the structure of the "deck" with an objects and an array:
@@ -122,3 +160,101 @@ for (let x in deck) {
 
 ```
 
+### How we display cards and for 2 players
+
+So, the **playdraw()** function that player and player1 have, we use it to show the cards drawn in the HTML:
+
+```
+playdraw( deck[ carte ][pescato], players1, playnum1, playstat1,carte )
+
+function playdraw(it, lista, numer, stat, seme ){
+    lista.push(it)
+    //we push the drawn value in the player array of cards, the argument lista works for both players by player/player1 argument 
+
+    let corretto = document.getElementById( numer.id )
+    let para = document.createElement("span");
+    //ALSO when we take document.getElementbyId("numer") we take the entire HTML tag <p id="playnum"></p>
+    //we will need just the ID that for the append.
+
+    para.innerText = it;
+    //we create a span and put the drawn content into it
+    //THEN check the card suit for the icon on the card
+
+    if( seme == "quadri"){
+        para.setAttribute("class", "fa-solid fa-diamond");
+        corretto.appendChild(para);
+        //we use Fontawesome to use classes for the icons AND the numer.id as append target
+        //also for the setAttribute we put "class/id", "value"
+        
+    }else if(seme == "cuori"){
+        para.setAttribute("class", "fa-solid fa-heart");
+        corretto.appendChild(para);
+    }else if(seme == "spade"){
+        para.setAttribute("class", "fa-solid fa-heart spada");
+        corretto.appendChild(para);
+    }else{
+        para.setAttribute("class", "fa-solid fa-clover");
+        corretto.appendChild(para);
+    }
+
+//To have a number and icon be on different levels in the CSS 
+
+#playnum > span {
+    border: solid white 1px;
+    margin: 3px;
+    padding: 18px 13px;
+
+    color: white;
+    font-size: 8px;
+}
+//spacing and border
+
+#playnum span::before{
+    color: black;
+    text-align: center;
+    position: absolute;
+    z-index: -2;
+
+    font-size: 25px;
+    margin: 2px;
+    transform: translate(-44%, -45%);
+}
+//The font-awesome icons will be put in the ::before pseudoclass, we use the z-index and absolute position
+
+#playnum span.fa-diamond::before, #playnum span.fa-heart::before{
+    color: red;
+}
+//the diamond and heart will be red
+
+#playnum span.spada::before{
+    color: black;
+    transform: translate(-46%, -48%) rotate(-180deg);
+}
+//we rotated an icon to make it look like spades
+
+```
+
+After displaying the card we sum the array values of the player/payer1:
+
+```
+let sum = lista.reduce(summing)
+//we sum the array values with Array.reduce(function)
+
+function summing(total, num){
+    return total + num
+}
+//we have 2 default parameters, one for the sum counter + the forEach() elements 
+
+if( stat.id== "playstat" ){
+    shoot(sum, playstat, playnum, players)
+}else{
+    shoot(sum, playstat1, playnum1, players1)
+}
+//we take the sum to shoot() with the player HTML, also remember the ==, if not the stat.id to change
+//ALSO we use stat.id to differentiate the sum and array of player/player1
+
+```
+
+### How to handle win/lose state and play attempts
+
+In the shoot() function,&#x20;
