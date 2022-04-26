@@ -87,3 +87,38 @@ if( deck[carte].length == 0 ){
 
 ```
 
+And when **all cards from all the arrays are drawn** we **re-start the page**:
+
+```
+if( mazzi.length== 0 ){
+    over.innerText = "No more DECK to draw"
+    setTimeout(function () {
+        location.reload()        //it works on the entire page without windows.
+    }, 1000);
+}
+
+//after .splice() we will end up with an mpt array, and if, we print on HTML the messagre
+//and restart the server after 1 second they read it
+
+```
+
+All of the above is what is used for the **draw functions** of the 2 players, **the bank** has a similar function:
+
+```
+pescare()            //will drawn a random cards and pass with playdraw()
+pescare1()           //on the other side bancare() wont need a playdraw()
+
+function bancare()
+
+for (let x in deck) {
+    if(deck[x].length == 0){
+        let vuoto = mazzi.indexOf( x ) 
+        mazzi.splice( vuoto, 1 )
+    }
+}
+//we use a different way to .splice the empty arrays, using the Object properties and checking each length()
+//BUT we use it to STILL .splic from the mazzi array, x is the name of the card suit
+//the rest is just code from the playdraw() we included to not have a separate function() with arguments not needed
+
+```
+
