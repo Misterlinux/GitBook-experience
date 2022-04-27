@@ -257,4 +257,211 @@ if( stat.id== "playstat" ){
 
 ### How to handle win/lose state and play attempts
 
-In the shoot() function,&#x20;
+In the **shoot()** function, we handle win attempts and win conditions:
+
+```
+function shoot(sball, dove, numeri ){
+    if(sball< 21){
+        dove.innerHTML = "Card?"
+        //the player can still play
+    
+    }else if( sball== 21 && dove.id!== "bancostat"){
+        //if blackjack AND it is a player, not the house
+        //we set the text on win condition and number drawn
+    
+        dove.innerHTML = "Stand"
+        playfinal.innerHTML = sball
+    
+        disableButton()
+        //we disable the player1 after sending the card score
+        
+        giokato = giokato + 1
+        //we have a player counter that we will compare to the player counter mode 
+        //it will increase for each player that presses the play button
+    
+        if( giokato == gioca){
+            if(giokato==1){
+                bancobot(final)
+    
+            }else{
+                bancobot()
+                disableButton1()
+            }
+            //We need different arguments for 1 or 2 players,only player 1 will have the final while 
+
+        }
+        else{
+            document.getElementById("playstand1").disabled = false;
+            document.getElementById("playgio1").disabled = false;
+            //this happens after player 1 blackjacks so we let player 2 start 
+        }
+    }
+    else if( dove.id== "bancostat"){
+        dove.innerHTML= "sballato"
+        //this will work even if ball = 21 for bancato 
+    }
+...
+}
+
+```
+
+For **lose condition,** when neither house or players have ==21 or <21:
+
+```
+...
+else{
+    //if not ==21 and not <21
+    let perso = document.createElement("button")
+    let retry = document.createTextNode( "re-try" )
+    
+    perso.appendChild(retry)
+    perso.setAttribute("id", "retry");
+    //we create a button, a TextNode for the button text with appendChild
+    //also (the attribute, the name of the attribute)
+
+    document.getElementById( dove.id ).appendChild( perso )
+    //the dove.id is also whre the result is, we append a button to restart after lose condition
+
+    perso.onclick = () =>{
+
+        if(dove.id == "playstat"){
+            attento+= 1;
+        }else{
+            attento1+= 1;
+        }
+        //attento is the number of attempts, increases for each loss
+
+        if( attento> 2 || attento1> 2 ){
+            
+            banko.style.backgroundColor = "yellowgreen";
+            playa.style.backgroundColor = "indianred";
+
+            bankowin.innerText = "Banco Wins"
+            playawin.innerText = "Too many attempts"
+            
+            dinuovo()
+            //if at the 3th attempt we put the losing condition on the HTML
+            
+        }else if( attento == 1 && attento1== 0 ){
+            playstand.style.backgroundColor = "salmon";
+        }else if( attento == 2 && attento1== 0 ){
+            playstand.style.backgroundColor = "crimson";
+        }else if( attento1 == 1 ){
+            playstand1.style.backgroundColor = "salmon";
+        }else if( attento1 == 2 ){
+            playstand1.style.backgroundColor = "crimson";
+        }else{
+            console.log("something happened with " + attento + " " + attento1 )
+        }
+        //a bit complex on the counter, but we need to keep the button colors separated 
+
+        dove.innerHTML= ""
+        numeri.innerHTML= ""            
+        sball= 0
+
+        if( numeri.id == "playnum" ){
+            players= []
+        }else{
+            players1= []
+        }
+        //when re-starting but not yet losing, we reset score arrays and empty arrays
+
+    }
+}
+
+```
+
+After creating the re-try button and onClick(), we use the **dinuovo()** function to reset the game state after losing with 3 attempts:
+
+```
+function dinuovo(){
+    disableButton()
+
+    let restart = document.createElement("button")
+    let resta = document.createTextNode( "ritenta" )
+    restart.appendChild(resta)
+    //after we disable() we create the button and text 
+
+    document.getElementById("ritentando").appendChild( restart )
+    //we append the created button 
+
+    //so, in theory we need to disable the conta button before the restart
+    document.getElementById("cont").disabled = true;
+    
+    restart.onclick = () =>{
+
+        resetto()
+        //we resetto() most of the innerHTML
+
+        let ricomincia = document.createElement("button")
+        let ricomi = document.createTextNode( "rigioca" )
+        ricomincia.appendChild( ricomi )
+        //WE NEED ANOTHER button after they click and understood the lose state
+
+        document.getElementById("ricominciando").appendChild( ricomincia )
+
+        contaplay.addEventListener("submit", (event)=>{
+            event.preventDefault()
+            //we can have multiple addEventListener for submit
+
+            giokato = 0;
+            ricominciando.innerHTML= ""
+
+            attento = 0;
+            attento1 = 0;
+
+            if(numplayer.value=="uno"){
+                giocatore2.setAttribute("class", "giocatore2")
+                giocatore2.style.display = "none"
+
+            }
+            //we reset the counters for the players, ALSO we add the player one option
+            //to pass from player 2 to 1 while keeping the new counters after the reset with the submit
+
+        })
+
+        if(gioca == 1){
+
+            ricomincia.onclick = () =>{
+                giokato = 0;
+                bancare()
+                pescare()
+                ricominciando.innerHTML= ""
+    
+                ableButton()
+    
+                attento = 0;
+                attento1 = 0;
+            }
+
+        }else{
+            ricomincia.onclick = () =>{
+                bancare()
+                pescare()
+                pescare1()
+                ricominciando.innerHTML= ""
+    
+                giokato = 0
+    
+                ableButton()
+                disableButton1()
+            
+                attento = 0;
+                attento1 = 0;
+            }
+
+        }
+        //and in case we don't use the player menu, we reset the play-state based on the number of players
+
+    }
+}
+
+```
+
+After we get the players drawn score, we need to start the House play with **bancobot()**:
+
+```
+// Some code
+
+
+```
