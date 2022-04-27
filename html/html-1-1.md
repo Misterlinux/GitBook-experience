@@ -11,7 +11,7 @@ description: Templates and shortcuts to more HTML
 
 ## EMMET shortcuts
 
-To start using EMMET shortcuts in VS code:  **! + enter. **To open the palette and check other languages use **crtl+shift+p.**
+To start using EMMET shortcuts in VS code:  **! + enter.** To open the palette and check other languages use **crtl+shift+p.**
 
 ```css
 <!DOCTYPE html>
@@ -29,13 +29,13 @@ To start using EMMET shortcuts in VS code:  **! + enter. **To open the palette a
 </html>
 ```
 
-To access your keybind in VScode use** F1**, normally it should be handled by the **tab **but in case go to **File>Preferences>Settings **and search this setting
+To access your keybind in VScode use **F1**, normally it should be handled by the **tab** but in case go to **File>Preferences>Settings** and search this setting
 
 ```css
 "emmet.triggerExpansionOnTab": true
 ```
 
-Remember to use **Tab **at the end of the Emmet line.
+Remember to use **Tab** at the end of the Emmet line.
 
 ### Syntax and special uses
 
@@ -60,9 +60,23 @@ form.form-inline.mb-3>input:t.form-control.mr-2+input:s.btn.btn-dark^ul.list-gro
 </ul>
 ```
 
+Or how we can use tags for HTML effects:
+
+```
+<hr> for the X axis black line
+<br> (break)
+<b>This is how you blod text </b>
+<mark>we can have the yellow marker </mark>
+<u>underline text </u>
+<em>Fancy text </em>
+
+```
+
+![Example of HTML ](<../.gitbook/assets/special tags.PNG>)
+
 ### HTML Head and meta
 
-Head tag is for a **link, meta **, and **title **in the window
+Head tag is for a **link, meta** , and **title** in the window
 
 ```css
 <head>
@@ -94,11 +108,11 @@ h2[style="margin-left:400px"]
 
 ![Indented list                                                    ](../.gitbook/assets/Cattura1.PNG)
 
-**HTML **means HyperText Markup Language
+**HTML** means HyperText Markup Language
 
 ### VS features for HTML
 
-The last opened tag can be closed with<mark style="background-color:blue;">`</`</mark>. **Suggestions **appear while coding and can be forced with **crtl+space**. Vs code includes a color picker.
+The last opened tag can be closed with<mark style="background-color:blue;">`</`</mark>. **Suggestions** appear while coding and can be forced with **crtl+space**. Vs code includes a color picker.
 
 To format messy code use **crtl+k** then **crtl+f.**
 
@@ -148,7 +162,7 @@ For now, stop after you complete exercises 1 and 2.
 
 When writing HTML code, you can use different tags to describe the content. Is it a navigation menu, a paragraph of text, or an article? By using the correct tag, you help search engines like Google or screen readers for the visually impaired.
 
-> Semantic HTML is the use of HTML markup to reinforce the semantics, or **meaning**, of the information in webpages and web applications rather than merely to define its presentation or look. [Wikipedia](https://en.wikipedia.org/wiki/Semantic_HTML)
+> Semantic HTML is the use of HTML markup to reinforce the semantics, or **meaning**, of the information in webpages and web applications rather than merely to define its presentation or look. [Wikipedia](https://en.wikipedia.org/wiki/Semantic\_HTML)
 
 We'll cover the following semantic tags and talk about their use on the [BBC News website](https://www.bbc.co.uk/news):
 
@@ -159,7 +173,7 @@ We'll cover the following semantic tags and talk about their use on the [BBC New
 * `<article></article>`
 * `<aside role="complementary"></aside>`
 
-There are more than 100 semantic tags. If you would like, you can [review several semantic tags](https://developer.mozilla.org/en-US/docs/Glossary/Semantics#Semantic_elements).
+There are more than 100 semantic tags. If you would like, you can [review several semantic tags](https://developer.mozilla.org/en-US/docs/Glossary/Semantics#Semantic\_elements).
 
 > **Group Discussion**: How does semantic HTML relate to the [Separation of Concerns](broken-reference) that we discussed at the start of the class?
 
@@ -257,8 +271,8 @@ Complete exercise 9 from the [exercise project](https://github.com/CodeYourFutur
 Use the following resources to learn more about the topics we covered this week.
 
 1. [HTML5 - semantic elements](https://developer.mozilla.org/en/docs/Web/Guide/HTML/HTML5)
-2. [CSS Selectors - MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors)
+2. [CSS Selectors - MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS\_Selectors)
 3. [The Cascade - MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Cascade)
-4. [Box Model - MDN](https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Box_model)
+4. [Box Model - MDN](https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction\_to\_CSS/Box\_model)
 5. [Box Model, box-sizing: border-box - CSS Tricks](https://css-tricks.com/international-box-sizing-awareness-day/)
 6. [CSS specificity - MDN](https://developer.mozilla.org/en/docs/Web/CSS/Specificity)

@@ -39,6 +39,14 @@ id# > class. > tag
 
 Selectors mirror html tags for priority ( tag > id# > .class )
 
+Here some **Inline, Inline-block and block:**
+
+```
+// Some code
+
+
+```
+
 ### CSS Selectors
 
 Consider the following **example**:
