@@ -578,18 +578,51 @@ playstand.addEventListener("click", ()=>{
     playfinal.innerHTML = final
     disableButton()
     giokato= +1;
+    //we sum, set the counter and display the value on the HTML to let the bancobot() play
 
     if( giokato == gioca ){
         bancobot(final)
     }else{
-
         document.getElementById("playstand1").disabled = false;
         document.getElementById("playgio1").disabled = false;
         document.getElementById("playstand").disabled = true;
         document.getElementById("playgio").disabled = true;
-    }
+        //in the 2 players mode we need to disable player 1 buttons and enable player 2 buttons
 
+    }
 })
 
+```
+
+And for the colors the **win conditions of house/players use mybanc()**:
+
+```
+function mybanc(ginn, sfida){
+    if( ginn==sfida && sfida < 43 ){
+        banko.style.backgroundColor = "yellowgreen";
+        playa.style.backgroundColor = "indianred";
+
+        bankowin.innerText = "Banco Wins"
+        playawin.innerText = "Player Lost"
+        //this works for both 21/42 player score, if == then house win
+    }else if( ginn > sfida && ginn< 22 && sfida< 22 || ginn > sfida && ginn< 43 && sfida> 22 ){
+        banko.style.backgroundColor = "yellowgreen";
+        playa.style.backgroundColor = "indianred";
+
+        bankowin.innerText = "Banco Wins"
+        playawin.innerText = "Player Lost"
+        //if house > player BUT both are less then 22, 1 player more
+        //if house > player, house is less than 43 AND the players are bigger than 22 , 2 players mode
+    }else{
+        banko.style.backgroundColor = "indianred";
+        playa.style.backgroundColor = "yellowgreen";
+
+        bankowin.innerText = "Banco Lost"
+        playawin.innerText = "Player Wins"
+        //if not then the player won
+    }
+
+    bancofinal.innerHTML = ginn
+}
 
 ```
