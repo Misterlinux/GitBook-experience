@@ -458,10 +458,138 @@ function dinuovo(){
 
 ```
 
-After we get the players drawn score, we need to start the House play with **bancobot()**:
+### How the automated house plays
+
+After we get the players drawn score, we need to start the House play with **bancobot(),** first we start if the player gets 21, with the house challenging it by drawing cards at 1 second delay:
 
 ```
-// Some code
+function bancobot(sfida){
+    //argument present only with player 1 mode
+    if(sfida){
+        let ginn = banco.reduce(funk)
+
+        function funk(total, num){
+            return total + num
+        }
+    
+        if( sfida > ginn ){
+            //if the player has the bigger bid then the house starts drawing with bancare()
+            bancare()
+            let timeout;
+
+            //with the timer_on true at !0 we starts the timedCount() 
+            //with the timer_on at 1 we get !1 false
+            if (!timer_on) {
+                timer_on = 1;
+                timeout = setTimeout(timedCount, 1000);
+                mybanc(ginn, sfida)
+            }
+
+            //we use the setTimeout, that is supposed to happen once, BUT
+            //we set the timedCount() inside, using the ginn as the counter after summing each time
+            //we clear the timer after it gets to or surpasses the players bid
+            function timedCount() {
+                timeout = setTimeout(timedCount, 1000);
+
+                if(ginn >= sfida ){
+                    clearTimeout(timeout);
+                    timer_on = 0;
+                    mybanc(ginn, sfida)
+                }else{
+                    bancare()
+                    ginn = banco.reduce(funk)
+                    mybanc(ginn, sfida)
+                }
+            }
+
+            dinuovo()
+
+            ginn = banco.reduce(funk)
+            bancofinal.innerHTML = ginn
+            //we stop the game with dinuovo and show the result
+        }
+        else{
+            //auto win if the players bid is lower than the house
+  
+            banko.style.backgroundColor = "yellowgreen";
+            playa.style.backgroundColor = "indianred";
+
+            bankowin.innerText = "Banco Wins"
+            playawin.innerText = "Player Lost"
+
+            bancofinal.innerHTML = ginn
+            disableButton()
+
+            dinuovo()
+        }
+    }
+...
+
+```
+
+The process is similar for the **2 players mode,** we just double the house score and sum the 2 players score, the game proceeds the same **** :
+
+```
+//THIS IS FOR THE 2 PLAYERS MODE, we get the 2 arrays, first we SUM the 2 arrays from players
+    function twoplayers(arr1, arr2) {
+        return [...arr2, ...arr1];
+    }
+
+    let versus = twoplayers(players, players1)
+
+    let versato = versus.reduce(finaling)
+
+    function finaling(total, num){
+        return total + num
+    }
+    //after summing the arrays we sum all values inside
+
+    let playfinal1 = document.getElementById("playfinal1")
+    playfinal1.innerHTML = ""
+    playfinal.innerHTML = versato
+
+    //for the 2 player mode we will double the house score for 42
+    let ginn = banco.reduce(funk) * 2
+
+    function funk(total, num){
+        return total + num
+    }
+
+```
+
+### Players buttons and more win conditions
+
+So, we now need to show how the players play with the functions set up, to **draw** more cards or **stand** we have:
+
+```
+playgio.addEventListener("click", (event)=>{
+    event.preventDefault()
+    pescare()
+})
+//we just use the button to use the draw function
+
+playstand.addEventListener("click", ()=>{
+    let final = players.reduce(finaling)
+    
+    function finaling(total, num){
+        return total + num
+    }
+
+    playfinal.innerHTML = final
+    disableButton()
+    giokato= +1;
+
+    if( giokato == gioca ){
+        bancobot(final)
+    }else{
+
+        document.getElementById("playstand1").disabled = false;
+        document.getElementById("playgio1").disabled = false;
+        document.getElementById("playstand").disabled = true;
+        document.getElementById("playgio").disabled = true;
+    }
+
+})
 
 
 ```
