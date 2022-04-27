@@ -1,7 +1,8 @@
 # JS 4
 
-* Primo in lista
-* secondo in lista
+* [How we display cards and for 2 players](js-4.md#how-we-display-cards-and-for-2-players)
+* [How to handle win/lose state and play attempts](js-4.md#how-to-handle-win-lose-state-and-play-attempts)
+* [How the automated house plays](js-4.md#how-the-automated-house-plays)
 
 ### Dom Js exercise with Dynamic objects
 
