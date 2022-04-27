@@ -41,11 +41,99 @@ Selectors mirror html tags for priority ( tag > id# > .class )
 
 Here some **Inline, Inline-block and block:**
 
+{% tabs %}
+{% tab title="HTML inline-block" %}
 ```
-// Some code
+//inline elements won't have height/width and will be placed on a single line
+//inline-block won't still start a new line, included in the tags span/img/a for example
 
+<span class="linea">
+    <div></div>
+    <div></div>
+    <div></div>
+</span>
 
 ```
+{% endtab %}
+
+{% tab title="CSS inline-block" %}
+With inline-block we can use width/height and keep the boxes in a new line:
+
+```
+.linea div:first-child{
+    width: 100px;
+    height: 80px;
+    background-color: brown;
+    margin: 20px;
+    display: inline-block;
+
+}
+
+.linea div:nth-child(2){
+    width: 100px;
+    height: 100px;
+    background-color: green;
+    margin: 20px;
+    display: inline-block;
+
+}
+
+.linea div:nth-child(3){
+    width: 100px;
+    height: 120px;
+    background-color: yellow;
+    margin: 20px;
+    display: inline-block;
+}
+
+```
+{% endtab %}
+{% endtabs %}
+
+![Even if used a div tag, we overwrite it with CSS](../.gitbook/assets/inlineblocked.PNG)
+
+{% tabs %}
+{% tab title="HTML block " %}
+display:block will occupy the entire line and accept width/height, with the tags div, h1, p, li:
+
+```
+<span class="linea1">
+    <span></span>
+    <span></span>
+    <span></span>
+</span>
+```
+{% endtab %}
+
+{% tab title="CSS block" %}
+```
+.linea1 span:first-child{
+    height: 100px;
+    background-color: brown;
+    margin: 20px;
+    display: block;
+
+}
+
+.linea1 span:nth-child(2){
+    height: 100px;
+    background-color: green;
+    margin: 20px;
+    display: block;
+}
+
+.linea1 span:nth-child(3){
+    height: 100px;
+    background-color: yellow;
+    margin: 20px;
+    display: block;
+}
+
+```
+{% endtab %}
+{% endtabs %}
+
+![Even if used the span tag, we used block in the CSS](../.gitbook/assets/block.PNG)
 
 ### CSS Selectors
 
