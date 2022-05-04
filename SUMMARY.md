@@ -20,6 +20,7 @@
 * [JS 2](js/js-2.md)
 * [JS 3](js/js-3.md)
 * [JS 4](js/js-4.md)
+* [Jquery & others](js/jquery-and-others.md)
 
 ## REACT
 
