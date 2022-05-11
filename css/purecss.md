@@ -118,5 +118,8 @@ For **forms**, we start with a simpler one with no labels:
 </form>
 
 //we treat textarea as input, we use rows="3" for how many lines of space
+//ALSO we can have a disabled font that can't be modified
 
 ```
+
+![](../.gitbook/assets/Cattura12.PNG)
