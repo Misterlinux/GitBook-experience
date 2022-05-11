@@ -80,3 +80,43 @@ Also, we can add the **Hidden attribute**:
 <h1 hidden>NOBODY WILL NOTICE THIS </h1>
 
 ```
+
+### Menu and forms&#x20;
+
+Check this **form**, with an **input** and **button:**
+
+```
+//we can use pure-u on each tag to custom form elements, doing it on button will work but will need css for the fonr-size
+<div class="pure-g">
+    <div class="pure-u-1-2"
+        <form class="pure-form pure-u-2-3">
+        //we use the pure-form for form tags, like input/button AND on input we can grid
+            <input type="text" class="pure-input-2-3 pure-input-rounded" placeholder="search" >
+            <button class="pure-button">try </button>
+        </form>
+    </div>
+</div>
+
+//we have 1/2 screen, a 2/3 of it for the form AND 2/3 of it for the input
+
+```
+
+![](../.gitbook/assets/Cattura11.PNG)
+
+For **forms**, we start with a simpler one with no labels:
+
+```
+//we just add fieldset to group some inputs and use placeholder as labels
+<form class="pure-form">
+    <fieldset>
+        <input class="pure-input-2-3 placeholder="username">
+        <input class="pure-input-2-3 placeholder="password" readonly="">
+    </fieldset>
+    <fieldset>
+        <textarea placeholder="text here.." rows="3" id="" class="pure-input-2-3"></textarea>
+    </fieldset>
+</form>
+
+//we treat textarea as input, we use rows="3" for how many lines of space
+
+```
