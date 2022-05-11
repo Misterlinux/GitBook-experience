@@ -626,7 +626,7 @@ radial-gradient(circle, red 30%, yellow 45%, green 100%);
 //of the gradients on 100% of the screen, like the example below.
 ```
 
-![check here for more](../.gitbook/assets/Cattura.PNG)
+![check here for more](<../.gitbook/assets/Cattura (1).PNG>)
 
 So, for the **circles' background** fade-in/out effect:
 

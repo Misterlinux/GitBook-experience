@@ -1,7 +1,5 @@
 # CSS 3
 
-* Form carousel effect
-
 ### Form carousel effect
 
 First check this exercise:
