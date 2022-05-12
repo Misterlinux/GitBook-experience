@@ -81,6 +81,13 @@ This works on **images** too:
 //on bigger screens than (568px) we have 1/5 images and 2/3 image, they dont have to sum to 5/5
 //on smaller screens they will be 1/3 of the page
 
+//To add padding/margin without breaking the layout we box-sizing
+.pure-g > img {
+  box-sizing: border-box;
+  padding: 1em;
+  height: 50px;
+}
+
 ```
 
 Also, we can add the **Hidden attribute**:
