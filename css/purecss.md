@@ -109,7 +109,7 @@ For **forms**, we start with a simpler one with no labels:
 //we just add fieldset to group some inputs and use placeholder as labels
 <form class="pure-form">
     <fieldset>
-        <input class="pure-input-2-3 placeholder="username">
+        <input class="pure-input-2-3 placeholder="username" required="">
         <input class="pure-input-2-3 placeholder="password" readonly="">
     </fieldset>
     <fieldset>
@@ -120,6 +120,7 @@ For **forms**, we start with a simpler one with no labels:
 //we treat textarea as input, we use rows="3" for how many lines of space
 //ALSO we can have a disabled font that can't be modified
 
+//we can use required="" or disabled="" in the <input>
 ```
 
 ![](../.gitbook/assets/Cattura12.PNG)
@@ -173,3 +174,106 @@ Due to the **pure-u-1-3** or **pure-u-2-3** on the div>inputs we have different 
 ![pure-u-2-3 form](../.gitbook/assets/Cattura2-3.PNG)
 
 ![pure-u-1-3 form ](<../.gitbook/assets/Cattura1-3 (1).PNG>)
+
+### Button,checkbox and Tables
+
+We use **class="pure-button"** for both \<a> and \<button>:
+
+```
+//the difference between <a> and <button> will be the link hover blue color
+
+<a href="" class="pure-button"> &#60;a&#62; </a>
+<button class="pure-button"> &#60;button&#62; </button>
+
+<button class="pure-button">
+    <i class="fa fa-cog"></i>Fonts can go
+</button>
+//font awesome icons can go there
+
+//we have class for disabled/active and primary color (the only one)
+<div class="pure-button-group" role="group" aria-label="...">
+    <button class="pure-button pure-button-disabled">A Pure Button</button>
+    <button class="pure-button pure-button-primary">A Pure Button</button>
+    <button class="pure-button pure-button-active">A Pure Button</button>
+</div>
+
+//pure-button-group just reduces the spaces between buttons
+<button class="pure-button pure-button-disabled">A Pure Button</button>
+<button class="pure-button pure-button-primary">A Pure Button</button>
+<button class="pure-button pure-button-active">A Pure Button</button>  
+
+```
+
+![Radio and buttons](../.gitbook/assets/Catturaradio.PNG)
+
+For the checkbox and radio we need **form,label and input**:
+
+```
+//Pure-checkbox/pure-radio and pure-form is to normalize and vertically align
+
+<form action="" class="pure-form">
+    <labels class="pure-checkbox"> 
+        <input type="checkbox">You can check
+    </labels>
+    <labels class="pure-checkbox">
+        <input type="checkbox">each box
+    </labels>
+
+    <label for="" class="" >
+        <input type="radio" name="optionsRadios"/> 
+        Radio buttons
+    </label>
+    <label for="" class="">
+        <input type="radio" name="optionsRadios" checked="" /> 
+        can be picked
+    </label>
+    <label for="checkbox-radio-option-three" class="">
+        <input type="radio" id="checkbox-radio-option-three" name="optionsRadios" value="option2" /> 
+        only one at the time
+    </label>
+</form>
+
+//To have the radio be checked one at a time we just need NAME inside the input
+
+```
+
+We can style HTML **tables:**
+
+```
+//so, we use pure-table-horizontal to remove the vertical lines of the table
+//we have <thead> for the first row while <tbody> with both hvaing tROW or tDATA
+
+<table class="pure-table pure-table-horizontal pure-u-1-2">
+    <thead>
+        <tr>
+            <th>Table </th>
+            <th>head </th>
+            <th>has table </th>
+            <th>rows </th>
+        </tr>
+    </thead>
+    <tbody >
+        <tr class="pure-table-odd">
+            <td>Td are  </td>
+            <td>while </td>
+            <td>the </td>
+            <td>rest </td>    
+        </tr>
+        <tr>
+            <td>Table </td>
+            <td>is on </td>
+            <td>tbody </td>
+            <td>ALSO </td>    
+        </tr>
+        <tr class="pure-table-odd">
+            <td>Data </td>
+            <td>we use </td>
+            <td>table-odd </td>
+            <td>for row color </td>    
+        </tr>
+    </tbody>
+</table>
+
+//for each trow we can put pure-table-odd for the gray background
+
+```
