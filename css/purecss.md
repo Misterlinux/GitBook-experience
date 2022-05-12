@@ -320,6 +320,11 @@ Menus are organized like lists, we can use pureCSS classes for layout:
 </div>
 
 //To have it VERTICAL we just need to remove the pure-menu-horizontal
+//ALSO we can have selected/disabled menu-item elements
+
+<li class="pure-menu-item pure-menu-selected">
+<li class="pure-menu-item pure-menu-disabled">
+
 //Also for the vertical we may need css to keep it from occupying the entire space
 
 .pure-menu{
