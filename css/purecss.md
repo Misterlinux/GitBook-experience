@@ -123,3 +123,53 @@ For **forms**, we start with a simpler one with no labels:
 ```
 
 ![](../.gitbook/assets/Cattura12.PNG)
+
+The **pure-u** can change the **layout** of the form:
+
+```
+//let's start with the pure-g mode.
+
+<form class="pure-form pure-form-stacked">
+    <fieldset>
+        <div class="pure-g">
+
+            <div class="pure-u-1 pure-u-sm-1-3">
+                <label for="multi-first-name">First Name</label>
+                <input type="text" id="multi-first-name" class="pure-u-23-24" />
+            </div>
+
+            <div class="pure-u-1 pure-u-sm-1-3">
+                <label for="multi-last-name">Last Name</label>
+                <input type="text" id="multi-last-name" class="pure-u-23-24" />
+            </div>
+            <div class="pure-u-1 pure-u-sm-1-3">
+                <label for="multi-email">E-Mail</label>
+                <input type="email" id="multi-email" class="pure-u-23-24" required="" />
+            </div>
+            <div class="pure-u-1 pure-u-sm-1-3">
+                <label for="multi-state">State</label>
+                <select id="multi-state" class="pure-input-1-2">
+                    <option>AL</option>
+                    <option>CA</option>
+                    <option>IL</option>
+                </select>
+            </div>
+
+        </div>
+//we separate the pure-g from the checkbox and submit button for them to have their own line
+
+        <label for="multi-terms" class="pure-checkbox">
+            <input type="checkbox" id="multi-terms" /> I&#x27;ve read the terms and conditions
+        </label>
+        <button type="submit" class="pure-button pure-button-primary">Submit</button>
+
+    </fieldset>
+</form>
+
+```
+
+Due to the **pure-u-1-3** or **pure-u-2-3** on the div>inputs we have different layouts, also we need the **pure-form-stacked** to keep the spacing for the inputs and labels**:**
+
+![pure-u-2-3 form](../.gitbook/assets/Cattura2-3.PNG)
+
+![pure-u-1-3 form ](<../.gitbook/assets/Cattura1-3 (1).PNG>)
