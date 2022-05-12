@@ -32,6 +32,16 @@ require('purecss')
 
 ```
 
+_**Fonts**_ can be implemented:
+
+```
+.pure-g [class *= "pure-u"] {
+  /* Set your content font stack here: for some reason the font needs this*/
+  font-family: Georgia, Times, "Times New Roman", serif;
+}
+
+```
+
 _**The responsive grid:**_
 
 ```
@@ -275,5 +285,76 @@ We can style HTML **tables:**
 </table>
 
 //for each trow we can put pure-table-odd for the gray background
+
+```
+
+### Menus and dropdowns
+
+Menus are organized like lists, we can use pureCSS classes for layout:
+
+```
+//Organized as menu-list> menu-item> menu-link
+
+<div class="pure-menu pure-menu-horizontal">
+    <ul class="pure-menu-list ">
+        <li class="pure-menu-item"> 
+            <a href="" class="pure-menu-link">These link </a>
+        </li>
+        <li class="pure-menu-item"> 
+            <a href="" class="pure-menu-link">elements will </a>
+        </li>
+        <li class="pure-menu-item"> 
+            <a href="" class="pure-menu-link">be blue text</a>
+        </li>
+        <li class="pure-menu-item"> 
+            <a href="" class="pure-menu-link">on hover </a>
+        </li>
+    </ul>
+</div>
+
+//To have it VERTICAL we just need to remove the pure-menu-horizontal
+//Also for the vertical we may need css to keep it from occupying the entire space
+
+.pure-menu{
+  display: inline-block;
+}
+
+```
+
+![menu-horizontal NOT and the hover dropdown](../.gitbook/assets/menusthin.PNG)
+
+For the hover dropdown, we need **-menu-has-children**, **-menu-allow-hover** > **-menu-children:**
+
+```
+//we add the special classes in the parent LI element THEN the <ul> with item/link into it
+
+<div class="pure-menu pure-menu-horizontal">
+    <ul class="pure-menu-list">
+        <li class="pure-menu-item">
+            <a href="" class="pure-menu-link">uno</a>
+        </li>
+
+        <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+            <a href="" class="pure-menu-link">SCROLL </a>
+
+            <ul class="pure-menu-children">
+                <li class="pure-menu-item">
+                    <a href="" class="pure-menu-link">daje</a>
+                </li>
+                <li class="pure-menu-item">
+                    <a href="" class="pure-menu-link">daje</a>
+                </li>
+                <li class="pure-menu-item">
+                    <a href="" class="pure-menu-link">allargato may</a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="pure-menu-item">
+            <a href="" class="pure-menu-link">fatto </a>
+        </li>
+    </ul>
+
+</div>
 
 ```
