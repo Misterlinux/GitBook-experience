@@ -370,3 +370,45 @@ For the hover dropdown, we need **-menu-has-children**, **-menu-allow-hover** > 
 </div>
 
 ```
+
+We can also have **horizontal** scrollable menus, in case:
+
+```
+//pure-menu-horizontal will display on the width while -menu-scrollable will allow the scroll for the overflow elements
+
+<div class="pure-menu pure-menu-horizontal pure-menu-scrollable ">
+    <a href="#" class="pure-menu-link pure-menu-heading">Yahoo</a>
+    <ul class="pure-menu-list">
+        <li class="pure-menu-item">
+            <a href="#" class="pure-menu-link">SCrolling </a>
+        </li>
+        <li class="pure-menu-item">
+            <a href="#" class="pure-menu-link">Menu </a>
+        </li>
+        <li class="pure-menu-item">
+            <a href="#" class="pure-menu-link">On limit</a>
+        </li>
+        <li class="pure-menu-item">
+            <a href="#" class="pure-menu-link">SPACES </a>
+        </li>
+        <li class="pure-menu-item">
+            <a href="#" class="pure-menu-link">Finance</a>
+        </li>
+        <li class="pure-menu-item">
+            <a href="#" class="pure-menu-link">Movies</a>
+        </li>
+        <li class="pure-menu-item">
+            <a href="#" class="pure-menu-link">Small Business</a>
+        </li>
+        <li class="pure-menu-item">
+            <a href="#" class="pure-menu-link">Cricket</a>
+        </li>
+        <li class="pure-menu-item">
+            <a href="#" class="pure-menu-link">Tech</a>
+        </li>
+    </ul>
+</div>
+
+```
+
+![](<../.gitbook/assets/CScollable horizontalattura.PNG>)
