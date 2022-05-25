@@ -1,8 +1,8 @@
 # PureCSS
 
-* uno
-* due
-* tre
+* [Menu and Forms](purecss.md#menu-and-forms)
+* [Buttons, Checkbox & Tables](purecss.md#button-checkbox-and-tables)
+* [Menu & Dropdowns](purecss.md#menus-and-dropdowns)
 
 **PureCSS** is a set of responsive, small (3.7kb) and mobile-focused CSS modules.
 
