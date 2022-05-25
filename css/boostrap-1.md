@@ -130,4 +130,60 @@ In the content, we can add Extra PureCSS pure-g(rid), images, forms, and bootsra
 {% endtab %}
 {% endtabs %}
 
-here smore
+### Collapse Buttons and content
+
+So, the **Collapse** Js plugin allows us to toggle the height visibility of **Target** content:
+
+```
+//We can use both buttons or <a> links as buttons, it needs to toggle the "collapse" plugin
+//AND the target for the content to collapse/show
+
+<a href="" 
+ class="pure-button close" 
+ data-bs-toggle="collapse" 
+ data-bs-target="#opened"> 
+ X 
+</a>
+
+//we need the COLLAPSE class and target, the rest is PureCSS
+<div class="collapse" id="opened">
+    <ul class="pure-menu-list centered">
+        <li class="pure-menu-item"><a href="" class="pure-menu-link">Rerum?</a></li>
+        <li class="pure-menu-item"><a href="" class="pure-menu-link">Repellendus.</a></li>
+        <li class="pure-menu-item last"><a href="" class="pure-menu-link">Maxime?</a></li>
+    </ul>
+</div>
+
+```
+
+{% tabs %}
+{% tab title="Collapse button" %}
+![With the X button](../.gitbook/assets/Collapse.PNG)
+{% endtab %}
+
+{% tab title="Collapse content" %}
+![This is the show content](../.gitbook/assets/CattCOLLAPSINGura.PNG)
+{% endtab %}
+{% endtabs %}
+
+Also, it's possible to open **multiple** collapses by targetting classes:
+
+```
+<button data-bs-target=".multi-collapse" class="btn btn-primary" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2">
+  Toggle both elements
+</button>
+
+//We can open both the collapse r have buttons for each
+<div class="collapse multi-collapse" id="multiCollapseExample1">
+  <div class="card card-body">
+    Some placeholder content for the first collapse component of this multi-collapse example. This panel is hidden by default but revealed when the user activates the relevant trigger.
+  </div>
+</div>
+
+<div class="collapse multi-collapse" id="multiCollapseExample2">
+  <div class="card card-body">
+    Some placeholder content for the second collapse component of this multi-collapse example. This panel is hidden by default but revealed when the user activates the relevant trigger.
+  </div>
+</div>
+
+```
