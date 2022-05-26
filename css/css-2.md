@@ -198,6 +198,31 @@ In _**alternative**_ we can also use an \<img>:
 
 ![IMAGE with absolute and container as relative](../.gitbook/assets/backgroundimg.PNG)
 
+We can also have a **fixed** image background with content and scroll:
+
+```
+//We embed the text in an image
+
+<div class="banner">
+  <div>
+    <h1>This is the Reason we are here</h1>
+    <button>ECCOCI</button>
+  </div>
+</div>
+
+//we set fixed and cover over the 
+.banner {
+    background: url("https://bit.ly/3NwLCLI") 50% -7em no-repeat fixed;
+  
+    background-size: cover;
+    height: 20em;
+    margin-bottom: 3em;
+}
+
+```
+
+![We also added a position:ficed width:80% in the navbar](<../.gitbook/assets/Fixed (1).PNG>)
+
 How to **flex** space and **style borders** on icons:
 
 ```
