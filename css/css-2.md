@@ -159,6 +159,45 @@ box-shadow: 0px -20px 20px -20px #001f9c inset; (bottom)
 //remember: X / Y(space)/ blur / spread and color
 ```
 
+![Positioned flex text with shadow and image-background](../.gitbook/assets/bettershadow.PNG)
+
+In _**alternative**_ we can also use an \<img>:
+
+```
+//This will allow us to have more control over the background-image
+
+<div class="demo-wrap">
+    <img class="demo-bg pure-img" src="https://bit.ly/3MRzMMs">
+  <div class="demo-content">
+    <h1>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. In 
+        placeat quibusdam perferendis? Facilis magnam, itaque cumque totam 
+        soluta asperiores inventore.
+    </h1>
+  </div>
+</div>
+
+//the css will use position relative/absolute for image/text
+
+.demo-wrap {
+    overflow: hidden;
+    position: relative;
+}
+  
+.demo-bg {
+  opacity: 0.6;
+  position: absolute;
+  width: 100%;
+}
+
+.demo-content {
+  padding: 3em;
+}
+
+```
+
+![IMAGE with absolute and container as relative](../.gitbook/assets/backgroundimg.PNG)
+
 How to **flex** space and **style borders** on icons:
 
 ```
