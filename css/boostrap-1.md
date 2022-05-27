@@ -14,6 +14,22 @@ Even if we include only some **modules** of **** bootstrap we use the entire pac
 
 ```
 
+### Boostrap Spacing
+
+We can use classes to add **margin** and **padding**:
+
+```
+//so, we can use m_- or p_- for Margin or Padding, from 0-5 and even negative numbers
+<div class="ms-3"></div>
+
+//we can use x/y for left/right or top/bottom 
+<p class="my-2"></p> 
+
+//or if we want left/rigth/top bottom, s(tart),e(nd), t(op), b(ottom)
+<h3 class="pe-4"></h3> 
+
+```
+
 ### PureCSS and Modal
 
 For modals we have _buttons_ opening **extra windows** with content:&#x20;
@@ -187,3 +203,4 @@ Also, it's possible to open **multiple** collapses by targetting classes:
 </div>
 
 ```
+
