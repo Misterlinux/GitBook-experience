@@ -30,6 +30,31 @@ We can use classes to add **margin** and **padding**:
 
 ```
 
+So, we can create a **pagination** block of links:
+
+```
+//SO, we just need pagination for the style of the list
+
+<ul class="pagination pagination-lg justify-content-center my-5">
+  <li class=""><a class="page-link" href="#">
+    <span> &laquo;</span></a>
+  </li>
+  <li class=""><a class="page-link" href="#">1</a></li>
+  <li class=""><a class="page-link" href="#">2</a></li>
+  <li class=""><a class="page-link" href="#">3</a></li>
+  <li class="page-item active"><a class="page-link" href="#">
+    <span>&raquo;</span>
+  </a></li>
+</ul>
+
+//we can use pagination-lg/sm to style size of the options
+//Also we can justify-content-start/end/center
+//if we want the active background we use both page-item + active
+
+```
+
+![](../.gitbook/assets/Pagination.PNG)
+
 ### PureCSS and Modal
 
 For modals we have _buttons_ opening **extra windows** with content:&#x20;
