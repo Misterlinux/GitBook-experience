@@ -264,8 +264,81 @@ To have a _**dynamic pagination**_ bar we can use a Jquery Plugin [**Bootpag**](
 <script type="text/javascript" src="http://botmonster.com/jquery-bootpag/jquery.bootpag.js"></script>
 <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 
+```
 
-
-
+In HTML we just need div containers:
 
 ```
+//one for the content we may show and another for navigation
+
+<div style="text-align: center">
+	<div id="dynamic_content">Pagination goes here</div>
+	<div id="show_paginator"></div>
+</div>
+
+```
+
+Most is done in Javscript:
+
+```
+//we load the paramethers of the paginator with bootpag
+
+$('#show_paginator').bootpag({
+      total: 24,      //total pages/links
+      page: 1,        //starting page
+      maxVisible: 6,  //max number of visible
+      next: ">",      //we can change the next button default arrow
+      //href: "https://www.amazon.it/" //we can also give each page an automatic link
+
+}).on('page', function(event, num){
+     $("#dynamic_content").html("Page " + num); //onclick of the page link we change the html
+});
+
+```
+
+{% tabs %}
+{% tab title="First Pag" %}
+![](../.gitbook/assets/bootpag.PNG)
+{% endtab %}
+
+{% tab title="Second Pag" %}
+![](../.gitbook/assets/bottpag1.PNG)
+{% endtab %}
+{% endtabs %}
+
+We can add more properties or events or even change them after the onclick page:
+
+```
+//we modify the $(this).bootpag({}) 
+
+$('.demo1').bootpag({
+    total: 5
+}).on("page", function(event, num){
+    $(".content").html("Page " + num); 
+ 
+    //we can modify the bootpag after the click with new properties
+    $(this).bootpag({
+      total: 10, 
+      maxVisible: 6,
+      next: 'next',
+      href: "#pro-page-{{number}}", //we can give each button clicked an href
+      prev: null   		    //we can delete the prev button 
+    });
+ 
+    if(num==5){
+      $(".content").html("complimenti YOU GOT GNOMED")
+    }
+    //and we can add conditions on specific clicked buttons
+});
+
+```
+
+{% tabs %}
+{% tab title="First pag" %}
+![](../.gitbook/assets/bootcap.PNG)
+{% endtab %}
+
+{% tab title="Second pag" %}
+![](../.gitbook/assets/bootpog2.PNG)
+{% endtab %}
+{% endtabs %}
