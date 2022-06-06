@@ -229,3 +229,43 @@ Also, it's possible to open **multiple** collapses by targetting classes:
 
 ```
 
+### Pagination and bootpag
+
+We create a block of connected links for webpage navigation:
+
+```
+//we can add classes active/disable for selected or not active links
+//ALSO we can make the navigation bigger/smaller with navigation-lg/-sm additional classes
+
+<nav style="text-align: center">
+  <ul class="pagination ">
+    <li class=""><a class="page-link" href="#">
+        <span aria-hidden="true">&laquo;</span></a>
+    </li>
+    <li class="disabled"><a class="page-link" href="#">1</a></li>
+    <li class=""><a class="page-link" href="#">2</a></li>
+    <li class="page-item active"><a class="page-link" href="#">3</a></li>
+    <li class=""><a class="page-link" href="#">
+      <span aria-hidden="true">&raquo;</span>
+    </a></li>
+  </ul>  
+</nav>
+
+```
+
+![1 is .disabled, 3 is .active](../.gitbook/assets/naviga.PNG)
+
+To have a _**dynamic pagination**_ bar we can use a Jquery Plugin [**Bootpag**](https://botmonster.com/jquery-bootpag/#pro-page-7):
+
+```
+//to start using it we need Jquery and Bootpag in the <head> (and of course bootstrap)
+
+<script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="http://botmonster.com/jquery-bootpag/jquery.bootpag.js"></script>
+<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+
+
+
+
+```
