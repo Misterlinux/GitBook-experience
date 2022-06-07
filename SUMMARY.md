@@ -15,6 +15,7 @@
 * [CSS 3](css/css-3.md)
 * [PureCSS](css/purecss.md)
 * [Boostrap 1](css/boostrap-1.md)
+* [Boostrap 2](css/boostrap-2.md)
 
 ## JS
 
