@@ -223,6 +223,8 @@ For a basic carousel we need images and arrows to scroll through them:
 //for starters we need .carousel .slide for the container tag, with an id target and data-bs-RIDE="carousel"
 
 <div class="pure-u-1-4">
+
+//here we can add the .fade to change the slide to a fede effect
   <div class="carousel slide " id="clicked" data-bs-ride="carousel">
   
 //the content images will go in carousel-inner AND you need to have a carousel-item active for the entire thing to be visible
