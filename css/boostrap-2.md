@@ -298,3 +298,23 @@ We can also add text-captions to the carousel, timed slides, and carousel indica
 ```
 
 ![](../.gitbook/assets/captions-indicators.PNG)
+
+### Dropdown and button extra effects
+
+A basic dropdown button:
+
+```
+//dropdown-toggle is the small arrow near the text while we can modify button size with btn-sm/lg
+
+<div class="pure-u-1-6">
+  <button class="btn btn-warning btn-sm dropdown-toggle" data-bs-toggle="dropdown" data-bs-offset="5,20">Lorem</button>
+
+//this menu wont be visible before the button click
+  <ul class="dropdown-menu">
+    <li><a href="" class="dropdown-item active">uno</a></li>
+    <li><a href="" class="dropdown-item">due</a></li>
+    <li><a href="" class="dropdown-item">tre</a></li>
+  </ul>
+</div>
+
+```
