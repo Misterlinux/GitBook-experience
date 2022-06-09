@@ -299,18 +299,22 @@ We can also add text-captions to the carousel, timed slides, and carousel indica
 
 ![](../.gitbook/assets/captions-indicators.PNG)
 
-### Dropdown and button extra effects
+### Dropdown,breadcrumbs, and button extra effects
 
 A basic dropdown button:
 
 ```
 //dropdown-toggle is the small arrow near the text while we can modify button size with btn-sm/lg
+//we can space the dropdown menu with data-bs-offset="X, Y"
+//we can also use drop(position) on the container tag to direction of dropdown menu
 
-<div class="pure-u-1-6">
-  <button class="btn btn-warning btn-sm dropdown-toggle" data-bs-toggle="dropdown" data-bs-offset="5,20">Lorem</button>
+<div class="pure-u-1-6 dropup">
+  <button class="btn btn-warning btn-sm dropdown-toggle" 
+  data-bs-toggle="dropdown" data-bs-offset="5,20">Lorem</button>
 
-//this menu wont be visible before the button click
-  <ul class="dropdown-menu">
+//this menu wont be visible before the button click 
+//with dropdown-menu-dark we can have white text AND we can modify the background-color
+  <ul class="dropdown-menu dropdown-menu-dark bg-danger">
     <li><a href="" class="dropdown-item active">uno</a></li>
     <li><a href="" class="dropdown-item">due</a></li>
     <li><a href="" class="dropdown-item">tre</a></li>
@@ -318,3 +322,81 @@ A basic dropdown button:
 </div>
 
 ```
+
+![](../.gitbook/assets/DropUP.PNG)
+
+We can also have 2 buttons merge in a group or style the direction of the dropdown menu:
+
+```
+//for the button+arrow we need a container with btn-group
+
+<div class="pure-u-1-3 btn-group">
+   <button type="button" class="btn btn-danger">Very long button</button>
+   
+//the first button doesn't need dropdown, the second will need dropdown-toggle-split to remove the margin between the 2
+   <button data-bs-toggle="dropdown" type="button" class="btn btn-danger dropdown-toggle 
+   dropdown-toggle-split">
+   </button>
+   <div class="dropdown-menu ">
+     <a class="dropdown-item" href="#">Action</a>
+     <a class="dropdown-item" href="#">Something else here</a>
+     <div class="dropdown-divider"></div>
+     <a class="dropdown-item" href="#">Separated link</a>
+   </div>
+</div>
+
+
+<div class="pure-u-1-3">
+
+//we can also style the direction the dropdown is gonna appear (start/end of the button)
+//here we also add breakpoints to adapt the dropdown to the button
+  <button class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" 
+  data-bs-auto-close="inside">Lorem ipsum dolor sit amet.</button>
+  <ul class="dropdown-menu dropdown-menu-lg-start dropdown-menu-md-end">
+    <li><a href="" class="dropdown-item">Lorem.</a></li>
+    ...
+  </ul>
+</div>
+
+```
+
+![](../.gitbook/assets/DROPDOWNGROUp.PNG)
+
+**Badges** are small labels that can be put inside or on the border of buttons:
+
+```
+//so, we need to have position-relative on the button
+
+<div class="pure-u-1-3">
+  <button class="btn btn-secondary position-relative">
+    So we have <span class="badge bg-info">6</span> 
+    
+//a standard badge is a colored round span inside the button
+//to add a badge on the button border we use position-absolute & translate-middle, the rest is for position and round borders
+//we can also just have empty bardges and use P(adding) for its width    
+    <span class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-danger p-3"> </span>
+    <span class="position-absolute top-100 start-100 translate-middle badge rounded-pill bg-success">99+</span>
+  </button>
+</div>
+
+```
+
+![](../.gitbook/assets/badges.PNG)
+
+We can use breadcrumbs to organize navigation links:
+
+```
+//it's just a list with breadcrumb list with -item
+
+<nav class="pure-u-1-3 my-5">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="">Lorem.</a></li>
+    <li class="breadcrumb-item"><a href="">Reiciendis.</a></li>
+    <li class="breadcrumb-item"><a href="">Magnam?</a></li>
+    <li class="breadcrumb-item"><a href="">Aspernatur.</a></li>
+  </ol>
+</nav>
+
+```
+
+![](../.gitbook/assets/Breadcrumb.PNG)
