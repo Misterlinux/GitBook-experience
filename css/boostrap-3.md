@@ -48,11 +48,13 @@ A scollSpy is structured in a **menu** and a **content scroll:**
 <div class="pure-u-1-2 ">
   <menu>
     <nav id="select" class="navbar flex-column p3 align-items-stretch">
-      <!-- nav-pills is what allows the active to have the color background -->
       <a class="navbar-brand" href="#">Navbar</a>
+      
+<!-- nav-pills is what allows the active to have the color background -->      
       <ul class="nav nav-pills flex-column">
         <li class="nav-item active">
-          <!--to avoid having already checked active links I removed the classes from a-->
+        
+<!--a class for the <a> links isnt needed -->
           <a href="#uno" >Lorem.</a>
         </li>
         <li class="nav-item">
@@ -61,14 +63,17 @@ A scollSpy is structured in a **menu** and a **content scroll:**
         <li class="nav-item">
           ...
         </li>
+        
+//we just added margin to group the nav-item
         <li class="nav-item ms-3">
           <a href="#cinc">margin items</a>
         </li>
       </ul>
     </nav>
   </menu>
-
 </div>
+
+//here we have the scroll content, each section has a menu-item correspondant
 <div class="pure-u-1-2 contenuto" id="serve">
   <div>
     <section>
@@ -87,3 +92,51 @@ A scollSpy is structured in a **menu** and a **content scroll:**
 </div>
 
 ```
+
+For the Javascript we need to use the .**active** bootsrap class on click:
+
+```
+//we select each menu-item 
+
+let eccoli = document.querySelectorAll("menu li")
+
+//foreach on click we REMOVE the active class from each one, then we add ONLY to the clicked element
+eccoli.forEach(i=>{
+  i.onclick = (()=>{
+      eccoli.forEach(o=> o.classList.remove("active"))
+      i.classList.add("active")
+  })
+})
+
+```
+
+On scroll you need to use [**\_\_.getBoundingClientRect().y**](https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref\_element\_getboundingclientrect):
+
+```
+//We don't scroll the entire page so we need a selector for the scroll section we use
+let scrolling = document.getElementById("serve")
+
+//and we need another one for the singular paragraphs
+let singoli = document.querySelectorAll("#serve section")
+
+scrolling.addEventListener("scroll", ()=>{
+
+//while we scroll the selected for each of the paragraph we get the position relative to the viewpoint
+  singoli.forEach((x,y)=>{
+    let space = x.getBoundingClientRect().y
+
+//we check x.getBoundingClientRect at the start and at the end of the scroll to calculate
+//the space for each paragraèh using also the window.innerHeight
+    if(space < window.innerHeight - 456){
+    
+//here we just do the same as with the click function
+      eccoli.forEach( z=> z.classList.remove("active"))
+      eccoli[y].classList.add("active")
+    }
+  })
+})
+
+```
+
+### Toast and pop-up messages
+
