@@ -140,3 +140,50 @@ scrolling.addEventListener("scroll", ()=>{
 
 ### Toast and pop-up messages
 
+With toast, we can add close-ready messages to the page:
+
+```
+//Toast structure is similar to card
+
+<div class="toast-container position-fixed bottom-0 end-0 me-3 mb-3">
+//to keep the toast fixed on the border of the page we just need position-fixed, it needs
+//a coordinates to be visible, bottom/start/end/top
+
+  <div class="toast show hide" id="tuno">
+//we include the .hide for js toggle later, toaster-header will have a bottom-border from body
+  
+      <div class="toast-header">
+        <h5>This is the left </h5>
+        <button class="btn-close ms-auto" id="ecco1"></button>
+      </div>
+//like organizing grid in the toast
+      <div class="toast-body pure-g">
+        <div class="pure-u-1-3">
+          <img src="https://bit.ly/3tvUtWn" class="pure-img">
+        </div>
+        <div class="pure-u-2-3 p-3">
+          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto esse maiores, id a delectus quisquam!</p>
+        </div>
+      </div>
+ 
+  </div>
+</div>
+
+```
+
+For the JS we can toggle the .**show** .**hide:**
+
+```
+//with .toggle we can add .show if absent OR remove it if present
+let ecco = document.getElementById("ecco")
+let ecco1 = document.getElementById("ecco1")
+
+function hiding(dele){
+  dele.classList.toggle("show")
+}
+
+ecco1.onclick=(()=>{
+  hiding(ecco)
+})
+
+```
