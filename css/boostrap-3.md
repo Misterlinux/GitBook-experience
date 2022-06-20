@@ -187,3 +187,96 @@ ecco1.onclick=(()=>{
 })
 
 ```
+
+### Responsive navbar with Toggle button
+
+Check the final result:
+
+![](<../.gitbook/assets/Navbardrodowning (1).PNG>)
+
+```
+//navbar includes the justify-content-between, while bg gives it the background-color
+
+<nav class="navbar bg-warning">
+        <div>
+//navbar-brand will be thicker and no text-link decoration
+            <a href="" class="navbar-brand ps-3">Lorem.</a>
+        </div>
+
+//the navbar will be not displayed on smaller screens
+        <div class="d-sm-flex d-none align-items-center">
+//align-items in the container class is to vertically align the children tags
+
+            <div class="mx-1">simao.</div>
+            <div class="pure-menu-item pure-menu-has-children pure-menu-allow-hover pe-0">
+                <a href="" class="pure-menu-link">SCROLL </a>
+                <ul class="pure-menu-children">
+                    <li class="pure-menu-item">
+                        <a href="" class="pure-menu-link">daje</a>
+                    </li>
+                    <li class="pure-menu-item">
+                        <a href="" class="pure-menu-link">daje</a>
+                    </li>
+                    <li class="pure-menu-item">
+                        <a href="" class="pure-menu-link">allargato may</a>
+                    </li>
+                </ul>
+            </div>
+    
+//In a navbar we need to have the .dropdown class in the container tag
+            <div class=" dropdown">
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">Tutorials</a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#">Microsoft</a>
+                    <a class="dropdown-item" href="#">JAVA</a>
+                    <a class="dropdown-item" href="#">Database</a>
+                </div>
+            </div>
+
+//for form we will need d-flex in the container tag
+            <div>
+                <form class="pure-form d-flex">
+                    <input type="text" class="pure-input" placeholder="search">
+                    <button class="pure-button btn-sm">try </button>
+                </form>
+            </div>
+    
+        </div>
+
+```
+
+We won't use Navbar-expand- and instead will create a new **navbar-toggle:**
+
+![](../.gitbook/assets/Navbartoggled.PNG)
+
+For the code:
+
+```
+//for it to be visible only on a small screen we d-block AND d-sm-none
+
+        <div class="d-block d-sm-none">
+            <button class="navbar-toggle" data-bs-toggle="collapse" 
+            data-bs-target="#tuo">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+
+//the .collapse class keeps the content hidden until the data-bs-toggle="collapse is clicked
+//and the navbar-collapse has the id = data-bs-target
+            <div class="navbar-collapse collapse text-dark" id="tuo">
+            <ul class="navbar-nav text-center">
+                <li class="nav-item"><a href="" class="nav-link"> COSETTE </a></li>
+                <li class="nav-item"><a href="" class="nav-link">Ipsam?</a></li>
+                <li class="nav-item"><a href="" class="nav-link">Quo.</a></li>
+                <li class=" mx-auto ">
+                    <form class="pure-form d-flex">
+                        <input type="text" class="pure-input" placeholder="search">
+                        <button class="pure-button">try </button>
+                    </form>
+                </li>
+            </ul>
+        </div>  
+</nav>
+
+```
+
