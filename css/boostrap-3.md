@@ -280,3 +280,254 @@ For the code:
 
 ```
 
+### Complete responsive page
+
+Check this exercise:
+
+{% embed url="https://codepen.io/misterlinux/pen/zYRVoMe" %}
+
+About the responsive Layout:
+
+```
+//The HTML structure is based of:
+
+<div class="pure-g">
+
+    <div id="nav" class="pure-u-1">
+    </div>
+
+    <div id="list" class="pure-u-1">
+        <p>column is here</p>
+    </div>
+
+    <div id="main" class="pure-u-1">
+        <p>main text is here</p>
+    </div>
+</div>
+
+```
+
+{% tabs %}
+{% tab title="Mobile" %}
+![](../.gitbook/assets/ONeof1.PNG)
+
+The CSS code is:
+
+```
+// The Nav needs width/height and no position
+
+#nav{
+    background-color: orange;
+    height: auto;
+    width: 100%;
+}
+
+```
+{% endtab %}
+
+{% tab title="MD creen" %}
+![](../.gitbook/assets/Oneof2.PNG)
+
+For CSS we:
+
+```
+//#nav, #list and #main will have fixed position, overflow is for the scrollable content og List
+
+#nav, #list, #main {
+    position: fixed;
+    overflow: auto;
+}
+
+//with height 100% we occupy the entire page with sidenav
+#nav {
+    width: 9.5em;
+    height: 100%;
+}
+
+//the margin is the width occupied by the sidebar
+#list {
+    margin-left: 9.5em;
+    width: 90% ;
+    height: 33%; 
+    border-bottom: 1px solid #ddd;
+}
+
+//is top-position is the height occupied by the #list, we need bottom if we want it to cover the Y space
+//and we include the sidenav margin
+#main {
+    top: 33%;
+    bottom: 0; 
+    left: 9.5em;
+    background-color: violet;
+}
+
+```
+{% endtab %}
+
+{% tab title="Lg screen" %}
+![](../.gitbook/assets/Oneof3.PNG)
+
+For the large screen CSS:
+
+```
+//we make columns with height
+
+#list {
+    width: 22em;
+    height: 100%;
+    border-right: 1px solid #ddd;
+}
+
+//we use static position to avoid the previous media-query positioning
+#main {
+    position: static;
+    margin-left: 30em;
+    bottom: 0;
+}
+
+```
+{% endtab %}
+{% endtabs %}
+
+About every single layout now:
+
+![](../.gitbook/assets/StickyIMAGE.PNG)
+
+```
+//For the sticky scrollable image:
+
+<div class="splash-container d-block d-sm-none w-100">
+    <div class="splash text-center text-dark">
+        <h1 class="splash-head py-2">Big Bold Text</h1>
+        <p class="splash-subhead mb-1">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+        </p>
+        <a href="http://purecss.io" class="btn btn-primary">Get Started</a>
+    </div>
+</div>
+
+//height is for the image BUT the space is given by the margin between fixed elements
+.splash-container {
+    background: url("https://..");
+    height: 54%;
+    position: fixed !important;
+}
+//we can create the space with absolute and top position
+#main{
+    position: absolute;
+    top: 46%;
+}
+
+//For the overlay-image content we need absolute and left/right position to center it
+//width reduces the space occupied by the content to avoid spreading with margin
+
+.splash {
+    width: 55%;
+    margin: auto;
+    position: absolute;
+    top: 100px;
+    left: 0; 
+    right: 0;
+}
+
+```
+
+For the image grid with bottom-shadow + author link and Footer:
+
+![](../.gitbook/assets/IMAGEFOOTER.PNG)
+
+```
+//for each row of images we use the pureCSS grid
+//To keep different images at the same height we add to use extra CSS inside the img tag
+
+<div class="image pure-u-1-3">
+    <a href="">
+      <img class="pure-img riga" src="https://..">
+    </a>
+
+    <aside><span>by
+        <a href="http://..">
+          Dillon McIntosh
+        </a></span>
+    </aside>
+</div>
+
+<div class="texto pure-u-2-3 p-3 riga">
+    <h4>This is the odd space </h4>
+    <p>A collection of beautiful photos gathered from Unsplash.com.</p>
+</div>
+
+//first we need each image to be relative (to then apply the effect)
+.image{
+    position: relative;
+}
+//in case we want to stretch images in the grid layout
+.image img{
+    width: 100%;
+}
+
+//with position absolute we can be inside the image, bottom and text align give the text position
+//while width 100% will cover the entire single image
+.image aside {
+    position: absolute;
+    bottom: 0;
+    padding: 0.5em 0.5em;
+    color: white;
+    width: 100%;
+    font-size: 80%;
+    text-align: right;
+
+/*the shadow can be done with abackground, the top(white) from the black 90% down*/
+    background: -webkit-linear-gradient(top,#ffffff00 0%,rgba(12,2,2,0.7) 100%);
+}
+
+//For the footer
+
+<div class="footer text-center bg-dark p-2 w-100">
+  <div class="pure-u-1">
+      View the source of this layout to learn more. Made with love by the Pure
+      Team.
+  </div>
+</div>
+
+//fixed position and bottom will stick the footer and not be moved by scroll
+.footer {
+    color: orange;
+    font-size: 70%;
+    bottom: 0;
+    position: fixed;
+}
+
+```
+
+For the **scrollable messages** in the **MD** screen:
+
+![](../.gitbook/assets/Scrollable-messages.PNG)
+
+```
+// we used CSS on the images and grid on the text
+
+<div class="px-3 py-2 border-bottom border-warning email-item-selected pure-g">
+    <div class="pure-u">
+        <img width="64" height="64" class="me-2" src="https://bit.ly/3LkXD5I">
+    </div>
+
+    <div class="pure-u-3-4">
+        <h6 class="email-name mb-0"> Hello from Toronto </h6>
+        <p class="email-subject mb-0"> Article by 
+            <a class="email-author">Minimister </a> about 
+            <button class="btn btn-success btn-sm text-sm"> CSS </button> & 
+            <button class="brn btn-danger btn-sm"> Js </button>
+        </p>
+        <p class="email-desc">
+            Hey, I just wanted to check in with you from Toronto. I got here earlier today.
+        </p>
+    </div>
+</div>
+
+//The email-name is UpperCase , and email-subject is font-size 90%, for btn we just added
+.btn-danger:hover{
+    text-decoration: underline;
+}
+
+```
