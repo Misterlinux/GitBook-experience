@@ -1,8 +1,9 @@
 # Boostrap 3
 
-* uno
-* due
-* tre
+* [ScrollSpy](boostrap-3.md#scrollspy-implementation)
+* [Toast & Pop-up](boostrap-3.md#toast-and-pop-up-messages)
+* [Responsive and toggle Navbar](boostrap-3.md#responsive-navbar-with-toggle-button)
+* [Complete responsive page](boostrap-3.md#complete-responsive-page)
 
 **Offcanvas** are hidden sidebars we can trigger with buttons:
 
