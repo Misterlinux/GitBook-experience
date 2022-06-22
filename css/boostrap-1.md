@@ -1,9 +1,8 @@
 # Boostrap 1
 
-* list
-* are
-* some
-* here
+* [Modal & PureCSS](boostrap-1.md#purecss-and-modal)
+* [Collapse Buttons](boostrap-1.md#collapse-buttons-and-content)
+* [Pagination & Bootpag](boostrap-1.md#pagination-and-bootpag)
 
 Even if we include only some **modules** of **** bootstrap we use the entire package:
 

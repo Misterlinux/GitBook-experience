@@ -1,8 +1,7 @@
 # Boostrap 2
 
-* Cards and stuff
-* more
-* MORE
+* [Image overlay & Carousel](boostrap-2.md#image-overlay-and-carousel)
+* [Dropdown & Extra buttons](boostrap-2.md#dropdown-breadcrumbs-and-button-extra-effects)
 
 ### Cards and color customitation
 
