@@ -46,17 +46,21 @@ let come={
 //the constructor with both callback function and optional
 let sideview = new IntersectionObserver(sided, come)
 
-
-
-  //AFTER SETTNG UP THE INTERSECTIONOBSERVER we call the method observe to start observing 
-  //we call the method observe after creating the contructor TO THE SINGLE NODE ELEMENT
- 
-
 sidecont.forEach((ciglia)=>{
 
 //after creating the contructor(sideview) we call the method .observe() onEACH single NODE element
 
   sideview.observe(ciglia)
 })
+
+```
+
+The code we execute after the Intersection will be:
+
+```
+// Some code
+
+
+
 
 ```
