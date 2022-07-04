@@ -63,6 +63,7 @@ The code we execute after the Intersection will be:
 function sided(sides){
   sides.map((side)=>{
     if(side.isIntersecting){
+    
 //each NodeList element will get the current active removed
       sidenav.forEach(item=>item.classList.remove("active"))
       
@@ -71,6 +72,15 @@ function sided(sides){
     }
   })
 }
+
+```
+
+we can **remove any observation** with;
+
+```
+//inside the callback function
+
+____.unobserve(entry.target); 
 
 ```
 
@@ -96,5 +106,33 @@ function colora(){
 boxe.forEach((x)=>{
   x.style.backgroundColor = colora();
 })
+
+```
+
+For the Redirect smooth we get:
+
+```
+//For each nav link, 
+
+document.querySelectorAll('.nav-items').forEach(link => {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+
+//first we get the attribute and cut the # using .substrng(1), then we get the corresponsive ID
+    let href = this.getAttribute('href').substring(1);
+    const scrollTarget = document.getElementById(href);
+
+//we get the .getBoundingClientRect().top and we select the DOM element to scroll
+    const elementPosition = scrollTarget.getBoundingClientRect().top;
+    let colonna = document.querySelector(".colonna")
+
+//when scrolling the selected we move the TOP in a smooth behavior
+    colonna.scrollBy({
+      top: elementPosition - 150,      //we remove the margin 150px we added with CSS
+      behavior: 'smooth',
+    });
+
+  });
+});
 
 ```

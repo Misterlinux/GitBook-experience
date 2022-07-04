@@ -46,6 +46,19 @@ let primo = "this is the one"
 let secondo = "this is the two"
 
 primo.concat(" AND", secondo)    //"this is the one ANDthis is the two
+
+//we can also use .concat on NodeList, from
+
+let mostra = document.querySelectorAll(".mostra")
+let altro = document.querySelectorAll(".altro")
+
+//we can't use let tutto = mostra.concat(altro), NodeList doesnt have the .concat method
+//but can work with object arrays, we use push/apply for array-like elements
+
+var allTags = [];
+allTags.push.apply(allTags, mostra);
+allTags.push.apply(allTags, altro);
+
 ```
 
 But this **doesn**'**t mean that array and string are the same type:**
