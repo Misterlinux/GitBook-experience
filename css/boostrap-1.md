@@ -13,7 +13,7 @@ Even if we include only some **modules** of **** bootstrap we use the entire pac
 
 ```
 
-### Boostrap Spacing
+### Boostrap Spacing & Display
 
 We can use classes to add **margin** and **padding**:
 
@@ -26,6 +26,21 @@ We can use classes to add **margin** and **padding**:
 
 //or if we want left/rigth/top bottom, s(tart),e(nd), t(op), b(ottom)
 <h3 class="pe-4"></h3> 
+
+```
+
+And for _display_ and _media-query breakpoints_:
+
+```
+//we display with d-
+
+d-flex /d-block /d-inline-block
+
+//and media-query START from their breakpoints
+
+d-block d-sm-none    //D(isplay)-block but AFTER -sm-D(isplay)-none, only visible in small
+d-none d-sm-block    //D(isplay) AFTER small-block but BEFORE is -none
+d-none d-sm-block d-md-none    //visible only in md (none in default and AFTER md)
 
 ```
 
