@@ -101,6 +101,21 @@ lol(4, 8);
 //parameters are LOCAL to the function, defined inside of it, including extra local variables-
 ```
 
+We can also **Interpolate** variables into HTML elements:
+
+```
+//we can use `` or the +
+
+let greetingStart = "Hallo "
+let name = "dude"
+
+const greeting = `${greetingStart}, my name is ${name}`;
+let ecco = greetingStart + ", My name is " + name
+
+console.log(greeting) / console.log(ecco)     //Hallo , My name is dude
+
+```
+
 **Console** is where we run scripts and commands.
 
 ### Math Operations, Booleans, and Arrays methods.
@@ -215,6 +230,18 @@ Array.from("welcomed".toUpperCase() ).map( (x)=> "this is the letter " + x )    
 
 ```
 
+Any function that runs inside a method it's a **callback function**:
+
+```
+//for example teh anonymous functions inside .map()
+
+const numbers = [1, 2, 3];
+const numbersDoubled = numbers.map(function (number) {
+    return number * 2;
+});
+
+```
+
 **Booleans** are a type of data and we obtain it after **logical operators**:
 
 ```
@@ -228,6 +255,18 @@ true || !true == true //logical OR, returns true if one of is true
  == being the equality operator
  // && will be executed first
  
+//and in functions
+ 
+let studentCount = 12;
+let mentorCount = 10;
+var moreStudentsThanMentors = studentCount > mentorCount;
+console.log("The awnser is", moreStudentsThanMentors);     //The awnser is true
+ 
+//we can set boolean values without ""
+if (htmlLevel > 5){
+    cssAndHtmlAbove5 = true;
+}
+
 ```
 
 ### Js in HTML implementation

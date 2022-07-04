@@ -130,7 +130,16 @@ Inside the head tag we can **link** an external CSS file.
 </head>
 ```
 
+For _**special syntax HTML**_ [check this website:](https://www.html.am/reference/html-special-characters.cfm)
 
+```
+//here some for example
+
+<p>&#60 </p>        // <
+<p>&#62 </p>        // >
+<p>&#9824 </p>      // ♠
+
+```
 
 
 

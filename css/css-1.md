@@ -14,7 +14,7 @@ description: Syntax and properties
 **In the HTML file by EMMET**
 
 ```sql
-link 
+link + tab //will result in
 
 <link rel="stylesheet" type="text/css" href="style.css">
 ```

@@ -75,7 +75,7 @@ add(1)    //we check the array products for objects with property id ==(1) and g
 
 ```
 
-**Map() and filter()** can be different when returning properties and objects:
+**Map() and filter()** can be different when returning properties and objects, especially if used with **.forEach()**:
 
 ```
 let quatt = {
@@ -86,7 +86,8 @@ let quatt = {
 quatt.cosa.filter( (x)=> x<10 )    //[ 2, 9, 6, 2 ]
 quatt.cosa.map( (x)=> x<10 )       //[ true, true, true, true ]
 
-//and to chain you will have to use filter()
+//and to chain you will have to use filter(), we can use forEach() INSIDE .filter() but not the opposite, 
+//.forEach doesnt return an array for .filter to work() / .filter does create an array that can get .forEach()
 quatt.cosa.filter( (x)=> x<10 ).forEach( (x) =>  console.log( "This shoudl work with " + x ) )    //This shoudld work with 2 
 
 //having an array of objects and properties with arrays 
@@ -133,6 +134,21 @@ let app = {
 
 console.log( app.cibo(10) )            //[ 'terzo' ]
 console.log( app.filto("centro")  )    // 1 ,we get the length of the array of objects filtered
+
+```
+
+**Some()** allow us to run tests on _each element_ of an array, returning **true/false**:
+
+```
+//we can use logic operators without using .forEach()
+
+let pairs = [1,4,0,12,7]
+
+function nullifing(ind){
+  return ind == 10 && ind == 4
+}
+
+console.log(pairs.some(nullifing))
 
 ```
 
