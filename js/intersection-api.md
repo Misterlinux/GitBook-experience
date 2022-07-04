@@ -58,9 +58,43 @@ sidecont.forEach((ciglia)=>{
 The code we execute after the Intersection will be:
 
 ```
-// Some code
+//we will use classList for the bootstrap highlighted effect "active"
 
+function sided(sides){
+  sides.map((side)=>{
+    if(side.isIntersecting){
+//each NodeList element will get the current active removed
+      sidenav.forEach(item=>item.classList.remove("active"))
+      
+//and, with the INTERSECTED element ID, we "active" the NAV element withthe same href=""
+      let attiva1= document.querySelector(`.flex-column li[href*=${side.target.id}`).classList.add("active")
+    }
+  })
+}
 
+```
 
+### Color randomizer & Smooth redirect
+
+For the color we simply:
+
+```
+//We return a random string of 3 RGB 255 numbers
+
+function colora(){
+  let risulta = 0;
+  
+  for(let i= 0; i< 3; i++){
+    risulta+= (Math.random()*255).toFixed() + ","
+  }
+
+//we slice the starter 0 and teh last (,)
+  return `rgb(${risulta.slice(1,-1)})`
+}
+
+//then we color a node
+boxe.forEach((x)=>{
+  x.style.backgroundColor = colora();
+})
 
 ```
