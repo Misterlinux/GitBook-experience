@@ -148,7 +148,9 @@ function nullifing(ind){
   return ind == 10 && ind == 4
 }
 
-console.log(pairs.some(nullifing))
+//and it will return true/fale ONCE if it finds AT LEAST 1 passed test, without returing an array of results for each
+console.log(pairs.some(nullifing))      //true
+console.log(pairs.map(nullifing))       //[false, true, false, false, false]
 
 ```
 
