@@ -70,6 +70,12 @@ Or how we can use tags for HTML effects:
 <u>underline text </u>
 <em>Fancy text </em>
 
+//we can have a line trought text
+<del> Line trougth text </del> 
+
+//and a hover to text-etiquette for others
+<abbr title="smaller texto"> hover to read the smaller </abbr> 
+
 ```
 
 ![Example of HTML ](<../.gitbook/assets/special tags.PNG>)
