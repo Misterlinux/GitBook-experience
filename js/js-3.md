@@ -379,6 +379,7 @@ We can also use the **spread operator** for arrays and objects:
 
 ```
 //Allows us to .concat() the arrays in the order present in the array
+//on arrays we use the ...rest pattern
 function combineArrays(arr1, arr2, arr3) {
   return [...arr3 , ...arr2, ...arr1];
 }
@@ -386,6 +387,10 @@ combineArrays( [12, 34], [23, 45], [100] )    //[ 100, 23, 45, 12, 34 ]
 
 //We also can use it for Math. operations, without loops or filters
 let maximus = Math.max( ...mat )              //100 
+
+//we can also decostruct specific parts of an array
+let [uno, ...due] = [1,2,2,3,4,5,6,8]
+console.log( due )                      //[2, 2, 3, 4, 5, 6, 8]
 
 ```
 
@@ -490,6 +495,21 @@ function guiss(q,w){
 
 let [gui, pui] = guiss(5,1)        //the returns will be in array order
 console.log( gui, pui )            //6, 4
+
+```
+
+We can deconstruct an array of function **return results**:
+
+```
+//function to get the longest word in a string
+//without the rest pattern we couldn't work on the array by .split() and .map() for length
+function longino(sent){
+  return Math.max(
+    ...sent.split(" ").map(word=> word.length )
+  )
+}
+
+console.log( longino("Lorem ipsum dolor sit amet consectetur, adipisicing elit. Assumenda, consequatur?"))
 
 ```
 
