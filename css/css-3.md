@@ -1,5 +1,7 @@
 # CSS 3
 
+* [CSS Variables](css-3.md#undefined)
+
 ### Form carousel effect
 
 First check this exercise:
@@ -133,3 +135,21 @@ For the final styling we:
 To have the input area spaces be the same we need different % width
 ```
 
+### CSS Variables
+
+We can use the ;root and reference it during the styling:
+
+```
+//we create a --variable values (without "") in the :root
+//we then re-use by var(--variable) later
+
+:root{
+    --ecco:red;
+}
+
+.eccolo{
+    color: var(--ecco);
+    background-color: aqua;
+}
+
+```
