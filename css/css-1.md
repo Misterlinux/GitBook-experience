@@ -435,6 +435,37 @@ for icons we can use in HTML:
 <i class="fab fa-angellist"></i>
 ```
 
+For more _Font-Awesome_, we can **stack** various icons:
+
+```
+//We need a parent tag for the -stack and -1x & -2x for the child icons
+//and the fa-sm/md/lg for the size of the entire icon
+//we can use -o for a borded version and we can use fa-inverse to invert the black/white color
+
+<span class="fa-stack fa-sm">
+  <i class="fa fa-square-o fa-stack-2x "></i>
+  <i class="fa fa-twitter fa-stack-1x"></i>
+</span>
+
+<span class="fa-stack fa-sm">
+  <i class="fa fa-square fa-stack-2x "></i>
+  <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+</span>
+
+<span class="fa-stack fa-lg">
+  <i class="fa fa-circle-o fa-stack-2x "></i>
+  <i class="fa fa-flag fa-stack-1x"></i>
+</span>
+
+<span class="fa-stack fa-md">
+  <i class="fa fa-ban fa-stack-2x"></i>
+  <i class="fa fa-solid fa-igloo fa-stack-1x "></i>
+</span>
+
+```
+
+![](../.gitbook/assets/AwesomeCattura.PNG)
+
 ### CSS effects and :before:after
 
 For our buttons in the exercise we had to **position:**
