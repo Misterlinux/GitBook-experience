@@ -155,6 +155,24 @@ function radToDeg(rad) {
 };
 ```
 
+And in the case of NaN (not a number) we also can have operations:
+
+```
+//we have the operator isNaN() in case, and NaN isnt === o !== to itself
+
+NaN === NaN;        // false
+Number.NaN === NaN; // false
+isNaN(NaN);         // true
+isNaN(Number.NaN);  // true
+Number.isNaN(NaN);  // true
+
+function valueIsNaN(v) { return v !== v; }
+valueIsNaN(1);          // false
+valueIsNaN(NaN);        // true
+valueIsNaN(Number.NaN); // true
+
+```
+
 **Arrays** are variables that can hold more than one value and one _typeof()_ data:
 
 ```

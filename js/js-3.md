@@ -51,6 +51,19 @@ console.log( "these people can drive " + unicovo)    //these people can drive 19
 
 ```
 
+About how to **.filter() falsy values** and _arrays_ in the callback function:
+
+```
+//to filter the falsy values ("", null, false, NaN, undefined), the array (which is an object) and the .lenght 2 
+
+var pairsByIndexRaw = [
+    [0, 3], [1, 2], [2, 1], null, [1], false, "whoops", [1,2,4], "lo", 12
+];
+
+var pairsByIndex = pairsByIndexRaw.filter((n) => n && typeof(n) == "object" && n.length == 2);
+
+```
+
 **.find()** on the other hand, will return the _first_ element matching:
 
 ```
