@@ -481,7 +481,7 @@ img
 
 ### Image galleries and Carousels
 
-{% embed url="https://codepen.io/misterlinux/pen/KKXwerR?editors=1100" %}
+{% embed url="https://codepen.io/misterlinux/pen/MWEZjJX?editors=1100" %}
 
 In this exercise, we created multiple columns of images, we added **hover effects** for each and used CSS **counter:**
 
