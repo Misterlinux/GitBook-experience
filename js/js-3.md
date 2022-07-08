@@ -282,6 +282,11 @@ const person = {
   ]
 }
 
+//Instead of doing the .forEach on the Object.keys(__) we do a loop
+Object.keys(person).forEach(function (x) {
+  console.log(person[x]);
+});
+
 //with for(), we set the counter/Object.keys IN object and also use it for vlues too
 for (let x in person) {                  //key        object[key]=value
   console.log( x + ": " + person[x] )    //firstName: John,             lastName: second
@@ -297,6 +302,30 @@ for (let i in myObj.cars) {
     console.log( y )                 //also the array elements of the name[i] "Fiesta Focus Mustang" 
 
   }
+}
+
+```
+
+We can also **return property values** as _arrays_ with for() and **.values()**:
+
+```
+//This is usefull with NODElist
+
+let objin = {
+  name: "Porter",
+  age: 32
+};
+
+//in 2017 it was introduced the .values to go along with .keys()
+console.log(Object.values(objin));        //['Porter', 32]
+console.log( Object.keys(objin));         //['name', 'age'] 
+
+//we can also get an array using .map with obj11["property-name"]
+const vals = Object.keys(obj11).map(key => obj11[key]);
+
+//or we can get arrays or property:values couples, 
+for (const [key, val] of Object.entries(obj222)) {
+  console.log([key, val]);                            //['name', 'Porter'],['age', 32]
 }
 
 ```
