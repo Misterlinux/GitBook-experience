@@ -136,3 +136,56 @@ document.querySelectorAll('.nav-items').forEach(link => {
 });
 
 ```
+
+### Intersection CSS style animation
+
+Check this webpage:
+
+{% embed url="https://codepen.io/misterlinux/pen/yLKObpq" %}
+
+About the **translateX and scale() transformation animation** on Intersected images:
+
+```
+//We select the image text sections, remember that all other elements 
+//not intersected are under the ELSE styling
+
+let image = document.querySelectorAll(".imagi")
+
+let inter = new IntersectionObserver((entrie)=>{
+    entrie.forEach((entry)=>{
+        if(entry.isIntersecting){
+
+//we get the fading effect with opacity from 0/1, while the scale() and translateX()
+//we also used .classList.value to get the classes as an array, and with specific classes
+//we get other effects on the ternary operator
+
+            entry.target.style.opacity = 1
+            entry.target.classList.value.includes("panini") ? entry.target.style.transform = "scale(1)" : entry.target.style.transform = "translateX(0rem)"
+            entry.target.style.backgroundColor = entry.target.getAttribute("data-color");;
+        }else{
+            entry.target.style.opacity = 0
+            entry.target.classList.value.includes("panini") ? entry.target.style.transform = "scale(0)" : entry.target.style.transform = "translateX(-15rem)"
+
+        }
+    })
+},
+{
+    threshold: 0.3
+})
+
+```
+
+We still need to **add transition** in the CSS:
+
+```
+//For the .querySelector selector, we will have a transition delay
+.imagi{
+    transition: 0.5s;
+}
+
+//we can have the extra background effect
+.capsule{
+    background-color: aliceblue; 
+}
+
+```
