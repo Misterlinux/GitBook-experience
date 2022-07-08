@@ -175,6 +175,18 @@ let inter = new IntersectionObserver((entrie)=>{
 
 ```
 
+We can **access attributes** from querySelectors:
+
+```
+//On the HTML we can have specific data attributes we can use in the script.js
+
+let image = document.querySelectorAll(".imagi")
+<div class="imagi pure-g" data-color="#f1bace">
+
+entry.target.style.backgroundColor = entry.target.getAttribute("data-color");;
+
+```
+
 We still need to **add transition** in the CSS:
 
 ```
