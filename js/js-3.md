@@ -204,7 +204,7 @@ console.log( limesToCut(0, ['small', 'large', 'medium']) )        //we get 0
 
 ### Objects, methods, and keys
 
-**Objects** are variables that contain a collection of named values, stored in **property: value** pair:
+**Objects** are variables that contain a collection of named values, stored in **property: value** pairs:
 
 ```
 //and when we want to extract the property/value we:
@@ -218,14 +218,19 @@ car.type              //Fiat
 Object.keys(car)      //['type', 'model', 'color']  as an array we can also get
 Object.keys(car)[0]   //type
 
+//contrary to other languages the key is locked to "string" type
+//you don't need to "" it unless using special syntax like "-[]/1234 5"
 ```
 
-Objects can be **edited** by assigning a new property:value:
+Objects can be **edited** by assigning a new property:value and use _\[variables]_ to **dynamically access** property values::
 
 ```
 //we don't need keywords 
 car.type = "BMW"     //it changes the "Fiat" 
 car.age = 50;        //will add a new property age: 50
+
+let uno = "age"
+car[age] = 50        //we can both add and access objects using variables
 
 //also we can add different types of data
 car.nuovo = [1,2,3]            //like array

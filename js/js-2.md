@@ -183,6 +183,18 @@ For both these statements the **falsy** values will be **false** in boolean:
 
 //and in case you are curious about the typeof , null being an object is a bug but still
 typeof null + " " + typeof undefined    //object, undefined
+
+//null is a primitive value for "empty" variables
+
+let vuoto = null
+console.log( vuoto === null )        //true, assigned null value
+
+//undefined is for absence of a value, or non-existent keys in objects
+
+let name;
+console.log( name === undefined)     //true, initialized butnot even assigned variable
+
+
 ```
 
 **Ternary operator** is a simplified conditional operator:

@@ -153,6 +153,9 @@ function degToRad(degrees) {
 function radToDeg(rad) {
   return rad / (Math.PI / 180);
 };
+
+//we can type long numbers using _
+//1000000 = 1_000_000
 ```
 
 And in the case of NaN (not a number) we also can have operations:
