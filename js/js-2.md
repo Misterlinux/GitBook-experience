@@ -210,6 +210,18 @@ let greeting = ( condition) ?
 
 ```
 
+We can use the **nullish coalescing operator** for _null/undefined_ values:
+
+```
+//using the ?? we get returned the right value if the left one is null/undefined
+
+let amount = null;
+let amount1 = 2
+
+console.log(amount ?? 1)        // 1
+console.log(amount1 ?? 1)       // 2
+```
+
 ### Text filter javascript and DOM exercise
 
 Check this code implementing **regex, forms, and setInterval**:

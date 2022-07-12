@@ -243,9 +243,29 @@ person.lastName = "Doe";
 
 //To delete properties and values we use the keywords
 delete car.color;
+
+//To check if the key exist in the object
+car.hasOwnProperty("color")        //true/false if it exist 
 ```
 
-with different types of data, we can use **Object.keys()** on them:
+How we handle _**undefined/null**_ results in _objects_:
+
+```
+//to avoid having a JS error while accessing a nested non-existing property
+
+const obj = {
+  address: {
+    street: 'Trincomalee Highway',
+    city: 'Batticaloa',
+  }
+};
+
+console.log(obj.residence)          //undefined, for a non-existing property
+console.log(obj.residence.street)   //Javascript error when accessing nested property
+console.log(obj.residence?.street)  //undefined, wont block the page on JS error for nested property
+```
+
+With different types of data, we can use **Object.keys()** on them:
 
 ```
 //and we can use it on the array
