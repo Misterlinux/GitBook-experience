@@ -290,6 +290,53 @@ if (htmlLevel > 5){
 
 ```
 
+### Data conversion and type helpers
+
+We can use the built-in helpers **Boolean()**, **String() Number()** to check/convert to respective data types:
+
+```
+//Boolean will differentiate between truly/falsy values
+
+Boolean("0")        //True, a 1 digit string is truly
+Boolean(0)          //False, True for any other integer
+Boolean("")         //False for any empty array
+Boolean(" ")        //True, space digit is not empty arrays
+
+//Number() will return an integer from a string when possible
+
+Number("123.34")    //123.34, for Numbers in string use . for decimals
+Number("")          //0, for empty arrays
+Number(" 12.3  ")   //12.3 only the starters and ending spaces will be ignored
+Number(null)        //0, is from null
+Number(undefined)   //NaN
+
+//String() will return the string result of its content 
+
+String(1==1)        //"true" string will be returned
+String(1!==1)       //"false" string will be returned
+String(null)        //"null" string returned
+String(undefined)   //"undefined" string returned
+
+//String() on arrays will return a string of elements .join() by ,
+
+String(["siamo", null, undefined, "audd"])    //siamo,,,audd , the null and undefine will be empty
+String({name: "uno"})                         //[object, Object] will be returned
+
+```
+
+We can also have **data coercion** where values are converter automatically **:**
+
+```
+//For example during the if statement
+
+function errorMessage(input) {
+  if (!input) {                //will automatically work as !Boolean(input
+    return 'Required field'
+  }
+}
+
+```
+
 ### Js in HTML implementation
 
 To link our external .js file to the html page we use:

@@ -446,6 +446,12 @@ let maximus = Math.max( ...mat )              //100
 let [uno, ...due] = [1,2,2,3,4,5,6,8]
 console.log( due )                      //[2, 2, 3, 4, 5, 6, 8]
 
+//It also can .split("") an array if needed
+
+let siamo = "siamo"
+[...siamo]                   //['s', 'i', 'a', 'm', 'o']
+siamo.split("")              //['s', 'i', 'a', 'm', 'o']
+
 ```
 
 And in _objects_ we can edit the properties:
