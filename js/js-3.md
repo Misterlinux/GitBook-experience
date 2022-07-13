@@ -49,6 +49,18 @@ const unicovo = anni.filter( (x) =>
 
 console.log( "these people can drive " + unicovo)    //these people can drive 1964,1999,1978,1985,1919
 
+//we can also add callback functions to objects values using filter
+
+function quantities(layers) {
+  //we filter and array noodles, we count them and multiply as object values
+  return {
+    noodles: layers.filter((layer) => layer === 'noodles').length * 50,
+    sauce: layers.filter((layer) => layer === 'sauce').length * 0.2,
+  }
+}
+
+quantities(["noodles", "noodles", "noodles", 'sauce'])      //{noodles: 150, sauce: 0.2}
+
 ```
 
 About how to **.filter() falsy values** and _arrays_ in the callback function:
