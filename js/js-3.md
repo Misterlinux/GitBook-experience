@@ -355,7 +355,7 @@ let objin = {
 
 //in 2017 it was introduced the .values to go along with .keys()
 console.log(Object.values(objin));        //['Porter', 32]
-console.log( Object.keys(objin));         //['name', 'age'] 
+console.log(Object.keys(objin));         //['name', 'age'] 
 
 //we can also get an array using .map with obj11["property-name"]
 const vals = Object.keys(obj11).map(key => obj11[key]);
@@ -363,6 +363,17 @@ const vals = Object.keys(obj11).map(key => obj11[key]);
 //or we can get arrays or property:values couples, 
 for (const [key, val] of Object.entries(obj222)) {
   console.log([key, val]);                            //['name', 'Porter'],['age', 32]
+}
+
+//We can use for Object loop to rebuild an object
+
+function scaleRecipe1(recipe, portions) {
+  const scaled = recipe                    //taking the passed object
+
+  for (let ingredient in scaled) {
+    scaled[ingredient] *= portions/2       //we get the key from for and use object[key] to modify the values   
+  }
+  return scaled                            //then we get the object
 }
 
 ```
