@@ -62,7 +62,7 @@ sum()
 // result 27
 ```
 
-**return will stop execution** and return values.
+**return will stop execution** and return values, there are no _implicit_ returns in javascript
 {% endtab %}
 
 {% tab title="Arrow function" %}
@@ -87,21 +87,117 @@ tut();
 ```
 //we can use multiple values for the function operations
 
-function lol(num1, num2){
+function lot(num1, num2){
     var oltre = num1+num2;
     return console.log(oltre);
 }
 
-lol(5, 8);
-lol(1, 4);
-lol(4, 8);
+lot(5, 8);
+lot(1, 4);
+lot(4, 8);
 //results 13, 5, 12
 
 //parameters will be assigned based on their position, so num1=5 and num2=8
 //parameters are LOCAL to the function, defined inside of it, including extra local variables-
 ```
 
-We can also **Interpolate** variables into HTML elements:
+**Arguments** are the actual **values** passed when _invoking_ the function:
+
+```
+//Invoking the lot(num1,num2) function 
+
+lot(5, 8);    //assigning the num1, num2 Parameters the 5,8 Arguments
+
+```
+
+We can also implement **function composition**, using the return as an argument:
+
+```
+//the function returns another function
+
+function translate2d(dx, dy) {
+
+  return function (x, y){
+    return [dx + x, dy + y]  
+  }
+}
+
+const move2x = translate2d(2, 0);    //move2x is the returned function 
+const result = move2x(4, 8);         //result is the returned operation result
+console.log( result )                //[6, 8]
+
+```
+
+We can use the "parent" function to _store the_ **parameter**:
+
+```
+//we have a function as parameter and variables declared in the parent function
+
+function memoize(f) {
+  let preX, preY, preR
+  
+  return function (x, y) {
+    if (preX === x && preY === y) {
+      console.log("already casted")
+      return preR
+    }
+    preX = x
+    preY = y
+    return preR = f(x, y)
+  }
+}
+
+function addition(x,y){
+  return [x,y]
+}
+
+const memo1 = memoize(adding );      //we pass the function, without the () so it doesnt return yet 
+memo1(5, 5)                          //[5,5] and "already casted" for the first variables
+
+//we execute the callback memoize function using the adding function as parameter
+//memo1 has the returned function with the new arguments executing the parameter function
+//we also store the LAST x, y and return in preX, preY, preR
+
+memo1(1, 5)        //[1,5]
+memo1(5, 5)        //[5,5]
+memo1(5, 5)        //[5,5] "already casted"
+
+//if the arguments are repeated we just re-use the saved result and add a string
+
+```
+
+We can also implement the _spread operator_ for function returns and have _multiple parameters function_:
+
+```
+//we first create the 2 parameter functions
+
+function uni(x,y){
+  return [x+3, y+1]
+}
+
+function dui(x,y){
+  return [x*2, y*3]
+}
+
+function composeTransform(f, g) {
+  return function (x, y) {
+    return g(...f(x, y))
+  }
+}
+
+//the spread operator will set the array of results as arguments
+//we will execute FIRST the f(x,y) function THEN use the array results for the SECOND
+
+let tent = composeTransform( uni, dui)
+tent(2,1)                               //[10,6] 
+
+let tent1 = composeTransform( dui, uni)
+tent1(2,1)                             //[7,4]
+
+//the order of the functions will apply different operations and results
+```
+
+We can also **Interpolate** variables into HTML elements, also using _Ternary Operators_:
 
 ```
 //we can use `` or the +
@@ -114,6 +210,12 @@ let ecco = greetingStart + ", My name is " + name
 
 console.log(greeting) / console.log(ecco)     //Hallo , My name is dude
 
+//and for ternary logic we put the function between the ${}
+
+const grade = 95;
+`You have ${grade > 90 ? 'passed' : 'failed'} the exam.` ;
+
+//You have passed the exam
 ```
 
 **Console** is where we run scripts and commands.
@@ -251,7 +353,7 @@ Array.from("welcomed".toUpperCase() ).map( (x)=> "this is the letter " + x )    
 
 ```
 
-Any function that runs inside a method it's a **callback function**:
+Any function _passed as an argument,_ inside a method, it's a **callback function**:
 
 ```
 //for example teh anonymous functions inside .map()
