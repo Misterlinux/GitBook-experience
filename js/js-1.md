@@ -195,6 +195,22 @@ let tent1 = composeTransform( dui, uni)
 tent1(2,1)                             //[7,4]
 
 //the order of the functions will apply different operations and results
+
+//the passages for the spread operator are
+
+  const first = f(x, y)
+  const second= g(first[0], first[1])
+  return second
+  
+//then we use the spread operator on the returned array
+
+  const first = f(x, y)
+  return g(...first)
+  
+//to end in 
+
+  return g(...f(x, y))
+  
 ```
 
 We can also **Interpolate** variables into HTML elements, also using _Ternary Operators_:

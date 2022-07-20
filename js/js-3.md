@@ -298,15 +298,11 @@ const car = {
   color:"white",
   fullo: function() {
     return this.type + " " + this.model;
-  },
-  fullon: function(type, model) {
-    return type + " " + model;
   }
 };
 
-person.fullo()                        //Fiat 500 
-person.fullon(car.type, car.model)    //Fiat 500
-person.fullo                          //[Function (anonymous)]
+person.fullo()    //Fiat 500 
+person.fullo      //[Function (anonymous)]
 
 ```
 
