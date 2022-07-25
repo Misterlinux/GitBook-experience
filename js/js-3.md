@@ -298,11 +298,15 @@ const car = {
   color:"white",
   fullo: function() {
     return this.type + " " + this.model;
+  },
+  fullon: function(type, model) {
+    return type + " " + model;
   }
 };
 
-person.fullo()    //Fiat 500 
-person.fullo      //[Function (anonymous)]
+person.fullo()                        //Fiat 500 
+person.fullon(car.type, car.model)    //Fiat 500
+person.fullo                          //[Function (anonymous)]
 
 ```
 
@@ -452,28 +456,60 @@ defaultParameter()           //"sam"
 
 ```
 
-We can also use the **spread operator** for arrays and objects:
+We can also use the **spread/rest operator** for arrays and objects:
 
 ```
-//Allows us to .concat() the arrays in the order present in the array
-//on arrays we use the ...rest pattern
+//The REST operator can store the latter portion of the array,
+//It has to be the last element of the array because it can't be followed by a comma
+let [uno, ...due] = [1,2,2,3,4,5,6,8]
+console.log( due )                      //[2, 2, 3, 4, 5, 6, 8]
+
+//The SPREAD operator can sum arrays or use it to perform operations
+const oneToFive = [1, 2, 3, 4, 5];
+const oneToTen = [...oneToFive, 6, 7, 8, 9, 10];
+
+console.log(oneToTen)        //[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+//We can use it as .concat() method followng the order of the function parameters
 function combineArrays(arr1, arr2, arr3) {
   return [...arr3 , ...arr2, ...arr1];
 }
 combineArrays( [12, 34], [23, 45], [100] )    //[ 100, 23, 45, 12, 34 ]
 
-//We also can use it for Math. operations, without loops or filters
-let maximus = Math.max( ...mat )              //100 
-
-//we can also decostruct specific parts of an array
-let [uno, ...due] = [1,2,2,3,4,5,6,8]
-console.log( due )                      //[2, 2, 3, 4, 5, 6, 8]
-
-//It also can .split("") an array if needed
-
+//Or as .split("") method on strings
 let siamo = "siamo"
 [...siamo]                   //['s', 'i', 'a', 'm', 'o']
 siamo.split("")              //['s', 'i', 'a', 'm', 'o']
+
+//Or for Math operations without needing to loop/filter the array elemets
+let mat = [1, 25, 50, 100]
+let maximus = Math.max( ...mat )              //100 
+
+```
+
+This allows us to work with **Index** _without_ \[] or methods:
+
+```
+//For example by using REST on the other arrays elements, we don't get an array in this case
+//instead of using .shift()
+let deck = [1,1,1,2,3,4,55,6,6,5,4,6]
+
+function getFirstCard(deck) {
+    const [uno, ...rest] = deck
+    return uno
+}
+
+console.log( getFirstCard(deck) )        // 1  
+
+//and we can use the SPREAD to change the order of array indexes
+let deck1 = [1,500,1,2,3,55,6,5,4,6]
+
+function getFirstCard(deck) {
+  const [uno, due, ...rest] = deck
+  return [due, ...rest, uno]
+}
+
+console.log( getFirstCard(deck1) )        //[500, 1, 2, 3, 55, 6, 5, 4, 6, 1]
 
 ```
 
@@ -492,13 +528,14 @@ console.log( dogOwner )          //{ name: 'Lucas', age: 7, breed: 'cocker spani
 
 ```
 
-We can use **destructuring assignment** on arrays and objects:
+We can use **destructuring assignment** syntax to extract values from arrays (or objects):
 
 ```
-//we can assign variable to array elements on order
+//we can assign variable to array elements in order
 const x = [1,2,3,4,5] 
 const [well, lol] = x
 console.log( well )            // 1
+console.log( lol )             // 2
 //and in case we want to skip some we useempty comma
 let [ , , ,wen] = x
 console.log( wen )             //4
@@ -520,7 +557,7 @@ let {name, breed} = horse
 console.log( breed )              //"winn"
 ```
 
-We can use in different ways:
+We can use it in different ways:
 
 ```
 let [firstName, surname] = "John Doe oltre".split(' ');    //the .split returnes [ 'John', 'Doe', 'oltre' ]
