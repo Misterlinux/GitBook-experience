@@ -6,12 +6,21 @@
 
 ### Filter(), map(), find() and forEach() on arrays
 
-Filter(), map() ,and forEach() on arrays find(
+Some **methods** implement arrow **callback functions** in their **method call** and return true/false if the conditions apply, they are called **Predicate.**
 
-Some **methods** can implement arrow **functions** for better results, like **.map()**:
+**Includes()** return true/false for value existence in the array:
 
 ```
-//.map() will return a NEW ARRAY following the function in the METHOD CALL ()
+//we can apply it directly on arrays, like most Predicate
+
+[1,2,3,4,5].includes( 2 )        //true
+
+```
+
+**Map() will return a new array** applying its callback function:
+
+```
+let namesArray = ['antigoni', 'chris', 'elamin']
 namesArray.sort().map( (x) => x.toUpperCase() )        //['ANTIGONI', 'CHRIS', 'ELAMIN',]
 
 //with callback functions we can also use functions in calls without the ()
@@ -25,7 +34,7 @@ namesArray.map(upper)
 **.forEach()** is different:
 
 ```
-//it doesnt return an array, but it still lopps trought the array 
+//it doesn't return an array, but it still loops trought the array 
 let anni = [1964, 2008, 1999, 2005, 1978, 1985, 1919]
 
 anni.forEach( (x) => {
@@ -86,17 +95,29 @@ var product1 = {
   stock: 105,
 };
 
-var products = [product1, ... ];
-//we use find() not only to return the first element mattching but also to not have an array
+var producTs = [product1, ... ];
+
+//we use find() not only to return the first element matching but also to not have an array
 //products.find()would return    { id: 4, name: 'Star Ship', price: 100, stock: 5 }
 //products.filter() would return [ { id: 4, name: 'Star Ship', price: 100, stock: 5 } ]
+
 function add(x){
-    let scelto = products.find((xx)=>{
-        return xx.id == x
-    })
+    return producTs.find( (xx)=> xx.id == x)
 }
 
-add(1)    //we check the array products for objects with property id ==(1) and get returned just the object
+add(1)    //being producTs an array of objects we can use the method to find one with id property
+
+```
+
+**findindex()** works as a find() but is focused on indexes:
+
+```
+//finding the first even number on an array OR its index
+
+let stack= [1,3,4,5,6]
+
+[...stack].find((x)=>x%2==0) )            //4 is the number
+[...stack].findIndex( (x)=> x%2==0 )      //2 is its index
 
 ```
 
@@ -162,7 +183,7 @@ console.log( app.filto("centro")  )    // 1 ,we get the length of the array of o
 
 ```
 
-**Some()** allow us to run tests on _each element_ of an array, returning **true/false**:
+**Some()** run tests on _each element_ of an array, returning **true/false** if at **least one satisfies** the **callback function** :
 
 ```
 //we can use logic operators without using .forEach()
@@ -173,9 +194,19 @@ function nullifing(ind){
   return ind == 10 && ind == 4
 }
 
-//and it will return true/fale ONCE if it finds AT LEAST 1 passed test, without returing an array of results for each
+//and it will return true/false, without returning an array of results for each
 console.log(pairs.some(nullifing))      //true
 console.log(pairs.map(nullifing))       //[false, true, false, false, false]
+
+```
+
+**Every()** checks if all values of the array satisfies the callback function:
+
+```
+//it returns true/false
+
+[2,4,5,6,7].every( (x)=>x>= 2 )    //true
+[2,4,5,6,7].every( (x)=>x> 2 )     //false   
 
 ```
 
@@ -513,7 +544,29 @@ console.log( getFirstCard(deck1) )        //[500, 1, 2, 3, 55, 6, 5, 4, 6, 1]
 
 ```
 
-And in _objects_ we can edit the properties:
+As for using them **as parameters and variables** remember that:
+
+```
+//we can destruct the array parameter of a function
+
+let deck = [ 100, 23, 45, 12, 34 ]
+
+function first( [uno,due, ...resto ]=deck ){
+  return [...rest, uno, due]      //[45, 12, 34, 100, 23]
+  return [rest, uno, due]         //[Array(3), 100, 23]
+}
+
+//resto variable can be used without the ..., instead of just passing its values it becomes an array
+//we can use it to also pick indexes
+
+function second([,due]= deck ){
+  return due          //2
+  return [due]        //[2] if you need it as an array
+}
+
+```
+
+And in _**objects**_** ** we can edit the properties:
 
 ```
 const dog = {

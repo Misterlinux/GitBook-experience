@@ -66,7 +66,7 @@ sum()
 {% endtab %}
 
 {% tab title="Arrow function" %}
-Instead, we can use the **const** keyword and the arrow:
+Instead, we can use the **const** keyword (for the _identifier_) and the fat arrow:
 
 ```
 const tut = () =>{
@@ -75,6 +75,7 @@ const tut = () =>{
   return console.log(wel+tre)
 }
 
+//if the function just returns a value, you don't need {} or return
 //the structure is always keyword/parameters/operations
 tut();
 //result 22
