@@ -473,6 +473,78 @@ univa.spicc(-16)          //"no money ;(?"  with money=8< 10
 
 ```
 
+**Javascript** uses **prototypical objects** as _Templates_ from which **new** Objects **inherit** properties and methods (states and behaviors):
+
+```
+//We start with a prototype function, starting with a Capital letter
+
+function Person(name){
+  this.name = name;
+  this.mee = function(){
+    return this.name + " welcome"
+  }
+}
+
+```
+
+![The \[\[Prototype\]\] showing which methods properties are present](../.gitbook/assets/prototype.PNG)
+
+All Javascript **Objects inherit** \[\[prototype]], a property/function that acts as a **map** for all the _properties and methods avaiable_ to the object&#x20;
+
+Any method/property in the prototypical **object constructor function** body can instead _be added_ to the **prototype,** which is **more memory efficient** and allows for **object-specific syntax:**
+
+```
+//This can only be done to the Construction Object, not the instance/object
+
+let prim = new Primo(11)
+
+Primo.prototype.somma1 = function(){
+  return "ecco il numero " + this.value + " and " + this.somma(10) 
+}
+
+console.log( prim.somma1() )      //ecco il numero 11 and 22
+
+//If we wanted we could access JUST the [[prototype]] 
+console.log( prim.__proto__ ) 
+//but we are still referencing the constructor prototype, the one that actually has it
+console.log( Primo.prototype )
+//if we tried to get the .prototype from the Instance/object
+console.log( prim.prototype )      //undefined
+
+console.log( prim ) 
+//And the object prototype will be changed
+```
+
+![The new method is in the \[\[prototype\]\]](../.gitbook/assets/added.PNG)
+
+About **inheritance** and **.hasproperty()** in _Instances_:
+
+```
+//Any new method/property will be added to the Instances, even those precedents
+
+let secondo = new Primo(33)
+console.log( secondo )
+
+Primo.prototype.messo= false
+Primo.prototype.retro = function(){
+  console.log( this.molti + " is our way")
+}
+
+console.log( secondo )
+//Both secondo are gonna now have the .retro() method
+
+//In Instances/objects we can use .hasOwnProperty() for True/False on specific properties
+secondo.hasOwnProperty("messo")    //True, secondo has the intance messo
+
+
+```
+
+![](../.gitbook/assets/propertyBEFORE.PNG)
+
+![](../.gitbook/assets/prototypebefroeAFTER.PNG)
+
+![](../.gitbook/assets/BeforeAfterprototype.PNG)
+
 ### ES6 syntax and more objects
 
 We can use a **Default parameter** in a function:

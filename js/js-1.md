@@ -6,7 +6,7 @@
 
 ### Var, const, and functions.
 
-&#x20;**Javascript** is an object-oriented and dynamic style.
+&#x20;**Javascript** is an **Object-Oriented language** _based_ on **Prototypes** (not on classes )
 
 **var, const and let** is how we store data in **keywords:**
 
