@@ -527,23 +527,104 @@ console.log( secondo )
 
 Primo.prototype.messo= false
 Primo.prototype.retro = function(){
-  console.log( this.molti + " is our way")
+  console.log( this.messo+ " is our way")    //false is our way
 }
 
 console.log( secondo )
-//Both secondo are gonna now have the .retro() method
+//Both secondo are gonna now have the .retro() method and .messo property
 
 //In Instances/objects we can use .hasOwnProperty() for True/False on specific properties
 secondo.hasOwnProperty("messo")    //True, secondo has the intance messo
 
+```
+
+After defining default values and .methods, we can modify properties inside instances
+
+```
+//We start with default values and a method that interacts with it
+
+Primo.prototype.messo= false
+Primo.prototype.vedo= function(){
+  if(!this.messo){
+    this.messo= true
+  }
+}
+
+console.log( prim )
+prim.vedo()
+console.log( prim )
 
 ```
 
+{% tabs %}
+{% tab title="Before method" %}
 ![](../.gitbook/assets/propertyBEFORE.PNG)
 
+This is before the method .vedo() is called, **both have the method and default property in prototype.**
+{% endtab %}
+
+{% tab title="Second Tab" %}
 ![](../.gitbook/assets/prototypebefroeAFTER.PNG)
 
+Even if both had the .messo property in the prototype, after the method the second one has the .messo **property in the object body**.
+{% endtab %}
+
+{% tab title="Prototypes after method" %}
 ![](../.gitbook/assets/BeforeAfterprototype.PNG)
+
+It's prim.messo **property changed** (true) after the .vedo() method and **we still have** the \[\[prototype]] messo with its default values in our instance.
+
+```
+//the instance prim now has a different property from prototype
+
+prim.messo        //true
+
+```
+{% endtab %}
+{% endtabs %}
+
+We can use **Object.assign** to more easily add properties and methods to prototypes:
+
+```
+//we need Object.assign(target, list of add-ons)
+
+Object.assign(
+  Rings.prototype,
+  {
+    texttogo: function(){
+      return "ecco la stringa"
+    },
+    theme: "giallo",
+    color: function(){
+      return this.theme
+    }
+  }
+)
+
+```
+
+We can make a constructor Object **Inherit an entire constructor**, and have _access_ to its \[\[prototype]]:
+
+```
+//While using the created Rings constructor
+
+function Potato(sauce){
+  this.sauce= sauce
+}
+
+//You don't need to add the arguments to the contrcutor
+Potato.prototype= new Rings()
+
+let tomato = new Potato("ketchup")
+console.log(tomato.inn)      //undefined, from the this.inn Rings property
+
+//now any instance of Potato has access to Rings properties and methods
+console.log(tomato.texttogo() )      //"ecco la stringa"
+console.log(tomato.color() )         //giallo
+
+```
+
+\-------------------
 
 ### ES6 syntax and more objects
 
