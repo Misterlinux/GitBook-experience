@@ -603,7 +603,7 @@ Object.assign(
 
 ```
 
-We can make a constructor Object **Inherit an entire constructor**, and have _access_ to its \[\[prototype]]:
+We can make a _constructor_ Object **Inherit an entire constructor**, and have _access_ to its \[\[prototype]], the instance will have a **chain of prototypes**, inheriting multiple constructor prototypes:
 
 ```
 //While using the created Rings constructor
@@ -612,7 +612,7 @@ function Potato(sauce){
   this.sauce= sauce
 }
 
-//You don't need to add the arguments to the contrcutor
+//You don't need to add the arguments to the constructor
 Potato.prototype= new Rings()
 
 let tomato = new Potato("ketchup")
@@ -622,9 +622,116 @@ console.log(tomato.inn)      //undefined, from the this.inn Rings property
 console.log(tomato.texttogo() )      //"ecco la stringa"
 console.log(tomato.color() )         //giallo
 
+//doing that to an Instance won't work
+//And inheriting another will invalidate all previous access
+
+Potato.prototype= new Extra()
+console.log(tomato.texttogo() )    //error .texttogo is not a function
+
 ```
 
-\-------------------
+{% tabs %}
+{% tab title="Simple constructor" %}
+```
+//A normal constructor will have [[property]] Object and constructor potato
+
+function Potato(sauce){
+  this.sauce= sauce
+}
+
+Potato.prototype.ordine= function(cosa){
+  this.sauce = cosa
+}
+
+```
+
+![](<../.gitbook/assets/Chainof (1).PNG>)
+{% endtab %}
+
+{% tab title="Inherited contructor" %}
+```
+//its [[prototype]] changed and even its constructor is now Rings, with its properties
+
+function Potato(sauce){
+  this.sauce= sauce
+}
+
+Potato.prototype= new Rings()    //no argumenst mean undefined property values
+let tomato = new Potato("ketchup")
+
+```
+
+![](../.gitbook/assets/inheritedobject.PNG)
+{% endtab %}
+{% endtabs %}
+
+**.Call()** is a Javascript method, it invokes (call) **a method from another object** using **this.** owner object as an argument.
+
+```
+//The method we created requires 2 properties called UNO and DUE 
+
+function Cosa(uno2, due2){
+  this.uno= uno2
+  this.due= due2
+}
+
+//we could use any .uno and .due property from objects
+Cosa.prototype.altro= function(){
+  return this.uno + " " + this.due + " is the other"
+}
+
+let occa= new Cosa("numero", "second")
+
+const exem = {
+  uno: "ecco",
+  due: "altro"
+}
+
+//Even if the function didn't have a parameter, with .call() we can use ANOTHER
+//object as argument and pass the .uno and .due property
+console.log( occa.altro.call(exem))      //ecco altro is the other
+
+//we can even add more arguments, the order of which is important
+
+Cosa.prototype.ancora = function(sapore, forma){
+  return this.uno + " is the " + sapore + " " + this.due + " is indeed " + forma
+}
+
+occa.ancora.call(exem, "dolce", "quadrato")    //ecco is the dolce altro is indeed quadrato
+//we used both properties and arguments
+
+```
+
+We use **.call()** in order to **inherit just some** properties or methods from the **constructor object**:
+
+```
+//we .CALL() the constructor function, with THIS. HAMB object as argument, and
+//arguments for ITS properties
+
+function Hamb(meat, sauce1){
+  Potato.call(this, sauce1, meat)
+  this.meat= meat
+}
+
+let chicken = new Hamb("pollo", "garlic", "upwards")
+
+```
+
+{% tabs %}
+{% tab title="Hamb object" %}
+![](../.gitbook/assets/CalledOBJ.PNG)
+
+It will indicate Rings constructor but **It won't have access to its methods**, just its properties.
+{% endtab %}
+
+{% tab title="Potato object" %}
+![](../.gitbook/assets/Potatone.PNG)
+
+The object has access to its methods if they are with the \[\[prototype]]
+{% endtab %}
+{% endtabs %}
+
+
 
 ### ES6 syntax and more objects
 
