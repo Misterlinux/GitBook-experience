@@ -731,7 +731,107 @@ The object has access to its methods if they are with the \[\[prototype]]
 {% endtab %}
 {% endtabs %}
 
+**instanceof** checks if a prototype chain of an **instance** has **a constructor.prototype,** returning a boolean value**:**
 
+```
+//From our previous code
+//after the Potato.prototype= new Rings()
+//let tomato = new Potato("ketchup")
+
+tomato instanceof Potato        //True tomato gets to be instance of both 
+tomato instanceof Rings         //True
+
+chicken instanceof Hamb     //true
+chicken instanceof Potato   //false the .call() inherits just the properties, not any prototype
+
+```
+
+More about **.constructor** and **.constructor.prototype:**
+
+{% tabs %}
+{% tab title="Tomato instance" %}
+![](../.gitbook/assets/INSIDEPROTOTYPE.PNG)
+
+```
+//from the first line you see is an instance of Potato{properties}
+//its [[prototype]] is gonna be Rings, which tomato is instaceof
+//Also, Potato.prototype.ordine is inside [[prototype]] with the 
+//Rings[[prototype]] and inside of it there is the Rings() methods
+console.log( tomato )
+
+//the constructor is gonna be the function constructor body, without the 
+//prototype.methods added
+console.log( tomato.constructor )
+
+```
+
+![](../.gitbook/assets/CONSTRUCTIONPROTP.PNG)
+
+```
+//[[prototype]] Rings => [[prototype]] Object => the list of methods and
+//properties assigned to Tomato.constructor (Ring)
+
+tomato.constructor.prototype
+
+```
+{% endtab %}
+
+{% tab title="Chicken instance" %}
+![](../.gitbook/assets/HAMBonlyconst.PNG)
+
+```
+//chicken only is an instance of Hamb, its [[prototype]] is just object
+//Its actual constructor isn't Rings, its Hamb
+console.log( chicken )
+console.log( chicken.constructor )
+
+```
+
+![](../.gitbook/assets/ACTUALconstructor.PNG)
+
+```
+//Its constructor prototype ends up being
+
+console.log( chicken.constructor.prototype )
+
+```
+{% endtab %}
+{% endtabs %}
+
+We can use **instanceof** for other types of data too:
+
+```
+//It can help to see the difference between a primitive typeof and an Object
+//for Booleans, strings and numbers
+
+let str= 'This is a literal string';
+let obj= new String('String');
+
+//The obj is gonna have a [[prototype]] string, while the primitive won't 
+console.log(str instanceof String)     //false
+console.log(obj instanceof String)     //true
+
+//which also means is instanceof Object
+console.log(str instanceof Object)    //false
+console.log(obj instanceof Object)    //true
+
+```
+
+Using **instanceof** in any **if statement** requires:
+
+```
+//you need an extra () if working with FALSE instanceof
+
+if(!(chicken instanceof Rings )){
+  console.log("its not an instaceof then this apply")
+}
+
+if(!chicken instanceof Rings){
+  console.log("this will never apply")
+}
+
+//!chicken will be evaulated before, so it will end up as False instaceof Rings, which can't happen
+```
 
 ### ES6 syntax and more objects
 
