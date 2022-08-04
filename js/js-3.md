@@ -308,6 +308,35 @@ console.log(obj.residence.street)   //Javascript error when accessing nested pro
 console.log(obj.residence?.street)  //undefined, wont block the page on JS error for nested property
 ```
 
+We can also use **instanceof** to check if empty or null objects are still _objects_:
+
+```
+//empty objects still count as
+
+let lettera= {
+}
+let nulla= Object.create(null)
+
+lettera instanceof Object        //true
+({})    instanceof Object        //true
+nulla   instanceof Object        //false, even if Object.create is used
+
+```
+
+**Primitive Data types** can be _objects_ with or without **coercion**, being Javascript a **weakly typed language:**
+
+```
+//Coercion will temporarily change the datatype of a variable in order to make
+//an invalid operation work
+
+"parola".length    //
+
+
+
+
+
+```
+
 With different types of data, we can use **Object.keys()** on them:
 
 ```
@@ -381,7 +410,7 @@ for (let i in myObj.cars) {
 We can also **return property values** as _arrays_ with for() and **.values()**:
 
 ```
-//This is usefull with NODElist
+//This is useful with NODElist
 
 let objin = {
   name: "Porter",
