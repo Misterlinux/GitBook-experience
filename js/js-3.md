@@ -329,12 +329,18 @@ nulla   instanceof Object        //false, even if Object.create is used
 //Coercion will temporarily change the datatype of a variable in order to make
 //an invalid operation work
 
-"parola".length    //
+"parola".length    //6, it shouldn't work coz primitive strings don't have properties like .length
+Number(2) + 3      //5, you shouldn't be able to sum objects with primitives
 
+//there is a difference between 
 
+let parola1= "stringa"    
+let parola= new String("stringa")
 
+(parola1 instaceof String/Object)   //false both for string literal/primitive
+(parola instaceof String/Object)    //true both, new Strings() creates an object and a string
 
-
+//It works for new Number() and New Boolean() too.
 ```
 
 With different types of data, we can use **Object.keys()** on them:
@@ -862,6 +868,153 @@ if(!chicken instanceof Rings){
 //!chicken will be evaulated before, so it will end up as False instaceof Rings, which can't happen
 ```
 
+We build a **construction function** in which we use **other construction as property**:
+
+{% tabs %}
+{% tab title="Size constructor" %}
+```
+
+class Size{
+  constructor(uno= 80, due=60){
+    this.width= uno;
+    this.height= due;
+  }
+}
+
+Size.prototype.resize = function(uni, dui) {
+  this.width = uni
+  this.height = dui
+}
+
+```
+{% endtab %}
+
+{% tab title="Position constructor" %}
+```
+
+class Position{
+  constructor(uno=0, due=0){
+    this.x= uno;
+    this.y= due;
+  }
+
+  move(newuno, newdue){
+    this.x= newuno;
+    this.y= newdue;
+  }
+}
+
+```
+
+
+{% endtab %}
+{% endtabs %}
+
+```
+//We assign the property screenSize the instance of Size with set arguments
+//size and position can work without parameters thanks to their default values
+
+class ProgramWindow{
+  constructor(){
+      this.screenSize = new Size(800, 600)
+      this.size= new Size()
+      this.position= new Position()
+  }
+}
+
+//and we can access the height and width property from the screenSie property
+const prop = new ProgramWindow()
+console.log( prop.screenSize.width )    //800
+console.log( prop.screenSize.height )   //600
+
+```
+
+Next we have a **resize()** method that will resize any new object that surpasses the set width, height of screenSize:
+
+```
+//the Size1 width and height will be resized IF it's bigger than the difference
+//between the fixed screenSize and the current position X Y
+
+//with Math.min is a simpley way to do Size1.width < topwidth
+//We also use Math.max(1) to cerrect the lower value to 1 if negative
+
+  resize(Size1){
+
+    const topheight= this.screenSize.height - this.position.y
+    const topwidth= this.screenSize.width - this.position.x
+
+    const neoheight= Math.max(1, Math.min(Size1.height, topheight))
+    const neowidth= Math.max(1, Math.min(Size1.width, topwidth))
+
+    this.size.resize(neowidth, neoheight)
+    Size1.width= this.size.width
+    Size1.height= this.size.height
+  }
+  
+//to access the method itself we need to first create an instace of it
+const programWindow = new ProgramWindow();
+
+//Then we create an instace we want to use as argument of said method
+let max= new Size(850, 650)
+
+programWindow.resize(max)
+console.log(max)      //its height and width will be resized at 800, 600, based on
+                      //the screenSize and 0,0 position
+```
+
+We do a symilar operation with the **move()** method:
+
+```
+//it's symilar to the previous method, the position object in the parameter
+//will be modyfied if it plus the Size exceed teh screenSize proportions
+
+  move(Pos){
+    const topheight= this.screenSize.height - this.size.height
+    const topwidth= this.screenSize.width - this.size.width
+
+    const neoheight= Math.max(0, Math.min(Pos.y , topheight))
+    const neowidth= Math.max(0, Math.min(Pos.x , topwidth))
+
+    Pos.x= neowidth
+    Pos.y= neoheight
+
+    this.position.move(neowidth, neoheight)
+  }
+
+//both methods modify the property of out new ProgramWindow() instance
+const programWindow2 = new ProgramWindow();
+
+const newPosition2 = new Position(410, 750);
+programWindow2.move(newPosition2);
+console.log( newPosition2 )        //410, 540
+//Position.Y exceeds the screenSize so with default Size.height at 60, we round at 540
+
+const newSize2 = new Size(1000, 1000);
+programWindow2.resize(newSize2);
+console.log(newSize2)             //390, 60
+//Both sizes will be resized BASED on the previous position results, that changed
+//the Size() and Position() that ProgramWindow uses as instances
+
+```
+
+We can **optimize** the entire process further:
+
+```
+//we use the instance objects as argument for the Instance method
+
+function changeWindow(prowin){
+  prowin.move(new Position(100, 150))
+  prowin.resize(new Size(900, 900))
+
+  return prowin
+}
+
+//we use the instace as argument
+const updatedWindow = changeWindow( new ProgramWindow() );
+console.log( updatedWindow )    //position be 100, 150 while size be 800, 450
+
+```
+
 ### ES6 syntax and more objects
 
 We can use a **Default parameter** in a function:
@@ -1139,7 +1292,9 @@ for(let x of l){
 
 ### Object constructor and extends
 
-We can create a template for objects with **function constructor:**
+**Functions are callable objects,** so they can contain properties and methods:
+
+We use **Constructions functions** as template to create new objects using the **new** keyword:
 
 ```
 function Person(first, last, age, eye) {            //we set the properties/VALUES
@@ -1165,8 +1320,8 @@ Using **Prototype** we can add properties and methods to already objects:
 
 ```
 //the property added won't be visible in console.log( myFather )
-Person.prototype.bahamas = "volottato"
-console.log( myFather.bahamas )        //"volottato" can still be called
+Person.prototype.bahamas = "volato"
+//it will be set in the [[prototype]] property
 
 //we add the properties and methods to the constructor BUT has to be called on the new
 Person.prototype.masuda = function(yoga){
@@ -1177,6 +1332,8 @@ myFather.masuda( 900 )                 //123 and also 900 maybe
 
 ```
 
+![The construction function is Person{}](../.gitbook/assets/firstprototype.PNG)
+
 We can use **extends** to extend pre-existing function constructor:
 
 ```
@@ -1186,6 +1343,7 @@ function Animal(name){
         console.log(`${this.name} makes a noise.`);
     }
 }
+
 //we put the new objects FIRST extends (old object)
 class Dog extends Animal {
   constructor(surname, altro) {
@@ -1201,6 +1359,27 @@ class Dog extends Animal {
 let d = new Dog('Mitzie', "maybe");    //Dog { name: 'Mitzie', speak: [Function: speak], more: 'maybe' }
 //Dog takes 2 arguments that will be used in contructor() and super('Mitzie') will be Animal(name)
 
+```
+
+The **Class keyword** was introduced in 2015, it doesn't change Javascript's **prototype-based nature** but helps to make syntax more in line with C++ and Java.
+
+It creates **construction Objects** whose properties and methods can be **inherited** by other objects, called instances:
+
+```
+//it needs a constructor that keeps the properties and parameters
+//while the methods are outside
+
+class Parv{
+  constructor(rin){
+    this.all= rin
+  }
+  dardo= function(){
+    return this.all + " more"
+  }
+}
+
+let rag = new Parv("winn")
+console.log( rag.dardo() )      //winn more
 ```
 
 We can also use **get()** for methods and more _super_:

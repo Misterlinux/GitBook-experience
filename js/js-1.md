@@ -62,7 +62,7 @@ sum()
 // result 27
 ```
 
-**return will stop execution** and return values, there are no _implicit_ returns in javascript
+**return will stop execution** and return values, there are no _implicit_ returns in javascript.
 {% endtab %}
 
 {% tab title="Arrow function" %}
@@ -79,6 +79,16 @@ const tut = () =>{
 //the structure is always keyword/parameters/operations
 tut();
 //result 22
+ 
+```
+
+And to return an object we:
+
+```
+//with no return but also extra ()
+
+const addUpTwoNumbers = (num1, num2) => ({ uno:num1, due:num2});
+
 ```
 {% endtab %}
 {% endtabs %}
@@ -295,7 +305,7 @@ valueIsNaN(Number.NaN); // true
 
 ```
 
-**Arrays** are variables that can hold more than one value and one _typeof()_ data:
+**Arrays** are objects variables that can hold more than one value and one _typeof()_ data:
 
 ```
 var list = [1, 2, 3]
@@ -309,7 +319,9 @@ list.length == 2
 
 ```
 
-With **.length** we can check **Properties** of the array.
+We can check its built-in _methods_ and _properties_ in **its \[\[prototype]] property,** like **concat()** or **.length:**
+
+![](../.gitbook/assets/ArrayObj.PNG)
 
 **Methods** on the other hand are **actions** on objects, and they need () because they are function:
 
