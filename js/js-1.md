@@ -224,6 +224,77 @@ tent1(2,1)                             //[7,4]
   
 ```
 
+We can implement **Variables** as functions when using **function combination**:
+
+```
+//We create 2 predicate functions 
+
+function negative(x) {
+    return x < 0;
+}
+function positive(y) {
+    return y > 0;
+}
+
+//then we create the function combining the 2 as function, 
+function or(p1, p2) {
+
+//here we pass the variable argument
+    return function(x) {
+        return p1(x) || p2(x);
+    }
+}
+
+//a variable, if the result of a function, can have an argument, 
+let nonzero = or(negative, positive);
+
+nonzero(-5)         //(negative) true || (positive) false = true
+
+//the or function has function as arguments, THEN we execute the argument functions
+//with the (-5) argument p1(x) p2(x), EVEN if a variable can have arguments.
+
+```
+
+We can even **nest** more functions **in the predicates**:
+
+```
+//We are gonna sue strings and length property
+
+//The first parameter (x) is gonna be from islonger("lungo") while the Y is gonna
+//be from the con("quantolungo"), they have different priority
+function islonger(x){
+    return function(y){
+        return y.length > x.length
+    }
+}
+
+//we can then use the result of a specific function to ! using the variable argument
+function not(p) {
+    return function(x) {
+        return !p(x);
+    }
+}
+
+function isshorter(x){
+    return function(y){
+        return y.length < x.length
+    }
+}
+
+function mixend(x1, x2){
+    return function(x){
+        return x1(x) && x2(x)
+    }
+}
+
+//We use the OR for || AND in the second argument we also use && mixend function
+let con= or(not(islonger("lungo")), mixend( isshorter("hint"), not(islonger("allunga") )))
+
+con("quantolungo")    //FALSE COZ islonger() !True || ( isshorter False && islonger !false)
+con("lil")            //TRUE COZ islonger() !False || (true && islonger() !false)
+
+```
+
 We can also **Interpolate** variables into HTML elements, also using _Ternary Operators_:
 
 ```
