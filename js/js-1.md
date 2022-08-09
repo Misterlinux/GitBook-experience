@@ -93,6 +93,8 @@ const addUpTwoNumbers = (num1, num2) => ({ uno:num1, due:num2});
 {% endtab %}
 {% endtabs %}
 
+In Javascript **** all **functions are object methods**, be it from constructor or global object.
+
 **Parameters** are values that are passed to the function and can be used locally in the function:
 
 ```
@@ -490,6 +492,16 @@ if (htmlLevel > 5){
     cssAndHtmlAbove5 = true;
 }
 
+```
+
+Booleans, Strings, and Numbers are the most known **primitives,** contrary to _objects_, which are aggregation of properties, primitives are just values, they have no property:
+
+```
+//new String is a constructor, that's why its result is an object
+
+typeof "abc";                 //"string"
+typeof String("abc");         //"string"
+typeof new String("abc");     //"object"
 ```
 
 ### Data conversion and type helpers

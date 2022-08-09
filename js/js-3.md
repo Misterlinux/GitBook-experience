@@ -291,6 +291,20 @@ delete car.color;
 car.hasOwnProperty("color")        //true/false if it exist 
 ```
 
+Or we could use **Object.assign()** to change an object property:
+
+```
+//we need 2 arguments, the objects and the { new property }
+
+const obj12={
+    tre: "well"
+}
+
+Object.assign( obj12, { tre: 12345 } );
+console.log( obj12 )                    //{tre: 12345}
+
+```
+
 How we handle _**undefined/null**_ results in _objects_:
 
 ```
@@ -524,7 +538,7 @@ function Person(name){
 
 ![The \[\[Prototype\]\] showing which methods properties are present](../.gitbook/assets/prototype.PNG)
 
-All Javascript **Objects inherit** \[\[prototype]], a property/function that acts as a **map** for all the _properties and methods avaiable_ to the object&#x20;
+All Javascript **Objects inherit** \[\[prototype]], a property/function that acts as a **map** for all the _properties and methods avaiable_ to the object.
 
 Any method/property in the prototypical **object constructor function** body can instead _be added_ to the **prototype,** which is **more memory efficient** and allows for **object-specific syntax:**
 
@@ -1029,7 +1043,7 @@ defaultParameter()           //"sam"
 
 ```
 
-We can also use the **spread/rest operator** for arrays and objects:
+We can also use the **spread/rest operator** on arrays and objects:
 
 ```
 //The REST operator can store the latter portion of the array,
@@ -1057,6 +1071,48 @@ siamo.split("")              //['s', 'i', 'a', 'm', 'o']
 //Or for Math operations without needing to loop/filter the array elemets
 let mat = [1, 25, 50, 100]
 let maximus = Math.max( ...mat )              //100 
+
+```
+
+This depends on **iterals,** including objects, **spread** enumerates/expands its elements while **rest** "condenses" them:
+
+```
+//we can .concat() objects, but if same properties overwrite happens
+
+const obj1 = { foo: 'bar', x: 42 };
+const obj2 = { foo: 'baz', y: 13 };
+
+console.log( {...obj1, ...obj2} )    //{foo: "baz"; x: 42; y: 13 } including a [[prototype]]
+
+//BUT you won't be able to iterate an object into an array in any way
+
+const obje = { key1: 'value1' }
+const hel = { key2: "value2"}
+console.log( [ ...obj, ...hel] )    //ERROR, obje is not iterable
+
+const obj = { 0: "a", 1: "b", length: 2 };
+const [a, b] = obj;                //ERROR obj ot iterable
+
+//BUT ALSO you can iterate arrays into objects
+//in an array, all indices are enumerable's own properties 
+
+const array = [11, 21, 31];
+console.log( {..array} )    //{ 0: 11; 1: 21; 2: 31 }
+
+```
+
+Also kind of fringe but we can **parse variables over functions**:
+
+```
+//We can take a function returned values
+
+function f(){
+    return [12, 13]
+}
+
+const [a,b]= f()
+
+console.log(a, b)    //12, 13
 
 ```
 
@@ -1158,24 +1214,44 @@ We can use it in different ways:
 let [firstName, surname] = "John Doe oltre".split(' ');    //the .split returnes [ 'John', 'Doe', 'oltre' ]
 console.log( firstName, surname )    //"John Doe" we can assign the first 2 values 
 
-//we can add properties to pre-existent objects
+//we can add properties to pre-existent objects using __proto__ (the [[prototype]] of the object)
+
 let novo = { 
   tent: 1,
   cove: 2
 }
-let {
-  missin= "more", 
-  ultras="verona", 
-  tent
-} = novo
-console.log( novo )      //{ tent: 1, cove: 2 } even if added 
-console.log( missin )    //"more" we cant see the property on object but we can call it
+
+novo.__proto__.gron = "il nuovo"
+console.log( novo.unn )      //"il nuovo"
 
 ```
+
+We can edit \[\[prototype]] also using **.setPrototypeOf(),** for additional objects**:**
+
+```
+//
+
+let har = {
+  state: "Haryana",
+  country: "nevada"
+}
+
+let inn = {
+  country: "India"
+}
+
+Object.setPrototypeOf(har, inn);
+
+//it the first object body properties still take priority so you will get
+console.log(har.country)    //"nevada"
+```
+
+![har.\_\_proto\_\_.country will be "india"](../.gitbook/assets/PROTOTYPEobjects.PNG)
 
 And for _nested objects,_ we can assign:
 
 ```
+//You can deconstruct object but you neeed to keep the property's name
 let scato = {
   yuse: {
     mode: "wannabe",
@@ -1195,7 +1271,40 @@ let {
 } = scato
 
 //and we can call an objects and array element
-console.log( unato + " " + mode)    //123 wannabe
+console.log( unato + " " + mode)                        //123 wannabe
+console.log( scato.listato[0] + " " + scato.yuse.mode ) //123 wannabe
+
+```
+
+You can also use **deconstruct objects as parameters**, but need to keep the property name:
+
+```
+//The decostructed properties will pass the property VALUE
+const meta11={
+    uno: "darth",
+    more:{
+        lazer: "guns",
+        ammo: "fire"
+    }
+}
+
+function show11( {more:{lazer}} ){
+    console.log( lazer )
+}
+
+show11(meta11)        //"guns"
+//we can also have objects parameters AND default values in functions
+
+function drawChart({ size = 'big', coords = { x: 0, y: 20 }, radius = 25 } = {}){
+  console.log(size, coords, radius);
+}
+
+drawChart( {
+  coords: { x: 18, y: 30 },
+  radius: 130,
+});
+//"big {x: 18, y: 30} 130", ALSO, coords object will return both default properties
+//ONLY IF the coords: argument is totally absent
 
 ```
 
@@ -1265,6 +1374,40 @@ function showBook({
 }
 
 showBook(options);  //setting the object used
+
+```
+
+We can also **Loop** through a **deconstruct object parameter**:
+
+```
+//We loop trought an array of objects
+
+const people = [
+  {
+    name: 'MIKE',
+    family: {
+      mother: 'Jane Smith',
+      father: 'Harry Smith',
+      sister: 'Samantha Smith',
+    }
+  },
+  {
+    name: 'TOM',
+    family: {
+      mother: 'Norah Jones',
+      father: 'Richard Jones',
+      brother: 'Howard Jones',
+    }
+  }
+];
+
+//while being const we can't modify property n and father, AND first we deconstruct
+//Then we loop with OF array
+for (const { name: n, family: { father } } of people) {
+  console.log(`Name: ${n}, Father: ${father}`);
+}
+
+//Name: MIKE, Father: Harry Smith; Name: TOM, Father: Richard Jones
 
 ```
 
@@ -1363,7 +1506,7 @@ let d = new Dog('Mitzie', "maybe");    //Dog { name: 'Mitzie', speak: [Function:
 
 The **Class keyword** was introduced in 2015, it doesn't change Javascript's **prototype-based nature** but helps to make syntax more in line with C++ and Java.
 
-It creates **construction Objects** whose properties and methods can be **inherited** by other objects, called instances:
+It creates **construction Objects templates** whose properties and methods can be **inherited** by other objects, called instances:
 
 ```
 //it needs a constructor that keeps the properties and parameters
@@ -1380,6 +1523,28 @@ class Parv{
 
 let rag = new Parv("winn")
 console.log( rag.dardo() )      //winn more
+```
+
+Instances can still **modify the inherited** \[\[prototype]] from their constructor:
+
+```
+function Vehicle(make, model) {
+    this.make = make;
+    this.model = model;
+}
+
+Vehicle.prototype.start = function() {
+    console.log(this.make + ' ' + this.model + ' starts');
+};
+
+var volkswagen = new Vehicle('Volkswagen', 'Golf');
+
+volkswagen.start();                 // Volkswagen Golf start
+volkswagen.start= function(){
+    console.log(this.make + ' ' + this.model + ' is kinda starting');
+} 
+volkswagen.start()                  //Volkswagen Golf is kinda starting
+
 ```
 
 We can also use **get()** for methods and more _super_:
