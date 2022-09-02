@@ -24,6 +24,7 @@
 * [JS 2](js/js-2.md)
 * [JS 3](js/js-3.md)
 * [JS 4](js/js-4.md)
+* [JS 5](js/js-5.md)
 * [Jquery & others](js/jquery-and-others.md)
 * [Intersection API](js/intersection-api.md)
 
