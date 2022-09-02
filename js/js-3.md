@@ -1029,6 +1029,8 @@ console.log( updatedWindow )    //position be 100, 150 while size be 800, 450
 
 ```
 
+###
+
 ### ES6 syntax and more objects
 
 We can use a **Default parameter** in a function:
@@ -1246,7 +1248,7 @@ Object.setPrototypeOf(har, inn);
 console.log(har.country)    //"nevada"
 ```
 
-![har.\_\_proto\_\_.country will be "india"](../.gitbook/assets/PROTOTYPEobjects.PNG)
+![har.\_\_proto\_\_.country will be "india"](<../.gitbook/assets/PROTOTYPEobjects (1).PNG>)
 
 And for _nested objects,_ we can assign:
 
@@ -1337,101 +1339,9 @@ console.log( longino("Lorem ipsum dolor sit amet consectetur, adipisicing elit. 
 
 ```
 
-And in **function parameters**:
 
-```
-let obb = {
-    type: "working",
-    uno: 123,
-}
-//here we need to use the same name in the objects
-const dritto = ( {type, uno } ) => (type, uno)
-console.log( dritto(obb) )                      //working 123
 
-//we can nest a new object to the existing object
-obb.new = {
-    citta: "unova",
-    number: 34
-}
-//and to call it in the parameter we just need an extra {} for the object
-const dentro = ( {new:{number} } ) => console.log(number + " this is the nested values")
-dentro(obb)                  //34 this is the nested values
 
-let options = {
-  title: "Js book",
-  items: ["Item1", "Item2"]
-};
-
-//we create a default property in the function parameter
-function showBook({
-  title = "Javascript",
-  pages = 200,
-  species  = "programming",
-  items = []    //we get the default things EXCEPT THE ITEMS THAT ARE GONNA BE FROM OBJECT
-}) {
-  console.log(`${title} ${species} ${pages}`); // Javascript programming 200
-  console.log(items); // Item1, Item2
-}
-
-showBook(options);  //setting the object used
-
-```
-
-We can also **Loop** through a **deconstruct object parameter**:
-
-```
-//We loop trought an array of objects
-
-const people = [
-  {
-    name: 'MIKE',
-    family: {
-      mother: 'Jane Smith',
-      father: 'Harry Smith',
-      sister: 'Samantha Smith',
-    }
-  },
-  {
-    name: 'TOM',
-    family: {
-      mother: 'Norah Jones',
-      father: 'Richard Jones',
-      brother: 'Howard Jones',
-    }
-  }
-];
-
-//while being const we can't modify property n and father, AND first we deconstruct
-//Then we loop with OF array
-for (const { name: n, family: { father } } of people) {
-  console.log(`Name: ${n}, Father: ${father}`);
-}
-
-//Name: MIKE, Father: Harry Smith; Name: TOM, Father: Richard Jones
-
-```
-
-And we can also get **.entries()** for property/key-value pairs:
-
-```
-//for arrays we have
-let frut = [123, "wall", "proll"]   //we get index and value
-const f = frut.entries()            //[ 0, 123 ],[ 1, 'wall' ],[ 2, 'proll' ]
-
-//for Objects we would need a loop to show the array iteration object
-let ultron = {
-  doing: "firsto",
-  dell: "secondo"
-}
-Object.entries(ultron)      //[ [ 'doing', 'firsto' ], [ 'dell', 'secondo' ] ]
-//we get the an array with arrays of pairs
-
-const l = Object.entries(ultron)
-for(let x of l){
-  console.log( x )          //  ['doing', 'firsto'], ['dell','secondo']
-}
-
-```
 
 ### Object constructor and extends
 
