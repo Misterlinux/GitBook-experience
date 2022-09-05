@@ -522,10 +522,107 @@ univa.spicc(-16)          //"no money ;(?"  with money=8< 10
 
 ```
 
-**Javascript** uses **prototypical objects** as _Templates_ from which **new** Objects **inherit** properties and methods (states and behaviors):
+Javascript doesn't have **static types** or **Static dispatching,** each object has a _private property_ **\[\[prototype]]**, that can be swapped or edited:
 
 ```
-//We start with a prototype function, starting with a Capital letter
+//It can be created and it has to be an object
+
+const uno={
+  ol: "siamo",
+  __proto__:{
+    ol: "siamo stati",
+    vid: "quasistati",
+    __proto__:{
+      rin: "secondo"
+    }
+  }
+}
+
+//here the chain of [[prototypes]], from uno.__proto__... , will be:
+//{ ol: "siamo" } --> { ol: "siamo stati", vid: "quasistati" } --> {rin: 'secondo'} --> Object.prototype --> null
+
+```
+
+We can also set _other construction functions_ as \[\[prototype]]:
+
+```
+function Base() {}
+function Derived() {}
+
+//we can set Derived.[[prototype]] to be Base.[[prototype]]
+Object.setPrototypeOf(
+  Derived.prototype,
+  Base.prototype,
+);
+
+//we made the [[prototype]] chain longer
+console.log( Derived.prototype )        //Base {constructor: ƒ}
+
+//and it would be
+const obje = new Derived();
+// Derived.prototype ---> Base.prototype ---> Object.prototype ---> null
+
+```
+
+When creating instances from constructors, the **constructor.prototype** **will become the \[\[prototype]] of the instance:**
+
+```
+console.log( Derived.prototype )    //Base {constructor: ƒ}
+console.log( obje.__proto__ )       //Base {constructor: ƒ}
+console.log( obje.prototype)        //undefined
+
+//Object.getPrototypeOf(Constructor.prototype) === Object.prototype
+
+```
+
+**Instances** are new objects with methods and properties copied from a class:
+
+```
+function doSomething() {
+  this.oltre= "acido"
+}
+
+doSomething.prototype.lin= "accidenti"
+
+//You can simply add properties to the instance
+let finn= new doSomething()
+finn.liberi= "muriatico"
+
+console.log( doSomething.oltre )        //Both undefined, even if the property is
+console.log( doSomething.lin )          //in the constructor and prototype
+console.log( doSomething.prototype.lin) //"accidenti"
+
+//.liberi and .oltre will be included in the constructor 
+
+```
+
+<figure><img src="../.gitbook/assets/InstancePrototype.PNG" alt=""><figcaption></figcaption></figure>
+
+We can also use **Object.create()** to set the \[\[prototype]] and properties of a new object:
+
+```
+//This allow us to create null prototypes with
+Object.create(null)
+
+const a1 = { a: 1 };
+
+const b1 = Object.create(a1);
+// b ---> a ---> Object.prototype ---> null
+
+```
+
+
+
+
+
+
+
+**Javascript** uses **prototypical objects** as _Templates_ from which **new** Objects **inherit** properties and methods (states and behaviors) in their \[\[prototype]].
+
+Arrays and RegEx, for example, come with **\[\[prototype]]** included :
+
+```
+//Prototype function start with capital letter
 
 function Person(name){
   this.name = name;
@@ -534,13 +631,51 @@ function Person(name){
   }
 }
 
+//[prototype] won't be present in primitive data type BUT in their intances
+let num= 5                //won't have [prototype]
+let num= new Number(5)    //will have [prototype]:number
+
+//Arrays and RegEx are intances
+let fila= [1,2,3,4]      //new Array(1, 2, 3, 4);
+const regexp = /abc/;    //new RegExp("abc");
+
+//[[prototype]] and __protot__ are different from .prototype
+
 ```
 
-![The \[\[Prototype\]\] showing which methods properties are present](../.gitbook/assets/prototype.PNG)
+{% tabs %}
+{% tab title="[[prototype]]/__proto__" %}
+To access the \[\[prototype]] methods and properties:
 
-All Javascript **Objects inherit** \[\[prototype]], a property/function that acts as a **map** for all the _properties and methods avaiable_ to the object.
+```
+console.log( fila.__proto__ )
+console.log( Object.getPrototypeOf(fila) )
 
-Any method/property in the prototypical **object constructor function** body can instead _be added_ to the **prototype,** which is **more memory efficient** and allows for **object-specific syntax:**
+```
+
+<figure><img src="../.gitbook/assets/Arrayprototype.PNG" alt=""><figcaption></figcaption></figure>
+{% endtab %}
+
+{% tab title=".prototype" %}
+.prototype is different and mostly used in **inheritance:**
+
+```
+//Simple objects won't have .prototype
+console.log( fila.prototype )     //undefined
+console.log( Array.prototype )    //actual prototype
+
+//some older built-in prototypes are instances
+console.log( Number.prototype )     //number 0
+console.log( Array.prototype )      //empty array
+console.log( RegExp.prototype )     // /(?:)/.
+
+```
+{% endtab %}
+{% endtabs %}
+
+All Javascript **Objects inherit** \[\[prototype]], a property/function that contains all the _properties and methods avaiable_ to the object.
+
+Any method/property in the prototypical **object constructor function** body can _be added_ to the **prototype,** which is **more memory efficient** and allows for **object-specific syntax:**
 
 ```
 //This can only be done to the Construction Object, not the instance/object
@@ -882,7 +1017,7 @@ if(!chicken instanceof Rings){
 //!chicken will be evaulated before, so it will end up as False instaceof Rings, which can't happen
 ```
 
-We build a **construction function** in which we use **other construction as property**:
+In this **exercise**, we build a **construction function** in which we use **other construction as property**:
 
 {% tabs %}
 {% tab title="Size constructor" %}
@@ -1097,6 +1232,14 @@ class Dog extends Animal {
 
 let d = new Dog('Mitzie', "maybe");    //Dog { name: 'Mitzie', speak: [Function: speak], more: 'maybe' }
 //Dog takes 2 arguments that will be used in contructor() and super('Mitzie') will be Animal(name)
+
+```
+
+**Extends** also extends the **\[\[prototype]] chain:**
+
+```
+
+// d--> Dog.prototype --> Animal.prototype --> Object.prototype --> null
 
 ```
 
