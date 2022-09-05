@@ -265,6 +265,19 @@ Object.keys(car)[0]   //type
 //you don't need to "" it unless using special syntax like "-[]/1234 5"
 ```
 
+We can also use variables as property:values pairs:
+
+```
+const a123 = 'foo';
+const b123 = 42;
+const c123 = {};
+
+const object3 = { a123, b123, c123 };
+
+console.log( object3.a123 )    //"foo"
+
+```
+
 Objects can be **edited** by assigning a new property:value and use _\[variables]_ to **dynamically access** property values::
 
 ```
@@ -387,6 +400,19 @@ const car = {
 person.fullo()                        //Fiat 500 
 person.fullon(car.type, car.model)    //Fiat 500
 person.fullo                          //[Function (anonymous)]
+
+```
+
+Property functions can be shortened:
+
+```
+const tost={
+  property: function (parameters) {},
+}
+
+const tost1={
+  property(parameters){},
+}
 
 ```
 
@@ -522,7 +548,9 @@ univa.spicc(-16)          //"no money ;(?"  with money=8< 10
 
 ```
 
-Javascript doesn't have **static types** or **Static dispatching,** each object has a _private property_ **\[\[prototype]]**, that can be swapped or edited:
+Javascript doesn't have **Static types** or **Static dispatching,** everything is an instance(object) or a function(constructor), and even functions are instances of a function constructor.
+
+Each object has a _private property_ **\[\[prototype]]**, that can be swapped or edited:
 
 ```
 //It can be created and it has to be an object
@@ -608,6 +636,36 @@ const a1 = { a: 1 };
 
 const b1 = Object.create(a1);
 // b ---> a ---> Object.prototype ---> null
+
+```
+
+Or we can set the **prototype** as a **new instance**:
+
+```
+function Foo() {}
+function Bar() {}
+
+console.log( Bar.prototype )        //Object.prototype
+
+//after we set its new prototype we get 
+//Bar.prototype = Object.create(Foo.prototype);
+Bar.prototype= new Foo()
+console.log( Bar.prototype )        //Foo {}
+
+const bar = new Bar();
+const foo = new Foo();
+
+console.log(Foo.prototype.isPrototypeOf(bar));    //true 
+console.log(Bar.prototype.isPrototypeOf(bar));    //true
+
+console.log(Foo.prototype.isPrototypeOf(foo));    //true, its an intance of, so of course
+console.log(Bar.prototype.isPrototypeOf(foo));    //false, 
+
+console.log( bar instanceof Foo)      //True
+console.log( bar instanceof Bar)      //true
+
+//due to the chain now being, bar is considered both intanceof coz it has both prototypes
+//bar--> Bar.prototype--> Foo.prototype--> Object.prototype--> null
 
 ```
 
@@ -701,16 +759,15 @@ console.log( prim )
 
 ![The new method is in the \[\[prototype\]\]](../.gitbook/assets/added.PNG)
 
-About **inheritance** and **.hasproperty()** in _Instances_:
+About **inheritance** and **.hasOwnProperty()** in _Instances_:
 
 ```
 //Any new method/property will be added to the Instances, even those precedents
 
 let secondo = new Primo(33)
-console.log( secondo )
 
 Primo.prototype.messo= false
-Primo.prototype.retro = function(){
+Primo.prototype.retro= function(){
   console.log( this.messo+ " is our way")    //false is our way
 }
 
@@ -719,6 +776,11 @@ console.log( secondo )
 
 //In Instances/objects we can use .hasOwnProperty() for True/False on specific properties
 secondo.hasOwnProperty("messo")    //True, secondo has the intance messo
+Object.hasOwn( secondo, 'messo')   //True, we can also use it
+
+secondo.hasOwnProperty("retro")    //False, retro method is not in the constructor
+secondo.__proto__.hasOwnProperty('retro')    //True, the method is in the prototype
+Object.getPrototypeOf(secondo).hasOwnProperty('messo')
 
 ```
 
@@ -1238,9 +1300,7 @@ let d = new Dog('Mitzie', "maybe");    //Dog { name: 'Mitzie', speak: [Function:
 **Extends** also extends the **\[\[prototype]] chain:**
 
 ```
-
 // d--> Dog.prototype --> Animal.prototype --> Object.prototype --> null
-
 ```
 
 The **Class keyword** was introduced in 2015, it doesn't change Javascript's **prototype-based nature** but helps to make syntax more in line with C++ and Java.
