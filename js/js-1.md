@@ -434,6 +434,16 @@ carrello.comprati.splice( index, 1 )            //["uno", "tre"]
 typeof longi == arrays
 ```
 
+**Splice()** can also ADD elements to an array:
+
+```
+//We put the INDEX we want the new element to be in, and 0
+
+const arringa = ['1', '2', '5', '6'];
+arringa.splice(2, 0, '3');            //['1', '2', '3', '5', '6']
+
+```
+
 More **methods:**
 
 ```

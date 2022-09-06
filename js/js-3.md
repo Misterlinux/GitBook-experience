@@ -8,6 +8,8 @@
 
 Some **methods** implement arrow **callback functions** in their **method call** and return true/false if the conditions apply, they are called **Predicate.**
 
+Some methods are **Pure**, which means they return a new array without modifying the original.
+
 **Includes()** return true/false for value existence in the array:
 
 ```
@@ -17,7 +19,7 @@ Some **methods** implement arrow **callback functions** in their **method call**
 
 ```
 
-**Map() will return a new array** applying its callback function:
+**Map() will return a new array** applying its callback function, it's pure:
 
 ```
 let namesArray = ['antigoni', 'chris', 'elamin']
@@ -47,7 +49,7 @@ numeronia.map( (x)=> x+2 ).forEach( (x) => console.log( "the number is " + x))  
 
 ```
 
-**.filter()** will return an array with only the ones that satisfy:
+**.filter()** will return an array with only the ones that satisfy, is pure:
 
 ```
 //It will create a new array with only the passed elements if we store it with
@@ -200,13 +202,70 @@ console.log(pairs.map(nullifing))       //[false, true, false, false, false]
 
 ```
 
-**Every()** checks if all values of the array satisfies the callback function:
+**Every()** checks if all values of the array satisfy the callback function:
 
 ```
 //it returns true/false
 
 [2,4,5,6,7].every( (x)=>x>= 2 )    //true
 [2,4,5,6,7].every( (x)=>x> 2 )     //false   
+
+```
+
+**Reduce()** needs an **accumulator** parameter to return a single value, sum of the array elements**:**
+
+```
+let arr = [1, 2, 3, 4];
+
+//We also need a second parameter which is the current element we are summing/looping
+arr.reduce((accumulator, current) => accumulator + current, 0)    //0+1,+2,+3,+4= 10
+//We also need a ,Startingvalue 0 from which the sum is gonna start
+
+//we don't necessarily need to return the sum values, we can use the accumulator/starter
+console.log(
+  arr.reduce(
+    (acc, cur) => {
+      (cur % 2 === 0) ? acc.even.push(cur) : acc.odd.push(cur);
+      return acc;
+    },
+    { even: [], odd: [] }
+  )
+)
+//form the reduce() we return the modyfied object after looping trought the elements
+//the acc(umulator) is the startingValue if we don't sum, so we retunr an object
+
+```
+
+**Reverse()** modifies the original array.
+
+**Flat()** creates a _new array_ with all sub-array elements concatenated in the same level:
+
+```
+//substituting a specific number with an array
+
+let deck= [1,2,3,4, 3]
+
+deck.map((number, index)=>{
+  if(number==3){
+    deck.splice(index, 1, [3,3,3])
+  }
+})
+
+deck             //[1, 2, Array(3), 4, Array(3)]
+deck.flat()      //[1, 2, 3, 3, 3, 4, 3, 3, 3]
+//we could also specify .flat(2) in case we have multiple nested arrays OR .flat(Infinity);
+
+//if we wanted to substitute we could use .reduce() and .concat() to "sum" to an empty array
+deck.reduce((acc, val) => acc.concat(val), [])
+
+```
+
+**FlatMap()** returns a new array by applying the callback fucntion to each element and flattends it:
+
+```
+let schab= [1,2,3,4,5,3]
+schab.flatMap((card) => card === 3 ? [card, card, card] : [card])
+//[1, 2, 3, 3, 3, 4, 5, 3, 3, 3]
 
 ```
 
@@ -571,6 +630,56 @@ const uno={
 
 ```
 
+We can use **\_\_**_**proto\_\_**_** ** in objects for **inheritance**:
+
+```
+//The parent object doesn't need it
+
+const genitore={
+  dopp: 3,
+  metodo(){
+    return this.dopp + 10
+  }
+}
+
+const fig={
+  __proto__: genitore
+}
+
+//The child object fig can use methods from the parent object, when needing this.dopp
+//property, not being present in the child, it will search for it in the [[prototype]]
+console.log( fig.metodo() )    //13    
+
+fig.dopp= 12
+console.log( fig.metodo() )    //22
+//after we set a new property it will use it instead
+
+```
+
+Setting up \_\__proto_\_\_ can be done with .prototype:
+
+```
+function Scatola(rega){
+  this.ecco= rega
+}
+
+Scatola.prototype.aggiungi= function(){
+  return this.ecco + " è il nostro"
+}
+
+//We can create anonymous new objects 
+const katt= [
+  new Scatola(11),
+  new Scatola(12),
+  new Scatola(13),
+]
+
+//Object.getPrototypeOf(new Scatola()) === Scatola.prototype
+
+```
+
+
+
 We can also set _other construction functions_ as \[\[prototype]]:
 
 ```
@@ -639,37 +748,65 @@ const b1 = Object.create(a1);
 
 ```
 
-Or we can set the **prototype** as a **new instance**:
+Or we can set the **prototype** as a **new instance,** and use **.isPrototypeOf()** to check the instance prototype:
 
 ```
 function Foo() {}
 function Bar() {}
+function Baz() {}
 
 console.log( Bar.prototype )        //Object.prototype
 
-//after we set its new prototype we get 
+//We chain the Baz1.prototype-> Bar1.prototype--> new Foo()  
 //Bar.prototype = Object.create(Foo.prototype);
 Bar.prototype= new Foo()
-console.log( Bar.prototype )        //Foo {}
+Baz.prototype= new Bar()
 
-const bar = new Bar();
-const foo = new Foo();
+console.log( Bar.__proto__)        //Foo {}
+console.log( Baz.__proto__)        //Foo {} [[Prototype]]:Foo1
 
-console.log(Foo.prototype.isPrototypeOf(bar));    //true 
-console.log(Bar.prototype.isPrototypeOf(bar));    //true
+const foo1 = new Foo();
+const bar1 = new Bar();
+const baz1 = new Baz();
 
-console.log(Foo.prototype.isPrototypeOf(foo));    //true, its an intance of, so of course
-console.log(Bar.prototype.isPrototypeOf(foo));    //false, 
+//The prototype of Baz1, Bar1, Foo1 are the same and present in the intance baz1
+//By checking the prototype chain we find that Bar and baz1.__proto__ are a new Foo()
+console.log(Baz1.prototype.isPrototypeOf(baz1));    // true
+console.log(Bar1.prototype.isPrototypeOf(baz1));    // true
+console.log(Foo1.prototype.isPrototypeOf(baz1));    // true
 
-console.log( bar instanceof Foo)      //True
-console.log( bar instanceof Bar)      //true
+//This means that Baz1 instanceof all 3
+console.log( baz1 instanceof Baz1)    //true
+console.log( baz1 instanceof Bar1)    //true
+console.log( baz1 instanceof Foo1)    //true
 
-//due to the chain now being, bar is considered both intanceof coz it has both prototypes
-//bar--> Bar.prototype--> Foo.prototype--> Object.prototype--> null
+//bar1.__proto__ is a steps ahead of Baz1.prototype and the opposite for Baz1 and foo1 
+console.log(Baz1.prototype.isPrototypeOf(bar1));    // false
+console.log(Baz1.prototype.isPrototypeOf(foo1));    // false
+
+//baz1 was created by new Baz1(), which is Baz.prototype= new Bar(), so it's its prototype
+console.log(Bar1.prototype.isPrototypeOf(baz1));    // true
+console.log(Bar1.prototype.isPrototypeOf(foo1));    // false
+//even if Foo1() is contained in Bar1 , Baz.prototype= new Bar(), it's step ahead 
+
+console.log(Foo1.prototype.isPrototypeOf(bar1));    // true
+console.log(Object.prototype.isPrototypeOf(baz1));  // true
+
+//the prototype chain for baz1 being
+//baz1->Baz1.prototype-> Bar1.prototype-> Foo1.prototype-> Object.prototype-> null
 
 ```
 
+This can be useful when needing specific prototypes to be part of instances:
 
+```
+//Some properties or methods present in Foo1 have to be present for example
+
+if (Foo1.prototype.isPrototypeOf(baz1)) {
+  console.log( "baz1 is the correct instance to use")
+}
+
+```
 
 
 

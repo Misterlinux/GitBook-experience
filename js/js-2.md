@@ -25,7 +25,7 @@ Here are some more notes:
 //with charCodeAt we get the unique code of the digit pressed 
 ```
 
-And we can use more same **methods** to modify strings:
+And we can use more same **methods** to modify strings, **Slice()** creates a mini array, doesn't edit the original :
 
 ```
 //.slice(x, y) will include the x index but not the y
