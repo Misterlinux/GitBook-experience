@@ -434,6 +434,14 @@ carrello.comprati.splice( index, 1 )            //["uno", "tre"]
 typeof longi == arrays
 ```
 
+**Pop()** and **Shift()** can both store values and perform action**:**
+
+```
+// we cut the first and last element of an array AND splice them in the middle of it
+deck.splice(deck.length/2, 0, deck.pop(), deck.shift());
+
+```
+
 **Splice()** can also ADD elements to an array:
 
 ```
