@@ -178,6 +178,24 @@ simple()
 
 <figure><img src="../.gitbook/assets/FetchBody.PNG" alt=""><figcaption><p>Response.body / response.json() / a specific property</p></figcaption></figure>
 
+We can use **await** on simple **promises**:
+
+```
+async function pleaseWait() {
+  const promise = new Promise((resolve, reject) => {
+   setTimeout(() => resolve(console.log('hello')), 1000)
+  })
+
+  await promise
+  console.log('world')
+
+  return 42
+}
+//hello (1 second) world (at the end)
+```
+
+_Promises_ can only change **from pending to fulfilled** or pending to rejected. They cannot change from fulfilled back to pending or rejected back to pending.
+
 The **Blob** object can represent data as a file-like object that doesn't need to be in a javascript-native format, like **images**.
 
 The **Blob()** _method_ in the response returns a promise that resolves with a blob:
@@ -345,4 +363,6 @@ return this.api
 ```
 {% endtab %}
 {% endtabs %}
+
+
 
