@@ -233,7 +233,7 @@ zero()
 
 ```
 
-The bind() method allows us to keep THIS argument when in a callback function:
+The **bind()** method allows us to keep THIS argument when in a callback function:
 
 {% tabs %}
 {% tab title="Simple" %}
@@ -260,7 +260,7 @@ console.log( fullName )    //Hege Nilsen
 ```
 {% endtab %}
 
-{% tab title="Second Tab" %}
+{% tab title="Callback" %}
 ```
 //when used in a callback function
 
@@ -286,5 +286,63 @@ setTimeout( bloccato, 5000)    //Not a Callback after 5 seconds
 {% endtab %}
 {% endtabs %}
 
-Request() will implement a method to request from client to server:
+The **Request()** object will go from the client to the server:
+
+```
+//It will come with a method(Get if empty) and can be fetch()
+
+async function finn(){
+  const request = new Request('https://www.mozilla.org/favicon.ico' );
+  console.log( request.method )    //GET method
+
+  fetch(request)
+    .then((response) =>{
+      console.log( response)       //status and body
+    })
+}
+
+finn()
+//if posting Object JSON you will need to stringify first
+```
+
+Some Promise() based exercises solutions
+
+{% tabs %}
+{% tab title="Re-try a promise" %}
+```
+//the function returns a promise, it fetch() from API and can reject
+
+const promisify = () => new Promise((resolve, reject) => {
+  this.api.request(text, (result) => {
+    result ? reject(result) : resolve();
+  })
+})
+    
+return promisify()  //   try
+  .catch(promisify) // retry one
+  .catch(promisify) // retry two
+  
+//each catch will work for each reject
+```
+{% endtab %}
+
+{% tab title="Re-try a response" %}
+```
+//in catch() we can use the fetch() argument, when fetching it again
+
+return this.api
+      .fetch(text)
+      .catch(() => {
+        return this.request(text).then(() => this.api.fetch(text));
+      })
+      .then((res) => {
+        if (res.quality < minimumQuality){
+          throw new QualityThresholdNotMet(text);
+        }
+        return res.translation;
+      });
+
+```
+{% endtab %}
+{% endtabs %}
 
