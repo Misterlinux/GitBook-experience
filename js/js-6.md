@@ -122,12 +122,169 @@ if (response.ok) {
 
 ```
 
-The **response** promise object provides methods to access it in **various formats**:
+The **response** promise object _provides_ methods to access it in **various formats**:
 
 ```
-// Some code
-
-
+response.text() return the text/string of the response 
+response.json() parse the response as JSON 
+response.formData() – return the response as FormData object
+response.blob() – return the response as Blob (binary data with type),
+response.arrayBuffer() – return the response as ArrayBuffer (low-level binary data),
 
 ```
+
+The **response** needs to be **await**, for code that has yet to return we use **async functions**.
+
+{% tabs %}
+{% tab title="await syntax" %}
+<pre><code>async function test2()
+{
+  let url = 'https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits';
+  
+  //without options this is a GET response object
+  let response = await fetch(url2);
+
+  //we then Parse it as a json()
+<strong>  let commits = await response.json(); 
+</strong>
+  console.log(response11)
+  console.log(commits7)
+  console.log(commits7[0].author.login);
+}
+
+test2()</code></pre>
+{% endtab %}
+
+{% tab title="promise syntax" %}
+```
+async function simple(){
+  fetch('https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits')
+    .then(response =>{
+      console.log( response )
+      return response.json()
+    })
+    .then(commits => {
+      console.log( commits )
+      console.log(commits[0].author.login)
+      return commits[0].author.login
+    });
+    
+}
+
+simple()
+```
+{% endtab %}
+{% endtabs %}
+
+<figure><img src="../.gitbook/assets/FetchBody.PNG" alt=""><figcaption><p>Response.body / response.json() / a specific property</p></figcaption></figure>
+
+The **Blob** object can represent data as a file-like object that doesn't need to be in a javascript-native format, like **images**.
+
+The **Blob()** _method_ in the response returns a promise that resolves with a blob:
+
+```
+//it will return empty("") if its prototype.type is opaque
+
+async function blob(){
+
+  //it won't work with shortened URL
+  let response = await fetch(' https://www.cdc.gov/nceh/features/lightning-safety/lightning-safety_600v2px.jpg?_=99663 ');
+
+  //Promise to resolve in a Blob object 
+  let blob = await response.blob(); 
+
+  //after creating an HTML tag
+  let img = document.createElement('img');
+  img.style = 'position:fixed;top:10px;right:10px;width:100px';
+  document.body.append(img);
+
+  //we go back to the URL
+  img.src = URL.createObjectURL(blob);
+
+  setTimeout(() => { 
+  //hides it by revoking its URL call, necessary in case you don't need it anymore
+  img.remove();
+    URL.revokeObjectURL(img.src);
+  }, 3000);
+
+}
+
+```
+
+The **URL.createObjectURL()** is a static method that creates an URL representing the object given.
+
+The **headers** read-only property of the **Response** interface contains the Headers object associated with the response:
+
+```
+async function zero(){
+  let response = await fetch('https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits');
+  
+  console.log( response.headers.get('Content-Type'));  
+  //application/json; charset=utf-8
+
+  //we can also loop trought the map-like key/value pairs
+  for (let [key, value] of response.headers) {
+    console.log(`${key} = ${value}`);
+  }
+
+}
+
+zero()
+
+```
+
+The bind() method allows us to keep THIS argument when in a callback function:
+
+{% tabs %}
+{% tab title="Simple" %}
+```
+//we can also use method on other objects
+
+const person = {
+  firstName:"John",
+  lastName: "Doe",
+  fullName: function () {
+    return this.firstName + " " + this.lastName;
+  }
+}
+
+const member = {
+  firstName:"Hege",
+  lastName: "Nilsen",
+}
+
+let fullName = person.fullName.bind(member);
+console.log( fullName )    //Hege Nilsen
+//It won't appear in the member object as a method, its a single operation bind to the object
+
+```
+{% endtab %}
+
+{% tab title="Second Tab" %}
+```
+//when used in a callback function
+
+const persona = {
+  firstName:"Not a",
+  lastName: "Callback",
+  display: function () {
+    console.log( this.firstName + " " + this.lastName)
+  }
+}
+
+persona.display()      //Not a Callback
+setTimeout( persona.display, 3000)    
+//If I did add the () it would execute but it wouldnt do the 3 seconds timeout
+
+//we bind the method to its object
+let bloccato= persona.display.bind( persona )
+setTimeout( bloccato, 5000)    //Not a Callback after 5 seconds
+
+```
+
+
+{% endtab %}
+{% endtabs %}
+
+Request() will implement a method to request from client to server:
 
