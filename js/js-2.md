@@ -81,6 +81,16 @@ Array.isArray("indeed" )            //false
 //Typeof is an operator, not a method 
 ```
 
+The **split()** method creates substrings from a pattern separator, returning an array:
+
+```
+//we can also use a limit for how many substrings we want
+
+let siamo= "are you ready"
+siamo.split("", 5)             //['a', 'r', 'e', ' ', 'y']
+
+```
+
 String data contains only 1 value and so is **primitive**, while Object contains more.
 
 ### If and Switch
