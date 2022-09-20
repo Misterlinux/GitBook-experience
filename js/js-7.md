@@ -62,3 +62,29 @@ rik.forEach((x)=>{
 
 ```
 
+To pass **from Set to Array** and vice-versa:
+
+```
+//By becoming a set it will also eliminate its duplicates
+
+let sort= [1,1,1,1,2,3,4,5,5,3,2,1,2,3]
+let set= new Set(sort)        //Set(5) {1, 2, 3, 4, 5}
+
+//to then go back to arrays
+
+[...new Set(sore)]            //[1, 2, 3, 4, 5]
+Array.from( new Set(sore))    //[1, 2, 3, 4, 5]
+```
+
+We can use Sets to get **intersections** and **difference** sets:
+
+```
+//we start from 2 Sets, we need to convert one into an array to use .filter(9
+//while the other will pass elements from the second that return true if on the first
+
+const intersection = new Set([...rik].filter((x) => seconn.has(x) ));
+
+const difference = new Set([...rik].filter((x) => !seconn.has(x)));
+//opposite operation with difference
+```
+
