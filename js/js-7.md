@@ -1,7 +1,6 @@
 # JS 7
 
-* its just a&#x20;
-* meme bro
+* Will add smaller content to compensate
 
 A **Set()** is a list-like data structure that _can't be accessed through index_ like arrays:
 
