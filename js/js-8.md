@@ -78,6 +78,40 @@ fetch( weatherbit )
 {% endtab %}
 {% endtabs %}
 
+We can also _modify the fetch URL_ based on the data we have available:
+
+```
+const APIKEY = "1313cd4c0f364f82aa120509835e4786";
+let URL = `https://api.weatherbit.io/v2.0/current?key=${APIKEY}`;
+
+//we use the city URL or the lat/lon if city not available
+let risultato= city
+    ? "&city=" + city
+    : `&lat=0&lon=0`
+
+let risposta= await fetch( `${URL}${risultato}` )
+let dati= await risposta.json()
+
+let {city_name, temp, lat, lon, weather } = dati.data[0]
+return [lon, lat];
+
+
+//If we return the coordinates we can .THEN() with the data returned
+
+  getweather().then((response)=>{
+
+    cent= [response[0], response[1]]
+
+    var mapp = new mapboxgl.Map({
+      container: "map", 
+      style: "mapbox://styles/mapbox/streets-v11", 
+      center: cent, 
+      zoom: 9, 
+    });
+    
+  }
+```
+
 We can also use [openweathermap ](https://openweathermap.org/api)API to fetch **cities with similar names**:
 
 ```
@@ -137,7 +171,66 @@ console.log( lista[0].categories[0].icon.suffix  )
 {% endtab %}
 {% endtabs %}
 
+### Designing maps with MapBox
 
+MapBox is a **javascript library** to build interactive maps using _OpenGL_ to render in 2d or 3d.
 
+First, we **import** [MapBox.gl](https://docs.mapbox.com/#maps) .js and .css:
 
+```
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet" />
+
+//you can use different links in case there are problems    
+<script src='https://api.mapbox.com/mapbox.js/v3.3.1/mapbox.js'></script>
+<link href='https://api.mapbox.com/mapbox.js/v3.3.1/mapbox.css' rel='stylesheet' />
+
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.js"></script>
+
+```
+
+We need an HTML id for the map:
+
+```
+//We can add it through javascript
+
+<div id="map" style="width: 400px; height: 300px; text-align: center;"></div>
+```
+
+For the javascript we need:
+
+```
+mapboxgl.accessToken =
+  "pk.eyJ1IjoiY29kZW1hb3oiLCJhIjoiY2toYXlnbzg1MWg4YzMwbDJ5YXYyMngwOSJ9.vcMw1P0hoburAql8VyDTtQ";
+
+//we start with the map class
+let centrino = [0, 0];
+let zoomino= 1;
+
+//container will use the map ID on HTML
+var mapp = new mapboxgl.Map({
+  container: "map",                             
+  style: "mapbox://styles/mapbox/streets-v11", 
+  center: centrino,           //this is the center coords array for the map
+  zoom: zoomino,              //this s the zoom level
+});
+
+//Then add multiple markers
+new mapboxgl.Marker()
+  .setLngLat( centrino )    //array [longitude, latitude]
+  .addTo(mapp);             //map to which be added
+
+//if we wanted to modify the current map we can:
+centrino= [response[0], response[1]]
+zoomino= 9
+
+var mapp = new mapboxgl.Map({
+    container: "map", 
+    style: "mapbox://styles/mapbox/streets-v11", 
+    center: centrino, 
+    zoom: zoomino, 
+});
+
+```
 

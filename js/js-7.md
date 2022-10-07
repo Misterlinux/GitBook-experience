@@ -9,7 +9,7 @@ A **Set()** is a list-like data structure that _can't be accessed through index_
 
 let set= new Set()
 set.add(1)
-let primo= {tin: 10, ten:"dieci"}
+set.add( {tin: 10, ten:"dieci"})
 
 ```
 
@@ -22,7 +22,7 @@ let uno= new Set()
 uno.add(1)
 uno.add(1)
 uno.add({uno: 1})
-uno.add({uno:1)}
+uno.add({uno: 1)}
 
 uno.size            //Set(3) {1, {…}, {…}}
 //the 2 objects arent strict equals so it will add
