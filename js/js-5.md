@@ -388,7 +388,7 @@ for (const { name: n, family: { father } } of people) {
 
 ```
 
-And we can also get **.entries()** for property/key-value pairs:
+And we can also get **.entries()** for property/key-value pairs, **array iteration**:
 
 ```
 //arrays will have their index
