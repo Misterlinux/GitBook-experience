@@ -391,9 +391,14 @@ for (const { name: n, family: { father } } of people) {
 And we can also get **.entries()** for property/key-value pairs:
 
 ```
-//for arrays we have
+//arrays will have their index
 let frut = [123, "wall", "proll"]   //we get index and value
-const f = frut.entries()            //[ 0, 123 ],[ 1, 'wall' ],[ 2, 'proll' ]
+const f = frut.entries()          
+
+for( const entry of f){
+  console.log( entry )              //[ 0, 123 ],[ 1, 'wall' ],[ 2, 'proll' ]
+}
+
 
 //for Objects we would need a loop to show the array iteration object
 let ultron = {
