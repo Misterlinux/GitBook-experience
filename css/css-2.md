@@ -548,7 +548,7 @@ And now for the **carousel structure**, we start with the carousel **window** an
 
 ```
 
-We also add some -webkit to style the scroll:
+We also add some -webkit to **style the scroll**:
 
 ```
 .contenuto1::-webkit-scrollbar{
