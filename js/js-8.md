@@ -190,7 +190,7 @@ First, we **import** [MapBox.gl](https://docs.mapbox.com/#maps) .js and .css:
 
 ```
 
-We need an HTML id for the map:
+We need an **HTML** id for the **map**:
 
 ```
 //We can add it through javascript
@@ -231,6 +231,32 @@ var mapp = new mapboxgl.Map({
     center: centrino, 
     zoom: zoomino, 
 });
+//but we also need to repeat the map or the changes to work
 
 ```
+
+The **mapbox Styles API** includes map styles for the maps:
+
+<pre><code><strong>
+</strong><strong>mapbox://styles/mapbox/satellite-streets-v11  //for the satelite view 3D
+</strong>mapbox://styles/mapbox/navigation-night-v1    //dark with traffic color roads
+mapbox://styles/mapbox/dark-v10               //normal dark
+mapbox://styles/mapbox/streets-v11            //clear map
+mapbox://styles/mapbox/light-v10              //gray map
+</code></pre>
+
+**Markers** are a method in mapboxgl.js, they rappresent a set of coordinates, with **icon** being the **visual** part:
+
+```
+//you can put multiple by just repeating the code
+
+new mapboxgl.Marker()
+    .setLngLat( centrino )    //array [longitude, latitude]
+    .addTo(mapp);             //map to which be added
+
+```
+
+<figure><img src="../.gitbook/assets/mapboxgl.js.PNG" alt=""><figcaption></figcaption></figure>
+
+
 
