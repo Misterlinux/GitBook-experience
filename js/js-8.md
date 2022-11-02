@@ -258,5 +258,133 @@ new mapboxgl.Marker()
 
 <figure><img src="../.gitbook/assets/mapboxgl.js.PNG" alt=""><figcaption></figcaption></figure>
 
+To add **custom marker**s we can add them as **HTML tags on the map**, or **add them on the style**:
+
+{% tabs %}
+{% tab title="HTML on the map" %}
+We need a GEOjson with the coordinates **features:**
+
+```
+const geojson = {
+    type: 'FeatureCollection',
+    features: [
+      {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [-77.032, 38.913]
+        },
+        properties: {
+          title: 'Mapbox',
+          description: 'Washington, D.C.'
+        }
+      }
+    ]
+};
+
+```
+
+The **Marker** method can be used to **add** DIV tags and CSS class to the Map:
+
+```
+for (const feature of geojson.features) {
+    const el = document.createElement('div');
+    el.className = 'marker';
+
+//we append the tag to the Marker
+    new mapboxgl.Marker(el)
+        .setLngLat(feature.geometry.coordinates)
+        .addTo(mapp1);
+}
+```
+
+We just add a background-image as the **icon**
+
+```
+.marker {
+    background-image: url('https://img.icons8.com/ios/344/3d-recycle-center.png');
+    background-size: cover;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+```
+
+The Marker is added Inside the mapbox map
+
+<figure><img src="../.gitbook/assets/MAPBOXhtmlmarker.png" alt=""><figcaption><p>included with its own CSS class</p></figcaption></figure>
+{% endtab %}
+
+{% tab title="Add on the Style" %}
+We will need a **.loadImage()** _after the map done loading_**:**
+
+```
+
+mapp.on('load', () => {
+
+    //We first load the image
+    mapp.loadImage(
+        'https://img.icons8.com/ios/344/3d-recycle-center.png',
+        (error, image) => {
+        if (error) throw error;
+     
+        //we addImage to the Style
+        mapp.addImage('cat', image);
+        
+        //
+        mapp.addSource('pointo', {
+        'type': 'geojson',
+        'data': {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': centrino
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [ 21 , 41 ]
+                    }
+                }
+            ]
+//we can also add how many times it features in the mapp style
+            }
+        });
+
+
+```
+
+**s**
+
+**s**
+
+**s**
+{% endtab %}
+{% endtabs %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
