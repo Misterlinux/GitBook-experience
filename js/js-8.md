@@ -214,6 +214,8 @@ var mapp = new mapboxgl.Map({
   style: "mapbox://styles/mapbox/streets-v11", 
   center: centrino,           //this is the center coords array for the map
   zoom: zoomino,              //this s the zoom level
+  bearing: 90,                //rotates the map by degree
+  projection: 'globe'         //model of map
 });
 
 //Then add multiple markers
@@ -329,10 +331,11 @@ mapp.on('load', () => {
         (error, image) => {
         if (error) throw error;
      
-        //we addImage to the Style
+        //we addImage to the Style, with its ID
         mapp.addImage('cat', image);
         
-        //
+        //source being the DATA referenced by the style, with ID "pointo"
+        //the coordinates features of the markers
         mapp.addSource('pointo', {
         'type': 'geojson',
         'data': {
@@ -345,46 +348,26 @@ mapp.on('load', () => {
                         'coordinates': centrino
                     }
                 },
-                {
-                    'type': 'Feature',
-                    'geometry': {
-                        'type': 'Point',
-                        'coordinates': [ 21 , 41 ]
-                    }
-                }
+                ...
             ]
-//we can also add how many times it features in the mapp style
             }
         });
-
+        
+        // Add a layer to use the image to represent the data.
+        mapp.addLayer({
+            'id': 'points',
+            'type': 'symbol',
+            'source': 'pointo', // reference the data source
+            'layout': {
+                'icon-image': 'cat', // reference the image
+                'icon-size': 0.15    //we can modify it also
+            }
+        });
+}
+);
 
 ```
 
-**s**
-
-**s**
-
-**s**
+Being included in the style means its not in the HTML.
 {% endtab %}
 {% endtabs %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
