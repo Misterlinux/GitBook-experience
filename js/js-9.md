@@ -65,5 +65,38 @@ mapp.on('click', (event) => {
 
 <figure><img src="../.gitbook/assets/PopUplayer.PNG" alt=""><figcaption><p>this PopUp could be edited trought its css .mapboxgl-popup-content </p></figcaption></figure>
 
+We can add a **flyTo animation** effect _between the points_ :
+
+```
+//instead of click we start it on LOADed map
+
+mapp2.on('load', (e)=>{
+
+  const features = mapp2.queryRenderedFeatures(e.point, {
+    layers: ['chicago-parks']
+  });
+  if (!features.length) {
+    return;
+  }
+  
+  let index= 0
+  
+  for(const x of features) {
+    index+= 1
+    
+    setTimeout(() => {
+      mapp2.flyTo({ 
+        center: x.geometry.coordinates,
+        zoom: 13
+      });
+
+    //Markers don't need to be added, already in the style
+
+    }, 2000 * index);
+  //each point gets 2000 of timeout before passing to the other
+}
+
+```
+
 
 
