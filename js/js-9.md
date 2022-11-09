@@ -98,5 +98,36 @@ mapp2.on('load', (e)=>{
 
 ```
 
+### MapBox Markers, events, and properties
+
+The **Marker** component can take a _property argument object_:
+
+```
+//we first create the div in which
+let contenuto1= document.createElement("div")
+contenuto1.className= "location1"    //we could use a CSS class properties OR
+
+contenuto1.style.backgroundImage= 'url("https://img.icons8.com/bubbles/2x/user-female.png")'
+contenuto1.style.backgroundSize= "cover"
+contenuto1.style.width= "60px"
+contenuto1.style.height= "60px"
+
+//we then create an object for the .Marker()
+let propieta1={
+    element: contenuto1,
+    draggable: true,
+    rotation: 30,
+    //scale: 0.8        //only works on default marker
+    //color: red        
+    offset: [ 100, -20]
+}
+
+//
+new mapboxgl.Marker( propieta1 )
+    .setLngLat( [14, 45.2] )
+    .addTo( map )
 
 
+
+
+```
