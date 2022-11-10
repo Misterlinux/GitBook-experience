@@ -235,5 +235,37 @@ for (const marker of geojson.features) {
 
 <figure><img src="../.gitbook/assets/ultimateMrker.PNG" alt=""><figcaption><p>each is a DIV element in the map</p></figcaption></figure>
 
+### Mapbox PopUps, properties, and events.
 
+First let's see how to **bind a Popup to a Merker**:
+
+```
+//we create a popUp to append to a Merker
+
+let kers= new mapboxgl.Popup()
+    .addText("using the variable we can add stuff later")
+
+let ker= new mapboxgl.Marker(drag)
+    .setLngLat( [13.5, 45] )
+    .addTo(map)
+    .setPopup(kers)
+
+```
+
+<figure><img src="../.gitbook/assets/MarkerPopup.PNG" alt=""><figcaption></figcaption></figure>
+
+Now for the **Popup Properties**:
+
+```
+let promp= {
+    className: "rad",        //will add a .class to the popup
+    closeButton: false,      //if you want to remove the X close button
+    closeOnClick: false,     //to close or not on click outside Popup
+    closeOnMove: true,       //to close on mapmove or zoom
+    offset: [ 20, -50],      //X Y offset
+}
+
+let kers= new mapboxgl.Popup(promp)
+
+```
 
