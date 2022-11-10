@@ -168,7 +168,10 @@ muove.isDraggable()          //we GET if draggable
 muove.setDraggable= false    //false stops its draggable property
 
 muove.setOffset([20, 30])
-muove.getOffset()          
+muove.getOffset()   
+
+muove.setLngLat()         
+muove.getLngLat()                
 
 muove.remove()            //to remov ethe Marker
 
