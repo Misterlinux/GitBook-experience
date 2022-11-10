@@ -114,20 +114,123 @@ contenuto1.style.height= "60px"
 
 //we then create an object for the .Marker()
 let propieta1={
-    element: contenuto1,
+    element: contenuto1,    //gets the DOM as Marker
     draggable: true,
     rotation: 30,
-    //scale: 0.8        //only works on default marker
+    //scale: 0.8            //these 2 works on default marker
     //color: red        
-    offset: [ 100, -20]
+    offset: [ 100, -20]    //X Y offset
 }
 
-//
 new mapboxgl.Marker( propieta1 )
     .setLngLat( [14, 45.2] )
     .addTo( map )
 
+```
 
-
+{% tabs %}
+{% tab title="Markers events" %}
+For _Marker()_ **events** we use on():&#x20;
 
 ```
+//we can attack events on defined markers
+
+let muove= new mapboxgl.Marker(scansa)
+    .setLngLat( [14, 45] )
+    .addTo(map)
+
+//we can get the current dragged Markers coordinates
+function mosso(){
+    let posto= muove.getLngLat()
+    console.log( "[" + posto.lng + " " + posto.lat + "]")
+}
+
+//then on the on() we can put the events
+muove.on("dragend", mosso)    //will trigger once at the end 
+
+muove.on("drag", mosso)       //will trigger for each pixel of drag
+
+muove.on("dragstart", ()=>{
+    console.log("Just Started")    //will trigger once at the start
+})
+
+```
+{% endtab %}
+
+{% tab title="Markers Set() Get()" %}
+We also can **set()** and **get()** the marker properties:
+
+```
+muove.setRotation(10)      //we SET the marker's property   
+muove.getRotation()        //we GET the marker's rotation
+
+muove.isDraggable()          //we GET if draggable
+muove.setDraggable= false    //false stops its draggable property
+
+muove.setOffset([20, 30])
+muove.getOffset()          
+
+muove.remove()            //to remov ethe Marker
+
+```
+{% endtab %}
+{% endtabs %}
+
+We can also use **Geojson** for the Markers data**:**
+
+```
+const geojson = {
+    'type': 'FeatureCollection',
+    'features': [
+        {
+            'type': 'Feature',
+            'properties': {
+            'message': 'Foo',
+            'iconSize': [60, 60]
+            },
+            'geometry': {
+            'type': 'Point',
+            'coordinates': [12, 44.5] 
+            }
+        },
+        ...
+    ]
+};
+
+for (const marker of geojson.features) {
+
+    const el = document.createElement('div');
+  
+    const width = marker.properties.iconSize[0];
+    const height = marker.properties.iconSize[1];
+    let lng= marker.geometry.coordinates[0]
+    let lat= marker.geometry.coordinates[1]
+
+    el.className = 'marker';
+    el.style.backgroundImage = `url(https://www.tabaccheriaguzzi.it/images/product/91/HABNOS-2-02.jpg)`;
+    el.style.width = `${width}px`;
+    el.style.height = `${height}px`;
+
+    el.style.backgroundSize= 'cover'
+    el.style.backgroundPosition= "center"
+
+    el.style.borderRadius = '50%'
+    el.style.cursor = 'pointer'
+  
+    //makes the div created as the marker
+    let marki = new mapboxgl.Marker(el)
+        .setLngLat(marker.geometry.coordinates)
+        .addTo(map);
+  
+    //the setPop() requires an entire Popup() argument to work
+    marki.setPopup(new mapboxgl.Popup()
+        .setHTML( `<p>${lng} and ${lat}</p>` )
+    )
+}
+
+```
+
+<figure><img src="../.gitbook/assets/ultimateMrker.PNG" alt=""><figcaption><p>each is a DIV element in the map</p></figcaption></figure>
+
+
+
