@@ -173,8 +173,10 @@ muove.getOffset()
 muove.setLngLat()         
 muove.getLngLat()                
 
-muove.remove()            //to remov ethe Marker
+muove.getPopup()          //to get the Popup if present
+muove.togglePopup()       //open close Popup
 
+muove.remove()            //to remove the Marker
 ```
 {% endtab %}
 {% endtabs %}
@@ -268,4 +270,74 @@ let promp= {
 let kers= new mapboxgl.Popup(promp)
 
 ```
+
+And for the **PopUp Event** and **Instance members:**
+
+{% tabs %}
+{% tab title="Events" %}
+```
+//events On Popup variables
+
+kers.on("open", ()=>{
+    console.log("will on PopUp click open")
+})
+
+kers.on("close", ()=>{
+    console.log("will work on closeOnClick PopUps")
+})
+```
+{% endtab %}
+
+{% tab title="Get() & Set()" %}
+```
+//the .getLngLat() are the same for Popup and Marker
+kers.getLngLat()       
+ker.getLngLat()        
+
+kers.setLngLat()        //we can place the Popup in coordinate
+kers.getElement()       //gets the HTML Dom of the Popup
+
+kers.setHTML("<h1> Siamo sicuri?</h1>")      
+kers.setText("Popup text")                   
+
+kers.setMaxWidth("400px")        //still don't know how it styles
+kers.getMaxWidth()
+
+kers.addClassName("cls")         //CSS class needs to be more specific
+kers.removeClassName("cls")      //on the Popup
+kers.toggleClassName("cls")      //will add/remove the class on teh Popup
+
+kers.setOffset([0, 0])           //at [0,0] its the Marker point
+
+kers.remove()                    //will keep the marker but not the Popup
+
+ker.togglePopup()                //will open/close on Marker
+
+let div= document.createElement("div")
+div.innerText("text on Node HTML element")
+
+kers.setDOMContent(div)
+```
+
+The specific class **to style the Popup**:
+
+```
+.cls.mapboxgl-popup .mapboxgl-popup-content{
+    color: white;
+    background-color: lightblue;
+    width: 400px;
+}
+```
+
+<figure><img src="../.gitbook/assets/PopUP.PNG" alt=""><figcaption><p>added colors and larger Width</p></figcaption></figure>
+{% endtab %}
+{% endtabs %}
+
+
+
+
+
+
+
+
 
