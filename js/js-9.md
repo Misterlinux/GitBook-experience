@@ -333,9 +333,18 @@ The specific class **to style the Popup**:
 {% endtab %}
 {% endtabs %}
 
+We can have events on **Markers** used on **Popup** instance:
 
+```
+let citta = new mapboxgl.Popup()
+let macchia= new mapboxgl.Marker(lacera)
 
+macchia.on("dragend", ()=>{
+  citta.setText("l'ho vista da dove " + macchia.getLngLat() )
+})
+```
 
+<figure><img src="../.gitbook/assets/dragPop.PNG" alt=""><figcaption><p>on Marker event we GET and use it on Popup</p></figcaption></figure>
 
 
 
