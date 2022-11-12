@@ -390,5 +390,46 @@ map.on('load', () => {
 
 <figure><img src="../.gitbook/assets/Source.PNG" alt=""><figcaption><p>Circle stroke is the border</p></figcaption></figure>
 
+For the **Popup on Hover** :
 
+<pre><code>//we add the Popup properties
+  const popup = new mapboxgl.Popup({
+    closeButton: false,
+    closeOnClick: false
+  });
+  
+//if on map mouse enters the places layer
+  mapp0.on('mouseenter', 'places', (e) => {
+  
+    // Change the cursor style as a UI indicator.
+    mapp0.getCanvas().style.cursor = 'pointer';
+
+    // Copy coordinates array.
+    const coordinates = e.features[0].geometry.coordinates; //.slice() ?
+    const description = e.features[0].properties.description;
+    //the description is gonna be the HTML on the properties
+
+    //if the map moves and another popUp gets focused it wont change the already opened
+    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+      coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+    }
+    
+<strong>  //we just add content and position to the created Popup
+</strong>    popup.setLngLat(coordinates).setHTML(description).addTo(mapp0);
+  });
+</code></pre>
+
+We also need to include a **remove() Popup on Hover off**:
+
+```
+//on mouseLeaving from the Layer points we remove the pointer and Poup
+
+  map.on('mouseleave', 'places', () => {
+  
+    map.getCanvas().style.cursor = '';
+    //empty style cursor on mouseleave is giving the pointer to only mouseenter
+    popup.remove();
+  });
+
+```
 
