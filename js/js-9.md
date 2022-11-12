@@ -346,7 +346,49 @@ macchia.on("dragend", ()=>{
 
 <figure><img src="../.gitbook/assets/dragPop.PNG" alt=""><figcaption><p>on Marker event we GET and use it on Popup</p></figcaption></figure>
 
+### Style Geojson sources with Mapbox layers
 
+We add the **Geojson as a source** (with ID):
+
+```
+map.on('load', () => {
+  map.addSource('places1', {
+      'type': 'geojson',
+      'data': {
+        'type': 'FeatureCollection',
+        'features': [
+            {
+              'type': 'Feature',
+              'properties': {
+                'description': '<h2>la montagna</h2>'
+              },
+              'geometry': {
+                'type': 'Point',
+                'coordinates': [13, 45.2]
+              }
+            },
+            ...
+        ]
+      }
+  })
+
+//Its source uses the ID
+  map.addLayer({
+    'id': 'places',
+    'type': 'circle',
+    'source': 'places1',
+    'paint': {
+      'circle-color': '#ff64fb',
+      'circle-radius': 6,
+      'circle-stroke-width': 3,
+      'circle-stroke-color': '#ffffff'
+    }
+  });
+  
+})
+```
+
+<figure><img src="../.gitbook/assets/Source.PNG" alt=""><figcaption><p>Circle stroke is the border</p></figcaption></figure>
 
 
 
