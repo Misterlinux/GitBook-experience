@@ -240,7 +240,7 @@ for (const marker of geojson.features) {
 
 ### Mapbox PopUps, properties, and events.
 
-First let's see how to **bind a Popup to a Merker**:
+First, let's see how to **bind a Popup to a Merker**:
 
 ```
 //we create a popUp to append to a Merker
@@ -256,6 +256,19 @@ let ker= new mapboxgl.Marker(drag)
 ```
 
 <figure><img src="../.gitbook/assets/MarkerPopup.PNG" alt=""><figcaption></figcaption></figure>
+
+Remember that **Popup() doesn't have the **_**element**_** property**:
+
+```
+//so if you want to add DOM content you need to
+
+const secondo= window.document.createElement("div")
+secondo.innerHTML = "I know its playable"
+
+new mapboxgl.Popup(prop)
+    .setDOMContent( secondo )
+    
+```
 
 Now for the **Popup Properties**:
 
