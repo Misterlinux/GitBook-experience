@@ -433,3 +433,50 @@ We also need to include a **remove() Popup on Hover off**:
 
 ```
 
+We can use **Mapbox data** in our **source**:&#x20;
+
+```
+map.addSource('iconi', {
+
+  'type': 'geojson',
+  'data': {
+    'type': 'FeatureCollection',
+    'features': [
+    {
+      'type': 'Feature',
+      'properties': {
+        'description': '<p> teatro </p>',
+        'icon': 'theatre-15'    //its from mapbox we could use bar-15, etc
+      },
+      'geometry': {
+        'type': 'Point',
+        'coordinates': [11.5, 41.7] 
+      }
+    }
+    ...
+})
+
+map.addLayer({
+  'id': 'iconi1',
+  'type': 'symbol',
+  'source': 'iconi',
+  'layout': {
+    'icon-image': '{icon}',    //how we include the icon
+    'icon-allow-overlap': true
+  }
+});
+
+```
+
+<figure><img src="../.gitbook/assets/IconeMap.PNG" alt=""><figcaption><p>yet to see if their color can be changed</p></figcaption></figure>
+
+The code is the same as the **Hover**:
+
+```
+map.on('click', 'iconi1', (e) => {
+    ...
+}
+```
+
+
+
