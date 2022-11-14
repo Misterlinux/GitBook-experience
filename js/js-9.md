@@ -222,15 +222,16 @@ for (const marker of geojson.features) {
     el.style.borderRadius = '50%'
     el.style.cursor = 'pointer'
   
+    //we create the Popup
+    let pop= new mapboxgl.Popup()
+      ..setHTML( `<p>${lng} and ${lat}</p>`)
+  
     //makes the div created as the marker
     let marki = new mapboxgl.Marker(el)
         .setLngLat(marker.geometry.coordinates)
         .addTo(map);
-  
-    //the setPop() requires an entire Popup() argument to work
-    marki.setPopup(new mapboxgl.Popup()
-        .setHTML( `<p>${lng} and ${lat}</p>` )
-    )
+        .setPopup(pop)
+ 
 }
 
 ```
