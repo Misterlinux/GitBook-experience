@@ -134,6 +134,7 @@ For _Marker()_ **events** we use on():&#x20;
 
 ```
 //we can attack events on defined markers
+//remember you need setLngLat() before addTo() 
 
 let muove= new mapboxgl.Marker(scansa)
     .setLngLat( [14, 45] )
