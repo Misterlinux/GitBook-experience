@@ -245,6 +245,7 @@ The **mapbox Styles API** includes map styles for the maps:
 mapbox://styles/mapbox/dark-v10               //normal dark
 mapbox://styles/mapbox/streets-v11            //clear map
 mapbox://styles/mapbox/light-v10              //gray map
+
 </code></pre>
 
 **Markers** are a method in mapboxgl.js, they rappresent a set of coordinates, with **icon** being the **visual** part:

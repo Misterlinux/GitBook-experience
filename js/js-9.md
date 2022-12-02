@@ -432,6 +432,7 @@ For the **Popup on Hover** :
 <strong>  //we just add content and position to the created Popup
 </strong>    popup.setLngLat(coordinates).setHTML(description).addTo(mapp0);
   });
+
 </code></pre>
 
 We also need to include a **remove() Popup on Hover off**:
