@@ -67,7 +67,7 @@ We can **()** group and **{}** for text:&#x20;
 
 ```
 
-We can _multiply the lorem sample_ and **\[]** to add properties
+We can _multiply the lorem sample_ and **\[]** to add attrbutes
 
 <pre><code><a data-footnote-ref href="#user-content-fn-1">h2[style="color: red"]</a>><a data-footnote-ref href="#user-content-fn-2">lorem*2</a>
 <strong>
@@ -137,6 +137,8 @@ The Head tag is for a **link, meta**, and **title** for _internal and external f
 ```
 
 To format code use **crtl+k** then **crtl+f.**
+
+for numbers we can use 1\_000\_000
 
 For _**special syntax HTML**_ [check this website:](https://www.html.am/reference/html-special-characters.cfm)
 
