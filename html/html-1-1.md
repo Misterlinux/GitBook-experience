@@ -60,6 +60,22 @@ form.form-inline.mb-3>input:t.form-control.mr-2+input:s.btn.btn-dark^ul.list-gro
 </ul>
 ```
 
+we can use > and ^ for child or parents tags:
+
+<pre><code>
+h1>lorem5^h2.secondo>p>lorem2^^p.resto>p>lorem2
+
+<strong>
+</strong>&#x3C;h1>Lorem ipsum dolor sit amet.&#x3C;/h1>
+&#x3C;h2 class="secondo">
+    &#x3C;p>Lorem, ipsum.&#x3C;/p>
+&#x3C;/h2>
+&#x3C;p class="resto">
+    &#x3C;p>Lorem, ipsum.&#x3C;/p>
+&#x3C;/p>
+
+</code></pre>
+
 Or how we can use tags for HTML effects:
 
 ```
