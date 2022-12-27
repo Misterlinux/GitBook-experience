@@ -58,5 +58,15 @@ When other branches are pushed a **pull request** opens, to check proposed chang
 
 We can then use **git pull** to set the repository code into our local machine.
 
+more **git** commands:
 
+```
+
+git clone __url__                //will copy code/files from GitHub URL
+git rm index.html                //will remove files if those are committed
+
+git merge __branch to merge with the current one__
+//It won't delete the merging branch, and we still need to commit it after merge
+
+```
 
