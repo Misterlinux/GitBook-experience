@@ -2,12 +2,11 @@
 description: Templates and shortcuts to more HTML
 ---
 
-# HTML 1
+# HTML Tags and EMMET
 
-* [Syntax and special uses](html-1-1.md#syntax-and-special-uses-1)
-* [HTML head, meta and images](html-1-1.md#html-head-and-meta)
-* [HTML features and format](html-1-1.md#vs-features-for-html)
-* [Link CSS file](html-1-1.md#link-css-to-html-file)****
+* [Emmet syntax](html-1-1.md#emmet-html-syntax)
+* [Special HTML tags](html-1-1.md#special-html-tags)
+* [Link Head and Meta HTML tags](html-1-1.md#html-head-and-meta)
 
 **HTML** means HyperText Markup Language.
 
@@ -138,7 +137,7 @@ The Head tag is for a **link, meta**, and **title** for _internal and external f
 
 To format code use **crtl+k** then **crtl+f.**
 
-for numbers we can use 1\_000\_000
+for numbers, we can use 1\_000\_000
 
 For _**special syntax HTML**_ [check this website:](https://www.html.am/reference/html-special-characters.cfm)
 
@@ -150,15 +149,6 @@ For _**special syntax HTML**_ [check this website:](https://www.html.am/referenc
 <p>&#9824 </p>      // ♠
 
 ```
-
-
-
-1. [HTML5 - semantic elements](https://developer.mozilla.org/en/docs/Web/Guide/HTML/HTML5)
-2. [CSS Selectors - MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS\_Selectors)
-3. [The Cascade - MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Cascade)
-4. [Box Model - MDN](https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction\_to\_CSS/Box\_model)
-5. [Box Model, box-sizing: border-box - CSS Tricks](https://css-tricks.com/international-box-sizing-awareness-day/)
-6. [CSS specificity - MDN](https://developer.mozilla.org/en/docs/Web/CSS/Specificity)
 
 [^1]: can work with images too&#x20;
 
