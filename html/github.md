@@ -54,7 +54,7 @@ git restore .                    //will delete any un-committed changes
 
 And even _branches can be pushed_ to a GitHub repository.
 
-When other branches are pushed a **pull request** opens, to check proposed changes and to solve code conflicts.
+When other branches are pushed a **pull request** opens, to check proposed changes and to solve code conflicts, a **new repository branch** will also open and can receive pushes even without a solved pull request.
 
 We can then use **git pull** to set the repository code into our local machine.
 
