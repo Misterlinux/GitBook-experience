@@ -24,7 +24,7 @@ link + tab //will result in
 ```sql
 -external
 <link rel="stylesheet" type="text/css" href="style.css">
-(rel stands for relantionship)
+(rel stands for relationship)
 
 -internal
 Selectors {
@@ -37,9 +37,9 @@ Selectors {
 id# > class. > tag
 ```
 
-Selectors mirror html tags for priority ( tag > id# > .class )
+Selectors mirror HTML tags for priority ( tag > id# > .class )
 
-Here some **Inline, Inline-block and block:**
+Here's some **Inline, Inline-block, and block:**
 
 {% tabs %}
 {% tab title="HTML inline-block" %}
@@ -163,6 +163,14 @@ input[type="checkbox"] (or even with specific)
 :nth-child(1) (using numbers for position)
 
 ```
+
+
+
+
+
+
+
+
 
 To adapt elements for different screens we use **media queries**:
 

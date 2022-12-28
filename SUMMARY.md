@@ -4,7 +4,7 @@
 
 ## HTML
 
-* [Github](html/github.md)
+* [Git and Github](html/git-and-github.md)
 * [HTML Tags and EMMET](html/html-1-1.md)
 
 ## CSS
