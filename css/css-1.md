@@ -137,42 +137,35 @@ display:block will occupy the entire line and accept width/height, with the tags
 
 ### CSS Selectors
 
-Consider the following **example**:
+We use it to _select HTML **elements**_** ** to style with CSS **properties**:
 
 {% embed url="https://codepen.io/misterlinux/pen/qBXYpZb" %}
+Interactive CSS selector exercise
+{% endembed %}
 
-So, the syntax for them is:
+<details>
+
+<summary>List of CSS selectors</summary>
 
 ```
-<plate> 
-  <orange/>
-  <orange/>
-  <orange/>
-</plate>
+//we can also use * to select any element inside
 
-plate > * (for every tag inside <plate)
-#x.y (to select with both tag x AND class y)
-.x, .y (to select classes with x OR x)
-x + .y (to select only the first .y to follow the x [children not included])
-x > y (to select children on parent tag)
-plate:only-child/first-child/last-child (to select specific positions)
-*[for] (all properties with the attribute selector)
-p[for]:not([for="non"]) (to exclude a specific attribute selector)
-input[type="checkbox"] (or even with specific)
-[class*="heading"] (to select classes with "heading" in the name)
-:nth-child(1) (using numbers for position)
+plate > *                       //for every inside tag
+tag + .class1                   //only first and if following class
+.class1.class2                  //classes with BOTH 
+.class1, .class2                //classes with ANY
+.class1 .class2                 //any child class2 inside class1
+.class1 + .class2               //only the direct children of class1
+.class1[href="www.."]           //selection based on an attribute
+.class1[href]:not[href="www.."] //selecting EXCEPT said attribute
 
 ```
 
+</details>
 
+### Media query
 
-
-
-
-
-
-
-To adapt elements for different screens we use **media queries**:
+A media query consists of a **media type** that adapts elements to different screens:
 
 ```
 @media only screen and (max-width: 400px) {
@@ -189,13 +182,12 @@ To adapt elements for different screens we use **media queries**:
     }
 }
   
-//like we choose a smaller font for an H1, and the complete 
-keyframe statuses
+//we changed the font-size and animation position for smaller screens
 ```
 
-Also, the properties are inherited and so we have to change only the different ones.
+**CSS selectors inherit their properties**, any changes are limited to the media query.
 
-### **Position, Canvas and Animation**
+### **Position, Canvas, and Animation**
 
 check this example:
 
@@ -205,41 +197,236 @@ animation on html/css page
 
 We used animations/transition/canvas and pixel art.
 
-#### Transitions and animations
+### CSS transform
 
-So, to modify CSS properties trought different states we can use:
+The transform property allows us to **move, rotate, scale, and skew** HTML elements:
 
 ```
-.box{
-  background: blueviolet;
-  width: 200px;
-  height: 150px;
-  transition: 1s;
+//We can use matrix() method to 
+//(scaleX(), skewY(), skewX(), scaleY(), translateX(), translateY())
+
+.com{
+    background-color: tomato;
+    width: 200px;
+    height: 150px;
 }
 
-.box:hover{
-  width: 300px;
+.fat{
+    background-color: tomato;
+    width: 200px;
+    height: 150px;
+
+    transform: matrix(1.2, 0, 0.5, 0.6, -100, -20);
 }
 
-//we transition in 1second the box's width from 200 to 300 
-after a :hover, but we have to use transform to do more like rotate()
-
-.type{
-  border-right: .1em solid green;
-  animation: color 1s step-end infinite;
+//for multiple transform we just
+.cof{
+    transform: scale( 2, 0.5 ) translate( 150px, -30px);
 }
 
-@keyframes color{
-  0% { border-color: green; }
-  50% { border-color: transparent; }
-  100% { border-color: green; }
-}
-
-//we animate the border to intermit in 1 second, infinite
-some elements can't be animated
 ```
 
-The syntax  is \[all]\[0.5s]\[ease] / **\[target]\[time]\[way]**.
+<figure><img src="../.gitbook/assets/matrix.PNG" alt=""><figcaption><p>Width scaled 1.2 and height 0.6, skey(0, 0.5) and translate left 100px and top 20px</p></figcaption></figure>
+
+<details>
+
+<summary>Transform property guide</summary>
+
+The **translate()** method moves the element's **current position by X/Y:**
+
+```
+// -/+ X values being left and right, while -/x top and bottom on Y axis
+
+.cor{
+    background-color: lightsalmon;
+    width: 250px;
+    height: 300px; 
+
+    position: relative;
+    top: 50px;
+    left: 30px;
+
+    transform: translate(-30px, 100px)
+}
+
+```
+
+The **rotate()** method rotates the element clock/anti-clockwise in degrees:
+
+```
+//negative numbers for anti-clockwise
+
+.prin{
+    background-color: darkgoldenrod;
+    width: 300px;
+    height: 330px;
+    
+    transform: rotate(90deg);
+}
+
+```
+
+The **scale()** method increases or decreases the width/height of an element:
+
+```
+//scale() X/Y are multipliers, you can also scaleX() or scaleY()
+
+#avv{
+    background-color: green;
+    width: 300px;
+    height: 330px;
+    
+    transform: scale( 2,2 );
+}
+
+```
+
+The **skew()** method skews elements on their X/Y axis by degrees:
+
+```
+//it can also modify its width/height
+
+.oll{
+    background-color: lightskyblue;
+    width: 300px;
+    height: 330px;
+
+    transform: skewX(90deg);
+}
+
+```
+
+</details>
+
+### CSS transition&#x20;
+
+The transition **property** allows us to change CSS values over a duration.
+
+```
+transition: width 2s linear 1s;
+
+//Transition being a shorthand for 
+
+transition-property= "width"
+transition-duration= 2s
+transition-timing-function: "linear"
+transition-delay= 1s
+
+```
+
+<details>
+
+<summary>Transition property guide</summary>
+
+The transition property **covers any changes** the selectors receive, **after an event**:
+
+```
+//the event can be a CSS pseudo:class or a javascript event
+
+.gir{
+    background-color: sienna;
+    width: 200px;
+    height: 150px;
+
+    transition: 1s;
+}
+
+.gir:hover{
+    width: 450px;
+    background-color: slateblue;
+}
+
+//Both width and color will transition at 1s after an :hover
+```
+
+You will need a transition-property when **different durations** for properties:
+
+```
+#face{
+    background-color: fuchsia;
+    width: 200px;
+    height: 150px;
+
+    transition: width 3s, background-color 1s;
+}
+
+let face= document.getElementById("face")
+face.addEventListener("click", ()=>{
+    face.style.width= "350px"
+    face.style.backgroundColor= "red"
+})
+
+//width will take 3s while the color will be done in 1s
+```
+
+We can change the **timing function** at each stage of the transition:
+
+```
+//remember to always put the timing AFTER the normal transition 
+
+#book{
+    background-color: lawngreen;
+    width: 200px;
+    height: 150px;
+
+    transition: width 3s, background-color 1s;
+    transition-timing-function: ease-in-out;
+}
+
+//ease(default) faster middle, slow start/end
+//linear, same speed everywhere
+//ease-in/out ease-in-out, slower at start/end or both
+```
+
+we can delay the **transition** in between the event and the property change:&#x20;
+
+```
+#face{
+    background-color: fuchsia;
+    width: 200px;
+    height: 150px;
+
+    transition: width 3s, background-color 3s;
+    transition-delay: 2s;
+}
+
+```
+
+</details>
+
+### Transition + Transform CSS property
+
+We can add the transition **effect** to a transformation **method**.
+
+```
+//we transition the width property AND also transform by degrees
+
+.prin{
+    background-color: darkgoldenrod;
+    width: 300px;
+    height: 330px;
+
+    transition: transform 3s, width 3s;
+}
+
+.prin:hover{
+    transform: rotate(90deg);
+    width: 220px;
+}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
 
 We can use **Tranform** for more properties and multiple animations:
 
@@ -370,6 +557,10 @@ in state 0 or 1, to then add it to the existing shape
 ctx.fillStyle = grd;
 ctx.fill();
 ```
+
+###
+
+###
 
 ### Buttons and effects
 
