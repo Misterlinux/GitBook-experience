@@ -197,6 +197,8 @@ animation on html/css page
 
 We used animations/transition/canvas and pixel art.
 
+###
+
 ### CSS transform
 
 The transform property allows us to **move, rotate, scale, and skew** HTML elements:
@@ -416,11 +418,134 @@ We can add the transition **effect** to a transformation **method**.
 
 ```
 
+### CSS animation property
 
+This property allows us to **control every step** of a CSS animation with **keyframe rule:**
 
+```
+//animation property includes
+/*
+animation-name: example;
+animation-duration: 5s;
+animation-timing-function: linear;
+animation-delay: 2s;
+animation-iteration-count: infinite;
+animation-direction: alternate;
+*/
 
+animation: example 5s linear 2s infinite alternate;
 
+//@keyframes to change any property at any % step
+@keyframes example {
+  0%   {background-color: red;}
+  100% {background-color: green;}
+}
 
+```
+
+<details>
+
+<summary>Animation property guide</summary>
+
+An **animation requires** the name of its **keyframe** rule and its **duration**.
+
+```
+//we can use from/to for 0%/100%
+
+.robe{
+    background-color: brown;
+    width: 250px;
+    height: 200px;
+
+    animation: example 10s;
+}
+
+@keyframes example {
+    from {background-color: red;}
+    to {background-color: yellow;}
+}
+
+```
+
+The **animation-delay** specifies a delay for it to start:
+
+```
+//the delay can be negative, it will skip forward to the animation
+
+.cose{
+    background-color: brown;
+    width: 250px;
+    height: 200px;
+
+    animation: plane 10s;
+    animation-delay: 2s;
+}
+
+```
+
+The **animation-iteration-count** for how many times it should run:
+
+```
+//each re-run will start back at its starting properties
+//it can also be "infinite"
+
+.magi{
+    background-color: pink;
+    width: 250px;
+    height: 200px;
+
+    animation: adesso 10s;
+    animation-delay: -2s;
+    animation-iteration-count: 3;
+}
+
+```
+
+We use **animation-direction** to choose in which order the keyframe will run:
+
+```
+//normal(default), reverse, alternate & alternate-reverse
+//alternate will smoothly rewind the animation at the end frame
+//while alternate-reverse at the start end
+
+.nag{
+    background-color: navy;
+    width: 250px;
+    height: 200px;
+
+    animation: finali 5s;
+    animation-iteration-count: 4;
+    animation-direction: reverse;
+}
+
+```
+
+The **animation-timing-function** property is the same as transition:
+
+```
+//the speed will influence the keyframe speed
+
+animation-timing-function: ease/ linear/ ease-in/ ease-out/ ease-in-out
+
+```
+
+The **animation-fill-mode** property sets the **properties** that are gonna be **retained at the end** of the animation:
+
+```
+//forwards will retain last frame properties, while backwards the default's
+
+.n26{
+    background-color: lightgreen;
+    width: 250px;
+    height: 200px;
+
+    animation: uffa 10s;
+    animation-fill-mode: backwards;
+}
+
+```
+
+</details>
 
 
 
