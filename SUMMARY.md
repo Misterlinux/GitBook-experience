@@ -30,6 +30,7 @@
 * [JS 9](js/js-9.md)
 * [Js 10](js/js-10.md)
 * [JS 11](js/js-11.md)
+* [Extra-JS](js/extra-js.md)
 * [Jquery & others](js/jquery-and-others.md)
 * [Intersection API](js/intersection-api.md)
 
