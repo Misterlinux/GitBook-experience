@@ -129,7 +129,7 @@ let objects={
     timeZoneName: "long",        //15/01/2023, Central European Standard Time
     
     hour: 'numeric', minute: 'numeric', second: 'numeric',
-    Timezone: "Europe/Kiev",    //19:08:41 (we limited to time, and a timezone)
+    timeZone: "Europe/Kiev",    //19:08:41 (we limited to time, and a timezone)
     day: "numeric",             //15
     
     month: "short/long/numeric", //Jan/ January/ 1
