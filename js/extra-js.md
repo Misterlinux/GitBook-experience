@@ -113,5 +113,34 @@ console.log( ((((end - start)/1000)/60)/60) )  //2 hours
 {% endtab %}
 {% endtabs %}
 
+We use **new Intl.DateTimeFormat().format()** method to format a date according to the locale and formatting **options**:
+
+```
+//we set the state-language in the time format
+
+let kiev= new Date()
+//Sun Jan 15 2023 17:53:25 GMT+0100 (Ora standard dell’Europa centrale)
+
+new Intl.DateTimeFormat('it-IT').format(kiev)
+//15/1/2023
+
+//objects can limit the formatted date() returned 
+let objects={
+    timeZoneName: "long",        //15/01/2023, Central European Standard Time
+    
+    hour: 'numeric', minute: 'numeric', second: 'numeric',
+    Timezone: "Europe/Kiev",    //19:08:41 (we limited to time, and a timezone)
+    day: "numeric",             //15
+    
+    month: "short/long/numeric", //Jan/ January/ 1
+    year: "numeric",             //01/2023 (01 if not alone)
+    
+    weekday: "short/long"        //Sun/ Sunday
+    fractionalSecondDigits: 1/3, //the digits of seconds fractions
+    dayPeriod: "long"            //in the evening 
+}
+
+```
+
 
 
