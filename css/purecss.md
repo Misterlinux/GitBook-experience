@@ -67,7 +67,7 @@ _**The responsive grid:**_
 
 ```
 
-![Some grid](../.gitbook/assets/Cattura.PNG)
+![Some grid](<../.gitbook/assets/Cattura (3).PNG>)
 
 This works on **images** too:
 

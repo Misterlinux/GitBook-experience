@@ -37,9 +37,81 @@ Selectors {
 id# > class. > tag
 ```
 
-Selectors mirror HTML tags for priority ( tag > id# > .class )
+To implement **Google Fonts** in our CSS file we:
 
-Here's some **Inline, Inline-block, and block:**
+{% tabs %}
+{% tab title="@import fonts" %}
+```
+//we can use Google fonts
+@import url('https://fonts.googleapis.com/css2?family=Silkscreen&display=swap');
+font-family: 'Silkscreen', cursive;
+
+//or we can also import a .ttf file while using font-face import
+@font-face{
+    font-family: myFirstFont;
+    src: url(./Open\ 24\ Display\ St.ttf);
+}
+font-family: myFirstFont;
+
+```
+{% endtab %}
+
+{% tab title="Google fonts part 1" %}
+```
+@import url('https://fonts.googleapis.com/css2?family=Silkscreen&display=swap');
+/* https://fonts.google.com/specimen/Silkscreen */
+font-family: 'Silkscreen', cursive;
+
+@import url('https://fonts.googleapis.com/css2?family=Train+One&display=swap');
+/*https://fonts.google.com/specimen/Train+One*/
+font-family: 'Train One', cursive;
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+/*https://fonts.google.com/specimen/Bebas+Neue*/
+font-family: 'Bebas Neue', cursive;
+
+@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+/*https://fonts.google.com/specimen/Indie+Flower */
+font-family: 'Indie Flower', cursive;
+
+@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
+/* https://fonts.google.com/specimen/Permanent+Marker */
+font-family: 'Permanent Marker', cursive;
+```
+
+<figure><img src="../.gitbook/assets/Cattura.PNG" alt=""><figcaption></figcaption></figure>
+{% endtab %}
+
+{% tab title="Google fonts part 2" %}
+```
+@import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
+/*https://fonts.google.com/specimen/Righteous*/
+font-family: 'Righteous', cursive;
+
+@import url('https://fonts.googleapis.com/css2?family=Hammersmith+One&display=swap');
+/*https://fonts.google.com/specimen/Hammersmith+One*/
+font-family: 'Hammersmith One', sans-serif;
+
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300&display=swap');
+/* https://fonts.google.com/specimen/Josefin+Sans */
+font-family: 'Josefin Sans', sans-serif;
+
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+/*https://fonts.google.com/specimen/Lobster*/
+font-family: 'Lobster', cursive;
+
+@import url('https://fonts.googleapis.com/css2?family=Racing+Sans+One&display=swap');
+/* https://fonts.google.com/specimen/Racing+Sans+One */
+font-family: 'Racing Sans One', cursive;
+```
+
+<figure><img src="../.gitbook/assets/Catt1ura.PNG" alt=""><figcaption></figcaption></figure>
+{% endtab %}
+{% endtabs %}
+
+**Selectors** mirror HTML tags for priority ( tag > id# > .class ).
+
+Here are some **Inline, Inline-block, and block:**
 
 {% tabs %}
 {% tab title="HTML inline-block" %}
@@ -188,16 +260,6 @@ A media query consists of a **media type** that adapts elements to different scr
 **CSS selectors inherit their properties**, any changes are limited to the media query.
 
 ### **Position, Canvas, and Animation**
-
-check this example:
-
-{% embed url="https://codepen.io/misterlinux/project/editor/XrJJyL" %}
-animation on html/css page
-{% endembed %}
-
-We used animations/transition/canvas and pixel art.
-
-###
 
 ### CSS transform
 
@@ -546,6 +608,8 @@ The **animation-fill-mode** property sets the **properties** that are gonna be *
 ```
 
 </details>
+
+
 
 
 
