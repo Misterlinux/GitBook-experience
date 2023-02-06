@@ -153,6 +153,8 @@ The split(",") will change based on the values of some options properties:
 {% endtab %}
 {% endtabs %}
 
+If you want to know more **Timezones** check [here](https://bugs.chromium.org/p/chromium/issues/detail?id=928068#c1), and **languages** [here](https://www.w3schools.com/jsref/jsref\_tolocalestring.asp).
+
 We also have **set()** and **get()** **methods** for Date() objects:
 
 {% tabs %}
