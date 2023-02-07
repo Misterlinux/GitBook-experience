@@ -4,7 +4,8 @@ description: Syntax and properties
 
 # CSS 1
 
-* [Position, Canvas and Animation](css-1.md#position-canvas-and-animation)
+[Position, Canvas and Animation](css-1.md#position-canvas-and-animation)
+
 * [Buttons and effects](css-1.md#buttons-and-effects)
 * [CSS effects and :before:after](css-1.md#css-effects-and-before-after)
 * [Flex layout](css-1.md#flex-and-media-query)
@@ -545,11 +546,10 @@ The **animation-delay** specifies a delay for it to start:
 
 ```
 
-The **animation-iteration-count** for how many times it should run:
+The **animation-iteration-count** for how many **times** it should **run,** (can be **infinite**):
 
 ```
 //each re-run will start back at its starting properties
-//it can also be "infinite"
 
 .magi{
     background-color: pink;
@@ -566,9 +566,9 @@ The **animation-iteration-count** for how many times it should run:
 We use **animation-direction** to choose in which order the keyframe will run:
 
 ```
-//normal(default), reverse, alternate & alternate-reverse
-//alternate will smoothly rewind the animation at the end frame
-//while alternate-reverse at the start end
+//normal(default), reverse for same animation reverse keyframes.
+//alternate will smoothly reverse once done
+//while alternate-reverse will reverse first to them default keyframes
 
 .nag{
     background-color: navy;
@@ -582,12 +582,12 @@ We use **animation-direction** to choose in which order the keyframe will run:
 
 ```
 
-The **animation-timing-function** property is the same as transition:
+The **animation-timing-function** property is the same as transition, including **steps()**:
 
 ```
 //the speed will influence the keyframe speed
 
-animation-timing-function: ease/ linear/ ease-in/ ease-out/ ease-in-out
+animation-timing-function: ease/ linear/ ease-in/ ease-out/ ease-in-out/ steps()
 
 ```
 
@@ -609,34 +609,96 @@ The **animation-fill-mode** property sets the **properties** that are gonna be *
 
 </details>
 
-
-
-
-
-
-
-
-
-We can use **Tranform** for more properties and multiple animations:
+We can use the **animation-timing-function** steps() to use image frames.
 
 ```
-.box{
-    background: blueviolet;
-    width: 50px;
-    height: 50px;
-    transition: height 1s linear, width 4s ease-out, transform 3s;
-    transition-delay: 1s
+steps(<number_of_steps>, <direction>)
+```
+
+<details>
+
+<summary>steps() animation</summary>
+
+We move the pixel images as background, on a 1-frame width window:
+
+```
+<img src="http://s.cdpn.io/79/sprite-steps.png" />
+<div class="hi"></div>
+
+//remember to calculate the exact width of 1 frame, 500px/10(frames)
+.hi {
+  width: 50px;
+  height: 72px;
+  background-image: url("http://s.cdpn.io/79/sprite-steps.png");
+  
+  transform: scale(3);
+  animation: play 5s infinite;
+  animation-timing-function: steps(10);
 }
 
-//to multiple or add a transform to a transition
-
-.box:hover{
-    width: 200px;
-    height: 150px;
-    transform: rotate(180deg);
+@keyframes play {
+  from { background-position: 50px; }
+  to { background-position: -500px; }
 }
 
 ```
+
+</details>
+
+<figure><img src="../.gitbook/assets/animationsteps.gif" alt=""><figcaption><p>Example of it in action with pixel art</p></figcaption></figure>
+
+<details>
+
+<summary>Steps() direction, transform-origin and animation-fill-mode</summary>
+
+**Transform-origin is center by default**, we move it to top/bottom for the rotate()
+
+```
+//
+
+.pendolo{
+    margin: 15em auto;
+    position: relative;
+    width: 30px;
+    height: 200px;
+    background-color: brown;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+
+    transform-origin: top;
+    animation: pendo 15s steps(10, start) ;
+    animation-fill-mode: forwards;
+}
+
+
+
+```
+
+The steps(**start/end**) sets the starting frame
+
+1
+
+1
+
+</details>
+
+{% tabs %}
+{% tab title="Animation" %}
+1
+
+<figure><img src="../.gitbook/assets/pendolato4.gif" alt=""><figcaption><p>steps(start) and steps(end)</p></figcaption></figure>
+{% endtab %}
+
+{% tab title="animation-fill-mode" %}
+1
+
+<figure><img src="../.gitbook/assets/fill-mode.PNG" alt=""><figcaption></figcaption></figure>
+{% endtab %}
+{% endtabs %}
+
+
 
 To animate the sprite pixel art (and the text on the title) we used **steps()**:
 
