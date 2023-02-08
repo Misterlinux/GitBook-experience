@@ -686,7 +686,7 @@ The steps(**start/end**) sets the starting frame
 
 {% tabs %}
 {% tab title="Animation" %}
-1
+Steps(start) will "skip" the first frame, while completely ending, while steps(end) will start from the very first frame but ending 1 frame before
 
 <figure><img src="../.gitbook/assets/pendolato4.gif" alt=""><figcaption><p>steps(start) and steps(end)</p></figcaption></figure>
 {% endtab %}
