@@ -647,15 +647,34 @@ We move the pixel images as background, on a 1-frame width window:
 
 <figure><img src="../.gitbook/assets/animationsteps.gif" alt=""><figcaption><p>Example of it in action with pixel art</p></figcaption></figure>
 
-<details>
+in the next example we will use **transform-origin**:&#x20;
 
-<summary>Steps() direction, transform-origin and animation-fill-mode</summary>
-
-**Transform-origin is center by default**, we move it to top/bottom for the rotate()
+{% tabs %}
+{% tab title="css implent" %}
+Starting point from which the transform starts, Internal to the element, and center/50% 50% by default:
 
 ```
-//
+//keywords or X/Y percentages depending on the dimensions of the element
 
+transform: top/bottom/left/right/(X% Y%)
+
+```
+{% endtab %}
+
+{% tab title="Example" %}
+For a transform-origin: **25% 25%**, and a transform: rotate().
+
+<figure><img src="../.gitbook/assets/transfrom-rotate.png" alt=""><figcaption><p>(0deg), (90deg), (180deg) and (270deg)</p></figcaption></figure>
+{% endtab %}
+{% endtabs %}
+
+<details>
+
+<summary>Steps(&#x3C;direction>) and animation-fill-mode</summary>
+
+For single-dimension elements we need only 1 Transform-origin **** keyword**:**
+
+```
 .pendolo{
     margin: 15em auto;
     position: relative;
@@ -666,37 +685,96 @@ We move the pixel images as background, on a 1-frame width window:
     display: flex;
     justify-content: center;
     align-items: flex-end;
+    
+    ...
 
+```
+
+The steps(**start/end**) sets the starting frame, while the **forwards/backwards** the frame to have at the end.
+
+```
     transform-origin: top;
     animation: pendo 15s steps(10, start) ;
     animation-fill-mode: forwards;
 }
-
-
-
 ```
-
-The steps(**start/end**) sets the starting frame
-
-1
-
-1
 
 </details>
 
 {% tabs %}
 {% tab title="Animation" %}
-Steps(start) will "skip" the first frame, while completely ending, while steps(end) will start from the very first frame but ending 1 frame before
+**Steps(start)** will "skip" the first frame, while completely ending, while **steps(end**) will start from the very first frame but end 1 frame before
 
 <figure><img src="../.gitbook/assets/pendolato4.gif" alt=""><figcaption><p>steps(start) and steps(end)</p></figcaption></figure>
 {% endtab %}
 
 {% tab title="animation-fill-mode" %}
-1
+**Forwards** will keep the last frame at the end of the animation, while **backwards** will rollback to the first.
 
 <figure><img src="../.gitbook/assets/fill-mode.PNG" alt=""><figcaption></figcaption></figure>
 {% endtab %}
 {% endtabs %}
+
+
+
+<details>
+
+<summary>Typewriter effect usin transition and steps() animation</summary>
+
+We create a text that gets visible on hover and includes a _typing effect for each letter_:
+
+```
+//we just need one class
+<div class="typewriter">
+    <p>123456789 10</p>
+</div>
+
+//for the transition with steps()
+.typewriter p{
+    color: brown;
+    margin: auto;
+    font-size: 2em;
+
+    white-space: nowrap;         //keeps the text in-line, to avoid smooth transition
+    overflow: hidden;            //text is not deleted, we just use width 
+    width: 0;                    //to show it later
+    transition:  width 10s steps(12) ;    //steps() based on the letters
+}
+
+//then on hover the container (remember the width of the entire text)
+.typewriter:hover p{
+    width: 250px;
+}
+
+```
+
+The animated part being:
+
+```
+.typewriter p{
+    border-right: 0.3em solid black;
+    animation: colon 1s step-end infinite;
+}
+
+@keyframes colon{
+    0% { border-color: black; }
+    50% { border-color: transparent; }
+    100% { border-color: black; }
+}
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/typewriter2.gif" alt=""><figcaption><p>typewriter effect gif (kinda)</p></figcaption></figure>
+
+
+
+
+
+
+
+
 
 
 
