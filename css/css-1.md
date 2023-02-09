@@ -768,7 +768,7 @@ The animated part being:
 
 <figure><img src="../.gitbook/assets/typewriter2.gif" alt=""><figcaption><p>typewriter effect gif (kinda)</p></figcaption></figure>
 
-
+### Clock Designs
 
 
 
