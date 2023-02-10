@@ -909,6 +909,107 @@ In the animation we include **translateY()** for the center/hand **intersect**:
 
 <figure><img src="../.gitbook/assets/clocking.gif" alt=""><figcaption><p>animated clock hands with center intersection</p></figcaption></figure>
 
+For the next part, we need the [**insertAdjacentElement()**](https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentElement) **** method **;**
+
+```
+//To insert an element node in a position relative to another element
+element.insertAdjacentElement(<position>, <inserted element>)
+
+// <position> being beforebegin, afterbegin, beforeend and afterend.
+<!-- beforebegin -->
+<p>
+  <!-- afterbegin -->
+  foo
+  <!-- beforeend -->
+</p>
+<!-- afterend -->
+
+//Example we are gonna use now
+document.head.insertAdjacentElement('beforeend', styleTag);
+//we insert in <head> tag inside the HTML document, 
+```
+
+<details>
+
+<summary>Added clock ticks with javascript</summary>
+
+We first design the CSS ticks in couples:
+
+```
+//Like the clock hands, they overlay so position absolute
+//we get the ticks with transparent lines and colored borders top/bottom
+
+.punto{
+    width: 4px;
+    height: 100%;
+
+    top: 0%;
+    left: calc(50% - 2px);    //50%- 1/2 width for better centering
+
+    border-top: 8px solid red;
+    border-bottom: 8px solid red;
+
+    position: absolute;
+}
+
+//and more width for the 5minutes ticks
+.punto:nth-of-type(5n){
+    width: 6px;
+    height: 100%;
+
+    top: 0px;
+    left: calc(50% - 3px);
+
+    border-top: 12px solid green;
+    border-bottom: 12px solid green;
+    z-index: 2;
+}
+```
+
+Now for the HTML and Js implementation:
+
+```
+//first we need an HTML 
+<div class="orologio">
+  <div id="marche">
+  </div>
+</div>
+
+let marche= document.getElementById("marche")
+
+//To avoid creating 30 CSS selectors we create a js loop
+
+for(let x= 0; x<= 30; x++ ){
+    let uno= document.createElement("div")
+    uno.className= "punto"
+
+
+
+
+}
+
+
+
+```
+
+1
+
+1
+
+1
+
+1
+
+1
+
+</details>
+
+<figure><img src="../.gitbook/assets/JSdesign.png" alt=""><figcaption><p>Js implemented design</p></figcaption></figure>
+
+
+
+
+
 
 
 
