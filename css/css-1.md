@@ -977,30 +977,35 @@ Now for the HTML and Js implementation:
 
 let marche= document.getElementById("marche")
 
-//To avoid creating 30 CSS selectors we create a js loop
-
+//we loop 30 div with .punto class, we append to the HTML
+//then a <style> tag for the CSS selectors each increased by 6deg, as innerHTML
 for(let x= 0; x<= 30; x++ ){
     let uno= document.createElement("div")
     uno.className= "punto"
 
+    marche.appendChild( uno)
+    const cssTemplateString1 = `.punto:nth-child(${x}){ transform: rotate( calc(6deg * ${x} ) ) }`;
+    
+    const styleTag = document.createElement("style");
+    styleTag.innerHTML = cssTemplateString1;
 
-
-
+    document.head.insertAdjacentElement('beforeend', styleTag);
 }
-
-
 
 ```
 
-1
+We **insertAdjacentElement()** the created **\<style>** tag with the 30 CSS selectors right into(beforeend) the **\<head>** of the HTML document:
 
-1
+```
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
-1
+    <link rel="stylesheet" href="./style.css">
+    <title>Document</title>
+    <style>.punto:nth-child(0){ transform: rotate( calc(6deg * 0 ) ) }</style>
+</head>
 
-1
-
-1
+```
 
 </details>
 
