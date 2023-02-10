@@ -768,11 +768,146 @@ The animated part being:
 
 <figure><img src="../.gitbook/assets/typewriter2.gif" alt=""><figcaption><p>typewriter effect gif (kinda)</p></figcaption></figure>
 
-### Clock Designs
+### Clock CSS Designs and JS-based animation
 
+We start with a basic CSS clock design:
 
+<details>
 
+<summary>Clock design and animation</summary>
 
+HTML and basic clock is:
+
+```
+<div class="orologio">
+
+  <div class="centro">
+    <div class="ora"></div>
+    <div class="minuti"></div>
+    <div class="secondi"></div>
+  </div>
+
+</div>
+
+//we need position: relative for later
+.orologio{
+    margin: auto;
+    width: 350px;
+    height: 350px;
+
+    border: 5px solid brown;
+    border-radius: 50%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+}
+//with display flex we center/align any children element inside
+
+```
+
+For the tri-color center, they **overlay** the same space, so they need **position: absolute** :
+
+```
+.centro{
+    width: 30px;
+    height: 30px;
+    background-color: gray;
+
+    border-radius: 50%;
+    position: absolute;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+//we use :before :after, both needing display and content
+//the smallest has a higher Z-index
+.centro::before{
+    content: "";
+    display: block;
+    position: absolute;
+
+    width: 6px;
+    height: 6px;
+    background-color: blue;
+
+    border-radius: 50%;
+    z-index: 2;
+}
+
+.centro::after{
+    content: "";
+    display: block;
+    position: absolute;
+
+    width: 15px;
+    height: 15px;
+    background-color: yellow;
+
+    border-radius: 50%;
+    z-index: 1;
+}
+```
+
+For the clock hands we:
+
+```
+//all share position: absolute
+.ora{
+    position: absolute;
+    height: 170px;
+    width: 10px;
+
+    z-index: 0;
+    background-color: gray;
+    animation: girando 80s steps(60) infinite;
+}
+
+.minuti{
+    position: absolute;
+    height: 120px;
+    width: 8px;
+
+    z-index: 0;
+    background-color: yellow;
+    animation: girando 40s steps(60) infinite;
+}
+
+//the seconds arm will take priority over the others
+.secondi{
+    position: absolute;
+    height: 80px;
+    width: 4.5px;
+
+    z-index: 1;
+    background-color: blue; 
+    animation: girando 60s steps(60) infinite;
+}
+```
+
+In the animation we include **translateY()** for the center/hand **intersect**:
+
+<pre><code><strong>//we need to include both transform values in same transform property
+</strong><strong>//we use a negative value to not flip the hands
+</strong>
+@keyframes girando{
+    from{
+        transform: rotate(0deg) translateY(-15px);
+    }
+    to{
+        transform: rotate(360deg) translateY(-15px);
+    }
+}
+
+</code></pre>
+
+</details>
+
+<figure><img src="../.gitbook/assets/clocking.gif" alt=""><figcaption><p>animated clock hands with center intersection</p></figcaption></figure>
 
 
 
