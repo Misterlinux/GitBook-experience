@@ -1011,9 +1011,37 @@ We **insertAdjacentElement()** the created **\<style>** tag with the 30 CSS sele
 
 <figure><img src="../.gitbook/assets/JSdesign.png" alt=""><figcaption><p>Js implemented design</p></figcaption></figure>
 
+<details>
 
+<summary>Animating the clock hands for javascript current time</summary>
 
+We need to set the animation **duration** for a **360deg clock rotation**:
 
+```
+//A duration must be in seconds, for 12 hours clock we 3600* 12
+
+.secondi{
+    animation: girando 60s steps(60) infinite;
+}
+.minuti{
+    animation: girando 3600s steps(60) infinite;
+}
+.ora{
+    animation: girando 43200s steps(24) infinite;
+}
+```
+
+1
+
+1
+
+1
+
+1
+
+1
+
+</details>
 
 
 
