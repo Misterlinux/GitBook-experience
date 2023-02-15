@@ -1443,7 +1443,59 @@ for **repeating-conic-gradient** we:
 
 <figure><img src="../.gitbook/assets/repeating.PNG" alt=""><figcaption><p>repeating linear, radial, conic</p></figcaption></figure>
 
-1
+We can use **background-size** (and background-position) **** to **multiply** the background effect:
+
+<details>
+
+<summary>Checkboard conic-gradient effect </summary>
+
+For a basic color stop, we can use just a position:
+
+```
+//background size 50% doubles the number of gradients
+
+.nel div:nth-child(4){
+    width: 120px;
+    height: 120px;
+
+    background-image: 
+        conic-gradient(
+            #fff 90deg, 
+            #000 90deg 180deg, 
+            #fff 180deg 270deg, 
+            270deg,
+            #000 300deg
+        );
+    background-size: 50% 50%;
+}
+```
+
+we use background-position:&#x20;
+
+```
+.nel div:nth-child(5){
+    width: 120px;
+    height: 120px;
+
+    background-image: 
+        conic-gradient(
+            #000 0deg 45deg,
+            #fff 45deg 135deg, 
+            #000 135deg 225deg, 
+            #fff 225deg 315deg, 
+            315deg,
+            #000 360deg
+        );
+    background-position: top;
+    background-size: 25% 25%;
+}
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/coniceffect.PNG" alt=""><figcaption><p>different background-size and background position</p></figcaption></figure>
+
+We can find many more gradient designs [HERE](https://projects.verou.me/css3patterns/):
 
 1
 
