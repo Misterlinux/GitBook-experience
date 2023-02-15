@@ -1029,19 +1029,385 @@ We need to set the animation **duration** for a **360deg clock rotation**:
 .ora{
     animation: girando 43200s steps(24) infinite;
 }
+
+@keyframes girando{
+    from{
+        transform: rotate(0deg) translateY(-15px);
+    }
+    to{
+        transform: rotate(360deg) translateY(-15px);
+    }
+}
 ```
 
-1
+On the **Js** file, we only **set the starting current time** and let the animation run its course :
 
-1
+```
+//We set animation-delay property of CSS (query) selectors
+//All delays have to be in Seconds
 
-1
+let d= new Date()
 
-1
+let delayseconds= d.getSeconds() +1
+document.querySelector(".secondi").style.animationDelay= ( (delayseconds*-1) + "s" )
+//we get the current seconds + 1
 
-1
+let delaymin= d.getMinutes() *60
+document.querySelector(".minuti").style.animationDelay= ( (delaymin* -1) + "s" )
+//we do the same for minutes *60 to get it in seconds
+
+let delayora= d.getHours() *3600
+document.querySelector(".ora").style.animationDelay= ( (delayora* -1) + "s" )
+//and for hours
+
+```
+
+We can change the **animation-timing-function** from **steps()** to **linear** if we want _gradual movement_, etc,
 
 </details>
+
+Now we are gonna add extra CSS animated elements to the clock:
+
+<details>
+
+<summary>Pendolum animated effect</summary>
+
+```
+/Both being children of the clock element
+
+<div class="orologio">For the botto 
+  <div class="asse">
+  </div>
+
+  <div class="pendolo">
+  </div>
+
+</div>
+
+```
+
+We get the **bottom** part with a **box-shadow**:
+
+```
+//we create it to be the same area of the clock and add a box-shadow
+.pendolo{
+    position: absolute;
+    width: 350px;
+    height: 350px;
+
+    border-radius: 50%;
+    box-shadow: 0px 15px 0px 0px rgb(116, 13, 13); 
+    animation: nord 1s alternate-reverse infinite;
+}
+
+//the same for the upper part, we just lower z-index and push it to top
+.asse{
+    position: absolute;
+    height: 215px;
+    width: 45px;
+    background-color: rgb(116, 13, 13);
+    z-index: -2;
+
+    margin-top: -60%;
+    transform-origin: bottom;
+    animation: nord 1s alternate-reverse infinite;
+}
+```
+
+We can animate both with **same keyframes**:
+
+```
+@keyframes nord{
+    from {
+        transform: rotate(-50deg);
+    }
+    to {
+        transform: rotate(50deg);
+    }
+}
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/rotation.gif" alt=""><figcaption><p>animated pendolum CSS added</p></figcaption></figure>
+
+### More on degree rotation transform.
+
+```
+//Where does the 0deg/90deg/180deg and 270deg start?
+
+.nel div:nth-child(1){
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(0deg/90deg/180deg/270deg, yellow, blue);
+}
+
+```
+
+<figure><img src="../.gitbook/assets/rotation.PNG" alt=""><figcaption><p>bottom, left, top, and right </p></figcaption></figure>
+
+### Linear Gradients and shining effect
+
+The **Linear-gradient() function** creates a smooth color transition as a **background-image**, which can include a starting point, direction, and angle.
+
+```
+    background-image: linear-gradient( <Direction>, color1, color2, etc...);
+```
+
+<details>
+
+<summary>Guide to linear-gradients()</summary>
+
+We use Degrees as **starting point**:
+
+```
+.nel div:nth-child(1){
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(0deg, yellow, blue);
+}
+
+```
+
+If we use keywords it's the **to ending point**:
+
+```
+.nel div:nth-child(2){
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(to right bottom , yellow, blue, pink );
+}
+
+```
+
+We can also use **background-image** and **transparent** gradients;
+
+```
+//we got the blue on transparent gradient
+
+.nel div:nth-child(3){
+    width: 120px;
+    height: 120px;
+
+    background-image: 
+        linear-gradient(
+            to bottom right, 
+            yellow, 
+            transparent, 
+            pink 
+        );
+    background-color: blue;
+}
+
+```
+
+We can use **%** or **px** for **color-stops** on the gradient:
+
+```
+//we set where the color will change
+
+.nel div:nth-child(4){
+    width: 120px;
+    height: 120px;
+
+    background-image: 
+        linear-gradient(
+            110deg, 
+            yellow, 
+            transparent 15%,
+            pink 40%
+        );
+    background-color: blue;
+}
+
+```
+
+if we want rigid color transition we can:
+
+```
+.nel div:nth-child(5){
+    width: 120px;
+    height: 120px;
+
+    background-image: 
+        linear-gradient(
+            90deg,
+            orange 30px,
+            blue 30px,
+            blue 70px,
+            orange 70px
+        );
+}
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/radientlin.PNG" alt=""><figcaption><p>differet linear-gradient </p></figcaption></figure>
+
+A **radial-gradient()** function radiates from the **center**, on an ellipse(default) or circle shape:
+
+```
+    background-image: 
+        radial-gradient( <shape> <starting-point>, color1, color2, etc );
+```
+
+<details>
+
+<summary>Radial gradient guide</summary>
+
+We can change the gradient's ending areas with:
+
+```
+//closest-corner, closest-side, farthest-corner, farthest-side
+
+.alto div:nth-child(1){
+    width: 180px;
+    height: 120px;
+
+    background-color: yellow;
+    background-image: 
+        radial-gradient(
+            circle closest-corner,
+            transparent, 
+            red
+    );
+}
+
+//corner or side
+.alto div:nth-child(2){
+    width: 180px;
+    height: 120px;
+
+    background-color: yellow;
+    background-image: 
+        radial-gradient(
+            circle closest-side, 
+            transparent, 
+            red
+        );
+}
+```
+
+We set the **starting point** for the radial:
+
+```
+//we didn't set the shape and get an ellipse
+
+.alto div:nth-child(3){
+    width: 180px;
+    height: 120px;
+
+    background-color: yellow;
+    background-image: 
+        radial-gradient(
+            at top,
+            transparent 30%,
+            red 
+        );
+}
+```
+
+And use rigid gradients:
+
+```
+
+.alto div:nth-child(4){
+    width: 180px;
+    height: 120px;
+
+    background-color: yellow;
+    background-image: 
+        radial-gradient(
+            circle at top left ,
+            transparent 30%,
+            red 30%
+        );
+}
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/radialGRAdd.PNG" alt=""><figcaption></figcaption></figure>
+
+1
+
+1
+
+1
+
+1
+
+<details>
+
+<summary>Metal shiny effect with 6 HSL colors</summary>
+
+We use a **conic-gradient** as **background**, It works on any [HSL ](https://hslpicker.com/)color; _Hue, Saturation, and Lightess:_
+
+```
+//remember that the differences between lightness are what matters
+
+background: 
+conic-gradient(
+  hsla(353, 68%, 42%, 1), hsla(353, 68%, 27%, 1), hsla(353, 68%, 20%, 1), 
+  hsla(353, 68%, 54%, 1), hsla(353, 68%, 57%, 1),
+
+  hsla(353, 68%, 42%, 1),
+  hsla(353, 68%, 67%, 1), hsla(353, 68%, 54%, 1), hsla(353, 68%, 57%, 1),
+
+  hsla(353, 68%, 42%, 1), hsla(353, 68%, 27%, 1), hsla(353, 68%, 20%, 1), 
+  hsla(353, 68%, 54%, 1), hsla(353, 68%, 57%, 1),
+
+  hsla(353, 68%, 42%, 1),
+  hsla(353, 68%, 67%, 1), hsla(353, 68%, 54%, 1), hsla(353, 68%, 57%, 1),
+
+  hsla(353, 68%, 42%, 1)
+);
+
+//The color lightness rule being:
+x   / -15 / -7
++34 / +3  / +10
+
+```
+
+In order to **add more internal colors** we don't use borders (harder to color) but :before/:after:
+
+```
+//we add children tags to get more layers
+
+.captain::before{
+    content: "";
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+
+    background: 
+        conic-gradient(
+            hsla(0, 0%, 71%, 1), hsla(0, 0%, 54%, 1), hsla(0, 0%, 47%, 1),
+            hsla(0, 0%, 80%, 1), hsla(0, 0%, 83%, 1),
+
+            hsla(0, 0%, 71%, 1),
+            hsla(0, 0%, 93%, 1), hsla(0, 0%, 80%, 1), hsla(0, 0%, 83%, 1),
+
+            hsla(0, 0%, 71%, 1), hsla(0, 0%, 54%, 1), hsla(0, 0%, 47%, 1),
+            hsla(0, 0%, 80%, 1), hsla(0, 0%, 83%, 1),
+
+            hsla(0, 0%, 71%, 1),
+            hsla(0, 0%, 93%, 1), hsla(0, 0%, 80%, 1), hsla(0, 0%, 83%, 1),
+
+            hsla(0, 0%, 71%, 1)
+        );
+} 
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/shiny6colors1.PNG" alt=""><figcaption><p>multiple shiny layers</p></figcaption></figure>
+
+
+
+
 
 
 
