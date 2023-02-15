@@ -1245,7 +1245,7 @@ if we want rigid color transition we can:
 
 <figure><img src="../.gitbook/assets/radientlin.PNG" alt=""><figcaption><p>differet linear-gradient </p></figcaption></figure>
 
-A **radial-gradient()** function radiates from the **center**, on an ellipse(default) or circle shape:
+A **radial-gradient()** function radiates **from** the **center**, on an ellipse(default) or circle shape:
 
 ```
     background-image: 
@@ -1328,7 +1328,122 @@ And use rigid gradients:
 
 </details>
 
-<figure><img src="../.gitbook/assets/radialGRAdd.PNG" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/radialGRAdd.PNG" alt=""><figcaption><p>radial on different shapes, areas and positions</p></figcaption></figure>
+
+A **conic-gradient** is a circular gradient that **rotates on** a center point
+
+<details>
+
+<summary>Conic-gradient guide</summary>
+
+We can set **AT** its center (with both % and px):
+
+```
+.conico div:nth-child(1){
+    width: 150px;
+    height: 120px;
+
+    background-image: 
+        conic-gradient(
+            at 50% 70%,
+            yellow, 
+            red
+        );
+}
+
+```
+
+We can also set **FROM** which degree they start and color stops(only in **deg** and **%**)
+
+```
+.conico div:nth-child(2){
+    width: 150px;
+    height: 120px;
+
+    background-image: 
+        conic-gradient(
+            from 50deg,
+            yellow 10%,
+            red 10%
+        );
+}
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/conicradient.PNG" alt=""><figcaption><p>conic gradient position, degree and color stop</p></figcaption></figure>
+
+We can add **repeating-** for all of the gradients.
+
+<details>
+
+<summary>Repeating-gradients guide</summary>
+
+To have **repeating** gradients we need to set an **ending point** in %, deg, and px:
+
+```
+.conico div:nth-child(3){
+    width: 150px;
+    height: 120px;
+
+    background-image: 
+        repeating-linear-gradient(
+            45deg,
+            yellow,
+            yellow 10%,
+            red 10%,
+            red 20% 
+        );
+}
+```
+
+for **repeating-radial-gradient** we have:
+
+```
+.conico div:nth-child(4){
+    width: 150px;
+    height: 120px;
+    background-color: red;
+
+    background-image: 
+        repeating-radial-gradient(
+            circle at 90px -20px,
+            red 0,
+            red 45px,
+            yellow 80px
+        );
+}
+```
+
+for **repeating-conic-gradient** we:
+
+```
+// Some code
+
+.conico div:nth-child(5){
+    width: 150px;
+    height: 120px;
+
+    background-image: 
+        repeating-conic-gradient(
+            at 10% 50%,
+            yellow,
+            yellow 10deg,
+            red 10deg,
+            red 20deg,
+            orange 20deg,
+            orange 35deg
+        );
+}
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/repeating.PNG" alt=""><figcaption><p>repeating linear, radial, conic</p></figcaption></figure>
+
+1
 
 1
 
