@@ -1637,15 +1637,47 @@ We overlay by putting the **gradient below** the color:&#x20;
 
 <figure><img src="../.gitbook/assets/grany.PNG" alt=""><figcaption><p>raw gradient, filter and overlayed colors</p></figcaption></figure>
 
-1
+To use **grany radial gradients** as an overlay:
+
+<details>
+
+<summary>Grany radial-gradient() guide</summary>
+
+For the HTML we need 2 containers:
+
+```
+//one for the background and the other for the gradient+circle
+
+<div class="radi">
+
+  <div class="figurina">
+    <div class="raggi"></div>
+    <div class="luna"></div>
+  </div>
+
+</div>
+```
+
+We need a **relative position background** to move internal layers:
+
+```
+//except for the area,gradient and flex display we need
+.radi{
+    position: relative;
+    overflow: hidden;
+}  
+
+```
 
 1
 
-1
+</details>
+
+<figure><img src="../.gitbook/assets/gradientecentro1.gif" alt=""><figcaption></figcaption></figure>
 
 1
 
-
+1
 
 To animate the sprite pixel art (and the text on the title) we used **steps()**:
 
