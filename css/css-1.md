@@ -1495,19 +1495,11 @@ we use background-position:&#x20;
 
 <figure><img src="../.gitbook/assets/coniceffect.PNG" alt=""><figcaption><p>different background-size and background position</p></figcaption></figure>
 
-We can find many more gradient designs [HERE](https://projects.verou.me/css3patterns/):
-
-1
-
-1
-
-1
-
-1
+We can find many more gradient designs [HERE](https://projects.verou.me/css3patterns/).
 
 <details>
 
-<summary>Metal shiny effect with 6 HSL colors</summary>
+<summary>Conic Metal shiny effect with 6 HSL colors</summary>
 
 We use a **conic-gradient** as **background**, It works on any [HSL ](https://hslpicker.com/)color; _Hue, Saturation, and Lightess:_
 
@@ -1572,11 +1564,86 @@ In order to **add more internal colors** we don't use borders (harder to color) 
 
 <figure><img src="../.gitbook/assets/shiny6colors1.PNG" alt=""><figcaption><p>multiple shiny layers</p></figcaption></figure>
 
+### Grany gradient effect
 
+By using a **noise image** in the gradient **background**, we can:
 
+<details>
 
+<summary>Grany gradient guide</summary>
 
+We use **transparent in gradient** and _noise background-image_:
 
+```
+.secondo div{
+    background-image: 
+        linear-gradient(
+            to left,
+            red,
+            transparent
+        ),
+        url(https://grainy-gradients.vercel.app/noise.svg);
+}
+```
+
+For a more visible grany effect we use **filter()**, more **contrast()** for more _color space_, and more **brightness()** for more _grains visible_:
+
+```
+//filters will also change the color
+
+.terzo{
+  background-image: 
+      linear-gradient(
+          to left,
+          red,
+          transparent
+      ),
+      url(https://grainy-gradients.vercel.app/noise.svg);
+
+  filter: contrast(150%) brightness(350%);
+}
+```
+
+We overlay by putting the **gradient below** the color:&#x20;
+
+```
+//Colors will change, but not too much
+.primo div:nth-child(1){
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    background-color: blue;
+}
+
+//
+.primo div:nth-child(2){
+  position: absolute;
+
+  background-image: 
+    linear-gradient(
+        to left,
+        red,
+        transparent
+    ),
+    url(https://grainy-gradients.vercel.app/noise.svg);
+
+  filter: contrast(150%) brightness(350%);
+}
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/grany.PNG" alt=""><figcaption><p>raw gradient, filter and overlayed colors</p></figcaption></figure>
+
+1
+
+1
+
+1
+
+1
 
 
 
