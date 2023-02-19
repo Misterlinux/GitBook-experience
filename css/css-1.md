@@ -1661,15 +1661,53 @@ For the HTML we need 2 containers:
 We need a **relative position background** to move internal layers:
 
 ```
-//except for the area,gradient and flex display we need
+//except for the area, gradient and flex display we need
 .radi{
     position: relative;
     overflow: hidden;
 }  
 
+//while we set position of the internal layers
+.figurina{
+    position: absolute;
+
+    bottom: 50%;
+    left: 50%;
+}
 ```
 
-1
+While the 2 _absolute_ layers:
+
+```
+//we spread the gradient 100% on the parent tag
+.raggi{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    background: 
+        radial-gradient(
+            circle,
+            black,
+            transparent
+        ),
+        url(https://grainy-gradients.vercel.app/noise.svg);
+
+    filter: brightness(400%) contrast(100%) invert(100%);
+    mix-blend-mode: screen;
+}
+//mix blend mode screen/multiply will show bright/dark colors
+//we invert() the black and show the white
+
+.luna{
+    width: 25%;
+    height: 25%;
+    border-radius: 50%;
+
+    background-color: antiquewhite;
+}
+
+```
 
 </details>
 
