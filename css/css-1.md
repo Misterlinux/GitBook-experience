@@ -1711,7 +1711,49 @@ While the 2 _absolute_ layers:
 
 </details>
 
-<figure><img src="../.gitbook/assets/gradientecentro1.gif" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/gradientecentro1.gif" alt=""><figcaption><p>Radial gradient on single layer</p></figcaption></figure>
+
+We can create a **3D shadow** with a double **radial-gradient():**
+
+<details>
+
+<summary>Double gradient layer </summary>
+
+In the HTML, remember the **order of the shadows**:
+
+```
+<div class="narancia">
+
+    <p>Grainy <br/> Shadows</p>
+    
+    <div class="spazio">
+        <div class="veraombra"></div>
+
+        <div class="succo">
+            <div class="pallaombra"></div>
+            <div class="palla"></div>
+        </div>
+    </div>
+
+</div>
+
+```
+
+1
+
+1
+
+1
+
+</details>
+
+<figure><img src="../.gitbook/assets/narancia1.png" alt=""><figcaption></figcaption></figure>
+
+1
+
+1
+
+1
 
 1
 
