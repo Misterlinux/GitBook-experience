@@ -1896,7 +1896,75 @@ For the mix-blend background, we use **multiply/screen** to show the **dark/whit
 
 </details>
 
-<figure><img src="../.gitbook/assets/invisiblegrad2.gif" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/invisiblegrad2.gif" alt=""><figcaption><p>invisible gradient tet effect</p></figcaption></figure>
+
+For multiple grany gradient backgrounds effect:
+
+<details>
+
+<summary>Multiple radial gradient guide</summary>
+
+```
+//we use 2 gradient layers in the container
+<div class="wheel">
+
+  <div class="grany">
+    <div class="nucleus"></div>
+  </div>
+
+</div>
+```
+
+To avoid having our transparent be mixed with other background colors, we **isolate**:
+
+```
+.wheel{
+    position: relative;
+      
+    isolation: isolate;
+    background-color: white;
+    overflow: hidden;
+}
+```
+
+We leave an **empty space at the center** of the first layer with the color-stop at 8%, remember that, the **difference between color stops makes the grany more visible**:
+
+```
+// we use transparent as white
+.grany{
+  background: 
+    radial-gradient(
+        hsla(353, 68%, 42%, 1) 8%,
+        transparent 40%,
+        hsla(353, 68%, 42%, 1) 70%),
+    url(https://grainy-gradients.vercel.app/noise.svg);
+
+  filter: contrast(200%) brightness(250%);
+}
+
+```
+
+We use a **partial-transparency** for the blue center:
+
+```
+//to fill and pass to the red part of the gradient
+.nucleus{
+  background: radial-gradient( 
+      rgba(0, 0, 255, 1) 34%, 
+      rgba(255, 0, 0, 0.1) 110% ),
+      url(https://grainy-gradients.vercel.app/noise.svg);
+
+  filter: contrast(150%) brightness(500%) ;
+}
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/captaingradient.PNG" alt=""><figcaption><p>double grany radial gradient CSS</p></figcaption></figure>
+
+1
+
+1
 
 1
 
