@@ -487,14 +487,14 @@ This property allows us to **control every step** of a CSS animation with **keyf
 
 ```
 //animation property includes
-/*
+
 animation-name: example;
 animation-duration: 5s;
 animation-timing-function: linear;
 animation-delay: 2s;
 animation-iteration-count: infinite;
 animation-direction: alternate;
-*/
+
 
 animation: example 5s linear 2s infinite alternate;
 
@@ -1719,7 +1719,7 @@ We can create a **3D shadow** with a double **radial-gradient():**
 
 <summary>Double gradient layer </summary>
 
-In the HTML, remember the **order of the shadows**:
+In the HTML, remember the **order of the shadow tags**:
 
 ```
 <div class="narancia">
@@ -1739,11 +1739,84 @@ In the HTML, remember the **order of the shadows**:
 
 ```
 
-1
+We don't need text and the sphere to overlay, position **relative**:
 
-1
+```
+//relative container and relative childrens, to space them
+.narancia{
+  position: relative;
+}
 
-1
+.narancia p{
+  transform: skewX(-14deg) rotateX(37deg);
+  position: relative;
+}
+.spazio{
+  position: relative;
+}
+
+```
+
+The _external shadow_ will be:
+
+```
+//we mix multiply the shadow on the background with a gradient
+.veraombra{
+  position: absolute;
+  border-radius: 50%;
+
+  background: 
+      radial-gradient(
+          ellipse,
+          navy,
+          transparent
+      ),
+      url(https://grainy-gradients.vercel.app/noise.svg);
+      
+  filter: contrast(150%) brightness(700%);
+  mix-blend-mode: multiply;
+  transform: rotateZ(7deg);
+}
+
+```
+
+For the _sphere_ and its _internal shadow_ we:
+
+```
+//we put the shadow first, by changing its center and the overlay hidden
+//we can show it only on one side
+.pallaombra{
+  position: absolute;
+  height: 100%;
+  width: 100%;
+
+  background: 
+      radial-gradient(
+          circle at 65% 35%,
+          transparent,
+          blue
+      ),
+      url(https://grainy-gradients.vercel.app/noise.svg); 
+
+  filter: contrast(120%) brightness(900%);
+}
+
+//we need the mix multiply for it to be visible
+.palla{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  background: 
+      radial-gradient(
+          circle,
+          lightsalmon,
+          crimson
+      );
+  mix-blend-mode: multiply;
+}
+
+```
 
 </details>
 
