@@ -1822,9 +1822,81 @@ For the _sphere_ and its _internal shadow_ we:
 
 <figure><img src="../.gitbook/assets/narancia1.png" alt=""><figcaption></figcaption></figure>
 
-1
+We can use **mix-blend-mode** and **filters** to create animated text gradient effect:
 
-1
+<details>
+
+<summary>Gradient invisible effect guide</summary>
+
+We will need an extra HTML tag:
+
+```
+//we will need an extra tag below the text for the background
+<div class="lamincard">
+
+  <div class="noise2">holo ••• graphic type •••</div>
+  <div class="sottofonda"></div>
+
+</div>
+
+//we animate the background to rotate(30deg)
+.lamincard{
+  animation: cube-rotate 2s alternate infinite ease-in-out;
+}
+```
+
+For the **text color**, we use **background-clip** and **color: invisible** to use the background **gradient()** as text color:
+
+```
+//The gradient text is also animated
+.noise2{
+  width: 100%;
+  height: 100%;
+
+  background: 
+    linear-gradient(
+      24deg, 
+      rgba(50, 0, 255, 0.1),
+      CornflowerBlue
+    ),
+    url(https://grainy-gradients.vercel.app/noise.svg); 
+
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  
+  animation: shimmer 2s alternate infinite
+}
+
+//the animation uses brightness to turn the color white
+@keyframes shimmer {
+    from {
+      filter: contrast(190%) brightness(500%);
+    }
+    to {
+      filter: contrast(190%) brightness(130%);
+    }
+}
+
+```
+
+For the mix-blend background, we use **multiply/screen** to show the **dark/white colors**:
+
+```
+//if we use multiply and the color is white, it becomes invisible
+.sottofonda{
+    position: absolute;
+    background: antiquewhite;
+    width: 100%;
+    height: 100%;
+
+    mix-blend-mode: multiply;
+}
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/invisiblegrad2.gif" alt=""><figcaption></figcaption></figure>
 
 1
 
