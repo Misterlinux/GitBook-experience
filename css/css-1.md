@@ -2099,7 +2099,119 @@ We use the border-radius and clip for the slice:
 {% endtab %}
 {% endtabs %}
 
+### Animated smoke CSS effect
 
+We are gonna animate a list of layers in a different order:
+
+<details>
+
+<summary>CSS smoke guide</summary>
+
+For the absolute layers, we need a relative container.
+
+```
+<div class="fumo">
+  <li></li>
+  <li></li>
+  <li></li>
+  <li></li>
+  <li></li>
+</div>
+
+.fumo{
+  position: relative;
+}
+
+```
+
+We style each smokeball:
+
+```
+//they are gonna be overlayed and share the same space
+.fumo li{
+  position: absolute;
+  list-style: none;
+
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  background-color: rgba(0, 140, 255, 0.6);
+}
+
+```
+
+To create a **spread smoke** effect we use **2 animations**:
+
+```
+//one for the even smokeballs and another for the odd
+.fumo li:nth-child(even){
+  animation: fuceven 1s linear infinite;
+}
+
+.fumo li:nth-child(odd){
+  animation: fucodd 1s linear infinite;
+}
+
+```
+
+And we also add a **different delay** to each smokeball:
+
+```
+//we keep the last smoke fixed for a better stream
+.fumo li:nth-child(1){
+  animation-delay: 0.2s;
+}
+.fumo li:nth-child(2){
+  animation-delay: 0.3s;
+}
+.fumo li:nth-child(3){
+  animation-delay: 0.4s;
+}
+.fumo li:nth-child(4){
+  animation-delay: 0.8s;
+}
+.fumo li:nth-child(5){
+  animation: none;
+  filter: blur(15px);
+}
+
+```
+
+For the actual animated frames:
+
+```
+//from their actual position (0,0) to any (x,y)
+@keyframes fuceven {
+  0%{
+      transform: translate(0,0) scale(1);
+      opacity: 1;
+      filter: blur(5px);
+  }
+  100%{
+      transform: translate( 20px, -150px ) scale(3);
+      opacity: 0;
+      filter: blur(10px);
+  }
+}
+
+@keyframes fucodd{
+  0%{
+      transform: translate(0,0) scale(1);
+      opacity: 1;
+      filter: blur(5px);
+  }
+  100%{
+      transform: translate( -20px, -150px ) scale(3);
+      opacity: 0;
+      filter: blur(10px);
+  }
+}
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/fumogeno1.gif" alt=""><figcaption><p>smoke effect</p></figcaption></figure>
 
 1
 
