@@ -1962,9 +1962,115 @@ We use a **partial-transparency** for the blue center:
 
 <figure><img src="../.gitbook/assets/captaingradient.PNG" alt=""><figcaption><p>double grany radial gradient CSS</p></figcaption></figure>
 
-1
+### The clip-path() protperty
 
-1
+Clip-path() is a CSS property to cut a geometrical region from a region:
+
+{% tabs %}
+{% tab title="circle()" %}
+We use **circle( radius, center )**:
+
+```
+//we can use % and px for the center, 50% takes the entire space
+.circolo{
+    background-color: red;
+    clip-path: circle(40% at 20% 75% );
+}
+
+```
+
+<figure><img src="../.gitbook/assets/circle.PNG" alt=""><figcaption><p>clip circle on different center</p></figcaption></figure>
+{% endtab %}
+
+{% tab title="ellipse()" %}
+We use **ellipse( Xaxis, Yaxis, center)**:
+
+```
+//you can also use %
+.ellipse{
+    background-color: blue;
+    clip-path: ellipse(70px 100px at 135px 40px);
+}
+
+```
+
+<figure><img src="../.gitbook/assets/ellipse.PNG" alt=""><figcaption><p>ellipse with different center</p></figcaption></figure>
+{% endtab %}
+
+{% tab title="inset()" %}
+We get a rectangle with **inset( Xinset, Yinset ):**
+
+```
+//we cut 10% on both X sides, while 355 on the other
+.siren{    
+    background-color: darkmagenta;
+    clip-path: inset( 10% 35% );
+}
+
+```
+
+<figure><img src="../.gitbook/assets/inset.PNG" alt=""><figcaption><p>clip inset rectangle</p></figcaption></figure>
+{% endtab %}
+{% endtabs %}
+
+We can have **border-radius** on inset clips:
+
+<details>
+
+<summary>Border radius examples</summary>
+
+Unlike **inset()** that can take **2 values max**, we can use up to 4 with border-radius:
+
+```
+.commo{
+    background-color: crimson;
+    clip-path: inset( 5% 15% round 50% 50% 0 0 );
+}
+
+.pizza{
+    background-color: goldenrod;
+    clip-path: inset( 15% 5% round 50% 50% );
+}
+
+.tower{
+    background-color: dodgerblue;
+    clip-path: inset( 10% round 50% 0 50% 0 );
+}
+
+.quarto{
+    background-color: rosybrown;
+    clip-path: inset( 15% round 0 50% 0 0 );
+}
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/insetradius.PNG" alt=""><figcaption><p>inset with border radius</p></figcaption></figure>
+
+We can clip entire **polygon()**, you can use this as a [guide](https://www.cssportal.com/css-clip-path-generator/):
+
+```
+//We draw (X,Y) points for each point of the polygon
+.stalle{
+    background-color: white;
+    clip-path: polygon(
+        50% 0%, 
+        61% 35%, 
+        98% 35%, 
+        68% 57%, 
+        79% 91%, 
+        50% 70%, 
+        21% 91%, 
+        32% 57%, 
+        2% 35%, 
+        39% 35%
+    );
+}
+
+```
+
+<figure><img src="../.gitbook/assets/stalle.PNG" alt=""><figcaption><p>star polygon at the center</p></figcaption></figure>
 
 1
 
