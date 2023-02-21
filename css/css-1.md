@@ -2050,8 +2050,12 @@ Unlike **inset()** that can take **2 values max**, we can use up to 4 with borde
 
 We can clip entire **polygon()**, you can use this as a [guide](https://www.cssportal.com/css-clip-path-generator/):
 
+{% tabs %}
+{% tab title="Star polygon clip" %}
+We draw **(X,Y)** points for each point of the polygon:
+
 ```
-//We draw (X,Y) points for each point of the polygon
+//remember to NOT put a (,) for the last point
 .stalle{
     background-color: white;
     clip-path: polygon(
@@ -2067,10 +2071,37 @@ We can clip entire **polygon()**, you can use this as a [guide](https://www.cssp
         39% 35%
     );
 }
+```
+
+<figure><img src="../.gitbook/assets/stalle.PNG" alt=""><figcaption><p>star polygon on gradient</p></figcaption></figure>
+{% endtab %}
+
+{% tab title="Slice polygon" %}
+We use the border-radius and clip for the slice:
+
+```
+.poligono{
+    border-radius: 50%;
+    clip-path: polygon(
+        0 0, 
+        0 100%, 
+        100% 100%, 
+        100% 0, 
+        65% 0, 
+        50% 50%, 
+        35% 0
+    );
+}
 
 ```
 
-<figure><img src="../.gitbook/assets/stalle.PNG" alt=""><figcaption><p>star polygon at the center</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/pizzacut.PNG" alt=""><figcaption><p>the sliced circle clip</p></figcaption></figure>
+{% endtab %}
+{% endtabs %}
+
+
+
+1
 
 1
 
