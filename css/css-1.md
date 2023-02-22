@@ -2213,6 +2213,125 @@ For the actual animated frames:
 
 <figure><img src="../.gitbook/assets/fumogeno1.gif" alt=""><figcaption><p>smoke effect</p></figcaption></figure>
 
+### CSS and JS scrolling timer effect
+
+The HTML structure of the clock is gonna be:
+
+```
+//each time value is gonna be a container of 2 values
+<div class="hours1">
+  <div class="first">
+    <div class="number">0</div>
+  </div>
+  <div class="second">
+    <div class="number">0</div>
+  </div>
+</div>
+
+<div class="tick">:</div>
+
+```
+
+<details>
+
+<summary>Scrolling effect JS animation</summary>
+
+On the script.js file we get the **Date()** object for the **timezone**, and **we convert the time numbers to string data**:
+
+```
+//Take each time HTML sections 
+var hoursContainer = document.querySelector('.hours1')
+var minutesContainer = document.querySelector('.minutes1')
+var secondsContainer = document.querySelector('.seconds1')
+
+function updateTime (){
+    var now = new Date(new Date().toLocaleString("en-US", {timeZone: "Europe/Kiev"})); 
+
+    var nowHours = now.getHours().toString()
+    var nowMinutes = now.getMinutes().toString()
+    var nowSeconds = now.getSeconds().toString()
+
+    updateContainer(hoursContainer, nowHours)
+    updateContainer(minutesContainer, nowMinutes)
+    updateContainer(secondsContainer, nowSeconds)
+}
+
+```
+
+We **split()** the time string into an **array** of 2, and we **unshift()** a 0 in case _single digit._
+
+We separate the **first/last child** of the container and update if the current time value differs (with \<div> and value);
+
+```
+//arguments being the HTML container and the time number value
+function updateContainer (container, newTime) {
+    var time = newTime.split('')
+
+    if (time.length === 1) {
+      time.unshift('0')
+    }
+
+    var first = container.firstElementChild
+    if (first.firstElementChild.textContent !== time[0]) {
+      updateNumber(first, time[0])
+    }
+
+    var last = container.lastElementChild
+    if (last.firstElementChild.textContent !== time[1]) {
+      updateNumber(last, time[1])
+    }
+}
+```
+
+We **create/clone** the same **HTML** element with **updated** time, append it (below) to the current HTML, and animate it.
+
+After the animation is complete we **remove** the CSS and **remove** the old element.firstElementChild with the new/cloned one:
+
+```
+//element.firstChildelement being the old/current HTML element
+function updateNumber(element, number) {
+    var second = element.firstElementChild.cloneNode(true)
+    second.textContent = number
+  
+    element.appendChild(second)
+    element.classList.add('move')
+  
+    setTimeout(function () {
+      element.classList.remove('move')
+    }, 980)
+  
+    setTimeout(function () {
+      element.removeChild(element.firstElementChild)
+    }, 980)
+}
+
+//we update the time each second
+setInterval(updateTime, 1000)
+```
+
+The CSS animations being:
+
+```
+//we translateY() the height of the container
+.move {
+  animation: move linear 1s infinite;
+}
+
+@keyframes move {
+  from {
+    transform: translateY(0em);
+  }
+  to {
+    transform: translateY(-2.1em);
+  }
+}
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/scrolling.gif" alt=""><figcaption><p>scrolling clock js animation</p></figcaption></figure>
+
 1
 
 1
