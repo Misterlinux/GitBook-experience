@@ -2332,7 +2332,7 @@ The CSS animations being:
 
 <figure><img src="../.gitbook/assets/scrolling.gif" alt=""><figcaption><p>scrolling clock js animation</p></figcaption></figure>
 
-### CSS borders&#x20;
+### CSS borders and border-box
 
 Using the border property we can specify **width, color and style** of a border
 
@@ -2528,6 +2528,33 @@ We use **background-clip: content-box** to stop the background before the paddin
 <figure><img src="../.gitbook/assets/whiteclip.PNG" alt=""><figcaption><p>padding on content-box</p></figcaption></figure>
 {% endtab %}
 {% endtabs %}
+
+The **border width** sets the _difference_ between **content-box** and **border-box**:
+
+```
+//box-sizing: content-box is set by default, it adds border and padding to the width
+//border-box sums border and padding to the set width
+.come{
+    background-color: pink;
+    box-sizing: content-box;
+    
+    padding: 20px;
+    border: 10px blue solid;
+}
+
+.cane{
+    background-color: pink;
+
+    border: 10px blue solid;
+    box-sizing: content-box;
+}
+```
+
+<figure><img src="../.gitbook/assets/boxing.PNG" alt=""><figcaption><p>border-box and content-box</p></figcaption></figure>
+
+1
+
+1
 
 1
 
