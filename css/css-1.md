@@ -1495,7 +1495,7 @@ we use background-position:&#x20;
 
 <figure><img src="../.gitbook/assets/coniceffect.PNG" alt=""><figcaption><p>different background-size and background position</p></figcaption></figure>
 
-We can find many more gradient designs [HERE](https://projects.verou.me/css3patterns/).
+We can find many more **gradient designs** [HERE](https://projects.verou.me/css3patterns/) and [Here](https://www.magicpattern.design/tools/css-backgrounds).
 
 <details>
 
