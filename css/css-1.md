@@ -2332,6 +2332,205 @@ The CSS animations being:
 
 <figure><img src="../.gitbook/assets/scrolling.gif" alt=""><figcaption><p>scrolling clock js animation</p></figcaption></figure>
 
+### CSS borders&#x20;
+
+Using the border property we can specify **width, color and style** of a border
+
+<details>
+
+<summary>Borders guide</summary>
+
+About **border-style**:
+
+```
+.dot{
+    border: dotted 5px brown;
+}
+
+.dash{
+    border: dashed 5px brown;
+}
+
+.solid{
+    border: solid 5px brown;
+}
+
+//all get a complementary darker border-color 
+.groove{
+    border: groove 10px red;
+}
+
+.ridge{
+    border: ridge 10px red;
+}
+
+.inset{
+    border: inset  10px red;
+}
+
+.outset{
+    border: outset 10px red;
+}
+
+```
+
+We can style/width each side of the border
+
+```
+//order being top/right/bottom/left
+.chiuso{
+    border: outset red;
+    border-width: 8px 4px 2px 20px;
+}
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/bordertype.PNG" alt=""><figcaption><p>border examples</p></figcaption></figure>
+
+We can use border-style: **double** or the **outline** property for a double border:
+
+<details>
+
+<summary>Border: double and Outline guide </summary>
+
+The **width** of border-style: **double** is equally divided:
+
+```
+//between the external border, the offset, and the internal
+.dou{
+    border: double 10px red;    //3px red, 3px white, 3px red
+}
+```
+
+The **outline property** draws a line outside the border.
+
+It shared properties with border but **can't use** border-**radius**, it can **conflict with margin:**
+
+```
+//outline-style: dotted, dashed, solid, double, groove, ridge, inset, outset
+.groove{
+    background-color: darkorange;
+    border: 5px dotted brown;
+    outline: 5px dashed lightskyblue;
+    outline-offset: 5px;
+}
+
+```
+
+Outline-offset is _not in the shortcut_ and can be negative:
+
+```
+//calculate outline width when setting offset
+.dash{
+    background-color: darkorange;
+
+    border: 5px dashed lightskyblue;
+    outline: 5px dotted brown;
+    outline-offset: -15px;
+}
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/doubbleouts.PNG" alt=""><figcaption><p>border-style double and outlines</p></figcaption></figure>
+
+For an internal border, we can use **:before:after, box-shadow, or background-clip:**
+
+{% tabs %}
+{% tab title="Absolute position" %}
+We space each side:
+
+```
+//relative>absolute needed 
+.tasti{
+    position: relative;
+    border: 8px solid red;
+}
+
+.tasti::after{
+    content: " ";
+    position: absolute;
+
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border: 3px solid green;
+}
+```
+
+<figure><img src="../.gitbook/assets/absoluteborder.PNG" alt=""><figcaption><p>after layer on the relative</p></figcaption></figure>
+{% endtab %}
+
+{% tab title="Display flex" %}
+We center the :after with the **flex** display :
+
+```
+//justify and align
+.flexo{
+    position: relative;
+    border: 8px solid red;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flexo::after{
+    content: "";
+    position: absolute;
+
+    width: 80%;
+    height: 80%;
+    border: 3px solid green;
+}
+```
+
+<figure><img src="../.gitbook/assets/flexborder.PNG" alt=""><figcaption><p>flex display</p></figcaption></figure>
+{% endtab %}
+
+{% tab title="box-shadow" %}
+We draw a shadow-box with **blur** and **offset to 0**:
+
+```
+//they won't any space between, and the second needs to exceed the first
+.ombra{
+    height: 50px;
+    width: 120px;
+
+    background-color: pink;
+    box-shadow: 
+    0 0 0 5px blue,
+    0 0 0 10px orange;
+}
+
+```
+
+<figure><img src="../.gitbook/assets/doppioborda.PNG" alt=""><figcaption><p>double shadow </p></figcaption></figure>
+{% endtab %}
+
+{% tab title="background-clip" %}
+We use **background-clip: content-box** to stop the background before the padding, only on white:
+
+```
+.breaking{
+    background-color: pink;
+
+    border: 7px solid rgb(36, 85, 7);
+    padding: 5px;
+    background-clip: content-box;
+}
+
+```
+
+<figure><img src="../.gitbook/assets/whiteclip.PNG" alt=""><figcaption><p>padding on content-box</p></figcaption></figure>
+{% endtab %}
+{% endtabs %}
+
+1
+
 1
 
 1
