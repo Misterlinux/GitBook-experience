@@ -2552,11 +2552,125 @@ The **border width** sets the _difference_ between **content-box** and **border-
 
 <figure><img src="../.gitbook/assets/boxing.PNG" alt=""><figcaption><p>border-box and content-box</p></figcaption></figure>
 
-1
+We use **border-images** to use **gradients** or url images for our borders:
 
-1
+<details>
 
-1
+<summary>Border-image guide</summary>
+
+We can't use the shorthand for images/gradients:
+
+```
+.lineare{
+    border-style: solid;
+    border-width: 15px;
+    border-image: linear-gradient(90deg, rgb(0,143,104), rgb(250,224,66));
+    border-image-slice: 1;
+}
+
+.gradiale{
+    border-image: radial-gradient(rgb(0,143,104), rgb(250,224,66)) 1;
+}
+
+.conico{
+    border-image: conic-gradient(red, yellow, lime, aqua, blue, magenta, red) 1;
+}
+
+//border-image-slice is needed in border-image
+//it's X,Y and can use px/%, for how the image will be cut
+.test{
+  border-style: solid;
+  border-width: 15px;
+  border-image: url( https://live.staticflickr.com/65535/49927594376_d7c5d1d0e6_c.jpg );
+  border-image-slice: 60 30;
+}
+
+.grand{
+  border-style: solid;
+  border-width: 15px;
+  border-image: url(https://live.staticflickr.com/65535/49927594376_d7c5d1d0e6_c.jpg);
+  border-image-slice: 80 fill;
+}
+//fill will use the image as background+border
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/borderimage.PNG" alt=""><figcaption><p>background-images</p></figcaption></figure>
+
+We **can't use border-radius** not border-left/right/top/bottom for **border-image** but:
+
+<details>
+
+<summary>Border image radius guide</summary>
+
+We can use **padding-box** and **border-box** background:
+
+```
+//we need to use a gradient in the padding-box only to keep the border colored
+.granola{
+    padding: 15px;
+
+    border: 8px solid transparent;
+    border-radius: 15px;
+    background: 
+        linear-gradient(white 0 0) padding-box,
+        linear-gradient(to left, blue, pink) border-box;
+}
+```
+
+We could use **border-image-slice** to cut borders:
+
+```
+//we need % for that
+.meta{
+    border-style: solid;
+    border-width: 15px;
+
+    border-image: linear-gradient(to left, pink, blue);
+    border-image-slice: 100% 1;
+}
+```
+
+Or cut specific border-width:
+
+```
+.chris{
+    padding: 5px;
+
+    border-width: 10px 0 10px 0;
+    border-style: solid;
+    border-color: transparent;
+    
+    background: 
+        linear-gradient(white 0 0) padding-box,
+        linear-gradient(to right, blue, pink) border-box;
+}
+
+```
+
+It works the same for border-radius:
+
+```
+//you will need +1 radius on width
+.vas{
+    padding: 5px;
+
+    border-width: 0 0 10px 20px;
+    border-radius: 50% 0 50% 50%;
+    border-style: solid;
+    border-color: transparent;
+
+    background: 
+        linear-gradient(white 0 0) padding-box,
+        linear-gradient(to right, blue, pink) border-box;
+}
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/borderImagesradius.PNG" alt=""><figcaption><p>different border-image styles</p></figcaption></figure>
 
 1
 
