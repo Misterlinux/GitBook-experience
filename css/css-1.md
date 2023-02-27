@@ -2672,7 +2672,108 @@ It works the same for border-radius:
 
 <figure><img src="../.gitbook/assets/borderImagesradius.PNG" alt=""><figcaption><p>different border-image styles</p></figcaption></figure>
 
-1
+### Capital letter & Popup text
+
+We use _first-of-type_ pseudo selector and **attr()** CSS _content property_:
+
+<details>
+
+<summary>Capital letter and Popup text guide</summary>
+
+The popup **attr()** content is gonna be contained in the **tooltip-data:**
+
+```
+<div class="apri">
+  <p>
+    ...
+    <span class="tooltip" tooltip-data="Whoever tries to do that you won't use it 
+    I guess, maybe we should have javascript for this">
+    content
+    </span>
+    nisi!
+  </p>
+</div>
+
+```
+
+For the capital we use **first-of-type::first-letter**:
+
+```
+//float is necessary, while the rest is for style
+.apri p:first-of-type::first-letter {
+  color: orange;
+  font-size: 2.5em;
+
+  float: left;
+  line-height: 0.9em;
+  padding-right: 4px;
+}
+
+```
+
+After getting the HTML content **attr**ibute, we use before:after :
+
+```
+//Relative is for absolute layers before/after, while display is for
+//positioning the popup
+.tooltip{
+  position: relative;
+  border-bottom: 1px dotted black;
+  cursor: pointer;
+
+  display: inline-block;
+}
+
+```
+
+We use **opacity** to make it _invisible_, but also **visibility:hidden/visible** or **display:none/inline-block** for the transition effect:
+
+```
+//so the effect triggers only on the text and not on the popup width
+.tooltip::before{
+  content: attr(tooltip-data);
+  position: absolute;
+
+  width: 250px;
+  color: white;
+  background-color: orange;
+  padding: 5px;
+
+  bottom: 110%;
+  left: -60%;
+
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s;
+}
+
+//we use borders for a triangle at the base
+.tooltip::after{
+  content: "";
+  position: absolute;
+
+  right: 60%;
+
+  opacity: 0;
+  display: none;
+  transition: opacity .5s;
+
+  border-width: 5px;
+  border-style: solid;
+  border-color: #000 transparent transparent transparent;
+}
+
+.tooltip:hover:before, 
+.tooltip:hover:after {
+    opacity: 1;
+	display: inline-block;
+}
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/Capitaland.PNG" alt=""><figcaption><p>Capital letter and popup on hover</p></figcaption></figure>
 
 1
 
