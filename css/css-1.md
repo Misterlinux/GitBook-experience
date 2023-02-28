@@ -2775,6 +2775,112 @@ We use **opacity** to make it _invisible_, but also **visibility:hidden/visible*
 
 <figure><img src="../.gitbook/assets/Capitaland.PNG" alt=""><figcaption><p>Capital letter and popup on hover</p></figcaption></figure>
 
+### CSS custom checklist&#x20;
+
+We can **display:none** the \<input> and still have a checkbox:
+
+<details>
+
+<summary>CSS custom checklist guide</summary>
+
+In the HTML we create the \<label> for the \<input> tag:
+
+```
+//<i> is the customcheckbox
+<div class="check">
+
+  <h2>This is our version </h2>
+  <label>
+    <input type="checkbox" name="" id="" />
+
+    <i></i>
+    <span> First element </span>
+  </label>
+
+</div>
+
+```
+
+We can use _border-bottom_ and _underline_:
+
+```
+//they have a margin included 
+//inline-blocks limit the border only on the text, not the entire tag
+.check h2{
+	color: palegoldenrod;
+	display: inline-block;
+	border-bottom: 2px solid palegoldenrod;
+	text-decoration: underline;
+}
+
+//block is to have each label as new line
+.check label{
+  display: block;
+  margin: 30px 0;
+  ...
+}
+
+```
+
+For the actual **input**:
+
+```
+//we hide the actual input checkbox
+.check input{
+  display: none;
+}
+
+//custom checkbox, absolute for actual width/height
+.check i{
+  position: absolute;
+
+  width: 25px;
+  height: 25px;
+  border: 2px solid palegoldenrod;
+}
+
+//while the text is
+.check span{
+  position: relative;
+
+  top: 4px;
+  left: 40px;
+  transition: 0.5s;
+}
+
+```
+
+For the transition effect we:
+
+```
+//we cut 2 sides of the checkbox, and rotate it with different width/height
+.check input:checked ~ i{
+  height: 15px;
+  width: 25px;
+
+  border-top: none;
+  border-right: none;
+  transform: rotate(-45deg);
+}
+
+//we add the strikethrough decoration text
+.check input:checked ~ span {
+  color: palegoldenrod;
+  text-decoration: line-through;
+}
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/checklist.PNG" alt=""><figcaption></figcaption></figure>
+
+1
+
+1
+
+1
+
 1
 
 1
