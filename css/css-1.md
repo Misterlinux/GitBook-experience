@@ -2875,11 +2875,133 @@ For the transition effect we:
 
 <figure><img src="../.gitbook/assets/checklist.PNG" alt=""><figcaption></figcaption></figure>
 
-1
+### Expandable text and animated sidebars.
 
-1
+We use the **\<details>** tag and _absolute+hover_ **transition**:
 
-1
+<details>
+
+<summary>Expandable and sidebars guide</summary>
+
+In the HTML the **\<detail>** tag includes a **triangle icon** near **\<summary>** text, it also adds the attribute **open** to the tag if opened:
+
+```
+<div class="expand">
+  ...
+  <details open>
+    <summary> Second tab to click </summary>
+    
+    <div class="tab-content">
+      <p>
+        We Have a list of options
+      </p>
+
+      <div class="sidebar">
+
+        <nav class="menu">
+          <p><a href="">what you </a></p>
+          <p><a href="">what you1 </a></p>
+          <p><a href="">what you2 </a></p>
+          <p><a href="">what you4 </a></p>
+        </nav>
+
+      </div>
+    </div>
+
+  </details>
+</div>
+
+```
+
+We add another -/+ **icon** to the right side of **\<summary>**:
+
+```
+.expand summary{
+  position: relative;
+  padding: 1em;
+  background-color: antiquewhite;
+}
+
+//absolute +right fixes the content to the right
+details > summary::after {
+  position: absolute;
+  content: "+";
+  right: 20px;
+}
+
+//if the <details> is open we change icon
+details[open] > summary::after {
+  position: absolute;
+  content: "-";
+  right: 20px;
+}
+
+```
+
+For a **fade-in effect** of the expandables:
+
+```
+//on click it will gain the attribute open
+details[open] summary ~ * {
+  animation: sweep .5s ease-in-out;
+}
+
+@keyframes sweep {
+  0%{
+    opacity: 0; 
+    margin-top: -10px
+  }
+  100%{
+    opacity: 1; 
+    margin-top: 0px
+  }
+}
+
+```
+
+For the relative **sidebar,** we **overflow:hidden** and _absolute right: 100%_ before the hover_:_
+
+```
+.sidebar{
+  position: relative;
+  overflow: hidden;
+
+  width: 30%;
+  height: 150px;
+}
+
+//we need a padding+translateX() for the hover
+.menu{
+  position: absolute;
+  width: 60%;
+  right: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  background-color: darkkhaki;
+  padding: 1em;
+
+  transform: translateX(1em);
+  transition: 0.2s transform;
+}
+
+```
+
+**On hover** we move the menu visible again:
+
+```
+//we translate back the right:100%
+.menu:hover,
+.menu:focus-within {
+  transform: translateX(100%);
+}
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/expandible.png" alt=""><figcaption><p>Expandable and sidenav on hover</p></figcaption></figure>
 
 1
 
