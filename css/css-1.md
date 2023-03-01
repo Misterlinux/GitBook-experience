@@ -291,7 +291,7 @@ The transform property allows us to **move, rotate, scale, and skew** HTML eleme
 
 ```
 
-<figure><img src="../.gitbook/assets/matrix.PNG" alt=""><figcaption><p>Width scaled 1.2 and height 0.6, skey(0, 0.5) and translate left 100px and top 20px</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/matrix.PNG" alt=""><figcaption><p>Width scale(1.2) and height 0.6, skew(30deg) and translate(100px, 200px)</p></figcaption></figure>
 
 <details>
 
@@ -1449,7 +1449,7 @@ We can use **background-size** (and background-position) **** to **multiply** th
 
 <summary>Checkboard conic-gradient effect </summary>
 
-For a basic color stop, we can use just a position:
+We use **color-stop** to set each color for **1/4 of the area**, then we set this gradient for 1/4 (**50%, 50%**) of the **size** available:
 
 ```
 //background size 50% doubles the number of gradients
@@ -1470,7 +1470,7 @@ For a basic color stop, we can use just a position:
 }
 ```
 
-we use background-position:&#x20;
+we use **background-position** to display it in a different **order**:&#x20;
 
 ```
 .nel div:nth-child(5){
@@ -1494,6 +1494,76 @@ we use background-position:&#x20;
 </details>
 
 <figure><img src="../.gitbook/assets/coniceffect.PNG" alt=""><figcaption><p>different background-size and background position</p></figcaption></figure>
+
+The same works for **radial-gradients**:
+
+<details>
+
+<summary>Radial-radient circles effects</summary>
+
+**Background-size** defines **colors-stops** size:
+
+```
+//the purple gradient will cover 25% of 1/10 of the space
+.filone div:first-child{
+  height: 180px;
+  background: 
+    radial-gradient(
+      circle,
+      purple 10%,
+      pink 25%
+    );
+
+  background-size: 10% 10%;
+  background-position: left;
+}
+//ALSO position left moves the dots up/down
+
+```
+
+Only **even-numbered** gradients will e "cut" on the sides by **position**:
+
+```
+//position top moves the gradients on the sides
+.filone div:nth-child(2){
+  height: 180px;
+
+  background: 
+    radial-gradient(
+      circle,
+      purple 10%,
+      pink 15%
+    );
+
+  background-size: 25% 25%;
+  background-position: top;
+}
+
+```
+
+We can use percentages for position:
+
+```
+//we started the gradient in the top left using %
+.filone div:nth-child(3){
+  height: 180px;
+
+  background: 
+    radial-gradient(
+      circle,
+      purple 10%,
+      pink 20%
+    );
+
+  background-size: 20% 20%;
+  background-position: 50% 50%;
+}
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/repeatrad.PNG" alt=""><figcaption><p>10%, 25% and 20% sizes</p></figcaption></figure>
 
 We can find many more **gradient designs** [HERE](https://projects.verou.me/css3patterns/) and [Here](https://www.magicpattern.design/tools/css-backgrounds).
 
