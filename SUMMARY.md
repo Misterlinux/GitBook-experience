@@ -9,7 +9,7 @@
 
 ## CSS
 
-* [CSS 1](css/css-1.md)
+* [CSS 1: Animation, gradients and buttons effects](css/css-1.md)
 * [CSS 2](css/css-2.md)
 * [CSS 3](css/css-3.md)
 * [PureCSS](css/purecss.md)
