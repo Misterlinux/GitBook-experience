@@ -1,7 +1,103 @@
 # CSS 2
 
-* [Image gallery and Carousel](css-2.md#image-galleries-and-carousels)
+[Image gallery and Carousel](css-2.md#image-galleries-and-carousels)
+
 * [Dropdown and Hover effects](css-2.md#dropdown-and-hover-on-navbars)
+
+### Flex and page layout
+
+The **Flex**box layout justifies and aligns items within its container, while flex child elements **dynamically** expand their width to **fill**.
+
+{% tabs %}
+{% tab title="Sidebar-flex" %}
+To justify/align any element we need to use **display:flex each time**, also position will follow the HTML layout:&#x20;
+
+```
+//The height will be given by the content
+<div class="contiene">
+    <div class="sidebar">
+
+    </div>
+    <div class="stuff">
+
+    </div>
+</div>
+<div class="footer">
+
+</div>
+
+```
+
+In the CSS we use **Flex** to dynamically set the **width** of each div:
+
+```
+//Flex-direction is row by default
+.contiene{
+    display: flex;
+}
+
+//1/5 of flex for sidebar while 4/5 for stuff
+.contiene .sidebar{
+    flex: 1;
+    background-color: brown;
+}
+
+.contiene .stuff{
+    display: flex;
+    flex: 4;
+    justify-content: center;
+    background-color: orange;
+}
+
+//while footer can just be
+.footer{
+    display: flex;
+    background-color: black;
+}
+
+```
+
+<figure><img src="../.gitbook/assets/fullflex.PNG" alt=""><figcaption><p>full page flex layout</p></figcaption></figure>
+{% endtab %}
+
+{% tab title="Navbar-flex" %}
+We use **flex-direction column** for the navbar to be on the top, and use **flex to change the list** direction:
+
+```
+//from default row to column direction
+.contiene{
+    flex-direction: column;
+}
+
+//The list is now flex-direction row
+.contiene .sidebar ul{
+    display: flex;
+}
+
+```
+
+<figure><img src="../.gitbook/assets/middle.PNG" alt=""><figcaption><p>smaller page layout</p></figcaption></figure>
+{% endtab %}
+
+{% tab title="Mobile-navbar flex" %}
+For smaller screens we just set the navbar as column **on column flex container**:
+
+```
+//we need to use display: flex for it to work
+.contiene .sidebar ul{
+  display: flex;
+  flex-direction: column;
+}
+
+```
+
+<figure><img src="../.gitbook/assets/flexlittle.PNG" alt=""><figcaption><p>mobile pae layout</p></figcaption></figure>
+{% endtab %}
+{% endtabs %}
+
+
+
+##
 
 ## Navbar and Flex use
 
