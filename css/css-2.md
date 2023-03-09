@@ -168,11 +168,100 @@ To get a smaller border we reduced the container:
 
 <figure><img src="../.gitbook/assets/Untitled.png" alt=""><figcaption><p>row and column flex layout</p></figcaption></figure>
 
+The **flex-wrap** property sets if flex element will **fit in one line (nowrap)** or can **warp onto multiple lines,** we can use **flex with %** to set more precise for the elements.
+
+{% tabs %}
+{% tab title="Flex-wrap and 33%" %}
+We don't need to create row containers, the **CSS can split** by itself.
+
+```
+//for each 3 elements we change a line
+<div class="griglia">
+  <div>
+    <i class="fas fa-volleyball-ball"></i>
+    ...
+  </div>
+  <div>
+    <i class="fas fa-volleyball-ball"></i>
+    ...
+  </div>
+  ...
+</div>
+
+```
+
+We can also use **wrap-reverse** if we needed to change the order.
+
+```
+//3 for each line
+.griglia{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.griglia div{
+    flex: 33%;
+    text-align: center;
+}
+
+//then we border the third and forth for the effect
+.griglia div:nth-child(3n+1){
+    border-right: 1px black solid;
+}
+
+.griglia div:nth-child(3n){
+    border-left: 1px black solid;
+}
+
+```
+
+<figure><img src="../.gitbook/assets/flexflow.PNG" alt=""><figcaption><p>33% flex layout</p></figcaption></figure>
+{% endtab %}
+
+{% tab title="Flex-wrap and 50%" %}
+We go from 1/3 to 1/2 of the page for the elements:
+
+```
+.griglia div{
+    flex: 50%;
+}
+
+```
+
+<figure><img src="../.gitbook/assets/flexflowmin.PNG" alt=""><figcaption><p>50% flex </p></figcaption></figure>
+{% endtab %}
+
+{% tab title="Flex-wrap and 100%" %}
+A single element per line:
+
+```
+.griglia div{
+    flex: 100%;
+}
+
+```
+
+<figure><img src="../.gitbook/assets/flexgrowmobile.PNG" alt=""><figcaption><p>100% flex-wrap</p></figcaption></figure>
+{% endtab %}
+{% endtabs %}
 
 
 
 
-##
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Navbar and Flex use
 
