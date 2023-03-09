@@ -2,7 +2,7 @@
 description: Syntax and properties
 ---
 
-# CSS 1
+# CSS 1: Animation, gradients and buttons effects
 
 * [CSS selector and Media query](css-1.md#css-selectors-and-media-query)
 * [CSS transition and Animation](css-1.md#css-transition-and-animation)
@@ -259,6 +259,25 @@ A **media query** consists of a **media type** that adapts elements to different
 ```
 
 **CSS selectors inherit their properties**, any changes are limited to the media query.
+
+Also, **more specific selectors will take priority**, including the media query ones:
+
+```
+//2 class selectors
+.sidenav .title{
+    display: flex;
+}
+
+@media only screen and (max-width: 850px){
+    .contiene .title{
+        display: none;            //this won't work, even if inside a media query
+    }
+
+    .contiene .sidebar .title{
+        display: none;            //3 class selectors will work
+    } 
+}
+```
 
 ## CSS transition and Animation
 
