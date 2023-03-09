@@ -95,6 +95,81 @@ For smaller screens we just set the navbar as column **on column flex container*
 {% endtab %}
 {% endtabs %}
 
+We can use **inline-flex** to use flex only on a text element width:
+
+<details>
+
+<summary>Inline-flex, triple border and limited border guide </summary>
+
+We use font-awesome icons \<i> that work as text:
+
+```
+<ul class="trino">
+  <li>
+    <i class="fas fa-laptop-code"></i>
+    ...
+  </li>
+  <li>
+    <i class="fas fa-laptop-code"></i>
+    ...
+  </li>
+  <li>
+    <i class="fas fa-laptop-code"></i>
+    ...
+  </li>
+</ul>
+
+```
+
+We use **inline-flex** to have the border circle **only the text width** and **not the entire container,** and also to use all flex properties:
+
+```
+//we need justify and align for the :before:after layers
+.trino li i{
+    color: #C80815;
+    border: 1px brown solid;
+    padding: 0.6em;
+    border-radius: 100%;
+
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.trino li i::before{
+    padding: 1em;
+    border-radius: 100%;
+    border: 1px brown solid;
+}
+
+.trino li i::after{
+    content: "";
+    position: absolute;
+
+    padding: 1em;
+    border-radius: 100%;
+    border: 1px brown solid;
+}
+
+```
+
+To get a smaller border we reduced the container:
+
+```
+.trino li:nth-child(2){
+    width: 80%;
+    margin: 0 auto;
+    border-bottom: 2px solid brown;
+}
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/Untitled.png" alt=""><figcaption><p>row and column flex layout</p></figcaption></figure>
+
+
+
 
 
 ##
