@@ -245,11 +245,61 @@ A single element per line:
 {% endtab %}
 {% endtabs %}
 
+When using a flex-container with **multiple items** we can space them using **align-content** (different from align-items) or **gap:**
 
+<details>
 
+<summary>Align-content and gap guide</summary>
 
+We have a flex-container that flex wraps,&#x20;
 
+```
+<div class="quatto">
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+</div>
 
+```
+
+We use **align-content** to space the vertical space of **multiple** flex items:
+
+```
+//each image wrapping at 40%
+.quatto div{
+    flex: 40%;
+    height: 25px;
+}
+
+//we give space to the top/bottom using align-content, while padding is for outside
+.oltre .quatto{
+    display: flex;
+    flex-wrap: wrap;
+
+    align-content: space-around;
+    padding: 5px;
+}
+
+```
+
+If we want to define the **space between** the flex elements we use **gap**:
+
+```
+//it won't work with align-content
+.oltre .quatto{
+    display: flex;
+    flex-wrap: wrap;
+    
+    gap: 10px;
+    padding: 5px;
+}
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/aligngap.png" alt=""><figcaption><p>align-content and gap </p></figcaption></figure>
 
 
 
