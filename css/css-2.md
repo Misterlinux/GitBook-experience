@@ -6,7 +6,37 @@
 
 ### Flex and page layout
 
-The **Flex**box layout justifies and aligns items within its container, while flex child elements **dynamically** expand their width to **fill**.
+The **Flex**box layout justifies and aligns items within its container, while flex child elements expand their width to **fill it dynamically**.
+
+```
+//we still need to set height, and justify won't change how the space managed
+<div class="stripe">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+</div>
+
+.goleador{
+    display: flex;
+    height: 50px;
+    flex-direction: column/ row;
+}
+
+.goleador div:nth-child(odd){
+    flex: 1;
+    background-color: purple;
+}
+
+.goleador div:nth-child(even){
+    flex: 1;
+    background-color: yellow;
+}
+
+```
+
+<figure><img src="../.gitbook/assets/flexjustify.PNG" alt=""><figcaption><p>column and row</p></figcaption></figure>
 
 {% tabs %}
 {% tab title="Sidebar-flex" %}
@@ -94,6 +124,17 @@ For smaller screens we just set the navbar as column **on column flex container*
 <figure><img src="../.gitbook/assets/flexlittle.PNG" alt=""><figcaption><p>mobile pae layout</p></figcaption></figure>
 {% endtab %}
 {% endtabs %}
+
+The values for both **justify-content** and **align-items**:
+
+```
+flex-start | flex-end | center         //left, right, center
+space-between |                        //uses all the space to space the elements
+space-around |                         //uses spaces for he border
+stretch |                              //will stretch elements to use all the space                
+baseline                               //align for baseline
+
+```
 
 We can use **inline-flex** to use flex only on a text element width:
 
@@ -313,200 +354,49 @@ If we want to define the **space between** the flex elements we use **gap**:
 
 
 
-## Navbar and Flex use
 
-Check this flex-sample webpage:
 
-{% embed url="https://codepen.io/misterlinux/pen/KKXwerR?editors=1100" %}
-Responsive flex page
-{% endembed %}
 
-For the **Sidebar** setting of the page we have:
+
+We use the **\<img>** tag for _**images**_, it creates a space to link the image to:
 
 ```
-<div class="contiene">
-    <div class="sidenav">
-    </div>
-    <div class="resto">
-    </div>
-</div>
-<div class="foot">
-    <div class="fine">
-        <div class="parole">
-        </div>
-        <ul class="fa-ul">
-        </ul>
-    </div>
+//we can use order to change the order of flex-items
+<div class="vedi">
+    <img src="https://live.staticflickr.com/65535/52575562589_e7f248ff8f_c.jpg" alt="">
+    <img src="https://live.staticflickr.com/65535/49197710168_014f46e3a2_w.jpg" alt="">
+    <img src="https://live.staticflickr.com/65535/52148924164_6c7a2d74af_m.jpg" alt="">
 </div>
 
-//We separate the sidebar+content from the footer to have it cover the entire width
-//we set a flex row and give the sidebar color and less space
-
-.contiene{
+.vedi{
     display: flex;
-    flex-direction: row;
-}
-.sidenav{
-    flex:1;
-    background-color: brown;
-}
-.resto{
-    flex: 4;
-}
-.sidenav ul li{
-    display: flex;
-    color: white;
+    height: 115px;
 }
 
-//for the sidebar elements as a column we just use flex
-.foot{
-    display: flex;
-    flex-direction: row;
-    background-color: black;
-    color: white
-}
-.fine{
-    display: flex;
-    flex-direction: row;
-    flex: 100%;
-    margin: 1em 3em;
-}
-.fine .parole, ul{
+.vedi img:nth-child(1){
     flex: 1;
+    order: 2;
 }
-
-//the footer is also a row to avoid becoming an extra sidebar AND we add an additional row
-//with the margins for the content of the content of the footer
-```
-
-And the @media-query for a smaller screen:
-
-```
-@media only screen and (max-width: 900px)  {
-    .contiene{
-        flex-direction: column;
-    }
-    .sidenav ul{
-        display: flex;
-        flex-direction: row;
-        justify-content: space-around;
-    }
-    .fine{
-        flex-direction: column;
-    }
+.vedi img:nth-child(1){
+    flex: 2;
+    order: 1;
 }
-
-//for the first media-query we change the sidenav with a navbar AND changing the list
-//and setting the nav elements in a single row, for the footer we just put the content as a column for space
-```
-
-And for the smallest screen we:
-
-```
-@media only screen and (max-width: 500px){
-    .sidenav ul{
-        flex-direction: column;
-    }
-    .foot{
-        flex-direction: column;
-    }
-}
-
-//here we give each navbar element its line and the footer adapts the other flex row it had
-```
-
-About **how to background-position the images** (both in sidebar and content), including **text**:
-
-```
-<div class="title">
-    Angelo Zarate
-</div>
-
-.sidenav .title{
-    background-image: url("./img.png");
-    background-position: top right;
-    height: 12em;
-    display: flex;
-    align-items: flex-end;
-    box-shadow: 0px -20px 20px -20px #001f9c inset;
-}
-
-//here we have text over image, a set height space, and the flex to align the text on the bottom with align-item
-//background-position= X%/Y% or left-right/top-bottom/center
-//simply allows us to set the starting point of image display
-//Also in case you want a precise centered text:
-
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-
-```
-
-About [**Background-size**](https://www.w3schools.com/csSref/playit.asp?filename=playcss\_background-size\&preval=contain):
-
-```
-//we haven't used it much prefering width/flex 
-
-background-size:contain;
-background-size:cover; 
-
-//contain gets and adapts the entire image in but can result in smaller or bigger result
-//cover uses the entire space, considering our image was big already its not usable
-
-```
-
-Remember some rules for the use of **box-shadow** use:
-
-```
-//in the previous example 
-box-shadow: 0px -20px 20px -20px #001f9c inset; (bottom)
-            0px -20px -20px black inset; (right)
-            0px 20px 20px -20px #001f9c inset; (top)
-            20px 0px 20px -20px #001f9c inset; (left)
-            
-//we can set the side of the shadow with the X/Y position, also using inset for the intern shadow
-//remember: X / Y(space)/ blur / spread and color
-```
-
-![Positioned flex text with shadow and image-background](../.gitbook/assets/bettershadow.PNG)
-
-In _**alternative**_ we can also use an \<img>:
-
-```
-//This will allow us to have more control over the background-image
-
-<div class="demo-wrap">
-    <img class="demo-bg pure-img" src="https://bit.ly/3MRzMMs">
-  <div class="demo-content">
-    <h1>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. In 
-        placeat quibusdam perferendis? Facilis magnam, itaque cumque totam 
-        soluta asperiores inventore.
-    </h1>
-  </div>
-</div>
-
-//the css will use position relative/absolute for image/text
-
-.demo-wrap {
-    overflow: hidden;
-    position: relative;
-}
-  
-.demo-bg {
-  opacity: 0.6;
-  position: absolute;
-  width: 100%;
-}
-
-.demo-content {
-  padding: 3em;
+.vedi img:nth-child(1){
+    flex: 3;
+    order: 3;
 }
 
 ```
 
-![IMAGE with absolute and container as relative](../.gitbook/assets/backgroundimg.PNG)
+<figure><img src="../.gitbook/assets/images.PNG" alt=""><figcaption><p>&#x3C;img> with flex order</p></figcaption></figure>
+
+1
+
+1
+
+1
+
+1
 
 We can also have a **fixed** image background with content and scroll:
 
@@ -787,430 +677,4 @@ img
     border: 0;
 }
 
-```
-
-### Image galleries and Carousels
-
-{% embed url="https://codepen.io/misterlinux/pen/MWEZjJX?editors=1100" %}
-
-In this exercise, we created multiple columns of images, we added **hover effects** for each and used CSS **counter:**
-
-```
-.completo{
-    display: flex;
-    counter-reset: oll;
-}
-
-.completo p::after{
-    counter-increment: oll;
-    content: "il " counter(oll);
-}
-
-//counter-reset is used to start the VARiable, setting the selector from which it will work 
-//counter-increment is to set the repeated selector which will increase the counter
-//content: its not linked to counter BUT we can use it to display the counter as text with counter(Var) 
-
-```
-
-For the **Zoom** effect on images:
-
-```
-.colonna img{
-    width: 100%;
-
-    z-index: 0;
-    transition: transform .2s;
-    mix-blend-mode: luminosity;
-}
-
-//transform is a property we use during transition
-//position relative is used to overlap the Zoomed image to the others
-
-.colonna img:hover{
-    position: relative;
-    transform: scale(1.5);
-    mix-blend-mode: normal;
-    z-index: 1;
-}
-
-//mix-blends is for the color effect with the background, transform scale is for the Zoome effect
-
-```
-
-And now for the **carousel structure**, we start with the carousel **window** and the **scroll** property for mobile:
-
-```
-.contenuto1{
-    display: flex;
-    width: 13.3em;
-    height: 8em;
-
-    overflow-x: scroll;
-    overflow-y: hidden;
-
-    scroll-behavior: smooth;
-    scroll-snap-type: x mandatory;
-}
-
-//we haven't found a way to use % on the width/height
-//scroll-behavior to pass smoothly between the images
-//scroll-snap-type won't allow the carousel to stop midway during scroll
-
-```
-
-We also add some -webkit to **style the scroll**:
-
-```
-.contenuto1::-webkit-scrollbar{
-    height: 8px;
-}
-
-.contenuto1::-webkit-scrollbar-thumb{
-    background: chocolate;
-    border-radius: 25%;
-}
-
-//we set the height of the scrollbar while thumb for color and round
-
-```
-
-And now we handle the images within:
-
-```
-.contenuto1 div div{
-    display: flex;
-
-    width: 100%;
-    height: 100%;
-
-    scroll-snap-align: center;
-    -webkit-overflow-scrolling: touch;
-}
-
-//we don't modify the img directly
-//scoll-snap-align is used to set the point of image view 
-//the webkit-overflow is used on mobile view to scroll with touch
-
-```
-
-To navigate throught images we will use **side arrows** on each image and a list of **buttons** on the bottom:
-
-```
-<div class="contenuto1">
-    <div id="eco1">
-        <div>
-            <img src="./img.png" alt="">
-        </div>
-
-        <div class="allay">
-            <a href="#eco2" class="previsto">
-                <i class="fas fa-arrow-circle-left"></i>
-            </a>
-            <a href="#eco2" class="nexto">
-                <i class="fas fa-arrow-circle-right"></i>
-            </a>
-        </div>
-    </div>
-    ...
-</div>
-
-//each button has a href to direct it to the ID card image
-//we use some flex to display the arrows, we also need overflow-y to avoid the space of the buttons showing in the image
-
-.contenuto1 div .allay{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-//we use the space-between to space them at the sides of it
-
-.previsto,
-.nexto{
-    position: relative;
-    bottom: 55%;
-    background-color: transparent;
-    width: 1.5rem;
-    height: 1.5rem;
-  
-    border-radius: 50%;
-}
-
-//then we just position the area of the A tag to coincide with the arrow icon from the button to have it show in the middle of the image
-
-```
-
-And for the **buttonbar** to jump throught images on the bottom:
-
-```
-<div class="riga">
-    <div class="colato1">
-        <div class="contenuto1">
-        ...
-        </div>
-        <ul class="botonera">
-            <a href="#eco1">
-                <li>
-                    1
-                </li>
-            </a>
-            <a href="#eco2">
-                <li>
-                    2
-                </li>
-            </a>
-        </ul>
-        ...
-    </div>
-</div>
-
-//it's located as a row outside the image and arrows, and to style thinks
-
-.botonera{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-}
-
-.botonera li{
-    background-color: brown;
-    border-radius: 50%;
-    margin: 0px 3px;
-    padding: 0.3em 0.6em;
-}
-
-//the justify-content will work on the entire flex space, not relative to the carousel
-
-```
-
-And for a carousel with an entire row and **different sized** images:
-
-```
-.bigger{
-    display: flex;
-    justify-content: center;
-}
-
-//we needed a bigger div to position it at the center without it changing the image display
-
-.contenuto11 div div{
-    margin: 0em 2em;
-    justify-content: center;
-}
-
-//we add margins to the images to have more space for smaller screens and we also need justify center 
-
-.contenuto11 div div .rede{
-    height: 38%;
-    margin-top: 30%;
-}
-
-//in case of different sized images we just need to modify the height and margin-top
-
-```
-
-### Dropdown and Hover on navbars
-
-The structure of the navbar is similar to the last exercise but we included **dropdown** button  and **hover** showing hidden content:
-
-```
-<nav>
-    <ul class="naviga">
-        <div class="lati">
-            <li><a href="">Lorem.</a></li>
-
-            <label for="cli">
-                <li class="cliccare">
-                    <div>
-                        <a >Ipsam! </a>
-                        <i class="fas fa-chevron-down"></i>   
-                    </div>
-                    
-                    <input type="checkbox" id="cli">
-                    <div class="cliccato">
-                        <div><a href="">Lorem.</a></div>
-                        <div><a href="">Et.</a></div>
-                        <div><a href="">Similique.</a></div>
-                        <div><a href="">Obcaecati.</a></div>
-                        <div><a href="">In.</a></div>
-                    </div>
-                </li>
-            </label>
-        </div>
-        <div class="lati">
-        ...
-        </div>
-    </ul>
-</nav>
-
-//we have a checkbox that includes the entire LI nav element (id + for) with the label
-//to display the arrow icon at the side of the LI sidenav
-
-.cliccare{
-    display: flex;
-    flex-direction: column;
-}
-
-//to have the scrolled content show below the LI nav
-
-.cliccare + div{
-    flex-direction: row;
-    display: flex;
-}
-
-//specifically for the LI nav and the icon
-//and to avoid the checkbox to occupy space 
-
-#cli{
-    height: 0px;
-    width: 0px;
-}
-```
-
-To style and animate the **dropdown content** after the checkbox click:
-
-```
-.cliccato{
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    height: 0em;
-    padding: 0px;
-    overflow: hidden;
-  
-    transition: 
-      0.8s height linear,
-      0.6s padding linear;
-}
-
-//here we are gonna animate the height and padding from 0
-//position: Relative to have it occupy space on the sidebar with the others nav LI
-
-.cliccato div a{
-    text-decoration: none;
-    color: white;
-}
-
-//to modify the text we have to modify the link
-//to activate on click with the checkbox
-
-#cli:checked + .cliccato, .cliccato div{
-    height: 10em;
-    padding: 6px;
-}
-
-//label includes the entirety of nav Li but the id="cli" has inside before the hidden content
-//when clicked the height and padding gets animated
-
-```
-
-For the **hover** effect.
-
-```
-<li><a href="">Quibusdam!</a></li>
-
-<li class="over">
-    <div>
-        <a href="" class="toover">Recusandae.</a>
-    </div>
-    <div class="overato">
-        <div><a href="">Lorem.</a></div>
-        <div><a href="">Eaque!</a></div>
-        <div><a href="">Alias?</a></div>
-        <div><a href="">Consectetur?</a></div>
-    </div>
-</li>
-
-.overato{
-    display: flex;
-    flex-direction: column;
-}
-
-.overato div{
-    display: none;
-    background-color: rgb(206, 127, 31);
-}
-
-//a simpler structure passing from a display:none to flex
-
-.over:hover .overato div{
-    display: flex;
-    padding: 10px;
-}
-
-//after hovering the nav LI with also extra padding for the elements
-//Extra effect with the border before the :hover effect
-
-.over:not(:hover) .toover{
-    border-bottom: 1.2px solid wheat;
-}
-
-```
-
-Some notes for the **Responsive**
-
-To position Nav elements on **different sides** of the navbar we use flex
-
-```
-<nav>
-    <ul class="naviga">
-        <div class="lati">
-            <li><a href="">Lorem.</a></li>   
-                     
-        </div>
-        <div class="lati">
-            <li><a href="">Quibusdam!</a></li>
-            <li><a href="">Nisi!</a></li>
-
-        </div>
-    </ul>
-</nav>
-
-nav .naviga{
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-//we need extra div for the flex to work and the justify content to position the nav LI
-
-.naviga .lati{
-    display: flex;
-}
-
-//this is just to display the 2 groups of NAV li as a row
-```
-
-How do the dropdown and hover content **change** with a row navbar.
-
-```
-.cliccato{
-    position: absolute;
-}
-
-#cli:checked + .cliccato, .cliccato{
-    margin-top: 1.3em;
-    margin-left: -0.8em;
-}
-
-//we need the position:absolute to have it render outside the navbar 
-//while the rest is css to center more the content 
-
-.overato{
-    position: absolute;
-}
-.over:hover .overato div{
-    margin-left: -0.6em;
-}
-
-//basically the same with the hover content
-```
-
-The footer is almost similar to the last exercise but we removed the arrows on carousel:
-
-```
-.contenuto11 div .allay1{
-    display: none;
-}
-
-//for screens so small its being used a mobile device that have already the touch scroll
 ```
