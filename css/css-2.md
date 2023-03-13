@@ -360,6 +360,10 @@ If we want to define the **space between** the flex elements we use **gap**:
 
 We use the **\<img>** tag for _**images**_, it creates a space to link the image to:
 
+<details>
+
+<summary>Image tag and flex order example</summary>
+
 ```
 //we can use order to change the order of flex-items
 <div class="vedi">
@@ -385,12 +389,199 @@ We use the **\<img>** tag for _**images**_, it creates a space to link the image
     flex: 3;
     order: 3;
 }
-
 ```
+
+</details>
 
 <figure><img src="../.gitbook/assets/images.PNG" alt=""><figcaption><p>&#x3C;img> with flex order</p></figcaption></figure>
 
-1
+**We can't use flex** for single images or absolute layers, we use **width**, then **we use flex centering** for the **img container** and the **img tag**:
+
+```
+<div class="testo">
+    <div class="immaggine">
+        <img src="https://live.staticflickr.com/65535/49197710168_014f46e3a2_w.jpg" alt="">
+    </div>
+    <h1>We paint</h1>
+</div>
+
+//we center the text+image container container
+.testo{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+//then we set flex and width of the image container for the <img> tag
+.testo .immaggine {
+    width: 45%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+//THEN we set image width % 
+.testo .immaggine img{
+    width: 50%;
+}
+
+```
+
+The **\<img> height** will be proportional to its width, we can't use % and the image container won't reduce it.
+
+<figure><img src="../.gitbook/assets/Immagine 2023-03-13 124055.png" alt=""><figcaption><p>flex centered img container + width% image</p></figcaption></figure>
+
+Remember that **opacity is affected by the HTML tag order**:
+
+```
+//if we put the <h1> first it would be affected by the opacity
+<div class="immaggine">
+    ...
+</div>
+<h1>We paint</h1>
+
+.testo .immaggine img{
+    ...
+    opacity: 0.5;
+}
+
+```
+
+We can also use the **background** CSS **** property to style the entire element it's used in, we need a **height/width** for the background.
+
+```
+<div class="secondo">
+    <div></div>
+    <h1>We paint more</h1>
+</div>
+
+.secondo{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.secondo div{
+    width: 80%;
+    height: 10em;
+    background-image: url("https://live.staticflickr.com/65535/49197710168_014f46e3a2_w.jpg");
+    background-position: center;
+    background-size: cover;
+
+    opacity: 0.6;
+}
+
+```
+
+<figure><img src="../.gitbook/assets/Immagine 2023-03-13 135148.png" alt=""><figcaption><p>div tag with url ackround and absolute text</p></figcaption></figure>
+
+**Background-position** and **background-size** work similarly to how they worked with gradients, on CSS 1.
+
+```
+//position accepts X/Y values
+background-position: top/left/bottom/right/%/px
+
+//its default value is the native size of the image, auto/contain
+background-size: X/Y/%
+background-size: cover    //it stretches the image to occupy all the space, can crop
+
+```
+
+By default, a **background-image** that is smaller than the element it's in will **repeat** itself to **fill** it.
+
+We use **background-clip** to extend it underneath its border-box, padding-box, or content-box.
+
+<details>
+
+<summary>backround-repeat and background-clip guide</summary>
+
+We can set the **background-repeat** on the X/Y of the element, or not use it.
+
+```
+//it has background-repeat: repeat/ background-clip: border-box by default
+.cliprepeat div{
+    background-image: 
+        url("https://live.staticflickr.com/65535/49197710168_014f46e3a2_w.jpg");
+
+    width: 90%;
+    border: 10px dotted black;
+}
+
+background-repeat: no-repeat            //will use the image only once
+                   repeat-x/repeat-y    //will repeat only on width/height
+                   space                //repeats only if available space, no clip
+                   round                //repeats and stretches to not cut
+
+```
+
+while **background-clip**:
+
+```
+//we can use padding-box/ content-box to not include the border
+.clipped div{
+    background-image: url("https://live.staticflickr.com/65535/49197710168_014f46e3a2_w.jpg");
+    background-repeat: no-repeat;
+    background-clip: padding-box;
+
+    width: 90%;
+    border: 10px dotted black;
+}
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/Cattura.PNG" alt=""><figcaption><p>Background.clip and background-repeat different uses</p></figcaption></figure>
+
+We can include most properties with a **background shorthand** and put **multiple background-images** in one element.
+
+<details>
+
+<summary>Multiple background  and shorthand property</summary>
+
+Any space that is not filled by the image can be filled by **background-color**:
+
+```
+.molti div{
+    background: 
+        lightblue 
+        url("https://live.staticflickr.com/65535/49197710168_014f46e3a2_w.jpg")
+        no-repeat
+        right top;
+
+    width: 80%;
+}
+
+//background can include
+background-color
+background-image
+background-repeat
+background-position
+```
+
+We can add **multiple backgrounds** to an image:
+
+```
+//remember to use , for any new backround
+.altri div{
+    background: 
+        url("https://live.staticflickr.com/65535/52148924164_6c7a2d74af_m.jpg")
+        no-repeat
+        left bottom,
+
+        url("https://live.staticflickr.com/65535/49197710168_014f46e3a2_w.jpg")
+        repeat;
+
+    width: 80%;
+}
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/shorthand.PNG" alt=""><figcaption><p>background shorthand using multiple images and background-color</p></figcaption></figure>
 
 1
 

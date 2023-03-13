@@ -82,7 +82,7 @@ font-family: 'Indie Flower', cursive;
 font-family: 'Permanent Marker', cursive;
 ```
 
-<figure><img src="../.gitbook/assets/Cattura.PNG" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/Cattura (1).PNG" alt=""><figcaption></figcaption></figure>
 {% endtab %}
 
 {% tab title="Google fonts part 2" %}
