@@ -583,11 +583,35 @@ We can add **multiple backgrounds** to an image:
 
 <figure><img src="../.gitbook/assets/shorthand.PNG" alt=""><figcaption><p>background shorthand using multiple images and background-color</p></figcaption></figure>
 
-1
+We use a **fixed background-image** to have a fixed **scroll** image:
 
-1
+```
+//The fixed navbar will remain visible, while the background will disappear on scroll
+<div class="barra">
+</div>
+<div class="gravity">
+</div>
 
-1
+.barra{
+    position: fixed;
+    top: 0;
+    
+    height: 3em;
+    width: 100%;
+    background-color: red;
+}
+
+.gravity{
+    background: url("https://bit.ly/3NwLCLI") 20% 3em fixed;
+    
+    background-position: bottom;
+    background-size: cover;
+    height: 22em;
+}
+
+```
+
+<figure><img src="../.gitbook/assets/fixedscroll2.gif" alt=""><figcaption><p>fixed background-image with fixed top navbar</p></figcaption></figure>
 
 1
 
@@ -663,283 +687,4 @@ We use **scrollbar-thumb** for the css thumb:
 
 1
 
-We can also have a **fixed** image background with content and scroll:
-
-```
-//We embed the text in an image
-
-<div class="banner">
-  <div>
-    <h1>This is the Reason we are here</h1>
-    <button>ECCOCI</button>
-  </div>
-</div>
-
-//we set fixed and cover over the 
-.banner {
-    background: url("https://bit.ly/3NwLCLI") 50% -7em no-repeat fixed;
-  
-    background-size: cover;
-    height: 20em;
-    margin-bottom: 3em;
-}
-
-```
-
-![We also added a position:ficed width:80% in the navbar](<../.gitbook/assets/Fixed (1).PNG>)
-
-How to **flex** space and **style borders** on icons:
-
-```
-<ul class="ombra">
-    <li>
-        <i class="fas fa-laptop-code"></i>
-        <h1>Icons and</h1>
-        <p>
-            Lorem 
-        </p>
-    </li>
-        <li>
-        <i class="fas fa-laptop-code"></i>
-        <h1>Double </h1>
-        <p>
-            This
-        </p>
-    </li>
-    <li>
-        <i class="fas fa-laptop-code"></i>
-        <h1>Border effect </h1>
-        <p>
-            The
-        </br>
-            Lorem
-        </p>
-    </li>
-</ul>
-
-//line of 3 elements with equal space, also </br> is to break the line
-//to style the icons in li with a double border:
-
-.ombra{
-    display: flex;
-    flex-direction: row;
-    text-align: center;
-}
-
-.ombra li{
-    flex: 1;
-}
-
-/*first border and setting the ray with padding */
-.ombra i{
-    border: 1px brown solid;
-    padding: 0.6em;
-    border-radius: 100%;
-    color: #C80815;
-}
-
-//we use :before for the second layer and display inline-block
-.ombra i::before{
-    display: inline-block;
-    padding: 1em;
-    border-radius: 100%;
-    border: 1px rgba(165, 42, 42, 0.6) solid;
-}
-
-//To rotate a square border you will need 2 transforms:
-
-.square li{
-    border: 1px pink solid;
-    padding: 1em;
-    transform: rotate(-45deg);
-}
-
-.square li i{
-    transform: rotate(45deg)
-}
-
-```
-
-Adaptive **Row** with centered text and button:
-
-```
-<div class="incluso1">
-    <div class="dentro">
-        <img src="./img.png" alt="">
-    </div>
-    <div class="dentro">
-        <h2>Title </h2>
-        <p>
-            Text on
-        </p>
-        <button>Buttoned </button>
-    </div>
-</div>
-
-//we both need align for the text to be in the same line and the justify for space them
-
-.incluso1{
-    display: flex;
-    flex-direction: row-reverse;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.dentro{
-    text-align: center;
-}
-
-.dentro img{
-    width: 100%;
-}
-
-//setting width 100% will adapt it to its flex space, also for smaller screens we simply
-
-.incluso1{
-    flex-direction: column;
-}
-.incluso img{
-    width: 50%;
-}
-//the width is just to leave some margin on the sides
-```
-
-&#x20;Also check the difference in **the use of flex** n/% on the grid and colorband:
-
-```
-<div class="griglia">
-    <div>
-        <i class="fas fa-volleyball-ball"></i>
-        <h2>Using the </h2>
-        <p>Lorem </p>
-    </div>
-</div>
-
-//Using % on flex elements and Wrap allows us to organize rows of 3 elements styling only the li elements
-
-.griglia{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-}
-
-.griglia div{
-    flex: 33%;
-}
-
-//in case we want to have all elements in a line using flex:n we:
-
-<ul class="colorato">
-    <li> 
-        <i class="fas fa-hamburger"></i>
-        <p>Here we have the </p>
-    </li>
-    etc...
-</ul>
-
-.colorato{
-    display: flex;
-    flex-direction: row;
-}
-
-.colorato li{
-    flex: 1;
-}
-
-//with this, the elements added will be kept all in the same line, for smaller screens we just flex it as columns
-```
-
-And for the style of **list** , icons, and spacing:
-
-```
-<ul class="fa-ul">
-    <h2>Contacts </h2>
-    <li>
-        <div>
-            Email
-            <i class="fa-li fa-spin fas fa-spinner"></i>
-        </div>
-        <div>Lorem ipsum dolor sit amet. </div>
-    </li>
-</ul>
-
-//We use the FA-UL to set a list with the icons and the FA-LI to set the list icon 
-//and we space the icon+text from the Lorem
-
-.fine ul li{
-    display: flex;
-    justify-content: space-between;
-}
-```
-
-Also **to make fonts-awesome spin we use** fa-spin like up here.
-
-For **centering**, remember that **text-align** works with images too, **justify** on flex works only when multiple elements as children and you can also use **margin:auto**.
-
-For each flex-direction: row we **don't need** to set the children as columns.
-
-And, that the **href=""** in the \<a> tag stops some **animation** for showing.We can use the **calc()** to calculate some properties like:
-
-```
-max-width: calc(100% - 4em);
-```
-
-we didn't need to use **overflow** for the sidebar, in case:
-
-```
-overflow: visible (lets the content exceeding visible)
-          hidden  (cuts the content by the space it has)
-          scroll  (adds the scroll to fit the space)
-          auto    (adds scroll only if necessary on content) 
-          
-```
-
-About the **CSS Reset** , in case we need to have a standard css without browser inconsistencies, for smaller projects go:
-
-```
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-```
-
-But to handle bigger projects and more efficiently we use in the **CSS file**:
-
-```
-html,body,div,form,fieldset,h1,h2,h3,h4,h5,h6,p,blockquote,pre
-{
-    font-size: 100%;
-    font-weight: normal;
-
-    margin: 0;
-    padding: 0;
-
-    vertical-align: baseline;
-
-    border: 0;
-    outline: 0;
-    background: transparent;
-}
-
-table
-{
-    border-spacing: 0;
-    border-collapse: collapse;
-}
-
-th,
-td
-{
-    text-align: left;
-    vertical-align: top;
-}
-
-img
-{
-    border: 0;
-}
-
-```
+1
