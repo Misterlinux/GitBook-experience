@@ -589,6 +589,80 @@ We can add **multiple backgrounds** to an image:
 
 1
 
+1
+
+1
+
+### CSS scrollbar styling
+
+We use pseudo-elements to style the **scrollbar/scrollbar-track/scrollbar-thumb**:
+
+<details>
+
+<summary>Scrollbar style guide</summary>
+
+We need to set the **scroll overflow** in the container first:
+
+```
+<div class="skrull">
+    <div>
+        <div>
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. 
+          ...
+        </div>
+    </div>
+</div>
+
+.skrull{
+    overflow-x: scroll;
+    overflow-y: scroll;
+
+    width: 30%;
+    height: 8em;
+}
+
+```
+
+The **bottom/right scrollbar** area is set by height/width:
+
+```
+//width sets the left one, while height the bottom one
+.skrull::-webkit-scrollbar{
+    width: 12px;
+    height: 4px;
+}
+
+```
+
+while **scrollbar-track** is the actual areas
+
+```
+.skrull::-webkit-scrollbar-track {
+    background: orange;
+}
+
+```
+
+We use **scrollbar-thumb** for the css thumb:
+
+```
+//we can't reduce it, so we use border to color with the backround
+.skrull::-webkit-scrollbar-thumb{
+    background-color: rebeccapurple;
+    border-radius: 10px;
+    border: 3px solid orange;
+}
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/scollint.PNG" alt=""><figcaption><p>CSS scrollbar</p></figcaption></figure>
+
+1
+
+1
+
 We can also have a **fixed** image background with content and scroll:
 
 ```
