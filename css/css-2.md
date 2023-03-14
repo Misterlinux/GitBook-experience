@@ -1,4 +1,8 @@
-# CSS 2
+---
+description: Flex property and image background
+---
+
+# CSS 2: Flex, flex page layout and background-image
 
 * [HTML  and Background image](css-2.md#html-less-than-img-greater-than-and-background-image)
 * [CSS box-shadow](css-2.md#css-box-shadow)
