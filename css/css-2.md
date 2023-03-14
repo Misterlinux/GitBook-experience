@@ -613,6 +613,94 @@ We use a **fixed background-image** to have a fixed **scroll** image:
 
 <figure><img src="../.gitbook/assets/fixedscroll2.gif" alt=""><figcaption><p>fixed background-image with fixed top navbar</p></figcaption></figure>
 
+### CSS box-shadow&#x20;
+
+The **box-shadow** property adds **internal/external shadow** effects to an element frame.
+
+```
+//It is also affected by the border-radius
+//optional inset/ X offset/ Y offset/ blur/ spread(scale)/ color
+
+box-shadow: (inset) 20px -15px 10px 10px teal;
+
+```
+
+<details>
+
+<summary>Box-shadow basic guide</summary>
+
+&#x20;**Box-shadow** requires at least 2 values,  X/Y offset, it will be solid border/outline:
+
+```
+.flessi3 div:first-child{    
+    background: url("https://live.staticflickr.com/65535/52148924164_6c7a2d74af_m.jpg");
+    width: 40%;
+    border-radius: 10%;
+
+    box-shadow: 10px 15px brown;
+}
+
+```
+
+The third value is **blur**, it pushes the shadow forward but also blurs it.
+
+```
+//the shadow covers more, but is less intense
+box-shadow: 10px -15px 10px brown;
+
+```
+
+Then there is **spread**, which can **expand/reduce the box-shadow** from the element size:
+
+```
+//with a lower spread we keep the blur with less space
+box-shadow: -10px -15px 10px -10px brown;
+
+```
+
+Then we can use **inset** to put the shadow **inside** the element
+
+```
+//this has the same X/Y offset of the second, inset reverses offsets
+box-shadow: inset 10px -15px 10px 10px brown;
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/boxshadowbasic.PNG" alt=""><figcaption><p>box-shadow with different offsets/blur and spread</p></figcaption></figure>
+
+We can also have **single-side box-shadow effects**:
+
+<details>
+
+<summary>Single side box-shadow guide</summary>
+
+Box-shadow **directions are bottom/right**, on **inset** its **reversed**, also we need a **negative spread** to avoid any other side shadow from being visible:
+
+```
+//Y inset 20px would be bottom shadow, on inset it's top
+box-shadow: inset 0px 20px 20px -10px green;
+
+//negative X offset is left, but on inset is on the right
+box-shadow: inset -20px 0px 20px -10px green;
+
+//bottom inset negative X-offset
+box-shadow: inset 0px -20px 20px -10px green;
+
+//right inset box shadow
+box-shadow: inset 20px 0px 20px -10px green;
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/shadowsides.PNG" alt=""><figcaption><p>single side box-shadow inset effect</p></figcaption></figure>
+
+1
+
+1
+
 1
 
 1
