@@ -1,8 +1,8 @@
 # CSS 2
 
-[Image gallery and Carousel](css-2.md#image-galleries-and-carousels)
-
-* [Dropdown and Hover effects](css-2.md#dropdown-and-hover-on-navbars)
+* [HTML  and Background image](css-2.md#html-less-than-img-greater-than-and-background-image)
+* [CSS box-shadow](css-2.md#css-box-shadow)
+* [CSS scrollbar styling](css-2.md#css-scrollbar-styling)
 
 ### Flex and page layout
 
@@ -342,21 +342,7 @@ If we want to define the **space between** the flex elements we use **gap**:
 
 <figure><img src="../.gitbook/assets/aligngap.png" alt=""><figcaption><p>align-content and gap </p></figcaption></figure>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+### HTML \<img> and Background image
 
 We use the **\<img>** tag for _**images**_, it creates a space to link the image to:
 
@@ -697,14 +683,6 @@ box-shadow: inset 20px 0px 20px -10px green;
 
 <figure><img src="../.gitbook/assets/shadowsides.PNG" alt=""><figcaption><p>single side box-shadow inset effect</p></figcaption></figure>
 
-1
-
-1
-
-1
-
-1
-
 ### CSS scrollbar styling
 
 We use pseudo-elements to style the **scrollbar/scrollbar-track/scrollbar-thumb**:
@@ -770,9 +748,3 @@ We use **scrollbar-thumb** for the css thumb:
 </details>
 
 <figure><img src="../.gitbook/assets/scollint.PNG" alt=""><figcaption><p>CSS scrollbar</p></figcaption></figure>
-
-1
-
-1
-
-1
