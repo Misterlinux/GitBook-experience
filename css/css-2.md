@@ -4,9 +4,11 @@ description: Flex property and image background
 
 # CSS 2: Flex, flex page layout and background-image
 
+* [CSS reset and flex navbar](css-2.md#css-reset-and-flex-navbar)
 * [HTML  and Background image](css-2.md#html-less-than-img-greater-than-and-background-image)
 * [CSS box-shadow](css-2.md#css-box-shadow)
 * [CSS scrollbar styling](css-2.md#css-scrollbar-styling)
+* [CSS form carousel](css-2.md#css-form-carousel)
 
 ### Flex and page layout
 
@@ -345,6 +347,77 @@ If we want to define the **space between** the flex elements we use **gap**:
 </details>
 
 <figure><img src="../.gitbook/assets/aligngap.png" alt=""><figcaption><p>align-content and gap </p></figcaption></figure>
+
+### CSS reset and flex navbar
+
+For a **flex navbar**, we need:
+
+```
+//we create a row with 2 columns
+<div class="naviga">
+    <div class="col">
+        <div>lorem </div>
+        <div>lorem </div>
+    </div>
+
+    <div class="col">
+        <div>lorem </div>
+        <div>lorem </div>
+        <div>lorem </div>
+    </div>
+</div>
+
+//we use justify-content to space the nav-items
+.naviga{
+    display: flex;
+    justify-content: space-between;
+    background-color: orangered;
+}
+
+.naviga .col{
+    display: flex;
+}
+
+.col div{
+    padding: 0.6em 1em;
+    color: blueviolet;
+}
+
+.col div:hover{
+    color: orangered;
+    background-color: blueviolet;
+    cursor: pointer;
+}
+
+```
+
+<figure><img src="../.gitbook/assets/flexnavhover.png" alt=""><figcaption></figcaption></figure>
+
+We use **CSS reset** to cut **default CSS styling** from the browser:
+
+```
+//Without this we would have extra borders, and the navbar wouldn't cover the page
+HTML,body, div, form, fieldset, blockquote, header,h1,h2,h3
+{
+    font-size: 100%;
+    font-weight: normal;
+
+    margin: 0;
+    padding: 0;
+
+    vertical-align: baseline;
+
+    border: 0;
+    outline: 0;
+    background: transparent;
+}
+
+img
+{
+    border: 0;
+}
+
+```
 
 ### HTML \<img> and Background image
 
@@ -752,3 +825,153 @@ We use **scrollbar-thumb** for the css thumb:
 </details>
 
 <figure><img src="../.gitbook/assets/scollint.PNG" alt=""><figcaption><p>CSS scrollbar</p></figcaption></figure>
+
+### CSS form carousel&#x20;
+
+We create a carousel made of form cards through radio buttons:
+
+{% embed url="https://codepen.io/misterlinux/pen/ZEaOQXW?editors=1100" %}
+CSS form carousel
+{% endembed %}
+
+First, we create the **navbar** using **radio buttons:**
+
+<details>
+
+<summary>Radio buttons navbar guide</summary>
+
+We create **radio buttons** with their own label:
+
+```
+//each label is linked to the radio button
+<div class="contenuto">
+
+  <input id='tabC-4' type='radio' name='tabgroupC' checked />
+  <label class="salta" for="tabC-4">1</label>
+  ❭
+  <input id='tabC-5' type='radio' name='tabgroupC'>
+  <label class="salta" for="tabC-5">2</label>
+  ❭
+  <input id='tabC-6' type='radio' name='tabgroupC'>
+  <label class="salta" for="tabC-6">3</label>
+  ❭
+  <input id='tabC-7' type='radio' name='tabgroupC'>
+  <label class="salta" for="tabC-7">4</label>
+
+</div>
+
+```
+
+We then hide the radio buttons with CSS:
+
+```
+//We keep the buttons position 
+[type=radio] {
+    opacity: 0;
+    width: 0;
+    position: absolute;
+    display: inline-block; 
+}
+
+//and then we style the labels
+.salta{
+    background: transparent;
+    color: brown;
+    padding: 0em 0.4em;
+}
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/navcarousel.PNG" alt=""><figcaption><p>radio buttons navbar</p></figcaption></figure>
+
+Then use **CSS** to create and move the **carousel**.
+
+<details>
+
+<summary>CSS carousel and transition effect</summary>
+
+Every single card is an **HTML table**:
+
+<pre><code><strong>//We add new cards using &#x3C;td>
+</strong><strong>&#x3C;div class="contenuto">
+</strong>  &#x3C;table class="rigato">
+
+      &#x3C;td>
+          &#x3C;div class="cartone">
+          &#x3C;header>
+              &#x3C;h3 style="font-weight: bolder;">H3 in header&#x3C;/h3>
+          &#x3C;/header>
+          &#x3C;p>So, we have content in td and THEN card&#x3C;/p>
+
+          &#x3C;footer>
+              &#x3C;label class="botto" for="tabC-5">Agree&#x3C;/label>
+          &#x3C;/footer>
+          &#x3C;/div>
+      &#x3C;/td>
+
+  &#x3C;/table>
+  ...
+&#x3C;/div>
+
+</code></pre>
+
+We use **overflow** to hide the other cards and set their **table-layout** and position:
+
+```
+//we set the card container width and overflow
+.contenuto{
+  text-align: center;
+  width: 70%;
+  margin: 20px auto;
+  overflow: hidden; 
+}
+
+//400% width for 4 cards, we are gonna transition using the left position
+.contenuto .rigato {
+  width: 400%;
+  left: 0%; 
+
+  table-layout: fixed;
+  position: relative;
+  transition: all 0.3s;
+  margin: 10px 20px;
+}
+
+//then we set the width of the individual card
+.rigato .cartone {
+  margin: 10px auto;
+  text-align: left;
+
+  width: 50%;
+}
+
+```
+
+On the CSS we give each **radio button** its specific card **transition margin:**
+
+```
+.contenuto input:nth-of-type(1):checked ~ .rigato {
+  margin-left: 0%; 
+}
+.contenuto input:nth-of-type(2):checked ~ .rigato {
+  margin-left: -100%; 
+}
+.contenuto input:nth-of-type(3):checked ~ .rigato {
+  margin-left: -200%; 
+}
+.contenuto input:nth-of-type(4):checked ~ .rigato {
+  margin-left: -300%; 
+}
+
+//we can use other labels that are linked to the radio buttons
+<footer>
+  <label class="botto" for="tabC-5">Agree</label>
+</footer>
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/card4.PNG" alt=""><figcaption><p>Form card</p></figcaption></figure>
