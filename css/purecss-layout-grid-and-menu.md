@@ -1,8 +1,8 @@
-# PureCSS
+# PureCSS layout grid and menu
 
-* [Menu and Forms](purecss.md#menu-and-forms)
-* [Buttons, Checkbox & Tables](purecss.md#button-checkbox-and-tables)
-* [Menu & Dropdowns](purecss.md#menus-and-dropdowns)
+* [Menu and Forms](purecss-layout-grid-and-menu.md#menu-and-forms)
+* [Buttons, Checkbox & Tables](purecss-layout-grid-and-menu.md#button-checkbox-and-tables)
+* [Menu & Dropdowns](purecss-layout-grid-and-menu.md#menus-and-dropdowns)
 
 **PureCSS** is a set of responsive, small (3.7kb) and mobile-focused CSS modules.
 
@@ -34,21 +34,20 @@ require('purecss')
 
 _**Fonts**_ can be implemented:
 
-```
-.pure-g [class *= "pure-u"] {
-  /* Set your content font stack here: for some reason the font needs this*/
-  font-family: Georgia, Times, "Times New Roman", serif;
+<pre><code><strong>//we set the font 
+</strong><strong>.pure-g [class *= "pure-u"] {
+</strong>  font-family: Georgia, Times, "Times New Roman", serif;
 }
 
-```
+</code></pre>
 
-_**The responsive grid:**_
+The **responsive grid** is implemented with **pure-g** and **pure-u** classes_**:**_
 
 ```
-//so, first we need a parent tag, pure-g(rid), which is gonna contain units, pure-u(nits)
+//A pure-g(rid) parent tag, which container pure-u(nits)
 <div class="pure-g">
     <div class="pure-u-1-2">
-        this will be 1/2 of the screen and a 2-2 wont be the same as 1-1
+        this will be 1/2 of the screen and a 2-2 won't be the same as a 1-1
     </div>
     <div class="pure-u-1-2">
          the other 1/2, and if exceeding it will create a new line
@@ -69,19 +68,18 @@ _**The responsive grid:**_
 
 ![Some grid](<../.gitbook/assets/Cattura (3).PNG>)
 
-This works on **images** too:
+For **responsive images** we need **pure-img,** use **box-sizing** to give each element **padding** without breaking the layout:
 
 ```
-//first we need pure-img on the <img> under a pure-g parent tag, so to have a responsive image to the screen
+//It needs to be inside a pure-g parent tag
 <div class="pure-g">
     <img class="pure-img pure-u-1-3 pure-u-sm-1-5" src="image.jpg" alt="">
     <img class="pure-img pure-u-1-3 pure-u-sm-1-5" src="image.jpg" alt="">
     <img class="pure-img pure-u-1-3 pure-u-sm-2-5" src="image.jpg" alt="">
 </div>
-//on bigger screens than (568px) we have 1/5 images and 2/3 image, they dont have to sum to 5/5
-//on smaller screens they will be 1/3 of the page
+//On screens bigger than 568px we have 1/5,1/5 and 2/5, on smaller 1/3 
 
-//To add padding/margin without breaking the layout we box-sizing
+//border-box directly on the images
 .pure-g > img {
   box-sizing: border-box;
   padding: 1em;
@@ -90,40 +88,39 @@ This works on **images** too:
 
 ```
 
-Also, we can add the **Hidden attribute**:
+Also, we can add the **hidden attribute**:
 
 ```
-//It won't show the h1 element, as display:none does
+//It won't show the h1 element, as display: none does
 <h1 hidden>NOBODY WILL NOTICE THIS </h1>
 
 ```
 
 ### Menu and forms&#x20;
 
-Check this **form**, with an **input** and **button:**
+We use **pure-form** and **pure-input** for the input container and the input :
 
 ```
-//we can use pure-u on each tag to custom form elements, doing it on button will work but will need css for the fonr-size
+//We use pure-input-2-3 to space the input width
+
 <div class="pure-g">
-    <div class="pure-u-1-2"
+    <div class="pure-u-1-2">
+    
         <form class="pure-form pure-u-2-3">
-        //we use the pure-form for form tags, like input/button AND on input we can grid
             <input type="text" class="pure-input-2-3 pure-input-rounded" placeholder="search" >
             <button class="pure-button">try </button>
         </form>
+        
     </div>
 </div>
-
-//we have 1/2 screen, a 2/3 of it for the form AND 2/3 of it for the input
 
 ```
 
 ![](../.gitbook/assets/Cattura11.PNG)
 
-For **forms**, we start with a simpler one with no labels:
+We can set the number of **rows on a textarea** and set **input as required,disabled** or **readonly** (can't type):
 
 ```
-//we just add fieldset to group some inputs and use placeholder as labels
 <form class="pure-form">
     <fieldset>
         <input class="pure-input-2-3 placeholder="username" required="">
@@ -134,10 +131,6 @@ For **forms**, we start with a simpler one with no labels:
     </fieldset>
 </form>
 
-//we treat textarea as input, we use rows="3" for how many lines of space
-//ALSO we can have a disabled font that can't be modified
-
-//we can use required="" or disabled="" in the <input>
 ```
 
 ![](../.gitbook/assets/Cattura12.PNG)
@@ -186,15 +179,15 @@ The **pure-u** can change the **layout** of the form:
 
 ```
 
-Due to the **pure-u-1-3** or **pure-u-2-3** on the div>inputs we have different layouts, also we need the **pure-form-stacked** to keep the spacing for the inputs and labels**:**
+Due to the **pure-u-1-3** or **pure-u-2-3** on the \<div>inputs we have different layouts, also we need the **pure-form-stacked** to keep the spacing for the inputs and labels**:**
 
 ![pure-u-2-3 form](../.gitbook/assets/Cattura2-3.PNG)
 
 ![pure-u-1-3 form ](<../.gitbook/assets/Cattura1-3 (1).PNG>)
 
-### Button,checkbox and Tables
+### Button, checkbox, and Tables
 
-We use **class="pure-button"** for both \<a> and \<button>:
+We use **pure-button** for both \<a> and \<button>:
 
 ```
 //the difference between <a> and <button> will be the link hover blue color
@@ -207,7 +200,7 @@ We use **class="pure-button"** for both \<a> and \<button>:
 </button>
 //font awesome icons can go there
 
-//we have class for disabled/active and primary color (the only one)
+//we have a class for disabled/active and primary color (the only one)
 <div class="pure-button-group" role="group" aria-label="...">
     <button class="pure-button pure-button-disabled">A Pure Button</button>
     <button class="pure-button pure-button-primary">A Pure Button</button>
@@ -223,10 +216,10 @@ We use **class="pure-button"** for both \<a> and \<button>:
 
 ![Radio and buttons](../.gitbook/assets/Catturaradio.PNG)
 
-For the checkbox and radio we need **form,label and input**:
+For the checkbox and radio, we need **form, label, and input**:
 
 ```
-//Pure-checkbox/pure-radio and pure-form is to normalize and vertically align
+//Pure-checkbox/pure-radio and pure-form are to normalize and vertically align
 
 <form action="" class="pure-form">
     <labels class="pure-checkbox"> 
@@ -258,7 +251,7 @@ We can style HTML **tables:**
 
 ```
 //so, we use pure-table-horizontal to remove the vertical lines of the table
-//we have <thead> for the first row while <tbody> with both hvaing tROW or tDATA
+//we have <thead> for the first row while <tbody> with both having tROW or tDATA
 
 <table class="pure-table pure-table-horizontal pure-u-1-2">
     <thead>
@@ -297,7 +290,7 @@ We can style HTML **tables:**
 
 ### Menus and dropdowns
 
-Menus are organized like lists, we can use pureCSS classes for layout:
+Menus are organized like lists, we can use pureCSS **pure-menu**:
 
 ```
 //Organized as menu-list> menu-item> menu-link
@@ -371,10 +364,11 @@ For the hover dropdown, we need **-menu-has-children**, **-menu-allow-hover** > 
 
 ```
 
-We can also have **horizontal** scrollable menus, in case:
+We can also have **horizontal** scrollable menus with -menu-scrollable:
 
 ```
-//pure-menu-horizontal will display on the width while -menu-scrollable will allow the scroll for the overflow elements
+//pure-menu-horizontal will display on the width 
+//while -menu-scrollable will allow the scroll for the overflow elements
 
 <div class="pure-menu pure-menu-horizontal pure-menu-scrollable ">
     <a href="#" class="pure-menu-link pure-menu-heading">Yahoo</a>

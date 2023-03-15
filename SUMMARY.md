@@ -11,7 +11,7 @@
 
 * [CSS 1: Animation, gradients and buttons effects](css/css-1.md)
 * [CSS 2: Flex, flex page layout and background-image](css/css-2.md)
-* [PureCSS](css/purecss.md)
+* [PureCSS layout grid and menu](css/purecss-layout-grid-and-menu.md)
 * [Boostrap 1](css/boostrap-1.md)
 * [Boostrap 2](css/boostrap-2.md)
 * [Boostrap 3](css/boostrap-3.md)

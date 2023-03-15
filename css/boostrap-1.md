@@ -29,11 +29,10 @@ We can use classes to add **margin** and **padding**:
 
 ```
 
-And for _display_ and _media-query breakpoints_:
+And for _**display**_ and _**media-query** breakpoints_:
 
 ```
 //we display with d-
-
 d-flex /d-block /d-inline-block
 
 //and media-query START from their breakpoints
@@ -71,13 +70,14 @@ So, we can create a **pagination** block of links:
 
 ### PureCSS and Modal
 
-For modals we have _buttons_ opening **extra windows** with content:&#x20;
+For modals we have _buttons_ opening **extra windows** with content, through **data-bs-toggle="modal"** and **data-bs-target**:&#x20;
 
 ```
-//the button will have the -toggle for the modal and the target for the modal
+//the button will have the -toggle for the modal and the target for the modal content
 <button class="pure-button" data-bs-toggle="modal" data-bs-target="#uno">Stati</button>
 
-//parent tag has a modal to hide the modal before the click/fade for animation and ID for the target button
+//parent tag has a modal class to hide the modal before the click/fade for animation 
+//and the ID for the target button
 //the structure is modal-dialog>
                                  modal-content>
                                                 modal-header...                                                   
@@ -96,7 +96,7 @@ For modals we have _buttons_ opening **extra windows** with content:&#x20;
   </div>
 </div>
 
-//to close we use the btn-close boostrap and close our modal -dismiss="modal"
+//to close we use the btn-close bootstrap and close our modal -dismiss="modal"
 
 ```
 
@@ -110,7 +110,7 @@ For modals we have _buttons_ opening **extra windows** with content:&#x20;
 {% endtab %}
 {% endtabs %}
 
-In the content, we can add Extra PureCSS pure-g(rid), images, forms, and bootsrap effects:
+In the **modal content**, we can add Extra PureCSS pure-g(rid), images, forms, and bootstrap effects:
 
 ```
 //in the parent tag we can use DATA-BS-BACKDROP="static" to block the click-out of modal
