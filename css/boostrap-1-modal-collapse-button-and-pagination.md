@@ -1,8 +1,8 @@
-# Boostrap 1
+# Boostrap 1 modal, collapse button and pagination
 
-* [Modal & PureCSS](boostrap-1.md#purecss-and-modal)
-* [Collapse Buttons](boostrap-1.md#collapse-buttons-and-content)
-* [Pagination & Bootpag](boostrap-1.md#pagination-and-bootpag)
+* [Modal & PureCSS](boostrap-1-modal-collapse-button-and-pagination.md#purecss-and-modal)
+* [Collapse Buttons](boostrap-1-modal-collapse-button-and-pagination.md#collapse-buttons-and-content)
+* [Pagination & Bootpag](boostrap-1-modal-collapse-button-and-pagination.md#pagination-and-bootpag)
 
 Even if we include only some **modules** of **** bootstrap we use the entire package:
 
@@ -42,31 +42,6 @@ d-none d-sm-block    //D(isplay) AFTER small-block but BEFORE is -none
 d-none d-sm-block d-md-none    //visible only in md (none in default and AFTER md)
 
 ```
-
-So, we can create a **pagination** block of links:
-
-```
-//SO, we just need pagination for the style of the list
-
-<ul class="pagination pagination-lg justify-content-center my-5">
-  <li class=""><a class="page-link" href="#">
-    <span> &laquo;</span></a>
-  </li>
-  <li class=""><a class="page-link" href="#">1</a></li>
-  <li class=""><a class="page-link" href="#">2</a></li>
-  <li class=""><a class="page-link" href="#">3</a></li>
-  <li class="page-item active"><a class="page-link" href="#">
-    <span>&raquo;</span>
-  </a></li>
-</ul>
-
-//we can use pagination-lg/sm to style size of the options
-//Also we can justify-content-start/end/center
-//if we want the active background we use both page-item + active
-
-```
-
-![](../.gitbook/assets/Pagination.PNG)
 
 ### PureCSS and Modal
 
@@ -112,68 +87,86 @@ For modals we have _buttons_ opening **extra windows** with content, through **d
 
 In the **modal content**, we can add Extra PureCSS pure-g(rid), images, forms, and bootstrap effects:
 
-```
-//in the parent tag we can use DATA-BS-BACKDROP="static" to block the click-out of modal
+<details>
 
-<button class="pure-button" data-bs-toggle="modal" data-bs-target="#tutto" >Mixing </button>
+<summary>Bootstrap double modal guide</summary>
+
+We create **2 modal** inside the other.
+
+**data-bs-backdrop="static"** disables the click-off from the modal.
+
+**modal-dialog-scrollable** will overflow: scroll the modal if Y space is smaller.
+
+We can **bs-dismiss** the current **modal** and **bs-toggle** a new one.
+
+**modal-dialog-centered** centers the modal by X and Y.
+
+**modal-fullscreen-sm-down** will expand the modal to **fullscreen** if screen **below sm** media query.
+
+```
+<button class="pure-button" data-bs-toggle="modal" data-bs-target="#tutto"> 
+    Mixing 
+</button>
 
 <div id="tutto" class="modal fade" data-bs-backdrop="static">
 
-//If the content is too long we can focus the scoll inside the modal
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
+
             <div class="modal-header">
                 <h2>We start </h2>
                 <button class="btn-close" data-bs-dismiss="modal"></button>
             </div>
+
             <div class="modal-body pure-g">
-                <div class="pure-u-1-2 pure-u-sm-1">
-
+                <div class="pure-u-1 pure-u-sm-1-2">
+                    <p> We have the menu here </p>
                 </div>
-                <div class="pure-u-1-2 pure-u-sm-1">
-
-//So, pure-img allows the image to respond to the screen without being cut
+                <div class="pure-u-1 pure-u-sm-1-2">
                     <img src="https://bit.ly/3FMr8fu" alt="" class="pure-img">
-
                 </div>
             </div>
+
             <div class="modal-footer">
                 <button class="pure-button" data-bs-dismiss="modal" >Close </button>
-//In case we have more modals we can -target="#" -dismiss the modal we have and -toggle the new one
-                <button class="pure-button" data-bs-target="#secundum" data-bs-dismiss="modal" data-bs-toggle="modal" >Avanti </button>
+
+                <button class="pure-button" data-bs-target="#secundum" data-bs-dismiss="modal" data-bs-toggle="modal">
+                    Avanti 
+                </button>
             </div>
+
         </div>
     </div>
 
 </div>
 
-//we after-dismiss and -toggle the current modal we can open anew one
-
 <div class="modal fade" id="secundum" >
 
-//In dialog we can add the -centered that will center page the modal if its little enough
-//-fullscreen/-fullscreen-sm-down are to have a modal occupy the ENTIRE PAGE, SM-DOWN will do it on smaller screens
     <div class="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
         <div class="modal-content">
+
             <div class="modal-header">
                 <h3>This is larger </h3>
                 <button class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
             
-//we can target a modal with <a> and -dismiss/-toggle modal
                 <h3>So we can close stuff with a link to the next modal
                     with <a href="#linkato" data-bs-dismiss="modal" data-bs-toggle="modal" >this </a> LINK
                 </h3>
+
             </div>
             <div class="modal-footer">
 
             </div>
+
         </div>
     </div>
 </div>
 
 ```
+
+</details>
 
 {% tabs %}
 {% tab title="First Modal" %}
@@ -190,14 +183,14 @@ In the **modal content**, we can add Extra PureCSS pure-g(rid), images, forms, a
 So, the **Collapse** Js plugin allows us to toggle the height visibility of **Target** content:
 
 ```
-//We can use both buttons or <a> links as buttons, it needs to toggle the "collapse" plugin
+//We can use both buttons or <a> links as buttons, it toggles the "collapse" plugin
 //AND the target for the content to collapse/show
 
 <a href="" 
- class="pure-button close" 
- data-bs-toggle="collapse" 
- data-bs-target="#opened"> 
- X 
+    class="pure-button close" 
+    data-bs-toggle="collapse" 
+    data-bs-target="#opened"> 
+    X 
 </a>
 
 //we need the COLLAPSE class and target, the rest is PureCSS
@@ -221,14 +214,15 @@ So, the **Collapse** Js plugin allows us to toggle the height visibility of **Ta
 {% endtab %}
 {% endtabs %}
 
-Also, it's possible to open **multiple** collapses by targetting classes:
+Also, it's possible to open **multiple** collapses by targeting tags with the same class:
 
 ```
-<button data-bs-target=".multi-collapse" class="btn btn-primary" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2">
+<button class="btn btn-primary" type="button" 
+      data-bs-target=".multi-collapse" data-bs-toggle="collapse">
   Toggle both elements
 </button>
 
-//We can open both the collapse r have buttons for each
+//even if separated the 2 will open at the same time
 <div class="collapse multi-collapse" id="multiCollapseExample1">
   <div class="card card-body">
     Some placeholder content for the first collapse component of this multi-collapse example. This panel is hidden by default but revealed when the user activates the relevant trigger.
@@ -245,25 +239,24 @@ Also, it's possible to open **multiple** collapses by targetting classes:
 
 ### Pagination and bootpag
 
-We create a block of connected links for webpage navigation:
+On **pagination** we create a list of links:
 
 ```
-//we can add classes active/disable for selected or not active links
-//ALSO we can make the navigation bigger/smaller with navigation-lg/-sm additional classes
+//pagination-sm/md/lg sets the size of the list 
 
-<nav style="text-align: center">
-  <ul class="pagination ">
+<ul class="pagination pagination-lg justify-content-center my-5">
+
     <li class=""><a class="page-link" href="#">
-        <span aria-hidden="true">&laquo;</span></a>
+      <span> &laquo;</span></a>
     </li>
-    <li class="disabled"><a class="page-link" href="#">1</a></li>
+    <li class=""><a class="page-link" href="#">1</a></li>
     <li class=""><a class="page-link" href="#">2</a></li>
-    <li class="page-item active"><a class="page-link" href="#">3</a></li>
-    <li class=""><a class="page-link" href="#">
-      <span aria-hidden="true">&raquo;</span>
+    <li class=""><a class="page-link" href="#">3</a></li>
+    <li class="page-item active"><a class="page-link" href="#">
+      <span>&raquo;</span>
     </a></li>
-  </ul>  
-</nav>
+
+</ul>
 
 ```
 
@@ -280,22 +273,21 @@ To have a _**dynamic pagination**_ bar we can use a Jquery Plugin [**Bootpag**](
 
 ```
 
-In HTML we just need div containers:
+With the **plug-in** we only need an **id** for the **pagination and content**:
 
 ```
-//one for the content we may show and another for navigation
-
 <div style="text-align: center">
 	<div id="dynamic_content">Pagination goes here</div>
+	
 	<div id="show_paginator"></div>
 </div>
 
 ```
 
-Most is done in Javscript:
+Everything is done on **javascript** :
 
 ```
-//we load the paramethers of the paginator with bootpag
+//we load the parameters of the paginator with bootpag
 
 $('#show_paginator').bootpag({
       total: 24,      //total pages/links
@@ -320,10 +312,15 @@ $('#show_paginator').bootpag({
 {% endtab %}
 {% endtabs %}
 
-We can add more properties or events or even change them after the onclick page:
+We can change the **pagination property** by using **$(this).bootpag({  }).**
 
 ```
-//we modify the $(this).bootpag({}) 
+<div class="text-center">
+    <div class="demo1" >Pagination goes here</div>
+
+    <div class="content"></div>
+</div>
+
 
 $('.demo1').bootpag({
     total: 5
@@ -332,7 +329,7 @@ $('.demo1').bootpag({
  
     //we can modify the bootpag after the click with new properties
     $(this).bootpag({
-      total: 10, 
+      total: 10,                   //we add more pag elements
       maxVisible: 6,
       next: 'next',
       href: "#pro-page-{{number}}", //we can give each button clicked an href

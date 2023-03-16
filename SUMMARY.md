@@ -12,8 +12,8 @@
 * [CSS 1: Animation, gradients and buttons effects](css/css-1.md)
 * [CSS 2: Flex, flex page layout and background-image](css/css-2.md)
 * [PureCSS layout grid and menu](css/purecss-layout-grid-and-menu.md)
-* [Boostrap 1](css/boostrap-1.md)
-* [Boostrap 2](css/boostrap-2.md)
+* [Boostrap 1 modal, collapse button and pagination](css/boostrap-1-modal-collapse-button-and-pagination.md)
+* [Boostrap 2 Carousel, image overlay and dropdown](css/boostrap-2-carousel-image-overlay-and-dropdown.md)
 * [Boostrap 3](css/boostrap-3.md)
 
 ## JS

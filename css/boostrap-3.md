@@ -5,26 +5,26 @@
 * [Responsive and toggle Navbar](boostrap-3.md#responsive-navbar-with-toggle-button)
 * [Complete responsive page](boostrap-3.md#complete-responsive-page)
 
-**Offcanvas** are hidden sidebars we can trigger with buttons:
+**Offcanvas** are hidden sidebars, using **data-bs-toggle** and **data-bs-target** on the button**.**
+
+While using **offcanvas** and **offcanvas-(position)** on the content.
 
 ```
-//we need data-bs-target="#" or href="#" to trigger the hidden sidebar(offcanvas)
+//like modal it also can use data-bs-backdrop, we can close with data-bs-dismiss
+//data-bs-scroll is for the scroll to work only on open offcanvas.
 
 <button class="btn btn-warning" data-bs-toggle="offcanvas" data-bs-target="#ecco">
   Sinistra
 </button>
 
-//we need offcanvas and -(position) to choose where it's gonna appear, data-bs-backdrop="false" is to disable the close-offcanvas on click outside the sidebar
-//while data-bs-scroll true is to limit the scoll on only the sidebar
 <div id="ecco" class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" >
   <div class="offcanvas-header ">
     <h3>This sidebar </h3>
     
-//to add a close botton we just use -dismiss="offcanvas"
     <button class="btn-close" data-bs-dismiss="offcanvas"></button>
   </div>
   <div class="offcanvas-body">
-    <p> So, we can implement limit scoll and close on click outside offcanvas </p>
+    <p> So, we can implement limit scroll and close on click outside offcanvas </p>
   </div>
 </div>
 
