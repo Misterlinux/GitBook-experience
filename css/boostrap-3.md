@@ -5,6 +5,177 @@
 * [Responsive and toggle Navbar](boostrap-3.md#responsive-navbar-with-toggle-button)
 * [Complete responsive page](boostrap-3.md#complete-responsive-page)
 
+The **bootstrap grid** layout is based on flexbox, it uses **container**, **row**, and **col**(uns).
+
+The width is organized into **12 units**, **col**umns can be **auto** to adapt to their content.
+
+The bootstrap **col**umns implement media query **breakpoints** using **sm**,**md**, and **lg**.&#x20;
+
+```
+//we can use container-fluid to remove the container default margins
+//the breakpoints will take effect AFTER the md, from a 1-5-auto to 3-3-3 on smaller
+
+<div class="container">
+  <div class="row">
+
+    <div class="col-3 bg-warning col-md-1">
+      Lorem
+    </div>
+    <div class="col-3 bg-danger col-md-5">
+      Lorem
+    </div>
+    <div class="col-3 bg-success col-md-auto">
+      L
+    </div>
+    
+  </div>
+</div>
+
+```
+
+<figure><img src="../.gitbook/assets/bootstrap1.png" alt=""><figcaption><p>Grid columns on md and not-md screen</p></figcaption></figure>
+
+We can **align** and **justify col** elements in the container:
+
+<details>
+
+<summary>Bootstrap align and justify</summary>
+
+For **align** we need extra classes and CSS height:
+
+```
+.altezza{
+    height: 7em;
+    background-color: lightcoral;
+}
+
+//we need flex on container to align on row to work, also on content inside
+<div class="container d-flex altezza">
+  <div class="row align-items-center">
+
+    <div class="col-3">
+      One of three columns
+    </div>
+    <div class="col-3">
+      One of three columns
+    </div>
+    <div class="col-3">
+      One of three columns
+    </div>
+    <div class="col-3 align-self-start">
+      Another column
+    </div>
+    
+  </div>
+</div>
+
+```
+
+While **justify** doesn't need extra CSS.
+
+```
+//it uses between/around to justify space them
+<div class="container ">
+  <div class="row justify-content-end">
+
+    <div class="col-2">
+      lorem
+    </div>
+    <div class="col-2">
+      lorem
+    </div>
+    <div class="col-2">
+      lorem
+    </div>
+
+  </div>
+</div>
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/alignjustify.PNG" alt=""><figcaption><p>align-items and justify-content</p></figcaption></figure>
+
+We create a **break-line** between columns using a div with **w-100**:
+
+<details>
+
+<summary>break-line and breakpoints</summary>
+
+Without the div the columns share space:
+
+```
+<div class="container">
+  <div class="row">
+
+    <div class="col-4 bg-primary">social skill</div>
+    <div class="col-4 bg-warning">social skill</div>
+
+    <div class="w-100"></div>
+
+    <div class="col-3 bg-danger">Soldier </div>
+    <div class="col-3 bg-success">Soldier </div>
+
+  </div>
+</div>
+
+```
+
+We use d-block to remove the break-line on breakpoint.
+
+```
+//will be removed on sm, while display on md after
+<div class="container">
+  <div class="row">
+    <div class="col-4 bg-primary">social skill</div>
+    <div class="col-4 bg-warning">social skill</div>
+
+    <div class="w-100 d-none d-md-block"></div>
+
+    <div class="col-3 bg-danger">Soldier </div>
+    <div class="col-3 bg-success">Soldier </div>
+
+  </div>
+</div>
+
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/breakpointbootstrap.PNG" alt=""><figcaption><p>w-100 breakpoint and without</p></figcaption></figure>
+
+We can use **m**argin-auto to space columns on the sides.
+
+<details>
+
+<summary>margin-auto guide</summary>
+
+1
+
+1
+
+1
+
+1
+
+1
+
+</details>
+
+<figure><img src="../.gitbook/assets/marginbreak.png" alt=""><figcaption></figcaption></figure>
+
+1
+
+1
+
+1
+
+1
+
+### Bootstrap offcanvas&#x20;
+
 **Offcanvas** are hidden sidebars, using **data-bs-toggle** and **data-bs-target** on the button**.**
 
 While using **offcanvas** and **offcanvas-(position)** on the content.
