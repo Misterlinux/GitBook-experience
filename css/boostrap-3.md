@@ -152,19 +152,113 @@ We can use **m**argin-auto to space columns on the sides.
 
 <summary>margin-auto guide</summary>
 
-1
+We use **mr/ml-auto** to push the column to a side.
 
-1
+```
+//the second push the third to the max right
+<div class="row my-1">
 
-1
+  <div class="col-3 bg-primary">
+    Lorem
+  </div>
+  <div class="col-3 mr-auto bg-warning">
+    Lorem
+  </div>
+  <div class="col-3 bg-danger">
+    Lorem
+  </div>
+  
+</div>
+```
 
-1
+We can use **m**argin on **breakpoints**, but we need to nullify it first.
 
-1
+```
+//on md and after we push it to the right, after null the ml, on below md
+//we push it to the left  
+<div class="row">
+
+  <div class="col-4 col-md-6 bg-primary">
+    Bordato
+  </div>
+  <div class="col-4 ml-auto col-md-1 mr-md-auto ml-md-0 bg-warning">
+    Bordato1
+  </div>
+
+</div>
+```
 
 </details>
 
-<figure><img src="../.gitbook/assets/marginbreak.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/marginbreak.png" alt=""><figcaption><p>mr-md-auto and ml auto on media query</p></figcaption></figure>
+
+We can use **offset** to move them by column **units** to the right.
+
+<details>
+
+<summary>Bootstrap offset guide</summary>
+
+On **md**, we increase the offset on the smaller col, below md we invert offset and columns width to alternate between,&#x20;
+
+```
+<div class="container">
+
+  <div class="row">
+    <div class="col-3">sound register </div>
+    <div class="col-3 offset-3">sound register </div>
+  </div>
+
+  <div class="row">
+    <div class="col-3 offset-3 col-md-1 offset-md-2">sound register </div>
+    <div class="col-3 offset-3 col-md-1 offset-md-5">sound register </div>
+  </div>
+
+</div>
+```
+
+</details>
+
+When **nesting rows** we keep the 12 units width.&#x20;
+
+<details>
+
+<summary>Row nesting guide</summary>
+
+We need a **row** class on the container.
+
+```
+<div class="container m-2">
+
+  <div class="row">
+    <div class="col-3 bg-primary d-flex justify-content-center align-items-center text-white">
+      nesting 
+    </div>
+
+    <div class="col-8 bg-warning">
+      nesting 
+
+      <div class="row">
+        <div class="col-8 bg-secondary">
+          nested 
+        </div>
+        <div class="col-3 bg-danger">
+          nested 
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/rownesting.PNG" alt=""><figcaption><p>row nesting with align/justify flex</p></figcaption></figure>
+
+1
+
+1
 
 1
 
