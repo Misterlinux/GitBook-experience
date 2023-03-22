@@ -256,9 +256,385 @@ We need a **row** class on the container.
 
 <figure><img src="../.gitbook/assets/rownesting.PNG" alt=""><figcaption><p>row nesting with align/justify flex</p></figcaption></figure>
 
+### Scrollspy and getBoundingClientRect()
+
+The **getBoundingClientRect()** method returns an object, its properties provide the **position** relative to its **viewpoint** and the **size** of the viewpoint, with the position value updated on **scroll**.
+
+```
+//we get x7y position or width/height
+
+highlight.getBoundingClientRect().y/x/height/width
+```
+
+<details>
+
+<summary>getBoundingClientRect() as scrollspy guide</summary>
+
+In the HTML we need **nav-pills** (on containers to have the active bg color on nav-items child elements):
+
+```
+<div class="col-md-6 ">
+  <nav class="navbar bg-light ">
+
+    <nav class="nav nav-pills bounding flex-column w-100">
+
+      <a href="" class="navbar-brand ms-2">Navbrand</a>
+      <a href="" class="nav-link">
+        Read text
+      </a>
+
+      <div class="nav-link text-dark">
+        Top position:
+        <p id="movimento"></p>
+        Scroll window height:
+        <p id="altezza"></p>
+        Scroll window width:
+        <p id="larghezza"></p>
+      </div>
+
+    </nav>
+
+  </nav>
+</div>
+<div class="col-md-6 bounding" id="window">
+
+  <p class="obiettivo" >
+    We use <b>getBoundingClientRect()</b> to link specific js functions 
+    to a specific scrolling position of the element, the starting 
+    top value is given by the navbar
+  </p>
+
+</div>
+
+//while on CSS we need the overflow scroll and a height
+.bounding{
+    position: relative;
+    height: 400px;
+}
+
+.row .bounding:nth-child(2){
+    overflow-y: scroll;
+}
+
+.bounding > p{
+    padding: 600px 0 100px 0;
+}
+
+```
+
+The starter **x/y** value of **getBoundingClientRect**() includes all the other elements on the page, we add **active** to the nav-link:
+
+```
+//we first select the window, the element to scroll to, and the nav-link
+let finestra= document.getElementById("window")
+let highlight = document.querySelector(".obiettivo")
+let navi= document.querySelectorAll(".bounding .nav-link")
+
+let visible = highlight.getBoundingClientRect().y
+movimento.innerText= visible
+
+finestra.addEventListener("scroll", ()=>{
+
+  visible= highlight.getBoundingClientRect().y
+  movimento.innerText= visible
+
+  altezza.innerText= highlight.getBoundingClientRect().height
+  larghezza.innerText= highlight.getBoundingClientRect().width
+
+  if( visible< -70){
+      navi[0].classList.add("active")
+  }else{
+      navi[0].classList.remove("active")
+  }
+  
+})
+
+```
+
+To **calculate** where an element be **visible** we:
+
+```
+//We take the total top distance (padding-top) - window height - starting top
+// 600px - 400px - 131px= -70px (we scrolling down so we need negative)
+
+```
+
+The problem is that the getBoundingClientRect().x/y value changes on **smaller screens**.
+
+</details>
+
+<figure><img src="../.gitbook/assets/boundingrect.png" alt=""><figcaption><p>Using <strong>getBoundingClientRect()</strong> for navlist-item <strong>scrollspy</strong></p></figcaption></figure>
+
+Being getBoundingClientRect() an **object** we can get all its **properties** with a loop:
+
+```
+let bounded = highlight.getBoundingClientRect()
+
+for( const xx in bounded ){
+    console.log( xx + " : " + bounded[xx] )
+}
+```
+
+The **scrollspy Bootstrap component** updates **nav-item** elements based on **scroll position**.
+
+<details>
+
+<summary>Column navbar and scrollspy guide</summary>
+
+For the column navbar, we need, an **ID** target, **flex-column** for the navbar direction, and **align-items-stretch** for the width (due to the inverted flex-direction).
+
+```
+//also we need h-100 for the flex to cover the height
+<div class="col-4">
+
+  <nav id="colonna" class="h-100 flex-column align-items-stretch pe-4 border-end mt-4">
+    <nav class="nav nav-pills flex-column">
+
+    <a href="" class="navbar-brand my-2">Navbrand </a>
+      <a class="nav-link" href="#item-1">Item 1</a>
+      <nav class="nav nav-pills flex-column">
+        <a class="nav-link ms-3 my-1" href="#item-1-1">Item 1-1</a>
+        <a class="nav-link ms-3 my-1" href="#item-1-2">Item 1-2</a>
+      </nav>
+      <a class="nav-link" href="#item-2">Item 2</a>
+      <a class="nav-link" href="#item-3">Item 3</a>
+      <nav class="nav nav-pills flex-column">
+        <a class="nav-link ms-3 my-1" href="#item-3-1">Item 3-1</a>
+        <a class="nav-link ms-3 my-1" href="#item-3-2">Item 3-2</a>
+      </nav>
+    </nav>
+  </nav>
+
+</div>
+```
+
+On the **scroll** div, we need **data-bs-spy="scroll"** and **data-bs-target** for the navbar id.
+
+Each time an element **ID** referenced by a **nav-link href** is scrolled into view, the nav-link gets .**active** .
+
+```
+<div class="col-8">
+
+  <div data-bs-spy="scroll" data-bs-target="#colonna" data-bs-smooth-scroll="true" 
+  class="scrolling">
+    <div id="item-1">
+      <h4>Item 1</h4>
+      <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. 
+        Distinctio maiores saepe quis nihil ab esse consequuntur 
+        recusandae expedita inventore unde alias, atque qui possimus 
+        eum enim quas magni quibusdam id.
+      </p>
+    </div>
+    <div id="item-1-1">
+      <h5>Item 1-1</h5>
+      <p>
+        ...
+      </p>
+    </div>
+    <div id="item-1-2">
+      <h5>Item 1-2</h5>
+      <p>
+        ...
+      </p>
+    </div>
+    <div id="item-2">
+      <h4>Item 2</h4>
+      <p>
+        ...
+      </p>
+    </div>
+    <div id="item-3">
+      <h4>Item 3</h4>
+      <p>
+        ...
+      </p>
+    </div>
+    <div id="item-3-1">
+      <h5>Item 3-1</h5>
+      <p>
+        ...
+      </p>
+    </div>
+    <div id="item-3-2">
+      <h5>Item 3-2</h5>
+      <p>
+        ...
+      </p>
+    </div>
+  </div>
+  
+</div>
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/scrollspy8.gif" alt=""><figcaption><p>Scrollspy on column navbar</p></figcaption></figure>
+
+For more **navbar layout** check the complete project:
+
+{% embed url="https://codepen.io/misterlinux/pen/zYRyLKP" %}
+navbar scrollspy page
+{% endembed %}
+
+### Toast cards and functions
+
+The **toast** component mimics the push notifications, composed of a **toast** and **show** class, **toast-header, toast-body,** and a **data-bs-dismiss="toast"** to close it.
+
+We use **position-fixed** to have the toast always visible and position with **top/bottom/start/end-0/50**.
+
+```
+//The toast-body has a level of transparency, and add some margin and position
+
+<div class="toast-container position-fixed bottom-0 start-0 ms-2 mb-2">
+  <div class="toast show " style="z-index: 2;">
+
+    <div class="toast-header">
+      <img src="https://bit.ly/3tvUtWn" class=" me-2 img-fluid w-25">
+      <strong class="me-auto">Header bold</strong>
+
+      <small>small text</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+    </div>
+
+    <div class="toast-body">
+      In order to be always visible we use position fixed
+    </div>
+
+  </div>
+</div>
+
+```
+
+<figure><img src="../.gitbook/assets/Toast.PNG" alt=""><figcaption><p>Toast with margin and position</p></figcaption></figure>
+
+For multiple overlaying toasts and **position-static** on the **toast-container**:
+
+<details>
+
+<summary>Toast-container and position-static guide</summary>
+
+We can't use absolute positions like with static position, so we need an extra parent to **d-flex** and **justify** the toast-container,&#x20;
+
+```
+//The toast-container adds margins to the toasts
+
+<div class="d-flex justify-content-center">
+  <div class="toast-container position-static mb-2">
+
+    <div class="toast show" role="alert">
+      <div class="toast-header">
+        <img src="https://bit.ly/3tvUtWn" class="rounded me-2 w-25">
+        <strong class="me-auto">Overlaying</strong>
+
+        <button type="button" class="btn-close" data-bs-dismiss="toast" ></button>
+      </div>
+      <div class="toast-body">
+        toast-container adds a margin 
+      </div>
+    </div>
+  
+    <div class="toast show" role="alert">
+      <div class="toast-header">
+        <img src="https://bit.ly/3tvUtWn" class="rounded me-2 w-25">
+        <strong class="me-auto">toast bootstrap</strong>
+        
+        <small class="text-muted">2 seconds ago</small>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" ></button>
+      </div>
+      <div class="toast-body">
+        between the 2 toasts
+      </div>
+    </div>
+
+  </div>
+</div>
+
+```
+
 1
 
 1
+
+1
+
+1
+
+</details>
+
+<figure><img src="../.gitbook/assets/justifyfixed.PNG" alt=""><figcaption><p>fixed-position, overlay and justify toasts</p></figcaption></figure>
+
+We use extra **js** to **trigger a toast** on **button** click, triggered toats will close after a delay.
+
+<details>
+
+<summary>Toast button trigger</summary>
+
+Triggered toast will automatically close, you can add **data-bs-delay=""** to change the delay or use **data-bs-autohide="false"** to keep it open.
+
+```
+//we also need an ID for the toast and the button
+<div class="my-4">
+  <button type="button" class="btn btn-primary" id="liveToastBtn">Show live toast</button>
+</div>
+
+<div class="toast-container position-fixed bottom-0 start-0 ms-3 mb-3">
+  <div id="liveToast" class="toast" data-bs-autohide="false" >
+    <div class="toast-header">
+      <img src="https://bit.ly/3tvUtWn" class="w-25 img-fluid me-2">
+      <strong class="me-auto">Toast on button</strong>
+
+      <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+    </div>
+    <div class="toast-body">
+      we used new bootstrap.Toast() on js
+    </div>
+  </div>
+</div>
+
+```
+
+On **Js** we use the button and toast **ID**:
+
+```
+//we create a Toast() instance and then trigger the show() method
+const toastTrigger = document.getElementById('liveToastBtn')
+const toastLiveExample = document.getElementById('liveToast')
+
+toastTrigger.addEventListener('click', () => {
+    const toast = new bootstrap.Toast(toastLiveExample)
+  
+    toast.show()
+})
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/toastbottone.png" alt=""><figcaption><p>Toast on button click</p></figcaption></figure>
+
+We can use **external buttons** to **close** a toast:
+
+```
+//we need a target and a dismiss on the button
+<div class="toast-container top-0 start-50">
+  <div class="toast show" id="chiude">
+
+    <div class="toast-body">
+      Just a body without a dismiss button
+    </div>
+
+  </div>
+</div>
+
+<div class="position-fixed top-0 end-0">
+  <button type="button" class="btn btn-primary top-0 start-50" data-bs-dismiss="toast" data-bs-target="#chiude">
+    close 
+  </button>
+</div>
+
+```
 
 1
 
@@ -297,162 +673,11 @@ While using **offcanvas** and **offcanvas-(position)** on the content.
 
 ![](../.gitbook/assets/SIDEBAR.PNG)
 
-### ScrollSpy Implementation
+**1**
 
-We can use the scrollSpy component even without Boostrap:
+**1**
 
-{% embed url="https://codepen.io/misterlinux/pen/zYRyLKP?editors=1100" %}
-ScrollSpy with simple JS
-{% endembed %}
-
-A scollSpy is structured in a **menu** and a **content scroll:**
-
-```
-//in 2 columns
-
-<div class="pure-g">
-<div class="pure-u-1-2 ">
-  <menu>
-    <nav id="select" class="navbar flex-column p3 align-items-stretch">
-      <a class="navbar-brand" href="#">Navbar</a>
-      
-<!-- nav-pills is what allows the active to have the color background -->      
-      <ul class="nav nav-pills flex-column">
-        <li class="nav-item active">
-        
-<!--a class for the <a> links isnt needed -->
-          <a href="#uno" >Lorem.</a>
-        </li>
-        <li class="nav-item">
-          <a href="#due">Lorem.</a>
-        </li>
-        <li class="nav-item">
-          ...
-        </li>
-        
-//we just added margin to group the nav-item
-        <li class="nav-item ms-3">
-          <a href="#cinc">margin items</a>
-        </li>
-      </ul>
-    </nav>
-  </menu>
-</div>
-
-//here we have the scroll content, each section has a menu-item correspondant
-<div class="pure-u-1-2 contenuto" id="serve">
-  <div>
-    <section>
-      <h2 id="uno">Id on title</h2>
-      <p>
-        So, the text on menu click is based on href="#" link and id on title
-      </p>
-    </section>
-    <section>
-      ...
-    </section>
-
-  </div>
-</div>
-
-</div>
-
-```
-
-For the Javascript we need to use the .**active** bootsrap class on click:
-
-```
-//we select each menu-item 
-
-let eccoli = document.querySelectorAll("menu li")
-
-//foreach on click we REMOVE the active class from each one, then we add ONLY to the clicked element
-eccoli.forEach(i=>{
-  i.onclick = (()=>{
-      eccoli.forEach(o=> o.classList.remove("active"))
-      i.classList.add("active")
-  })
-})
-
-```
-
-On scroll you need to use [**\_\_.getBoundingClientRect().y**](https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref\_element\_getboundingclientrect):
-
-```
-//We don't scroll the entire page so we need a selector for the scroll section we use
-let scrolling = document.getElementById("serve")
-
-//and we need another one for the singular paragraphs
-let singoli = document.querySelectorAll("#serve section")
-
-scrolling.addEventListener("scroll", ()=>{
-
-//while we scroll the selected for each of the paragraph we get the position relative to the viewpoint
-  singoli.forEach((x,y)=>{
-    let space = x.getBoundingClientRect().y
-
-//we check x.getBoundingClientRect at the start and at the end of the scroll to calculate
-//the space for each paragraèh using also the window.innerHeight
-    if(space < window.innerHeight - 456){
-    
-//here we just do the same as with the click function
-      eccoli.forEach( z=> z.classList.remove("active"))
-      eccoli[y].classList.add("active")
-    }
-  })
-})
-
-```
-
-### Toast and pop-up messages
-
-With toast, we can add close-ready messages to the page:
-
-```
-//Toast structure is similar to card
-
-<div class="toast-container position-fixed bottom-0 end-0 me-3 mb-3">
-//to keep the toast fixed on the border of the page we just need position-fixed, it needs
-//a coordinates to be visible, bottom/start/end/top
-
-  <div class="toast show hide" id="tuno">
-//we include the .hide for js toggle later, toaster-header will have a bottom-border from body
-  
-      <div class="toast-header">
-        <h5>This is the left </h5>
-        <button class="btn-close ms-auto" id="ecco1"></button>
-      </div>
-//like organizing grid in the toast
-      <div class="toast-body pure-g">
-        <div class="pure-u-1-3">
-          <img src="https://bit.ly/3tvUtWn" class="pure-img">
-        </div>
-        <div class="pure-u-2-3 p-3">
-          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto esse maiores, id a delectus quisquam!</p>
-        </div>
-      </div>
- 
-  </div>
-</div>
-
-```
-
-For the JS we can toggle the .**show** .**hide:**
-
-```
-//with .toggle we can add .show if absent OR remove it if present
-let ecco = document.getElementById("ecco")
-let ecco1 = document.getElementById("ecco1")
-
-function hiding(dele){
-  dele.classList.toggle("show")
-}
-
-ecco1.onclick=(()=>{
-  hiding(ecco)
-})
-
-```
+**1**
 
 ### Responsive navbar with Toggle button
 
