@@ -633,16 +633,7 @@ We can use **external buttons** to **close** a toast:
     close 
   </button>
 </div>
-
 ```
-
-1
-
-1
-
-1
-
-1
 
 ### Bootstrap offcanvas&#x20;
 
@@ -671,354 +662,229 @@ While using **offcanvas** and **offcanvas-(position)** on the content.
 
 ```
 
-![](../.gitbook/assets/SIDEBAR.PNG)
+![sidebar on click](../.gitbook/assets/SIDEBAR.PNG)
 
-**1**
+### Responsive bootstrap navbar and toggle button
 
-**1**
+1
 
-**1**
+1
 
-### Responsive navbar with Toggle button
+1
 
-Check the final result:
+### Bootstrap complete responsive page
 
-![](<../.gitbook/assets/Navbardrodowning (1).PNG>)
+Here's a complete **triple-layout** bootstrap page:
+
+{% embed url="https://codepen.io/misterlinux/pen/zYRVoMe?editors=1100" %}
+
+For the **layout** , we nest the **bootstrap** rows:
+
+<details>
+
+<summary>Triple layout guide</summary>
+
+We create a **col-2 sidebar**, that's gonna become a **top navbar** on a small screen.
+
+Then we nest 2 other **columns** on the right side to then make them into full rows on smaller screens.
 
 ```
-//navbar includes the justify-content-between, while bg gives it the background-color
+//we use breakpoints to choose layouts
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 col-sm-2 bg-warning sidebar">
 
-<nav class="navbar bg-warning">
-        <div>
-//navbar-brand will be thicker and no text-link decoration
-            <a href="" class="navbar-brand ps-3">Lorem.</a>
         </div>
+        <div class="col-12 col-sm-10">
 
-//the navbar will be not displayed on smaller screens
-        <div class="d-sm-flex d-none align-items-center">
-//align-items in the container class is to vertically align the children tags
+            <div class="row">
+                <div class="col-12 col-lg-4 bg-danger toppo">
 
-            <div class="mx-1">simao.</div>
-            <div class="pure-menu-item pure-menu-has-children pure-menu-allow-hover pe-0">
-                <a href="" class="pure-menu-link">SCROLL </a>
-                <ul class="pure-menu-children">
-                    <li class="pure-menu-item">
-                        <a href="" class="pure-menu-link">daje</a>
-                    </li>
-                    <li class="pure-menu-item">
-                        <a href="" class="pure-menu-link">daje</a>
-                    </li>
-                    <li class="pure-menu-item">
-                        <a href="" class="pure-menu-link">allargato may</a>
-                    </li>
-                </ul>
-            </div>
-    
-//In a navbar we need to have the .dropdown class in the container tag
-            <div class=" dropdown">
-                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">Tutorials</a>
-                <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#">Microsoft</a>
-                    <a class="dropdown-item" href="#">JAVA</a>
-                    <a class="dropdown-item" href="#">Database</a>
+                </div>
+                <div class="col-12 col-lg-8 bg-info contenuto">
+
                 </div>
             </div>
 
-//for form we will need d-flex in the container tag
-            <div>
-                <form class="pure-form d-flex">
-                    <input type="text" class="pure-input" placeholder="search">
-                    <button class="pure-button btn-sm">try </button>
-                </form>
-            </div>
+        </div>
+    </div>
+</div>
+```
+
+Remember to use **vh** for the height of different layout components.
+
+```
+//to cover the entire screen height 100%/vh
+.sidebar{
+    height: 100vh;
+}
+
+@media only screen and (max-width: 950px) {
+    .toppo{
+        height: 30vh;
+    }
     
-        </div>
+    .contenuto{
+        height: 70vh;
+    }
+}
+
+@media only screen and (max-width: 550px) {
+    .sidebar{
+        height: 15vh;
+    }
+    .toppo{
+        height: 20vh;
+    }
+    
+    .contenuto{
+        height: 55vh;
+    }
+}
 
 ```
 
-We won't use Navbar-expand- and instead will create a new **navbar-toggle:**
+</details>
 
-![](../.gitbook/assets/Navbartoggled.PNG)
+<figure><img src="../.gitbook/assets/tripleboot.png" alt=""><figcaption><p>small, medium and large screen layout</p></figcaption></figure>
 
-For the code:
+We used **overflow** and **vh** for the fixed scroll container.
 
-```
-//for it to be visible only on a small screen we d-block AND d-sm-none
+<details>
 
-        <div class="d-block d-sm-none">
-            <button class="navbar-toggle" data-bs-toggle="collapse" 
-            data-bs-target="#tuo">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        </div>
+<summary>Fixed scroll container guide</summary>
 
-//the .collapse class keeps the content hidden until the data-bs-toggle="collapse is clicked
-//and the navbar-collapse has the id = data-bs-target
-            <div class="navbar-collapse collapse text-dark" id="tuo">
-            <ul class="navbar-nav text-center">
-                <li class="nav-item"><a href="" class="nav-link"> COSETTE </a></li>
-                <li class="nav-item"><a href="" class="nav-link">Ipsam?</a></li>
-                <li class="nav-item"><a href="" class="nav-link">Quo.</a></li>
-                <li class=" mx-auto ">
-                    <form class="pure-form d-flex">
-                        <input type="text" class="pure-input" placeholder="search">
-                        <button class="pure-button">try </button>
-                    </form>
-                </li>
-            </ul>
-        </div>  
-</nav>
+We don't need to use position-fixed, we need an **overflow-y** and a **vh** to cover **100**% of the screen.
 
 ```
+//we create an image + text column
+<div class="col-lg-4 listato">
+    
+  <div class="row mt-2 border-bottom border-warning">
+      <div class="col-2 mt-2">
+          <img width="56" height="56" class="me-2 my-auto" src="https://bit.ly/3LkXD5I">
+      </div>
+      <div class="col-10 pe-0">
+          <h6 class="email-name mb-0"> Hello from Toronto </h6>
+          <p class="email-subject mb-0"> Article by <a href="" class="email-author">Minimister </a> about 
+              <button class="btn btn-success btn-sm text-sm"> CSS </button> & 
+              <button class="btn btn-danger btn-sm"> Js </button>
+          </p>
+          <p class="email-desc">
+              Hey, I just wanted to check in with you from Toronto. I got here earlier today.
+          </p>
+      </div>
+  </div>
 
-### Complete responsive page
+  <div class="row mt-2 border-bottom border-warning">
+      <div class="col-2 mt-2">
+        ...
+      </div>
+      <div class="col-10 pe-0">
+        ...
+      </div>
+  </div>
 
-Check this exercise:
+  <div class="row mt-2 border-bottom border-warning">
+      <div class="col-2 mt-2">
+        ...
+      </div>
+      <div class="col-10 pe-0">
+        ...
+      </div>
+  </div>
 
-{% embed url="https://codepen.io/misterlinux/pen/zYRVoMe" %}
-
-About the responsive Layout:
-
-```
-//The HTML structure is based of:
-
-<div class="pure-g">
-
-    <div id="nav" class="pure-u-1">
-    </div>
-
-    <div id="list" class="pure-u-1">
-        <p>column is here</p>
-    </div>
-
-    <div id="main" class="pure-u-1">
-        <p>main text is here</p>
-    </div>
 </div>
 
 ```
 
-{% tabs %}
-{% tab title="Mobile" %}
-![](../.gitbook/assets/ONeof1.PNG)
-
-The CSS code is:
+On the **CSS**:
 
 ```
-// The Nav needs width/height and no position
-
-#nav{
-    background-color: orange;
-    height: auto;
-    width: 100%;
+.listato{
+    max-height: 100vh;
+    overflow-y: scroll;
 }
-
-```
-{% endtab %}
-
-{% tab title="MD creen" %}
-![](../.gitbook/assets/Oneof2.PNG)
-
-For CSS we:
-
-```
-//#nav, #list and #main will have fixed position, overflow is for the scrollable content og List
-
-#nav, #list, #main {
-    position: fixed;
-    overflow: auto;
-}
-
-//with height 100% we occupy the entire page with sidenav
-#nav {
-    width: 9.5em;
-    height: 100%;
-}
-
-//the margin is the width occupied by the sidebar
-#list {
-    margin-left: 9.5em;
-    width: 90% ;
-    height: 33%; 
-    border-bottom: 1px solid #ddd;
-}
-
-//is top-position is the height occupied by the #list, we need bottom if we want it to cover the Y space
-//and we include the sidenav margin
-#main {
-    top: 33%;
-    bottom: 0; 
-    left: 9.5em;
-    background-color: violet;
-}
-
-```
-{% endtab %}
-
-{% tab title="Lg screen" %}
-![](../.gitbook/assets/Oneof3.PNG)
-
-For the large screen CSS:
-
-```
-//we make columns with height
-
-#list {
-    width: 22em;
-    height: 100%;
-    border-right: 1px solid #ddd;
-}
-
-//we use static position to avoid the previous media-query positioning
-#main {
-    position: static;
-    margin-left: 30em;
-    bottom: 0;
-}
-
-```
-{% endtab %}
-{% endtabs %}
-
-About every single layout now:
-
-![](../.gitbook/assets/StickyIMAGE.PNG)
-
-```
-//For the sticky scrollable image:
-
-<div class="splash-container d-block d-sm-none w-100">
-    <div class="splash text-center text-dark">
-        <h1 class="splash-head py-2">Big Bold Text</h1>
-        <p class="splash-subhead mb-1">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        </p>
-        <a href="http://purecss.io" class="btn btn-primary">Get Started</a>
-    </div>
-</div>
-
-//height is for the image BUT the space is given by the margin between fixed elements
-.splash-container {
-    background: url("https://..");
-    height: 54%;
-    position: fixed !important;
-}
-//we can create the space with absolute and top position
-#main{
-    position: absolute;
-    top: 46%;
-}
-
-//For the overlay-image content we need absolute and left/right position to center it
-//width reduces the space occupied by the content to avoid spreading with margin
-
-.splash {
-    width: 55%;
-    margin: auto;
-    position: absolute;
-    top: 100px;
-    left: 0; 
-    right: 0;
-}
-
 ```
 
-For the image grid with bottom-shadow + author link and Footer:
+</details>
 
-![](../.gitbook/assets/IMAGEFOOTER.PNG)
+<figure><img src="../.gitbook/assets/fixedscroll.PNG" alt=""><figcaption><p>Scrollable column on 100vh </p></figcaption></figure>
+
+For the **image rows** with links on the smaller screen, we used **img-fluid**, (fixed) **height**, and position **absolute**:
+
+<details>
+
+<summary>Images rows guide</summary>
+
+We use **img-fluid** and **height** to keep images' size responsive.
 
 ```
-//for each row of images we use the pureCSS grid
-//To keep different images at the same height we add to use extra CSS inside the img tag
-
-<div class="image pure-u-1-3">
+<div class="col-4 p-0 image">
     <a href="">
-      <img class="pure-img riga" src="https://..">
+        <img class="img-fluid w-100 riga" src="https://24.media.tumblr.com/d6b9403c704c3e5aa1725c106e8a9430/tumblr_mvyxd9PUpZ1st5lhmo1_1280.jpg">
     </a>
 
-    <aside><span>by
-        <a href="http://..">
-          Dillon McIntosh
-        </a></span>
+    <aside> 
+        <span>by
+          <a href="http://www.dillonmcintosh.tumblr.com/" class="text-white">
+            Dillon McIntosh
+          </a>
+        </span>
     </aside>
 </div>
 
-<div class="texto pure-u-2-3 p-3 riga">
-    <h4>This is the odd space </h4>
-    <p>A collection of beautiful photos gathered from Unsplash.com.</p>
+<div class="col-8 p-2 bg-dark text-warning riga">
+    <h5>This is the odd space </h5>
+    <p>
+        A collection of beautiful photos gathered from Unsplash.com.
+    </p>
 </div>
 
-//first we need each image to be relative (to then apply the effect)
+```
+
+For the **absolute**-positon **text** on the **images**:
+
+```
 .image{
     position: relative;
 }
-//in case we want to stretch images in the grid layout
-.image img{
-    width: 100%;
+
+.image .riga{
+    height: 150px;
 }
 
-//with position absolute we can be inside the image, bottom and text align give the text position
-//while width 100% will cover the entire single image
 .image aside {
     position: absolute;
     bottom: 0;
+
     padding: 0.5em 0.5em;
     color: white;
     width: 100%;
     font-size: 80%;
     text-align: right;
 
-/*the shadow can be done with abackground, the top(white) from the black 90% down*/
-    background: -webkit-linear-gradient(top,#ffffff00 0%,rgba(12,2,2,0.7) 100%);
+    background: -webkit-linear-gradient(
+        top,
+        #ffffff00 0%,
+        rgba(12,2,2,0.7) 100%
+    );
 }
+```
 
-//For the footer
+</details>
 
-<div class="footer text-center bg-dark p-2 w-100">
-  <div class="pure-u-1">
-      View the source of this layout to learn more. Made with love by the Pure
-      Team.
+<figure><img src="../.gitbook/assets/rowbootimages.PNG" alt=""><figcaption><p>responsive row images with absolute text</p></figcaption></figure>
+
+For the **footer** to cover the entire width, we need an extra **row** with a single **col-12**.
+
+```
+//for position-fixed we need absolute position bottom-0
+<div class="row">
+  <div class="col-12 bg-dark text-warning p-2 text-center position-fixed bottom-0 " style="font-size: 70%;">
+    View the source of this layout to learn more. Made with love by the Pure Team.
   </div>
 </div>
-
-//fixed position and bottom will stick the footer and not be moved by scroll
-.footer {
-    color: orange;
-    font-size: 70%;
-    bottom: 0;
-    position: fixed;
-}
-
 ```
 
-For the **scrollable messages** in the **MD** screen:
-
-![](../.gitbook/assets/Scrollable-messages.PNG)
-
-```
-// we used CSS on the images and grid on the text
-
-<div class="px-3 py-2 border-bottom border-warning email-item-selected pure-g">
-    <div class="pure-u">
-        <img width="64" height="64" class="me-2" src="https://bit.ly/3LkXD5I">
-    </div>
-
-    <div class="pure-u-3-4">
-        <h6 class="email-name mb-0"> Hello from Toronto </h6>
-        <p class="email-subject mb-0"> Article by 
-            <a class="email-author">Minimister </a> about 
-            <button class="btn btn-success btn-sm text-sm"> CSS </button> & 
-            <button class="brn btn-danger btn-sm"> Js </button>
-        </p>
-        <p class="email-desc">
-            Hey, I just wanted to check in with you from Toronto. I got here earlier today.
-        </p>
-    </div>
-</div>
-
-//The email-name is UpperCase , and email-subject is font-size 90%, for btn we just added
-.btn-danger:hover{
-    text-decoration: underline;
-}
-
-```
+<figure><img src="../.gitbook/assets/footer.PNG" alt=""><figcaption><p>fixed-position footer </p></figcaption></figure>
