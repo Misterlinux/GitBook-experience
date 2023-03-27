@@ -1,7 +1,7 @@
-# Boostrap 2 Carousel, image overlay and dropdown
+# Boostrap 2 Cards,Carousel, image overlay and dropdown
 
-* [Image overlay & Carousel](boostrap-2-carousel-image-overlay-and-dropdown.md#image-overlay-and-carousel)
-* [Dropdown & Extra buttons](boostrap-2-carousel-image-overlay-and-dropdown.md#dropdown-breadcrumbs-and-button-extra-effects)
+* [Image overlay & Carousel](boostrap-2-cards-carousel-image-overlay-and-dropdown.md#image-overlay-and-carousel)
+* [Dropdown & Extra buttons](boostrap-2-cards-carousel-image-overlay-and-dropdown.md#dropdown-breadcrumbs-and-button-extra-effects)
 
 ### Cards and color/text customization
 
@@ -99,6 +99,21 @@ Check also the **bootstrap classes colors**:
 </details>
 
 ![4 cards in grid, space padding and colors](../.gitbook/assets/CARTA.PNG)
+
+Bootstrap **borders** can use **border-1/5** for width, **border-top/start** for position, and **border-top-0** to hide one margin.
+
+```
+//for border-top-0 we need border to show the other orderr
+<div class="border-bottom border-warning border-3">
+  Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dignissimos, 
+</div>
+
+<div class="border-top-0 border border-danger border-5">
+  Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dignissimos, 
+</div>
+```
+
+<figure><img src="../.gitbook/assets/borderbootstrap.PNG" alt=""><figcaption><p>margin positions, width and colors</p></figcaption></figure>
 
 Or we could use **Bootstrap W(idth)** and wrap flex:
 

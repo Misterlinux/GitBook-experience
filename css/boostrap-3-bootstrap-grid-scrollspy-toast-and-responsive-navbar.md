@@ -1,9 +1,9 @@
-# Boostrap 3
+# Boostrap 3 Bootstrap grid, Scrollspy, Toast and responsive navbar
 
-* [ScrollSpy](boostrap-3.md#scrollspy-implementation)
-* [Toast & Pop-up](boostrap-3.md#toast-and-pop-up-messages)
-* [Responsive and toggle Navbar](boostrap-3.md#responsive-navbar-with-toggle-button)
-* [Complete responsive page](boostrap-3.md#complete-responsive-page)
+* [ScrollSpy](boostrap-3-bootstrap-grid-scrollspy-toast-and-responsive-navbar.md#scrollspy-implementation)
+* [Toast & Pop-up](boostrap-3-bootstrap-grid-scrollspy-toast-and-responsive-navbar.md#toast-and-pop-up-messages)
+* [Responsive and toggle Navbar](boostrap-3-bootstrap-grid-scrollspy-toast-and-responsive-navbar.md#responsive-bootstrap-navbar-and-toggle-button)
+* [Complete responsive page](boostrap-3-bootstrap-grid-scrollspy-toast-and-responsive-navbar.md#complete-responsive-page)
 
 The **bootstrap grid** layout is based on flexbox, it uses **container**, **row**, and **col**(uns).
 
@@ -30,7 +30,6 @@ The bootstrap **col**umns implement media query **breakpoints** using **sm**,**m
     
   </div>
 </div>
-
 ```
 
 <figure><img src="../.gitbook/assets/bootstrap1.png" alt=""><figcaption><p>Grid columns on md and not-md screen</p></figcaption></figure>
@@ -192,7 +191,7 @@ We can use **m**argin on **breakpoints**, but we need to nullify it first.
 
 <figure><img src="../.gitbook/assets/marginbreak.png" alt=""><figcaption><p>mr-md-auto and ml auto on media query</p></figcaption></figure>
 
-We can use **offset** to move them by column **units** to the right.
+We can use **offset** to move them by column **units** to the **right**.
 
 <details>
 
@@ -666,11 +665,138 @@ While using **offcanvas** and **offcanvas-(position)** on the content.
 
 ### Responsive bootstrap navbar and toggle button
 
-1
+The responsive navigation **navbar** bootstrap component can implement **navbar-brand**, **navbar-collapse** content, and **input-groups**.
 
-1
+We implement the **responsive toggler-button** using **navbar-expand**.
 
-1
+<details>
+
+<summary>Responsive navbar with input group guide</summary>
+
+We use **navbar-expand-** on the nav to **expand** the **nav-items** over md breakpoint and **collapse** them when below.
+
+When **collapse**d we display the **navbar-toggler** button, which **data-bs-target** the **navbar-collapse** collapsed content using **data-bs-toggle="collapse".**
+
+For the navbar content, we use **navbar-nav> nav-item> nav-link.**
+
+```
+//we also need a container-fluid as an added container for the margins
+
+<nav class="navbar navbar-expand-md bg-primary navbar-dark">
+    <div class="container-fluid">
+
+        <a href="" class="navbar-brand">Titolo</a>
+
+        <button class="navbar-toggler" data-bs-toggle="collapse" 
+                data-bs-target="#primo">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="primo">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a href="" class="nav-link">Element </a>
+                </li>
+                <li class="nav-item">
+                    <a href="" class="nav-link">Element </a>
+                </li>
+                <li class="nav-item">
+                    <a href="" class="nav-link">Element </a>
+                </li>
+            </ul>
+
+            <div class="input-group w-50">
+                <span class="input-group-text">Text</span>
+                <input type="text" class="form-control"></input>
+                <button class="btn btn-outline-warning">Change</button>
+            </div>
+        </div>
+
+    </div>
+</nav>
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/basiccollapse.png" alt=""><figcaption><p><strong>navbar-expand</strong> and <strong>navbar-collapse</strong></p></figcaption></figure>
+
+We can implement **dropdown**, **navbar-brand** images,**overflow-y,** and **multiple collapse** containers to the navbar.
+
+<details>
+
+<summary>Dropdown and set height navbar guide</summary>
+
+On the **navbar-collapse** we add **navbar-nav-scroll** and **style="--bs-scroll-height: 120px",** this set height scroll will work on the toggle content.
+
+```
+//The set height/width on the navbar-brand <img> and align with the text
+<nav class="navbar navbar-expand-md bg-warning">
+  <div class="container-fluid">
+    <a href="" class="navbar-brand">
+      <img class="align-text-top" width="30" height="24" src="https://cdn-icons-png.flaticon.com/512/18/18609.png">
+      Walter 
+    </a>
+    ...
+    <div class="navbar-collapse collapse mt-2" id="noor">
+      <ul class="navbar-nav ms-auto navbar-nav-scroll" style="--bs-scroll-height: 120px">
+
+        <li class="nav-item">
+          <a href="" class="nav-link">
+              item
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="" class="nav-link">
+              item
+          </a>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+</nav>
+```
+
+For a **dropdown nav-item** on the navbar-nav we:
+
+```
+//remember that dropdown-item goes in the <A>
+
+<li class="nav-item dropdown">
+  <a href="" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"> item </a>
+  
+  <ul class="dropdown-menu">
+    <li><a href="" class="dropdown-item">Farina </a></li>
+    <li><hr class="dropdown-divider"> </li>
+    <li><a href="" class="dropdown-item">Farina </a></li>
+    <li><a href="" class="dropdown-item">KFC </a></li>
+  </ul>
+</li>
+```
+
+We can create **multiple collapse** container by using the **same ID**
+
+```
+//we make it appear at the bottom and the transition is the same
+<div class="collapse position-fixed bottom-0 w-100" id="noor">
+  <div class="bg-success text-white p-1">
+    <h1>Title of video</h1>
+    <p class="m-0">This is at the bottom</p>
+  </div>
+</div>
+```
+
+For the **divider line** in the dropdown we:
+
+```
+<li><hr class="dropdown-divider"></li>
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/navbarcollapse2.png" alt=""><figcaption><p>expanded navbar with dropdown and multiple collapsed</p></figcaption></figure>
+
+We set the navbar **\<nav>** position using **fixed-top/bottom**, **sticky-top/bottom.**
 
 ### Bootstrap complete responsive page
 
