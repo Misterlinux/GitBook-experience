@@ -18,6 +18,70 @@ npx create-react-app (name of the app)
 
 **React** is a _javascript library_ used for user interface, based on single-role **components**.
 
+We **render DOM** elements in the **React components** by **abstracting** HTML tags using **jsx**.
+
+<details>
+
+<summary>Render React DOM elements guide</summary>
+
+With Javascript, we needed to createElement, content, a selector, and then **render**:
+
+```
+<script type="text/javascript">
+  var divNode = document.createElement('div');
+  divNode.innerText = 'Hello World';
+
+  var rootElement = document.querySelector('#root');
+  rootElement.appendChild(divNode);
+</script>
+
+```
+
+On **React** we can:
+
+```
+const element = React.createElement("div", {
+  children: "Hello World",
+});
+
+const rootElement = document.querySelector("#root");
+ReactDOM.render(element, rootElement);
+
+```
+
+**JSX** is syntax sugar used to shortcut the createElement:
+
+```
+const element = <div>Hello World</div>;
+
+const rootElement = document.querySelector("#root");
+ReactDOM.render(element, rootElement);
+```
+
+Then we implement it on **components**:
+
+```
+import React from "react";
+import ReactDOM from "react-dom";
+
+function HelloWorld() {
+  return <div>Hello World</div>;
+}
+
+export default Base
+
+//we will use the root in App.js
+const root = ReactDOM.createRoot(document.getElementById('root'));
+```
+
+</details>
+
+1
+
+1
+
+1
+
 1
 
 1
