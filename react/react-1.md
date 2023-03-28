@@ -76,7 +76,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 </details>
 
-1
+A component needs to import React and can reference multiple components, called child components, but can export only one component.
 
 1
 
