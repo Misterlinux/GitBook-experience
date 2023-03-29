@@ -76,15 +76,104 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 </details>
 
-A component needs to import React and can reference multiple components, called child components, but can export only one component.
+A **component** needs to **import** React and can reference multiple components, called child components, but can export only one.
 
-1
+```
+//components are shortened versions of <Primo> </Primo> to put code in-between
+//we can use Arrow functions for the componeets
+import React from 'react';
 
-1
+const Primo =() =>{
+  return(
+    <div>
+      <h1> first component
+    </div>
+  )
+}
 
-1
+const Secondo =() =>{
+  return(
+    <div>
+      <h2>Second component</h2>
+    </div>
+  )
+}
 
-1
+const App =() =>{
+  return(
+    <div>
+      <Primo />
+      <Secondo />
+
+    </div>
+  )
+}
+
+export default App;
+```
+
+We use **CamelCase** for **component names** to differentiate from default HTML tags.
+
+On **JSX** we can use _javascript expressions_ using **{}**:
+
+<details>
+
+<summary>React javascript expression guide</summary>
+
+We put **javascript** before the **return** of the component.
+
+```
+//we can work with arrays, methods and objects
+const Second =() =>{
+  const linea= ["uno", "molti", "terzi"]
+
+  const oggetto= {
+    soggetto: "nome",
+    predicato: 12_000
+  }
+  
+  return(
+     <div>
+       This is a sum: {1 +2 +3}        //6
+       molti: {linea.join(" / ") }     //uno / molti / terzi
+       two object {oggetto.soggetto} and {oggetto.predicato} //nome and 12000
+     </div>
+  )
+}
+```
+
+We can invoke **functions and render loops**:
+
+```
+const Primo =() ={
+
+  function object(zona){
+    return zona.capital + " and " + zona.province
+  }
+  const area={
+    capital: "lichsteiner",
+    province: "vicini"
+  }
+  const serie= ["meant", 23, "to be"]
+
+  return(
+    <div>
+      We invoke the function: {object(area)}  //lichsteiner and vicini
+      <ul>
+        {
+          serie.map((x) =>{
+            return(                          
+              <li>The element is: {x} </li>  //The element is: meant 
+            )
+          })
+        }
+      </ul>
+    </div>
+  )
+}
+```
+
+</details>
 
 1
 
