@@ -175,6 +175,75 @@ const Primo =() ={
 
 </details>
 
+### React Props properties
+
+Props are **arguments** passed into React **components.**
+
+```
+//we use it when importing/exporting components
+//we declare props argument key and THEN we add properties
+
+const Basic= (props) =>{
+  return(
+    <div>
+        We use the props here: {props.name}
+    </div>
+  )
+}
+
+export default Basic
+
+//The property values change depending on the component which is used
+import Base from './components/Basso'
+
+const App= () =>{
+  return(
+    <Base name="Mozafar" />    //We use the props here: Mozafar
+  )
+}
+
+export default App;
+```
+
+<details>
+
+<summary>Basic props and javascript expression</summary>
+
+We can edit the **props** property using **javascript expressions**:
+
+```
+//we export the props component with expressions
+const Base= (props) =>{
+  console.log(props)
+
+  return(
+    <div id={ "numero-" + props.numba } >
+      The name is {props.name} and number {props.numba}
+      <div>nuovo valore: {props.numba + 12} </div>
+    </div>
+  )
+}
+
+export default Base
+
+//and properties values can be expressions themselves
+import Base1 from './components/Basso'
+
+let anni= Math.floor( Math.random()*100 )
+const App= () =>{
+                                           //console.log(
+  return(                                  //{name: "Mozafar", numba: 5} )
+    <div>                                  //<div id="numero-5">
+      <Base1 name="Mozafar" numba={anni}/> //The name is Mozafar and number 5
+    </div>                                 //nuovo valore: 17
+  )
+}
+
+export default App;
+```
+
+</details>
+
 1
 
 1

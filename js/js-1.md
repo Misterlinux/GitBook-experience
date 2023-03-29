@@ -6,9 +6,9 @@
 
 ### Var, const, and functions.
 
-&#x20;**Javascript** is an **Object-Oriented language** _based_ on **Prototypes** (not on classes )
+**Javascript** is an **Object-Oriented language** _based_ on **Prototypes** (not on classes )
 
-**var, const and let** is how we store data in **keywords:**
+**var, const, and let** are **keywords** used to _store data_:
 
 {% tabs %}
 {% tab title="var, let" %}
@@ -17,14 +17,11 @@ let uno = 'coming'
 uno = 'The javascript is ' + uno
 
 //we use = as an assign operator for the keyword uno and store the string "coming"
-//we can then modify the var,let by repeatng the assign
+//we modify the var,let by repeating the assign
 
-console.log(uno)
-/*result*/
+console.log(uno)        //"The javascript is coming"
 
-"The javascript is coming"
-
-//and we can declare multiple let
+//for multiple let we
 let primo= 1, secondo= 2, terzo= 3;
 
 //ALSO, we can only use _ or - on let names
@@ -38,7 +35,7 @@ Data stored in **const** cannot be re-assigned with =;
 const UNO = 20
 
 //const UNO = UNO +3 will result in "constant value error"
-//but you can still change it momentarely
+//but you can still change it momentarily
 
 console.log(UNO + 3)
 //will return 23
@@ -46,7 +43,7 @@ console.log(UNO + 3)
 {% endtab %}
 {% endtabs %}
 
-**Functions** are blocks of code used to  _perform tasks when invoked:_
+**Functions** are blocks of code used to _perform tasks when invoked:_
 
 {% tabs %}
 {% tab title="function()" %}
@@ -58,8 +55,7 @@ function sum(){
 }
 
 //after declaring the function with its keyword we Invoke it
-sum()
-// result 27
+sum()        //27
 ```
 
 **return will stop execution** and return values, there are no _implicit_ returns in javascript.
@@ -93,7 +89,7 @@ const addUpTwoNumbers = (num1, num2) => ({ uno:num1, due:num2});
 {% endtab %}
 {% endtabs %}
 
-In Javascript **** all **functions are object methods**, be it from constructor or global object.
+In Javascript, **** all **functions are object methods**, be it from constructor or global object.
 
 **Parameters** are values that are passed to the function and can be used locally in the function:
 
@@ -120,7 +116,6 @@ lot(4, 8);
 //Invoking the lot(num1,num2) function 
 
 lot(5, 8);    //assigning the num1, num2 Parameters the 5,8 Arguments
-
 ```
 
 We can also implement **function composition**, using the return as an argument:
@@ -138,7 +133,6 @@ function translate2d(dx, dy) {
 const move2x = translate2d(2, 0);    //move2x is the returned function 
 const result = move2x(4, 8);         //result is the returned operation result
 console.log( result )                //[6, 8]
-
 ```
 
 We can use the "parent" function to _store the_ **parameter**:
@@ -176,10 +170,9 @@ memo1(5, 5)        //[5,5]
 memo1(5, 5)        //[5,5] "already casted"
 
 //if the arguments are repeated we just re-use the saved result and add a string
-
 ```
 
-We can also implement the _spread operator_ for function returns and have _multiple parameters function_:
+We can also implement the _**spread operator**_ for function returns and have _multiple parameters function_:
 
 ```
 //we first create the 2 parameter functions
