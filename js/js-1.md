@@ -135,11 +135,16 @@ const result = move2x(4, 8);         //result is the returned operation result
 console.log( result )                //[6, 8]
 ```
 
-We can use the "parent" function to _store the_ **parameter**:
+We can use the "parent" function to store **parameters** and **return** values of **nested functions**.
+
+<details>
+
+<summary>Nested functions with function arguments guide</summary>
+
+We can use variables on the parent function to **store return values on multiple invoked functions.**
 
 ```
-//we have a function as parameter and variables declared in the parent function
-
+//we declare the variables but set their value later
 function memoize(f) {
   let preX, preY, preR
   
@@ -154,29 +159,39 @@ function memoize(f) {
   }
 }
 
+```
+
+We pass a **function** (without () so it won't execute) argument as a **parameter**:
+
+```
+//The memo1 stores the f(x,y) which is [5,5]
 function addition(x,y){
   return [x,y]
 }
 
-const memo1 = memoize(adding );      //we pass the function, without the () so it doesnt return yet 
-memo1(5, 5)                          //[5,5] and "already casted" for the first variables
+const memo1 = memoize(adding );      
+memo1(5, 5)                          
+```
 
-//we execute the callback memoize function using the adding function as parameter
-//memo1 has the returned function with the new arguments executing the parameter function
-//we also store the LAST x, y and return in preX, preY, preR
+On repeated arguments we:
 
+```
 memo1(1, 5)        //[1,5]
 memo1(5, 5)        //[5,5]
 memo1(5, 5)        //[5,5] "already casted"
-
-//if the arguments are repeated we just re-use the saved result and add a string
 ```
 
-We can also implement the _**spread operator**_ for function returns and have _multiple parameters function_:
+</details>
+
+We can also implement the _**spread operator**_ for function returns and have _multiple parameter functions._
+
+<details>
+
+<summary>Multi-parameter nested functions guide</summary>
+
+We create **2 different parameter functions,** the f(x,y) array result will be **spread** and then used as a parameter again.
 
 ```
-//we first create the 2 parameter functions
-
 function uni(x,y){
   return [x+3, y+1]
 }
@@ -190,40 +205,24 @@ function composeTransform(f, g) {
     return g(...f(x, y))
   }
 }
-
-//the spread operator will set the array of results as arguments
-//we will execute FIRST the f(x,y) function THEN use the array results for the SECOND
-
-let tent = composeTransform( uni, dui)
-tent(2,1)                               //[10,6] 
-
-let tent1 = composeTransform( dui, uni)
-tent1(2,1)                             //[7,4]
-
-//the order of the functions will apply different operations and results
-
-//the passages for the spread operator are
-
-  const first = f(x, y)
-  const second= g(first[0], first[1])
-  return second
-  
-//then we use the spread operator on the returned array
-
-  const first = f(x, y)
-  return g(...first)
-  
-//to end in 
-
-  return g(...f(x, y))
-  
 ```
 
-We can implement **Variables** as functions when using **function combination**:
+The **order** of the parameters **functions** changes the result:
+
+```
+let tent = composeTransform( uni, dui)  //[[2+3]*2 , [1+1]*3] 
+tent(2,1)                               //[10,6] 
+
+let tent1 = composeTransform( dui, uni)//[[2*2]+3, [1*3]+1 ] 
+tent1(2,1)                             //[7,4]
+```
+
+</details>
+
+We can implement **Variables** as functions when using **function combinations**:
 
 ```
 //We create 2 predicate functions 
-
 function negative(x) {
     return x < 0;
 }
@@ -231,42 +230,29 @@ function positive(y) {
     return y > 0;
 }
 
-//then we create the function combining the 2 as function, 
-function or(p1, p2) {
-
-//here we pass the variable argument
+//we use them as parameter functions
+function oppure(p1, p2) {
     return function(x) {
         return p1(x) || p2(x);
     }
 }
 
-//a variable, if the result of a function, can have an argument, 
-let nonzero = or(negative, positive);
-
-nonzero(-5)         //(negative) true || (positive) false = true
-
-//the or function has function as arguments, THEN we execute the argument functions
-//with the (-5) argument p1(x) p2(x), EVEN if a variable can have arguments.
-
+let nonzero = oppure(negative, positive);
+nonzero(-5)         //(negative) true || (positive) false == true
 ```
 
-We can even **nest** more functions **in the predicates**:
+We can **nest** more **predicate functions.**
+
+<details>
+
+<summary>Multiple nested predicate functions guide</summary>
+
+We create **predicates** about string length, we include a **different parameter (y)** that won't be in the parameter function but in the _parameter of the variable that invokes the parameter functions_.
 
 ```
-//We are gonna sue strings and length property
-
-//The first parameter (x) is gonna be from islonger("lungo") while the Y is gonna
-//be from the con("quantolungo"), they have different priority
 function islonger(x){
     return function(y){
         return y.length > x.length
-    }
-}
-
-//we can then use the result of a specific function to ! using the variable argument
-function not(p) {
-    return function(x) {
-        return !p(x);
     }
 }
 
@@ -276,25 +262,59 @@ function isshorter(x){
     }
 }
 
+function not(p) {
+    return function(x) {
+        return !p(x);
+    }
+}
+
 function mixend(x1, x2){
     return function(x){
         return x1(x) && x2(x)
     }
 }
 
-//We use the OR for || AND in the second argument we also use && mixend function
-let con= or(not(islonger("lungo")), mixend( isshorter("hint"), not(islonger("allunga") )))
-
-con("quantolungo")    //FALSE COZ islonger() !True || ( isshorter False && islonger !false)
-con("lil")            //TRUE COZ islonger() !False || (true && islonger() !false)
-
+//while using them as parameters functions
+function oppure(p1, p2) {
+    return function(x) {
+        return p1(x) || p2(x);
+    }
+}
 ```
 
-We can also **Interpolate** variables into HTML elements, also using _Ternary Operators_:
+We store the **parameters functions** in a **variable** and then add a parameter to invoke the functions.
+
+```
+//we make the first element the result of islonger() and the second
+//the result of && between isshorter() and not(islonger())
+let con= oppure(
+    not(islonger("lungo")), 
+    mixend( isshorter("hint"), not(islonger("allunga") ))
+)
+
+con("quantolungo") 
+//islonger("lungo") == True ("quantolungo"(y)> lungo(x))
+//not(islonger("lungo") )== False (re-does the function but ! the result)
+//isshorter("hint")== False ("quantolungo"(y)< hint(x) )
+//not(islonger("allunga"))== !True == False
+//Mixend(...) == False && False == False
+//oppure(...) == False || False == False
+
+con("lil")
+//islonger("lungo")== False
+//not(islonger("lungo"))== !false == True
+//isshorter("hint")== True
+//not(islonger("allunga"))== !False == True
+//Mixend(...)== True && True == true
+//oppure(...)== True || True == True
+```
+
+</details>
+
+We can also **Interpolate** variables into HTML elements, also using _**Ternary Operators**_:
 
 ```
 //we can use `` or the +
-
 let greetingStart = "Hallo "
 let name = "dude"
 
@@ -304,25 +324,22 @@ let ecco = greetingStart + ", My name is " + name
 console.log(greeting) / console.log(ecco)     //Hallo , My name is dude
 
 //and for ternary logic we put the function between the ${}
-
 const grade = 95;
-`You have ${grade > 90 ? 'passed' : 'failed'} the exam.` ;
+`You have ${grade > 90 ? 'passed' : 'failed'} the exam.`;  //You have passed the exam
 
-//You have passed the exam
 ```
 
-**Console** is where we run scripts and commands.
+**The console** is where we run scripts and commands.
 
 ### Math Operations, Booleans, and Arrays methods.
 
-Most Math operations work the same in Javascript **+, -, \* and /** following the **Pendas** priority system.
+Most Math operations work the same in Javascript **+, -, \*,** and **/** following the **Pendas** priority system, we use **==** for comparisons (while = is to assign variables values).
 
 ```
 //We can also define pow with:
-3 ** 2 == 9 //will be true
+3 ** 2 == 9 == true
 Math.pow(3,2) == 9
 
-// = is used for assigment while == for comparison
 //and we can get the modulus (the rest after division)
 10 % 3 == 1 ( 3*3 +1 )
 
@@ -331,7 +348,7 @@ Math.pow(3,2) == 9
 20 %= 3 (will be 2)
 ```
 
-We can also perform **Math.()** operations, Math.() is a **Global Built-In** Object for Mathematics, for example **Math.round()**:
+We can also perform **Math.()** operations, Math.() is a **Global Built-In** Object for Mathematics, like **Math.round()**:
 
 ```
 Math.round(12.3) == 12 
@@ -340,7 +357,8 @@ Math.ceil(12.3) == 13
 
 //round() will round up the number based on the decimal
 //ceil() and floor() round up and down without checking the decimal
-//and even numbers like P greek
+
+//ornumbers like P greek
 function degToRad(degrees) {
     return degrees * (Math.PI / 180);
 };
@@ -353,10 +371,10 @@ function radToDeg(rad) {
 //1000000 = 1_000_000
 ```
 
-And in the case of NaN (not a number) we also can have operations:
+And in the case of **NaN (not a number)** we also can have operations:
 
 ```
-//we have the operator isNaN() in case, and NaN isnt === o !== to itself
+//we have the operator isNaN() in case, and NaN isn't === o !== to itself
 
 NaN === NaN;        // false
 Number.NaN === NaN; // false
@@ -378,8 +396,8 @@ var list = [1, 2, 3]
 
 //elements can be edited by their index(starting from 0)
 list[1] = "new" //[1, "new", 3]
-
 list.length == 2 
+
 //strings are considered arrays of letters and so
 "welcomed"[3] == "c" / "welcomed".length == 8
 
@@ -391,85 +409,109 @@ We can check its built-in _methods_ and _properties_ in **its \[\[prototype]] pr
 
 **Methods** on the other hand are **actions** on objects, and they need () because they are function:
 
+<details>
+
+<summary>Array push(), pop(), shift(), unshift() methods guide</summary>
+
+We can use methods on **strings,** and we can **chain** them:
+
 ```
-"  its m i n us ".toUpperCase().trim()
-//to uppercase and remove spaces at start,end
-//"ITS M I N US"
-//And on arrays we have:
+//trim() removes start and end empty spaces
+"  its m i n us ".toUpperCase().trim()    //"ITS M I N US"
+```
 
+For arrays, we can use **push(), pop(), shift()** and **unshift():**
+
+```
 let row = [12]
-row.push(13) == [12,13] //.push() at the end of array
-row.pop() == 13 //pop will cut and return only the last element but not the shortened array
-row.shift() == 12 //will cut and return only the first element in the array
-row.unshift(10, 11) == [10,11,12,13] //will ADD and return the .length of the arrau
+//push adds at the end of the array, and returns array.length
+row.push(13) //row== [12,13] // console.log(row.push(13))== 2
 
-//.splice allows us to precise cut or substitute array elements
+//pop will cut and return ONLY the last element
+row.pop() // row == [12] // console.log(row.pop())== 13
+
+//shift will cut and return the first element of the array
+row.shift() // row== [13] // console.log(row.shift())== 12
+
+//unshift() will ADD at the start of the array 
+row.unshift(10, 11) //row== [10,11,12,13] //console.(row.unshift(10, 11))== 4
+```
+
+We use **.splice( \[starting array index ], cut elements number, elements added )** to substitute **multiple** array elements, remember that the **starting index is included** in the splice.
+
+```
 let longi = [1,2,3,4,5]
-longi.splice(3, 1, "indeed") == [1,2,3,"indeed",5]
+longi.splice(3, 1, "indeed") // longi== [1,2,3,"indeed",5]
+//console.log(longi.splice(3, 1, "indeed"))== [4] //the cut elements
 
-//it goes .splice([index of where to start], number of elements cut, element added)
-longi.splice(1, 2, "we change", "two") == [1,2,"we change","two",5]
-//AND we can just cut content if we dont use the third paramether
+longi.splice(1, 2, "we change", "two") // longi== [1,2,"we change","two",5]
 
-//Others like .includes(), .startsWidth() will return if true/false on the array
-//we can't use Regular expression Regex (/guess/i) here 
-longi.includes(1) == true
+//we can add elements if we cut 0 elements
+longi.splice(2, 0, "new") // longi==[1,2,"new",3,4,5]
 
+//we can cut elements if we don't add any
+longi.splice(3, 2) // longi== [1,2,3]
+
+//OR we can include elements starting from an index using only 1 argument
+longi.splice(1) // longi= [1]
+console.log(longi.splice(1)) == [2,3,4,5]
+
+//we can use it for Capital letters
 let oltre = "minimal"
 oltre[0].toUpperCase() + oltre.splice(1) == Minimal
-//we can ALSO use the .splice(1) to get all the elements from index[1] included
+```
 
-//also we can use it with indexOf() and splice(, 1) to cut a specific element
-carrello.comprati.indexOf( 'Star Ship' )        //["uno", "Star Ship", "tre"] [1]
-carrello.comprati.splice( index, 1 )            //["uno", "tre"]
+Other methods like **.includes()** and **.startsWith()** will return _true/false_:
 
-//also for last, arrays its a .typeof()
+```
+//We can't use Regex expressions here (/guess/i)
+longi.includes(1) == true
+"siamo".startsWith("S") == False
+```
+
+We can use **typeof** to check data type.
+
+```
 typeof longi == arrays
 ```
 
-**Pop()** and **Shift()** can both store values and perform action**:**
+</details>
+
+**Pop()** and **Shift()** can both store values and return **methods:**
 
 ```
-// we cut the first and last element of an array AND splice them in the middle of it
+//we are gonna change its 6,7 with 1,10, while also removing them
+let deck= [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
 deck.splice(deck.length/2, 0, deck.pop(), deck.shift());
+deck ==   [2, 3, 4, 5, 6, 10, 1, 7, 8, 9] 
 
+//we don't cut any elemennt with splice(),we use return .pop() and shift()
 ```
 
-**Splice()** can also ADD elements to an array:
+On arrays, we can **.sort()** and **.reverse()** the array elements order, and also use **.from()** to make **strings into arrays:**
 
-```
-//We put the INDEX we want the new element to be in, and 0
-
-const arringa = ['1', '2', '5', '6'];
-arringa.splice(2, 0, '3');            //['1', '2', '3', '5', '6']
-
-```
-
-More **methods:**
-
-```
-//we can use .sort() to sort array elements alphabetically, and .reverse() for the opposite
+<pre><code>//for strings the order is alphabetical
 let ginn = ["ar","ac", "kr", "qu", "ab", "ri"]
 ginn.sort()            //['ab', 'ac', 'ar', 'kr', 'qu', 'ri']
 ginn.reverse()         //['ri', 'qu', 'kr', 'ar', 'ac', 'ab']
 
-//for numbers its a bit tricky, considering it takes the typo code, you will need a function
-let numeronia = [4,6,8,2,4,1]
-numeronia.sort( (x,y)=> x - y)        //[ 1, 2, 4, 4, 6, 8 ]
+<strong>//numbers use typo code, an extra function needed
+</strong><strong>let numeronia = [4,6,8,2,4,1]
+</strong>numeronia.sort( (x,y)=> x - y)        //[ 1, 2, 4, 4, 6, 8 ]
 numeronia.sort( (x,y)=> y - x)        //[ 8, 6, 4, 4, 2, 1 ]
 
-//strings aren't arrays but you return one with Array.from()
+//strings aren't arrays, so we use .from()
 Array.from("welcomed")    //['w', 'e', 'l','c','o','m','e','d']
-Array.from("welcomed".toUpperCase() ).map( (x)=> "this is the letter " + x )    //['this the letter W',...]
+Array.from("welcomed".toUpperCase() ).map( (x)=> "this is the letter " + x )    
+//['this the letter W',...]
 
-//we can't use Regular expression Regex (/guess/i) here 
-
-```
+</code></pre>
 
 Any function _passed as an argument,_ inside a method, it's a **callback function**:
 
 ```
-//for example teh anonymous functions inside .map()
+//for example the anonymous functions inside .map()
 
 const numbers = [1, 2, 3];
 const numbersDoubled = numbers.map(function (number) {
@@ -498,14 +540,14 @@ let mentorCount = 10;
 var moreStudentsThanMentors = studentCount > mentorCount;
 console.log("The awnser is", moreStudentsThanMentors);     //The awnser is true
  
-//we can set boolean values without ""
+//we can set boolean values without =="True"
 if (htmlLevel > 5){
     cssAndHtmlAbove5 = true;
 }
 
 ```
 
-Booleans, Strings, and Numbers are the most known **primitives,** contrary to _objects_, which are aggregation of properties, primitives are just values, they have no property:
+Booleans, Strings, and Numbers are the most known **primitives,** contrary to _objects_, which are aggregations of properties, **primitives are just values, they have no property:**
 
 ```
 //new String is a constructor, that's why its result is an object
@@ -522,7 +564,7 @@ We can use the built-in helpers **Boolean()**, **String() Number()** to check/co
 ```
 //Boolean will differentiate between truly/falsy values
 
-Boolean("0")        //True, a 1 digit string is truly
+Boolean("0")        //True, a 1-digit string is truly
 Boolean(0)          //False, True for any other integer
 Boolean("")         //False for any empty array
 Boolean(" ")        //True, space digit is not empty arrays
@@ -555,16 +597,15 @@ We can also have **data coercion** where values are converter automatically **:*
 //For example during the if statement
 
 function errorMessage(input) {
-  if (!input) {                //will automatically work as !Boolean(input
+  if (!input) {                //will automatically work as !Boolean(input)
     return 'Required field'
   }
 }
-
 ```
 
 ### Js in HTML implementation
 
-To link our external .js file to the html page we use:
+To link our **external .js file** to the HTML page we use:
 
 ```
 <body>
@@ -572,13 +613,11 @@ To link our external .js file to the html page we use:
     </script>
 </body>
 
-//this will allow us to call function on page interaction like
-
+//we can trigger functions on events
 <a href="#" onClick="alert('text!');">Alert button</a> 
-//here we call on the click event on a link for an alert directly on HTML
 
+//or reference the function in the .js file
 <input type="button" value="uno" onclick="add()"/> 
-//so, here we reference the function add in the .js file onclickEvent
 
 function add(){
   alert("welcomed")
@@ -586,19 +625,16 @@ function add(){
 
 ```
 
-To make the _content appear_ in the HTML :
+We use **createElement(), createTextNode()** and **appendChild()** to potray _JS content into HTML_ :
 
 ```
 //we want to add additional <li> content on button click
-
 <ul id="myList">
     <li>Coffee</li>
     <li>Tea</li>
 </ul>
 
 <button onclick="myFunction()">Append</button>
-
-//on the .js we have
 
 function myFunction() {
   oll = "terzo"
@@ -608,14 +644,13 @@ function myFunction() {
   document.getElementById("myList").appendChild(node);
 }
 
-//so, we can create HTML tags elements with document.createElement()
-//then we need to add text to the empty tag with document.createTextNode("a string can do)
-//then we take the Tag and append to it the (content), Tag.appendChild(text)
-//THEN to make it appear in the DOM html we need to get the ID of a tag and append the tag (now filled with content
-
+//We create <li> HTML tag
+//We insert the js variable as text with createTextNode(oll)
+//We append the text to the <li> created element
+//We use an id html element to append everything into
 ```
 
-How to use **var** and **arrays** in the Dom:
+How to use **variables** and **arrays** in the DOM:
 
 ```
 <button onclick="myFunction()">Append</button>
@@ -630,8 +665,6 @@ function myFunction() {
   node.appendChild(textnode);
   document.getElementById("myList").appendChild(node);
 }
-
-//we can use variables from the .js in the functions AND we can use counters and modify on the function
 ```
 
 ### JS in DOM with arrays and event
