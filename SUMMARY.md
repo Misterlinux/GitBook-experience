@@ -18,7 +18,7 @@
 
 ## JS
 
-* [JS 1](js/js-1.md)
+* [JS 1: variables, functions, parameters, array methods, data types, Math operations  and HTML implementation](js/js-1.md)
 * [JS 2](js/js-2.md)
 * [JS 3](js/js-3.md)
 * [JS 4](js/js-4.md)
