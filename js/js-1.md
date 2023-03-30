@@ -675,22 +675,18 @@ Check **this exercise**:
 JS on DOM
 {% endembed %}
 
-On the JS. part we have **Math.random()** and arrays on DOM:
+We use Math.floor() to get **random 2-integers numbers**:
 
 ```
-//so, first to have the random numbers at 2 digits and floor them to the lower
-//also, we get the ID 
-
-  var oul = Math.floor( Math.random()*100 ) ;
-  var pro = Math.floor( Math.random()*100 ) ;
+//by multiplying the random (0 to 0.9) by 100 we get 2-digits numbers
+var oul = Math.floor( Math.random()*100 ) ;
 
 ```
 
-As long as the page is not refreshed we can store **arrays** with the input:
+We use an external **array** to _store the random numbers_, while also resetting the **innerHTML**:
 
 ```
-//we keep the empty array outside the function and fill it by the click event
-//using .length to place at the latest index when increasing
+//we use .length as an index to always update the array with the latest element
 var filone = []
 
 function rando() {
@@ -700,35 +696,27 @@ function rando() {
   document.getElementById("primo").appendChild(textnode);
 }
 
-//ALSO, to avoid the entire array being visible each click we "reset" the HTML content with
-
-  var propt = document.getElementById("primo")
-  propt.innerHTML = ""
-
+var propt = document.getElementById("primo")
+propt.innerHTML = ""
 ```
 
 We also wanted the **numbers** and the **sum** to happen separately:
 
 ```
+//we sum the last random generated numbers, in case none we get NaN
 function summin(){
-
   var erm = filone[filone.length-1] + filona[filona.length-1];
 
   const terzo = document.createTextNode(erm);
   document.getElementById("terzi").appendChild(terzo);
 }
 
-//with this we sum the last random generated numbers, in case none we have NaN
-
 ```
 
-So, then to show the complete arrays we:
+To show the arrays with the **stored values** we:
 
 ```
-//can simply add it with the content:
-
-  var riga = document.createTextNode("[ " + filone + " ]");
-  document.getElementById("colla1").appendChild(riga);
+var riga = document.createTextNode("[ " + filone + " ]");
+document.getElementById("colla1").appendChild(riga);
 
 ```
-
