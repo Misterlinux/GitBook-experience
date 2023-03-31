@@ -1,4 +1,4 @@
-# JS 1
+# JS 1: variables, functions, parameters, array methods, data types, Math operations  and HTML implementation
 
 * [Math Operations, Booleans and Arrays methods](js-1.md#math-operations-booleans-and-arrays.)
 * [Js in HTML implementation](js-1.md#js-in-html-implementation)
@@ -47,14 +47,14 @@ console.log(UNO + 3)
 
 {% tabs %}
 {% tab title="function()" %}
-you can use the **function** keyword to create a function:
+you can use the **function** keyword and a **reference** name to create a function:
 
 ```
 function sum(){
     return console.log(12 + 15)
 }
 
-//after declaring the function with its keyword we Invoke it
+//A functions executes only when calling its reference with ()
 sum()        //27
 ```
 

@@ -80,13 +80,13 @@ A **component** needs to **import** React and can reference multiple components,
 
 ```
 //components are shortened versions of <Primo> </Primo> to put code in-between
-//we can use Arrow functions for the componeets
+//we can use Arrow functions for the components
 import React from 'react';
 
 const Primo =() =>{
   return(
     <div>
-      <h1> first component
+      <h1> first component </h1>
     </div>
   )
 }
@@ -104,7 +104,6 @@ const App =() =>{
     <div>
       <Primo />
       <Secondo />
-
     </div>
   )
 }
@@ -175,9 +174,9 @@ const Primo =() ={
 
 </details>
 
-### React Props properties
+### React Props, event handlers and useState
 
-Props are **arguments** passed into React **components.**
+**Props** are **arguments** passed into React **components,** they are **read-only** and can't be **updated.**
 
 ```
 //we use it when importing/exporting components
@@ -207,7 +206,7 @@ export default App;
 
 <details>
 
-<summary>Basic props and javascript expression</summary>
+<summary>Props used with javascript expression</summary>
 
 We can edit the **props** property using **javascript expressions**:
 
@@ -225,7 +224,11 @@ const Base= (props) =>{
 }
 
 export default Base
+```
 
+to then assign the **props values** on the rendering components:
+
+```
 //and properties values can be expressions themselves
 import Base1 from './components/Basso'
 
@@ -243,6 +246,56 @@ export default App;
 ```
 
 </details>
+
+We can add **Event Handlers** to React components, like **onClick()**, **onChange()** or **onSubmit()**:
+
+```
+//We put the callback function in {} as an expression
+const Ano= () =>{
+  let add= 0;
+  function more(){  
+    add += 1
+    console.log("Added " + add)    //added 2/3/... 
+  }
+
+  return(
+    <div>
+      <button className='btn btn-warning' onClick={more}>Clikka</button>
+    </div>
+  )
+}
+```
+
+We use the React Hook **useState** to track the **state** of a component and **update** it:
+
+```
+//We use destructuring on the useState object, into a current value variable
+//and the set___ function to update it
+
+import React , { useState } from 'react';
+
+const Ray= () =>{
+  let [rar, setRar] = useState([])
+  let [uno, setUno] = useState( 21 )
+
+  function innio(){
+    setRar( rar.concat("immensi") )
+    setUno( 33 )
+  }
+
+  return(
+    <div>
+      You want to see il raggi? {rar}
+      We are doblgadig the numba {uno}
+      <button className='btn btn-outline-primary' onClick={innio}>More</button>
+    </div>
+  )
+}
+
+//for arrays we use .concat() instead of .push()
+//instead of changing the current array state, it creates a new state array and 
+///gets re-rendered on React
+```
 
 1
 
