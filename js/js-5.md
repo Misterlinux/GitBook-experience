@@ -143,7 +143,7 @@ function second([,due]= deck ){
 
 ```
 
-And in _**objects**_** ** we can edit the properties:
+And in _**objects**_ we can edit the properties:
 
 ```
 const dog = {
@@ -414,9 +414,9 @@ for(let x of l){
 }
 ```
 
-****
 
-****
+
+
 
 **Error is a javascript object**, with **.message** and **.name** being its main **property**:
 

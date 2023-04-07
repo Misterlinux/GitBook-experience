@@ -528,7 +528,7 @@ function bancobot(sfida){
 
 ```
 
-The process is similar for the **2 players mode,** we just double the house score and sum the 2 players score, the game proceeds the same **** :
+The process is similar for the **2 players mode,** we just double the house score and sum the 2 players score, the game proceeds the same :
 
 ```
 //THIS IS FOR THE 2 PLAYERS MODE, we get the 2 arrays, first we SUM the 2 arrays from players

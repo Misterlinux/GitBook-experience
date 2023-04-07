@@ -4,7 +4,7 @@
 * [Collapse Buttons](boostrap-1-modal-collapse-button-and-pagination.md#collapse-buttons-and-content)
 * [Pagination & Bootpag](boostrap-1-modal-collapse-button-and-pagination.md#pagination-and-bootpag)
 
-Even if we include only some **modules** of **** bootstrap we use the entire package:
+Even if we include only some **modules** of bootstrap we use the entire package:
 
 ```
 //On the <head> or inside the body

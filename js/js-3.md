@@ -630,7 +630,7 @@ const uno={
 
 ```
 
-We can use **\_\_**_**proto\_\_**_** ** in objects for **inheritance**:
+We can use **\_\_**_**proto\_\_**_ in objects for **inheritance**:
 
 ```
 //The parent object doesn't need it

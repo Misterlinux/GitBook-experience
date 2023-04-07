@@ -7,99 +7,90 @@
 * [SetInterval in javascript](js-2.md#about-setinterval-on-button)
 * [More on Text filter](js-2.md#text-filter-in-dom-with-javascript)
 
-### Methods on arrays and strings
-
-Here are some more notes:
+We can use **index** and array **methods** on **strings**:
 
 ```
-//we can put the array with index
-[1, 1, "sting"][2] //sting
-"string"[7]        //undefined
+//We can use the index but can't edit a string like an array
+"string"[2]        //"r"
+"string"[2] = "e"  //"string"
 
-//But we can't use a regular expression[] to substitute
-"string"[1] = "O"  //will remain "string"
-
-//we can also use methods for position
-"INDEED".charAt(5)        // D
-"INDEED".charCodeAt(5)    // 68
-//with charCodeAt we get the unique code of the digit pressed 
+//We can also use more specific methods
+"string".charAt(2)     //"r"
+"string".charCodeAt    //114
 ```
 
-And we can use more same **methods** to modify strings, **Slice()** creates a mini array, doesn't edit the original :
+<details>
+
+<summary>slice(), substring(), concat() and split() methods on strings</summary>
+
+We can't use **splice()** on strings, **slice()** doesn't edit the string, it creates a new one:
 
 ```
-//.slice(x, y) will include the x index but not the y
-//and negative values will start at the end of the string/array
+//slice(x,y), negative values start from the end of the string/array
 let str = "Apple, Banana, Kiwi";
 str.slice(7 , str.length)    //"Banana, Kiwi"
 str.slice(6, -2);            //" Banana, Ki"
 str.slice(5)                 //", Banana, Kiwi"
 
-//.slice() can work on arrays too, while .substring can't
-//.subString(x, y) we can create a new string starting at x and being Y digits ong
-
-str.substring(0, 5)          //"Apple"
-
-//Having 2 string we can .concat() them instead of using the + 
-
-let primo = "this is the one"
-let secondo = "this is the two"
-
-primo.concat(" AND", secondo)    //"this is the one ANDthis is the two
-
-//we can also use .concat on NodeList, from
-
-let mostra = document.querySelectorAll(".mostra")
-let altro = document.querySelectorAll(".altro")
-
-//we can't use let tutto = mostra.concat(altro), NodeList doesnt have the .concat method
-//but can work with object arrays, we use push/apply for array-like elements
-
-var allTags = [];
-allTags.push.apply(allTags, mostra);
-allTags.push.apply(allTags, altro);
-
 ```
 
-But this **doesn**'**t mean that array and string are the same type:**
+**substring( \[starting index, number of digits] )** can only be used on strings:&#x20;
+
+```
+str.substring(0, 5)          //"Apple"
+```
+
+**concat()** can work on strings too:
+
+```
+let ora= "orange"
+str.concat("and ", ora)    //"Apple, Banana, Kiwi and orange"
+```
+
+**split()** returns an array from a **pattern separator**:
+
+```
+//it checks for (" ") and creates an array element from it
+//We can limit the number of array elements
+
+let siamo= "are you ready"
+siamo.split("", 5)         //['a', 'r', 'e', ' ', 'y']
+siamo.split(" ", 5)        //['are', 'you', 'ready']
+siamo.split("   ", 5)      //['are you ready']
+```
+
+</details>
+
+But **arrays** and **strings** are not of the same **type**:
 
 ```
 typeof ["w","e","e","l"] //object
 typeof "well"            //string
+```
 
-//and we can transform both in the other with
-typeof "well".split("") == "w","e","e","l" //object
-["w","e","e","l"].toString()               //"w,e,e,l"
-["w","e","e","l"].join("")                 //"well"
-//join will set the () between the spaces of array elements
-//split will put the () between each array element
+We can convert each other using **split()**, **toString()** and **join()**:
 
-//or even you can
+```
+typeof "well".split("") == "w","e","e","l"     //object
+["w","e","e","l"].toString()                   //"w,e,e,l"   
+["w","e","e","l"].join("")                     //"well"
+```
+
+We use the **Typeof operator** and Array.isArray() to check the type of data:
+
+```
 Array.isArray("indeed".split(" ") ) //true
 Array.isArray("indeed" )            //false
-
-//Typeof is an operator, not a method 
-```
-
-The **split()** method creates substrings from a pattern separator, returning an array:
-
-```
-//we can also use a limit for how many substrings we want
-
-let siamo= "are you ready"
-siamo.split("", 5)             //['a', 'r', 'e', ' ', 'y']
-
 ```
 
 String data contains only 1 value and so is **primitive**, while Object contains more.
 
 ### If and Switch
 
-We use the IF statement to execute a block of code if the **condition** is true:
+The **IF statement** executes a block of code if its **condition** is true:
 
 ```
-//we have else for when the condition is false
-//and use _else if_ in case we need more conditions 
+//else_if for other conditions, _else_ if no condition is true
 
 if(true){
     return console.log("true")
@@ -114,12 +105,11 @@ else{
 For multiple **conditions** we can use **logical** operators:
 
 ```
-if ((x === 5 || y > 3 || x <= 10) && (loggedIn || userName === 'Steve')) {
-  // run the code
-}
+//We can't 3<x<10 so we have to repeat the variable
 
-//remember to repeat the variable in case you use it multiple times
-//for example in case of 3<x<10 separate the conditions 
+if ((x === 5 || y > 3 || x <= 10) && (loggedIn || userName === 'Steve')) {
+  //Run the code
+}
 
 if(x>3 && x<10){
   //code here
@@ -127,10 +117,10 @@ if(x>3 && x<10){
 
 ```
 
-We can also use **switch** to use cases:
+We can also use **switch** to use **case**s:
 
 ```
-//switch uses cases for blocks and breaks to stop the code
+//We use break to close the case and default as the last case
 
 switch (5) {
     case true:
@@ -143,80 +133,56 @@ switch (5) {
 	return console.log("sdell")
 }
 
-//in case we need more cases for a single block
-//we can use this method to get the month of the year
+//if more than one case shares the same code 
 const month = new Date().getMonth();
 
-//we can also use getDay() that starts in Sunday at 0 to 7
-const day = new Date().getDay();
-
 switch (month) {
-	// January, February, March
 	case 0:
 	case 1:
 	case 2:
-		console.log("Winter");
+		console.log("Winter");		// January, February, March
 		break;
-	// April, May, June
 	case 3:
 	case 4:
 	case 5:
-		console.log("Spring");
+		console.log("Spring");		// April, May, June
 		break;
-	// July, August, September
-	case 6:
-	case 7:
-	case 8:
-		console.log("Summer");
-		break;
-	// October, November, December
-	case 9:
-	case 10:
-	case 11:
-		console.log("Autumn");
-		break;
+	...
 	default:
-		console.log("Something went wrong.");
+		console.log("No month");
 }
 ```
 
-For both these statements the **falsy** values will be **false** in boolean:
+Strings, numbers, and objects can have **falsy values**, which will be **false** in boolean:
 
-```
-//both strings, numbers and objects can be falsy 
-
-- 0
+<pre><code>- 0
 - '': Empty string
 - null
 - undefined
 - NaN
 
-//and in case you are curious about the typeof , null being an object is a bug but still
-typeof null + " " + typeof undefined    //object, undefined
+//typeof null being an object is an old bug
+typeof null + " " + typeof undefined        //object, undefined
 
 //null is a primitive value for "empty" variables
-
 let vuoto = null
 console.log( vuoto === null )        //true, assigned null value
 
-//undefined is for absence of a value, or non-existent keys in objects
+//undefined is for the absence of a value, or non-existent keys in objects
+<strong>let name;
+</strong>console.log( name === undefined)     //true, initialized not assigned variable
 
-let name;
-console.log( name === undefined)     //true, initialized butnot even assigned variable
-
-
-```
+</code></pre>
 
 **Ternary operator** is a simplified conditional operator:
 
 ```
-//we don't need to have a constant linked to it
-//usable for if/else
+//The variable is used for returned values, works for if/else
 
 let greeting = ( condition) ? 
-	'string returned if condition' 
+	console.log("code returned for true")
 	: 
-	'string returned if false';
+	console.log("code returned for false");
 
 ```
 
@@ -243,29 +209,26 @@ Check this code implementing **regex, forms, and setInterval**:
 In 2015 the **let** keyword for variables was introduced:
 
 ```
-//the main difference is on the scope of the variable
+//the main difference is in the scope of the variable
 
 var z = 'hello';
 var z = 'world';     //will allow to re-declare the variable
 let j = 'hello';
-let j = 'world';     //will give Syntax error on re-declaring teh same let to modify it
+let j = 'world';     //Syntax error on re-using the let keyword to re-assign
 
-//being it that var will have a global scope while let will be limted to its block of code
-
+//Contrary to var global scope, let is limited to its block of code
 let greeter = "hey hi";  
 let times = 5;  
 if (times > 3) {  
    var hello = "Say Hello JavaTpoint";   
    console.log(hello) 
 }  
-console.log(hello)    //should be hello not declared Error with let
+console.log(hello)    //it shouldn't be declared, error when using let
 
-//being var global scope it can be called out of his block, and this can cause Erros 
-//that's why const is used most of the times, to avoid accidental change of values
-
+//var can be called out of its block, which is prone to errors 
 ```
 
-and on functions it would be:
+The **different scope** can make the var accidentally change its value:
 
 ```
 //here for example when calling the cb to see how the var=i changes in the for loop
@@ -288,34 +251,7 @@ console.log(callbacks.map(
   )
 );
 
-//if we had let the for loop would have increased and pushed the [1,2,3,4,5] instead
-
-```
-
-In the **exercise** we declare both **let and const**:
-
-```
-//we start declaring an "empty" variable that is gonna default at undefined
-let intervallato;
-
-//and then use it as opposite condition for the setInterval !undefined = true
-if (!intervallato) {
-}
-
-//which then we re-set after the clearInterval()
-intervallato = null; 
- 
-//ALSO we used 2 querySelectors
-const reset = document.getElementById("lorem").innerHTML
-let html = document.querySelector("#lorem")
-
-//when we need to remove the extra content and "reset" the HTML but also
-//want to select and modify it afterward we use let and const 
-
-html.innerHTML = reset 
-html.innerHTML = lol.map( (str,i) => )
-//considering how we break and join it back later we need the innerHTML to be from a let
-
+//If we had let the for loop would have increased and pushed the [1,2,3,4,5] instead
 ```
 
 ### Regex and string matching
@@ -323,45 +259,40 @@ html.innerHTML = lol.map( (str,i) => )
 We use **Regular Expression Search Methods** to search **patterns** in strings:
 
 ```
-let pattern = /Lorem/i    
-//we have the pattern in /slashes/ and letters for different modifyers, i(for case-insensitive) and g(to match with the whole content)
+//text pattern between // and letters for modifiers 
+let pattern = /Lorem/i        //i is for case insensitive
 
 vipsum.search(pattern)    //will return the index of the first match 
 vipsum.search(/loreM/i)   //we can also put directly
-/lOrem/i.test("Lorem Ipsum")     //in other cases 
 ```
 
 To search **more specific patterns** with regex we can use:
 
 ```
-//we can search a range of specific letters 
-vipsum.match(/[qvgk]/g)    //will return an array with all the matching single letters in []
+//We get an array of the matched [letters] in the text
+vipsum.match(/[qvgk]/g)    //['g', 'q', 'g', 'q', 'g', 'v', 'v', 'q']
 
-//we can match the first of 2 values (if we use g then it's just as [])
-vipsum.match( /[q|x]/ )    //will return the first of q|x matching
+//First match between 2 values (if we use g then it's the same as [])
+vipsum.match( /[q|x]/ )    // ['m', index: 4, input: 'Lorem ...']
 
-//we can also check for whitespaces/new lines 
-vipsum.match( /\s/g )    //with \s we check both "" and \n in an array (with g)
-vipsum.match( /\n/g )    //matches only the new lines
+//We can also check for whitespaces (\s includes newlines)/new lines (\n only lines)
+vipsum.match( /\s/g )    //(62)[' ', ' ', ' ', ' ', ' ', ' ', '\n',...]
+vipsum.match( /\n/g )    //(4)['\n', '\n', '\n', '\n']
 
-//we can also match strings that have at least 1
-vipsum.match( /s+/g )    //will return an array of "s" or "ss+"
-
+//Match the string /s+/ case insensitive and on the global string
+vipsum.match( /s+/ig )    //(10)['s', 's', 's', 'SSS', 's', 's', 's', 's', 's', 's']
 ```
 
-For the _methods,_ we have __ **.test()** and **.exec():**
+We use the **test()** method to **true/false if a pattern** is present on the string, while **exec()** to return a **pattern index** match and **input**:
 
 ```
-//We .test the Pattern to the String returning true/false if present
-let html = document.getElementById("lorem").innerText;
+//The regex goes first [pattern].test/exec(html) 
 const primo= /lorem/i;
-console.log( primo.test(html) );    //true
+console.log( primo.test(html) );    //true 
 
-//.Exec() will return an array with index and input including the text
+//input being the entire string is taken upon
 let yull = /ipsum/gi.exec(html)
-console.log(yull)                  //ipsum or null in case not matching
-
-//they have _____.text/exec(html) pattern first
+console.log(yull)                  //['ipsum', index: 6, input: 'Lorem ipsum ... ']
 ```
 
 Then we have the **.search()** and **.match() :**
@@ -375,24 +306,23 @@ console.log(n)                    //if no match then -1 return
 //.match will return an array like exec.() but can contain multiple matches
 console.log( "best is best".match(/best/g) )    //[best, best]
 
-//here we have html.search/match(___) when pattern is in ()
+//Here we have html.search/match(___) when pattern is in ()
 ```
 
-About **new regex** for variables:
+About variables used as **new regex patterns**:
 
 ```
-//we can get a value from the input to then create a new RegExp
+//We can get a value from the input to then create a new RegExp
 let oltre = document.getElementById("cosa").value 
 
-const regex =  new RegExp( "(" + oltre + ")", 'ig');
-const kok = html.innerHTML.split( regex ); 
-//we also need "" for the extra syntax AND , and additional and then operate with
+const regex =  new RegExp( "(" + oltre + ")", 'ig');    // /regex/ig
+const kok = html.innerHTML.split( regex );  
 ```
 
 About **stricter** filters:
 
 ```
-//we havent studied it much yet BUT .split() every single word we check for spaces
+//We can use renex on a split() method (for white spaces for example)
 let spaced = html.innerHTML.split( /(\s)/ )
 
 //while if we want to check if the input is only white spaces we do this
@@ -403,11 +333,11 @@ primo.match(/^\s*$/)
 
 We use **forms** to collect user **input**:
 
-```
-//We use <form> as a container for the inputs and buttons, we will use its ID to also access the tags inside
-//we also add to it a HTTP method "POST" or "GET" to add or retrieve content from the server
-//the action Attribute can allow us to redirect the form after submission
+{% tabs %}
+{% tab title="<Form>" %}
+**\<Form>** is a container for **inputs/labels** and the **action** attribute allows us to **redirect** the form after submission:
 
+```
 <form id="formula" method="post" action="https://www.ilpost.it/">
 	<label for="unon">First</label>
 	<input type="text" id="uno" name="unon"> <br>
@@ -424,117 +354,70 @@ We use **forms** to collect user **input**:
 
 	<input type="submit" value="submit">
 </form>
+```
+{% endtab %}
 
-//type in <input> allow us to use text/checkboxes/radio and submit buttons in the form
-//checkboxes allow us for multiple selections while radio button only one
-//type="submit" appears as a button with content value
+{% tab title="<input>" %}
+The input function depends on its type:
+
+```
+//It can be a radio button, a checkbox, or a text input
+<input type="text" id="uno" name="unon">
+<input type="radio" id="html" name="fav_language" value="HTML">
+<input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
 
 ```
 
-More about **label** for the inputs:
+To access its content/**value** we:
 
 ```
-//label is useful to link together inputs by "for" = "id" = "name"
-//we will need a name="" for the submit to happen
-//while checkbox will be checked even if click on label text
+let primo = document.querySelector("#vehicle1").value
+```
+{% endtab %}
 
+{% tab title="<label>" %}
+**Label** identifies the input, they are assigned using "for" = "id" = "name"
+
+```
+//The checkbox will be triggered even if click on the label
 <input type="radio" id="javascript" name="fav_language" value="JavaScript">
-<label for="javascript">JavaScript</label>
+<label for="javascript">JavaScript</label>:
+```
+{% endtab %}
+
+{% tab title="input submit" %}
+We use the **\<form> id** and the **"submit" event** on the **"submit" type input**.
 
 ```
+//We need event.preventDefault() to not refresh the page on every submit
 
-More about **value** on **input**:
+<form action="" id="btn">
+    <input type="text" id="scritto">
+    <input type="submit" value="javascript tick" >
+</form>
 
-```
-//Add always a value to the inputs, even if starting empty
-<input type="text" id="cambiare" value="">
-
-//that then we can extract the new inserted value
-let primo = document.querySelector("#cambiare").value
-
-//and then reset after the submit happens
-document.getElementById("cambiare").value = "";
-
-```
-
-To access the **form** we can use:
+const btn = document.querySelector('#btn');
+btn.addEventListener("submit", (event) =>{
+  event.preventDefault();
+  let java = document.getElementById("scritto").value
+  console.log(java)
+})
 
 ```
-//we can use the ID to access name/value of inputs for example
+{% endtab %}
+{% endtabs %}
 
-<form id="krip">
-    <input type="text" name="fname" value="Donald" id="uno">
-    <input type="text" name="lname" value="Duck" id="due">
-    <input type="submit" value="Submit">
-</form> 
-    
-<p id="demoman">
-    //Donald uno / Duck due / submit
-</p>
+<figure><img src="../.gitbook/assets/JSforms.PNG" alt=""><figcaption><p>form with input labels</p></figcaption></figure>
 
-//the <input> are treated as elements of an array so to access .value/.id in the tags
+We use **select** to create a dropdown list.
 
-let testo = "";
-const init = document.getElementById("krip")
+<details>
 
-for (let i = 0; i < isit.length; i++) {
-  testo +=  init[i].value + " " + init[i].id  + "<br>" ;
-}
-document.getElementById("demoman").innerHTML = testo;
+<summary>Select in the DOM and JS</summary>
+
+The **\<select>** in the HTML will be:
 
 ```
-
-About **AppendChild()** and **innerText** difference in DOM:
-
-```
-//We can also use <button> instead of<input value="ADD" type="submit">
-
-<input type="text" name="name" id="txt_name" > 
-<button onclick="kek()">
-    ADD
-</button>
-
-<p id="demo"></p>
-<p id="demani"></p>
-
-//in the first DOM html #demo, we createTextNode with the value in <input> 
-//to then append in #demo, THIS will add a new Text for each click on the Append
-
-function kek(){
-  let inside = document.getElementById("txt_name").value
-  
-  let textnode = document.createTextNode(inside+ " ");
-  document.getElementById("demo").appendChild(textnode);
-
-  let text;
-  if (isNaN(inside) || inside < 1 || inside > 10) {
-    text = "Input not valid";
-  } else {
-    text = inside + " I guess";
-  }
-  document.getElementById("demani").innerHTML = text;
-}
-
-//in the innerHTML we can put a text in the #demani BUT only once no matter how many clicks
-
-```
-
-More on the **innerHTML or replace():**
-
-```
-//we may need to use the .innerHTML and `` to just change the DOM 
-let ipsum = document.getElementById("lorem")
-let gulp =  ipsum.innerHTML.replace(/MagNi/gi, "Picoolo") 
-ipsum.innerHTML = `<span >` +  gulp + `</span>` 
-
-//or also use the replace with Regex
-```
-
-We can use **select** in the DOM for .value too:
-
-```
-//we can use label + select HTML
-
 <label for="weather">Select the weather type today: </label>
 <select id="weather">
     <option value="">--Make a choice--</option>
@@ -543,13 +426,14 @@ We can use **select** in the DOM for .value too:
 </select>
 
 <p id="well"></p>
+```
 
-//Here we didn't just added a textContent to the #well
+When the **select** gets used it triggers the **"change" event,** we also use a js function to update the **CSS style**.&#x20;
+
+```
+//we use the value of the <select> list
 const select = document.querySelector('#weather');
 const para = document.querySelector('#well');
-
-//we can also put the function separate from eventlistener
-select.addEventListener('change', setWeather);
 
 function setWeather() {
   const choice = select.value;
@@ -559,7 +443,6 @@ function setWeather() {
     para.style.color = textColor;
   }
 
-//the function works with the "value" property in <option>
   switch (choice) {
     case 'black':
       para.textContent = 'Text black on white space';
@@ -574,58 +457,59 @@ function setWeather() {
   }
 }
 
-//Here we didn't just add a textContent to the #well but used a function update() to style its new CSS
-//AND also the '' in case of default the space of the tag becomes null
+//We need a default "" case for when the value is ""
 ```
 
-For the **submit** button event to be listened we can various **options**:
+</details>
+
+<figure><img src="../.gitbook/assets/select.png" alt=""><figcaption></figcaption></figure>
+
+To push JS content into HTML DOM we can use **AppendChild()** or **innerHTML.**
+
+&#x20;AppendChild() will **record** and **update** its content while innerHTML will **reset** it.
 
 ```
-<input type="text" id="scritto">
-<button id="btn">javascript click</button>              
-//&&
-<input type="submit" value="javascript tick" id="btn">
-
-//In javascript we can have a button with onClick event OR
-const btn = document.querySelector('#btn');
-btn.onclick = () => {
-   let java = document.getElementById("scritto").value
-   console.log(java)
-};
-
-//have a form that responds on submit, with the ID on form
-<form action="" id="btn">
-    <input type="text" id="scritto">
-    <input type="submit" value="javascript tick" >
-</form>
-
-const btn = document.querySelector('#btn');
-btn.addEventListener("submit", (event) =>{
-  event.preventDefault();
-  let java = document.getElementById("scritto").value
-  console.log(java)
-})
-
-//here we have the form ID on .addEventListener("", () =>{})
-//we need an (event) and .preventDefault() to avoid the submit after the event
-//we can also use a "Click" EventListener for a button
-
-<button id="btnado">Get Selected Colors</button>
-bottone.addEventListener('click', (event) => {});   
-
-//or have the Onlick() on the html to reference the javascript and then use the input etc...
-<button onclick="clock()">
+<input type="text" name="name" id="txt_name" > 
+<button onclick="kek()">
+    ADD
 </button>
 
-function clock(){
+<p id="demo"></p>
+<p id="demani"></p>
+
+//To push/append an element it needs to be createTextNode()
+function kek(){
+  let inside = document.getElementById("txt_name").value
+  
+  let textnode = document.createTextNode(inside+ " ");
+  document.getElementById("demo").appendChild(textnode);  //will show past inputs
+
+  let text;
+  if (isNaN(inside) || inside < 1 || inside > 10) {
+    text = "Input not valid";
+  } else {
+    text = inside + " I guess";
+  }
+  document.getElementById("demani").innerHTML = text;  //only current text value
 }
 
-//In any case, is possible to add an onClick() to more than input/button
-//AND having it directly in javascript
-
-document.getElementById("start").addEventListener("click", changeColor);
-function changeColor(){}
 ```
+
+We can **replace()** an **innerHTML** element using **regex**.
+
+```
+let ipsum = document.getElementById("lorem")
+let gulp =  ipsum.innerHTML.replace(/MagNi/gi, "Picoolo") 
+ipsum.innerHTML = `<span >` +  gulp + `</span>` 
+```
+
+11
+
+11
+
+11
+
+11
 
 To select on **checkbox** and **radio** button form:
 

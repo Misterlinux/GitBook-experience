@@ -212,7 +212,7 @@ display:block will occupy the entire line and accept width/height, with the tags
 
 ## CSS Selectors and Media Query
 
-We use it to _select HTML **elements**_** ** to style with CSS **properties**:
+We use it to _select HTML **elements**_ to style with CSS **properties**:
 
 {% embed url="https://codepen.io/misterlinux/pen/qBXYpZb" %}
 Interactive CSS selector exercise
@@ -689,7 +689,7 @@ For a transform-origin: **25% 25%**, and a transform: rotate().
 
 <summary>Steps(&#x3C;direction>) and animation-fill-mode</summary>
 
-For single-dimension elements we need only 1 Transform-origin **** keyword**:**
+For single-dimension elements we need only 1 Transform-origin keyword**:**
 
 ```
 .pendolo{
@@ -926,7 +926,7 @@ In the animation we include **translateY()** for the center/hand **intersect**:
 
 <figure><img src="../.gitbook/assets/clocking.gif" alt=""><figcaption><p>animated clock hands with center intersection</p></figcaption></figure>
 
-For the next part, we need the [**insertAdjacentElement()**](https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentElement) **** method **;**
+For the next part, we need the [**insertAdjacentElement()**](https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentElement) method **;**
 
 ```
 //To insert an element node in a position relative to another element
@@ -1460,7 +1460,7 @@ for **repeating-conic-gradient** we:
 
 <figure><img src="../.gitbook/assets/repeating.PNG" alt=""><figcaption><p>repeating linear, radial, conic</p></figcaption></figure>
 
-We can use **background-size** (and background-position) **** to **multiply** the background effect:
+We can use **background-size** (and background-position) to **multiply** the background effect:
 
 <details>
 

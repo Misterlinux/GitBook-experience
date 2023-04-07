@@ -89,7 +89,7 @@ const addUpTwoNumbers = (num1, num2) => ({ uno:num1, due:num2});
 {% endtab %}
 {% endtabs %}
 
-In Javascript, **** all **functions are object methods**, be it from constructor or global object.
+In Javascript, all **functions are object methods**, be it from constructor or global object.
 
 **Parameters** are values that are passed to the function and can be used locally in the function:
 
@@ -411,7 +411,7 @@ We can check its built-in _methods_ and _properties_ in **its \[\[prototype]] pr
 
 <details>
 
-<summary>Array push(), pop(), shift(), unshift() methods guide</summary>
+<summary>Array push(), pop(), shift(), unshift() and splice() methods guide</summary>
 
 We can use methods on **strings,** and we can **chain** them:
 

@@ -511,7 +511,7 @@ Remember that **opacity is affected by the HTML tag order**:
 
 ```
 
-We can also use the **background** CSS **** property to style the entire element it's used in, we need a **height/width** for the background.
+We can also use the **background** CSS property to style the entire element it's used in, we need a **height/width** for the background.
 
 ```
 <div class="secondo">

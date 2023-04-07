@@ -40,7 +40,7 @@ To set up EMMET on your **File>Preferences>Settings:**
 
 {% tabs %}
 {% tab title="Child/Parents tags" %}
-We use **>** for _nesting_ and **^** to _climb up_ **+** __ for _parenting, **.**_ and **#** for _class_ and _id_:
+We use **>** for _nesting_ and **^** to _climb up_ **+** for _parenting, **.**_ and **#** for _class_ and _id_:
 
 ```
 h1#id.class_parent>p.child*2+p.sibling^h1.same_parent
