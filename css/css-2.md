@@ -213,7 +213,7 @@ To get a smaller border we reduced the container:
 
 </details>
 
-<figure><img src="../.gitbook/assets/Untitled.png" alt=""><figcaption><p>row and column flex layout</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/Untitled (1).png" alt=""><figcaption><p>row and column flex layout</p></figcaption></figure>
 
 The **flex-wrap** property sets if flex element will **fit in one line (nowrap)** or can **warp onto multiple lines,** we can use **flex with %** to set more precise for the elements.
 

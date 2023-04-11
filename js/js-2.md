@@ -409,6 +409,71 @@ btn.addEventListener("submit", (event) =>{
 
 <figure><img src="../.gitbook/assets/JSforms.PNG" alt=""><figcaption><p>form with input labels</p></figcaption></figure>
 
+For the **check status** and **value** of **radio/checkbox buttons,** we use the attributes **.checked** and **value**:
+
+<details>
+
+<summary>Radio and checkbox buttons submit</summary>
+
+In a form we can put **label** and **input** in a different order:
+
+```
+//we can separate or embed the tags
+<form id="formula" method="post">
+    <input type="radio" id="html" name="fav_language" value="HTML">
+    <label for="html">HTML</label><br>
+    
+    <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+    <label for="vehicle1"> I have a bike</label><br>
+
+    <label for="c1"> 
+        <input type="checkbox" name="color" value="red" id="c1">Red
+    </label>
+    <label for="c2">
+        <input type="checkbox" name="color" value="green" id="c2"> Green
+    </label>
+    <label for="c3">
+        <input type="checkbox" name="color" value="blue" id="c3">Blue
+    </label>
+
+    <input type="submit" value="submit">
+</form>
+
+```
+
+In javascript, we check the **check state/value** of a single button or **queryselect()** many with the same attribute.
+
+```
+const formato = document.getElementById('formula');
+
+let gippin = document.querySelector("#html")
+let dess = document.querySelector("#vehicle1")
+
+//.checked will return true/false if the button was clicked
+//.value will return the value attribute even if not clicked
+formato.addEventListener("submit", (event) => {
+   event.preventDefault();
+
+   console.log( gippin.checked )                 
+   console.log( dess.value)                     
+
+    let checkboxes = document.querySelectorAll('input[name="color"]:checked');
+    let values = [];
+
+    checkboxes.forEach((checkbox) => {
+        values.push(checkbox.value);
+        console.log( checkbox.value )
+    });
+
+}) 
+//we need the queryselector() inside the event listener, will push
+//all the values of the checked buttons in an array
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/Untitled.png" alt=""><figcaption><p>Checkbox/radio buttons form submit </p></figcaption></figure>
+
 We use **select** to create a dropdown list.
 
 <details>
@@ -503,73 +568,13 @@ let gulp =  ipsum.innerHTML.replace(/MagNi/gi, "Picoolo")
 ipsum.innerHTML = `<span >` +  gulp + `</span>` 
 ```
 
-11
+1
 
-11
+1
 
-11
+1
 
-11
-
-To select on **checkbox** and **radio** button form:
-
-```
-<form id="formula" method="post">
-    <input type="radio" id="html" name="fav_language" value="HTML">
-    <label for="html">HTML</label><br>
-    
-    <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
-    <label for="vehicle1"> I have a bike</label><br>
-
-    <input type="submit" value="submit">
-</form>
-
-//we can get the .checked() or just .value() from the form
-
- const formato = document.getElementById('formula');
-
-formato.addEventListener("submit", (event) => {
-  event.preventDefault();
-  let gippin = document.querySelector("#javascript")
-  console.log( gippin.checked )                 //Both radio,checkbox can be true/false if checked
-  let dess = document.querySelector("#vehicle2")
-  console.log( dess.value)                      //while value will display if checked or ot
-}) 
-
-```
-
-And to handle the **checkbox/radio** we can:
-
-```
-<form action="" id="parap">
-	<label for="c1"> 
-	    <input type="checkbox" name="color" value="red" id="c1">Red
-	</label>
-	<label for="c2">
-	    <input type="checkbox" name="color" value="green" id="c2"> Green
-	</label>
-	<label for="c3">
-	    <input type="checkbox" name="color" value="blue" id="c3">Blue
-	</label>
-
-	<input type="submit" value="selected" id="btnado">
-</form> 
-
-//with querySelectorAll we select all input with names that ends up pseudoclass checked
-//we can have an array with the checkboxes AND THEN get the forEach() to get an array pushed elements
-
-const btnadoo = document.querySelector('#parap');
-btnadoo.addEventListener('submit', (event) => {
-    event.preventDefault()
-    let checkboxes = document.querySelectorAll('input[name="color"]:checked');
-    let values = [];
-
-    checkboxes.forEach((checkbox) => {
-        values.push(checkbox.value);
-    });
-});   
-
-```
+1
 
 ### About SetInterval() on button
 
@@ -614,69 +619,4 @@ function stopping(){
 
 //With this we have a timing function that stops the setInterval and resets the timer
 //we also null the interval ID so we won't get any still running time in the background
-```
-
-### Text filter in DOM with Javascript
-
-In the exercise, we will use **Regex** and **Javascript** to filter, modify and substitute content in the DOM:
-
-```
-//First we .split() the html DOM with the regex, .split() will put the regex as ODD index
-//and will be at 1 minimun
-const regex =  new RegExp( "(" + oltre + ")", 'ig');
-const kok = html.innerHTML.split( regex ); 
-
-//THEN we modify the .innerHTML by .join("") the array elements after .map() each one of them
-if( kok.length > 1){
-    html.innerHTML = kok.map( (str,i) => 
-      (i%2== 1) ? `<span class="highlight">${str}</span>` : str
-    ).join('')
-}
-
-//the .map() will take 2 parameters, always, the str/string first and the i/index second
-//we use a ternary operator for each element of kok array, for each ODD index we add the class highlight
-//while keeping the string for the even ones and then joining
-```
-
-some extra about the **Selectors()**:
-
-```
-//to be sure to select all the HTML tags we will use getElementsByClassName() instead of queryselector
-
-let droll = document.getElementsByClassName("clickeirio");
-//which will be get as an array, and we can modify it with the index
-
-for(let rinn= 0; rinn< droll.length; rinn++){
-	results.push( droll[rinn])
-  droll[rinn].style.backgroundColor = "red"
-}
-```
-
-some about the space **randomizer** and .split()ting every single word in the HTML :
-
-```
-//for the random text position option I had to first check the number of whitespaces and words
-//in the .innterHTML, where the odd indexes will be the whitespaces that we need to put the new element in
-//if we do it in the even indexes we could get the wrong strings in the DOM
-
-let spaced = html.innerHTML.split( /(\s)/ )
-let sono =  spaced.length
-
-//THEN we start generating the random number, 
-if(spaced.length > 1 ){
-    let rando = Math.random()
-    
-    function trim(uno, due){
-        if( Math.floor(uno * due)%2 == 1 ){
-          return Math.floor(uno * due)
-        }else{
-          return Math.floor(uno * due) + 1
-        }
-    }
-    posizi.shift()
-    posizi.push( trim(rando, sono) )
-}
-
-//we clean the past array element, we create a function to push the trim() returned odd elements
-//the trim() function just multiplies the random with the .lenth to get an odd random number within the .length
 ```
