@@ -568,11 +568,118 @@ let gulp =  ipsum.innerHTML.replace(/MagNi/gi, "Picoolo")
 ipsum.innerHTML = `<span >` +  gulp + `</span>` 
 ```
 
-1
+### Setinterval() and SetTimeout()
 
-1
+The **setInterval() method** calls a function at specified millisecond **intervals**, it returns an **ID** that can be used to stop it using **clearInterval()**:
 
-1
+{% tabs %}
+{% tab title="New Date() interval" %}
+```
+<button class="btn btn-success" onclick="real()">Orario</button>
+<button class="btn btn-secondary" onclick="stopped()">ferma</button>
+<h3 id="attuale"></h3>
+```
+
+We **setInterval()** using the new Date() object (that updates itself) to create a clock:
+
+```
+let attuale = document.getElementById("attuale")
+let att;
+
+//we create the variable for the setInterval() ID and use it to stop it
+function current(){
+    const date = new Date();
+    attuale.innerHTML = date.toLocaleTimeString();
+}
+
+function real(){
+    
+    att= setInterval(() => {
+        current()
+    }, 1000);
+}
+
+function stopped(){
+    clearInterval(att)
+}
+```
+
+<figure><img src="../.gitbook/assets/timer1.gif" alt=""><figcaption><p>setInterval() used with new Dat</p></figcaption></figure>
+{% endtab %}
+
+{% tab title="setInterval() CSS bar" %}
+We draw a box and absolute background content:
+
+```
+<button class="btn btn-outline-danger" onclick="riempie()">Comincia</button>
+<button class="btn btn-outline-success" onclick="svuota()">Indietro</button>
+<div id="barra">
+    <div id="parte"></div>
+</div>
+
+#barra{
+    position: relative;
+    width: 100%;
+    height: 30px;
+    border: 1px solid green;
+}
+
+#parte{
+    position: absolute;
+    width: 1%;
+    height: 30px;
+    background-color: lightgreen;
+}
+```
+
+We use setInterval() to both increase and decrease width, but we need to **clearInterval()** before starting a new setInterval() with the **same ID**:
+
+<figure><img src="../.gitbook/assets/barra1.gif" alt=""><figcaption><p>CSS bar with increase/decrease setIterval() width</p></figcaption></figure>
+{% endtab %}
+
+{% tab title="setInterval() parameters" %}
+```
+<button class="btn btn-secondary" onclick="fer()">Fisso</button>
+<div class="scatola">
+</div>
+
+#barra{
+    position: relative;
+    width: 100%;
+    height: 30px;
+    border: 1px solid green;
+}
+
+#parte{
+    position: absolute;
+    width: 1%;
+    height: 30px;
+    background-color: lightgreen;
+}
+```
+
+We pass **parameters** to the **setTimeout function** by adding them in the setTimeout() method:
+
+```
+//We use a ternary operator to switch between the passed parameters
+let scatola = document.querySelector(".scatola")
+
+let andando= setInterval(boxe, 500, "red", "green")
+
+function boxe(x1, x2){
+    scatola.style.backgroundColor = 
+    scatola.style.backgroundColor == x1 ? x2 : x1
+}
+
+function fer(){
+    clearInterval(andando)
+}
+
+```
+
+<figure><img src="../.gitbook/assets/scatola.gif" alt=""><figcaption><p>setInterval() CSS parameters</p></figcaption></figure>
+{% endtab %}
+{% endtabs %}
 
 1
 
