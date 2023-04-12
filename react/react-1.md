@@ -268,9 +268,15 @@ const Ano= () =>{
 
 We use the React Hook **useState** to track the **state** of a component and **update** it:
 
+<details>
+
+<summary>updating Reactjs  useState() </summary>
+
+We use **destructuring** on the imported **useState object**, into a current state **variable,** and a set **function** to **update** it.
+
 ```
-//We use destructuring on the useState object, into a current value variable
-//and the set___ function to update it
+//We use .concat() instead of .push() to create a new state array that will 
+//get re-rendered on React (instead of just changing current with .push())
 
 import React , { useState } from 'react';
 
@@ -285,17 +291,74 @@ const Ray= () =>{
 
   return(
     <div>
-      You want to see il raggi? {rar}
-      We are doblgadig the numba {uno}
-      <button className='btn btn-outline-primary' onClick={innio}>More</button>
+      <div>Updated array on click {rar}</div>
+      <div>Number state changes {uno}</div>
+      <button className='btn btn-outline-primary' onClick={innio}>More</button> 
     </div>
   )
 }
-
-//for arrays we use .concat() instead of .push()
-//instead of changing the current array state, it creates a new state array and 
-///gets re-rendered on React
 ```
+
+</details>
+
+<figure><img src="../.gitbook/assets/usestato.png" alt=""><figcaption><p>useState() after onClick() </p></figcaption></figure>
+
+### React useEffect&#x20;
+
+We use the **useEffect(function, dependency)** **hook** to **synchronize** a component with an external **variable.**
+
+```
+//useEffect triggers on render, with the setState() change being a render 
+//the setTimeout continues, we use empty [] dependency to render it once
+
+let [esempio, setEsempio]= useState(0)
+
+useEffect(() => {
+  setTimeout(() => {
+    setEsempio((esempio) => esempio + 1);
+  }, 1000);
+}, [] );
+
+<div>aumentiamo di uno qui {esempio}</div>
+```
+
+When a **dependency state** changes the **useEffect** renders:
+
+<details>
+
+<summary>useEffect with dependency useState</summary>
+
+We need 2 **states**, one for the **dependency** change and the other for the **javascript expression.**
+
+```
+//When the count1 state changes onClick() the useEffect updates the 
+//calculation1 state and we render the javascript expressions
+
+const [count1, setCount1] = useState(0);
+const [calculation1, setCalculation1] = useState(0);
+
+useEffect( () =>{
+  setCalculation1(()=> Math.pow(count1, 2) - count1*2 )
+}, [count1])
+
+<button className="btn btn-outline-success" 
+        onClick={()=> setCount1((c)=> c + 1)} >
+  aggiungi
+</button>
+<p>
+  We did {Math.pow(count1, 2)} subtracting {count1*2} and got {calculation1}
+</p>
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/useeffect.gif" alt=""><figcaption><p>useEffect function rendering after onClick state</p></figcaption></figure>
+
+1
+
+1
+
+1
 
 1
 
