@@ -681,6 +681,54 @@ function fer(){
 {% endtab %}
 {% endtabs %}
 
+The **setTimeout() method** calls a function **once** after a number of milliseconds:
+
+{% tabs %}
+{% tab title="new Date() timeout" %}
+To **repeat** a setTimeout() function :
+
+```
+<h2 id="stime" class="text-center"></h2>
+
+//we need to put the setTimeout() in its own function
+//and can be stopped with clearTimeout()
+let stime= document.getElementById("stime")
+
+function blue(){
+    let arti= new Date()
+    stime.innerHTML= arti.toLocaleTimeString();
+    setTimeout( blue, 1000 )
+}
+
+blue()
+```
+
+<figure><img src="../.gitbook/assets/timer1.gif" alt=""><figcaption><p>new Date() with setTimeout()</p></figcaption></figure>
+{% endtab %}
+
+{% tab title="setTimeout() parameters" %}
+We include **parameters** for the setTimeout function:
+
+```
+<button class="btn btn-secondary" onclick="saluto()">arriva</button>
+
+function greeting(x1, x2){
+    console.log( x2 + " with some " + x1 )
+}
+
+function saluto(){
+    setTimeout(
+        greeting
+    ,2000, "extra content", "starts")
+}
+
+//will return "starts with some extra content"
+```
+{% endtab %}
+{% endtabs %}
+
+1
+
 1
 
 ### About SetInterval() on button
