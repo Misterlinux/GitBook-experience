@@ -303,7 +303,7 @@ const Ray= () =>{
 
 <figure><img src="../.gitbook/assets/usestato.png" alt=""><figcaption><p>useState() after onClick() </p></figcaption></figure>
 
-### React useEffect&#x20;
+### React useEffect with setInterval()
 
 We use the **useEffect(function, dependency)** **hook** to **synchronize** a component with an external **variable.**
 
@@ -354,11 +354,119 @@ useEffect( () =>{
 
 <figure><img src="../.gitbook/assets/useeffect.gif" alt=""><figcaption><p>useEffect function rendering after onClick state</p></figcaption></figure>
 
-1
+We can implement **javascript expression** using ternary-operators for DOM content:
 
-1
+```
+//we need to use {` ${``} `} 
 
-1
+<button className={`btn btn-${ lancetta ? `danger`: `success` }`}
+        onClick={()=> setLancetta((w)=> !w ) }
+>
+  {lancetta ? "pause" : "start" }
+</button>
+```
+
+We use 2 useState() **dependencies** to **start/pause the setInterval()**.
+
+```
+//We need the return clearTimeout() to limit the setInterval() to once at the time
+//We use the lancetta to true/false the useEffect setInterval() 
+//and we use the other dependency useState() to stop it with clearInterval()
+
+const [tempato, setTempato] = useState(0)
+const [lancetta, setLancetta] = useState(false)
+let interval;
+
+useEffect( ()=>{
+
+  if(lancetta){    
+    interval= setInterval( ()=>{
+      setTempato((temp)=> temp + 1)
+    }, 500)
+  }
+
+  if( tempato == 10 ){
+    setLancetta( false )
+    clearInterval(interval)
+  }
+
+  return () =>{
+    clearInterval(interval)
+  }
+}, [lancetta, tempato] )
+
+```
+
+<figure><img src="../.gitbook/assets/intervaleffect2.png" alt=""><figcaption><p>useEffect dependency used with setInterval()</p></figcaption></figure>
+
+We can also trigger **setInterval()** and **clearInterval()** using the same **dependency**:
+
+<details>
+
+<summary>Reset/Restart single button with useEffect</summary>
+
+The **stop/pause button** will reset the current seconds but **not the setInterval()**, for that we use the **reset** button.
+
+```
+//We use the true/false switch and javascript expressions
+
+<div className="text-center fs-2 font-weight-bold">
+  {seconds}s
+</div>
+
+<div className="text-center">
+  <button className={`btn btn-${isActive ? `danger`:`success`}` }
+          onClick={ ()=> setIsActive((x)=> !x) }>
+    {isActive ? 'Pause' : 'Start'}
+  </button>
+  <button className="btn btn-secondary" onClick={reset}>
+    Reset
+  </button>
+</div>
+```
+
+We use useEffect() **conditionals** to trigger the **setInterval()**.
+
+We reset(seconds), and we **clearInterval()** but we **also re-start**, by using setIsActive(!isActive) to **trigger** the useEffect() conditional **again** while keeping the gradi counter.
+
+We stop seconds and active using **reset()**.
+
+```
+//We need to include both triggers and state counters in the dependencies
+
+const [seconds, setSeconds] = useState(0);
+const [gradi, setGradi] = useState(0)
+const [isActive, setIsActive] = useState(false);
+
+function reset() {
+  setSeconds(0);
+  setIsActive(false);
+}
+
+useEffect(() => {
+  let interval = null;
+  if (isActive) {
+
+    interval = setInterval(() => {
+      setSeconds(seconds => seconds + 1);
+      setGradi(gradi => gradi + 1)
+    }, 500);
+
+  } else if (!isActive && seconds !== 0) {
+    clearInterval(interval);
+    setSeconds(0)
+    setIsActive(!isActive);
+  }
+  
+  return () => {
+    clearInterval(interval);
+  }
+}, [isActive, seconds, gradi]);
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/resetinterval.gif" alt=""><figcaption><p>start/reset/re-start on single button</p></figcaption></figure>
 
 1
 
