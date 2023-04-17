@@ -1,4 +1,4 @@
-# JS 2
+# JS 2, String array methods, If and Switch statements, let and var properties, HTML forms and js validation and setInterval()/setTimeout()
 
 * [Let, Var and differences](js-2.md#undefined)
 * [Text filter exercise](js-2.md#text-filter-javascript-and-dom-exercise)
@@ -117,7 +117,52 @@ if(x>3 && x<10){
 
 ```
 
-We can also use **switch** to use **case**s:
+We can also use **switch** and **cases:**
+
+<details>
+
+<summary>Switch (if) statement</summary>
+
+We use **break** to finish each **case** and default as the else{}.
+
+```
+switch (5) {
+    case true:
+	return console.log("number real")
+	break;
+    case false:
+	return console.log("number not")
+	break;
+     default:
+	return console.log("sdell")
+}
+
+```
+
+If **more cases** share the same code.
+
+```
+const month = new Date().getMonth();
+
+switch (month) {
+	case 0:
+	case 1:
+	case 2:
+		console.log("Winter");		// January, February, March
+		break;
+	case 3:
+	case 4:
+	case 5:
+		console.log("Spring");		// April, May, June
+		break;
+	...
+	default:
+		console.log("No month");
+}
+
+```
+
+</details>
 
 ```
 //We use break to close the case and default as the last case

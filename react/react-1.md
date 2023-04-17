@@ -357,13 +357,19 @@ useEffect( () =>{
 We can implement **javascript expression** using ternary-operators for DOM content:
 
 ```
-//we need to use {` ${``} `} 
+//we need to use {` ${``} `} for strings
 
 <button className={`btn btn-${ lancetta ? `danger`: `success` }`}
         onClick={()=> setLancetta((w)=> !w ) }
 >
   {lancetta ? "pause" : "start" }
 </button>
+
+//for variables we don't need ""
+const [texto, setTexto] = useState("start")
+
+<button>{lancetta ? texto : "no button" }</button>
+
 ```
 
 We use 2 useState() **dependencies** to **start/pause the setInterval()**.
