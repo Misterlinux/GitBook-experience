@@ -184,9 +184,7 @@ const Primo =() ={
 
 const Basic= (props) =>{
   return(
-    <div>
-        We use the props here: {props.name}
-    </div>
+    <div> We use the props here: {props.name} </div>
   )
 }
 
@@ -265,6 +263,128 @@ const Ano= () =>{
   )
 }
 ```
+
+We can pass **useState()** and **functions** using **props**:
+
+<details>
+
+<summary>useState() and functions on props</summary>
+
+We use the useEffect() hook to set-up a setInterval() based on isActive and isPaused useState().
+
+Then we **pass** useState() and the functions to the \<Tempo> **prop**
+
+```
+import Tempo from "./Timer.js"
+import Nub from "./Numeri.js"
+
+const [isActive, setIsActive] = useState(false);
+const [isPaused, setIsPaused] = useState(true);
+const [time, setTime] = useState(0);
+
+useEffect(()=>{
+    let interval= null
+
+    if (isActive && isPaused === false) {
+        interval = setInterval(() => {
+          setTime((time) => time + 10);
+        }, 100);
+
+      } else {
+        clearInterval(interval);
+      }
+      return () => {
+        clearInterval(interval);
+      };
+}, [isActive, isPaused, time])
+
+const handleStart = () => {
+    setIsActive(true);
+    setIsPaused(false);
+};
+  
+const handlePauseResume = () => {
+    setIsPaused(!isPaused);
+};
+  
+const handleReset = () => {
+    setIsActive(false);
+    setTime(0);
+};
+
+return(
+    <div>
+        <Nub time={time} />
+
+        <Tempo
+            isActive={isActive}
+            isPaused={isPaused}
+            handleStart={handleStart}
+            handlePauseResume={handlePauseResume}
+            handleReset={handleReset}
+        />
+    </div>
+)
+
+```
+
+We can then use the **prop function** and the **prop useState()** in the imported component:&#x20;
+
+```
+//We call the prop.functions with the onClick() event listener
+//We use the ternary operator with the returned prop.useState()
+
+const Tempo = (props) =>{
+    
+    const StartButton = (
+        <div className="btn btn-warning"
+             onClick={props.handleStart}>
+          Start
+        </div>
+    );
+
+    const ActiveButtons = (
+        <div className="btn-grp">
+          <div className="btn btn-danger" 
+               onClick={props.handleReset}>
+            Reset
+          </div>
+          <div className="btn btn-primary" 
+               onClick={props.handlePauseResume}>
+            {props.isPaused ? "Resume" : "Pause"}
+          </div>
+        </div>
+      );
+      
+    return (
+        <div className="Control-Buttons">
+          <div>{props.isActive ? ActiveButtons : StartButton}</div>
+        </div>
+    );
+
+}
+
+```
+
+After the useEffect() setInterval() is started we can **render** its **useState()** using **another component**.
+
+```
+//we can continue to edit the props.useState()
+<Nub time={time} />
+
+const Num= (props) =>{
+
+    return(
+        <div>
+            <h1>Sono passati {props.time/100} secondi </h1>
+            <h2>E sono passati { Math.floor( (props.time/6000 ))} minutos </h2>
+        </div>
+    )
+}
+
+```
+
+</details>
 
 We use the React Hook **useState** to track the **state** of a component and **update** it:
 
