@@ -474,6 +474,33 @@ useEffect(() => {
 
 <figure><img src="../.gitbook/assets/resetinterval.gif" alt=""><figcaption><p>start/reset/re-start on single button</p></figcaption></figure>
 
-1
+To implement **font-awesome** in **Reactjs** we:
+
+```
+//First we install its npm 
+npm i --save @fortawesome/fontawesome-svg-core
+npm install --save @fortawesome/free-solid-svg-icons
+npm install --save @fortawesome/react-fontawesome
+
+//then we import and use it
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faStopwatch } from '@fortawesome/free-solid-svg-icons'
+
+<h1> Welcome to the store 
+  <FontAwesomeIcon icon={faStopwatch} />
+</h1>
+```
+
+To **deploy** a **Reactjs** app GitHub repository on [_**Netlify**_ ](https://app.netlify.com/sites/wondrous-bubblegum-23cd24/overview)we edit the **package.json**:
+
+```
+//so it can be deployed even if it has warnings
+"scripts": {
+  "start": "react-scripts start",
+  "build": "react-scripts build",
+  "test": "CI=true react-scripts test"
+}
+
+```
 
 1
