@@ -85,17 +85,13 @@ import React from 'react';
 
 const Primo =() =>{
   return(
-    <div>
-      <h1> first component </h1>
-    </div>
+    <div> <h1>Second component </h1> </div>
   )
 }
 
 const Secondo =() =>{
   return(
-    <div>
-      <h2>Second component</h2>
-    </div>
+    <div> <h2>First component</h2> </div>
   )
 }
 
@@ -110,6 +106,8 @@ const App =() =>{
 
 export default App;
 ```
+
+<figure><img src="../.gitbook/assets/components.PNG" alt=""><figcaption><p>rendered React component</p></figcaption></figure>
 
 We use **CamelCase** for **component names** to differentiate from default HTML tags.
 
@@ -390,7 +388,7 @@ We use the React Hook **useState** to track the **state** of a component and **u
 
 <details>
 
-<summary>updating Reactjs  useState() </summary>
+<summary>Updating Reactjs  useState() </summary>
 
 We use **destructuring** on the imported **useState object**, into a current state **variable,** and a set **function** to **update** it.
 
@@ -474,7 +472,7 @@ useEffect( () =>{
 
 <figure><img src="../.gitbook/assets/useeffect.gif" alt=""><figcaption><p>useEffect function rendering after onClick state</p></figcaption></figure>
 
-We can implement **javascript expression** using ternary-operators for DOM content:
+We can implement **javascript expression** using **ternary-operators** for DOM content:
 
 ```
 //we need to use {` ${``} `} for strings
@@ -492,7 +490,18 @@ const [texto, setTexto] = useState("start")
 
 ```
 
-We use 2 useState() **dependencies** to **start/pause the setInterval()**.
+We can also use **&&** to **render** React components:
+
+```
+//Similar to a ternary-operator but without the else, won't render if no condition
+{record && 
+  <h4>This is rendered only if condition</h4>
+}
+```
+
+We can use a **useEffect()** hook to **start/pause a setInterval(),** to do so we need 2 useState() dependencies.
+
+One for the **onClick()** starter event and another for the **useState()** time-limit we want to use to stop it
 
 ```
 //We need the return clearTimeout() to limit the setInterval() to once at the time
@@ -525,7 +534,7 @@ useEffect( ()=>{
 
 <figure><img src="../.gitbook/assets/intervaleffect2.png" alt=""><figcaption><p>useEffect dependency used with setInterval()</p></figcaption></figure>
 
-We can also trigger **setInterval()** and **clearInterval()** using the same **dependency**:
+We can also trigger **setInterval()** and **clearInterval()** using the same **dependency** in the **useEffect condition**:
 
 <details>
 
@@ -622,5 +631,134 @@ To **deploy** a **Reactjs** app GitHub repository on [_**Netlify**_ ](https://ap
 }
 
 ```
+
+### ReactJs forms, inputs, and submit
+
+We render **input controlled-components** using useState() and callback functions.
+
+```
+//onChange() will trigger for each type in the input
+const [reminder, setReminder] = useState("");
+
+function handleChange1(e) {
+    e.preventDefault();
+    setName(e.target.value);
+}
+
+<form>
+  <input
+    type="text"
+    name="reminder"
+    value={reminder}
+    onChange={handleChange}
+  />
+</form>
+
+<p>Inserted text {reminder}</p>
+//the input value will be rendered as a useState()
+```
+
+<details>
+
+<summary>Complete form, input and submit ReactJS</summary>
+
+On the DOM, we add the **onSubmit()** attribute to the **\<form>** component.
+
+```
+//We use the same callback function for all inputs
+//the onSubmit() will trigger for any button pressed within <form>
+
+<form onSubmit={mandasotto}>
+  <input
+    type="text"
+    placeholder="Chillin"
+    name="reminder"
+    value={reminder}
+    onChange={handleChange}
+  />
+  <input
+      type="text"
+      placeholder="mail"
+      name="email"
+      value={email}
+      onChange={handleChange}
+  />
+  <input
+    type="password"
+    placeholder="pass "
+    name="password"
+    value={password}
+    onChange={handleChange}
+  />
+
+  <p>Text being: {reminder}, email: {email}, password: {password} </p>
+
+  <button className="btn btn-warning">Submit</button>
+</form>
+```
+
+We use **target.name** to select which useState() gets which **target.value** to **render.**
+
+While **onSubmit()** we print the current **useStates()**.
+
+```
+const [reminder, setReminder] = useState("");
+const [email, setEmail] = useState("")
+const [password, setPassword] = useState("")
+
+function handleChange(event) {
+
+  if(event.target.name === "reminder"){
+      setReminder( event.target.value );
+  }else if(event.target.name === "email"){
+      setEmail( event.target.value );
+  }else if(event.target.name === "password"){
+      setPassword( event.target.value );
+  }
+
+}
+
+function mandasotto(event){
+  event.preventDefault()
+  console.log(reminder + " " + email + " " + password )
+}
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/inputReact.PNG" alt=""><figcaption><p>fotm, input and submit with rendered values</p></figcaption></figure>
+
+We can also render **uncontrolled input components**, using the **useRef hook,** we set the callback function and the useState **outside** of the **input** component
+
+```
+//We set the ref={} on the input and then use it in useEffect
+
+const [name, setName] = useState('Ravi');
+const input = useRef();
+
+useEffect(() => {
+  input.current.onkeyup = handleChange1;
+  input.current.value = name;
+});
+
+function handleChange1(e) {
+  e.preventDefault();
+  setName(e.target.value);
+}
+
+<div>
+  Name:
+  <input type='text' ref={input} />
+</div>
+<div>Name is: {name}</div>
+
+```
+
+1
+
+1
+
+1
 
 1
