@@ -1,9 +1,9 @@
-# REACT 1
+# REACT 1, React props, event handlers, useState(), useEffect(), React forms/inputs and Class components
 
-* 1
-* 1
-* 1
-* 1
+* [React Props, event handlers and useState](react-1.md#react-props-event-handlers-and-usestate)
+* [React useEffect with setInterval()](react-1.md#react-useeffect-with-setinterval)
+* [ReactJs forms, inputs, and submit](react-1.md#reactjs-forms-inputs-and-submit)
+* [Class component, useState() and fetch()](react-1.md#class-component-usestate-and-fetch)
 
 **Node.js** is a _javascript environment_, we use **npm** (Node Package Manager) to install **modules** and use a **packages.json** file to track them.
 
@@ -831,10 +831,116 @@ We can use **external functions** with a toggle operator.
 
 </details>
 
-<figure><img src="../.gitbook/assets/useStateClassComp.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/useStateClassComp.png" alt=""><figcaption><p>Class component useState()</p></figcaption></figure>
 
-1
+<details>
 
-1
+<summary>Class component Fetch setState()</summary>
 
-1
+We use **componentDidMount()** to render after a **fetch()**.
+
+```
+//we then render a useState() on the img attribute
+
+class Num extends Component{
+  state = {
+    isLoading: true,
+    imgSrc: null,
+    date: "2019-01-01",
+  }
+
+  componentDidMount(){
+    fetch(
+      `https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=${
+        this.state.date
+      }&api_key=gnesiqnKCJMm8UTYZYi86ZA5RAnrO4TAR9gDstVb`
+    )
+    .then(res => res.json())
+    .then(data => {
+      this.setState({
+        isLoading: false,
+        imgSrc: data.photos[0].img_src
+      });
+    });
+  }
+
+  render() {
+      return (
+        <div>
+          {this.state.isLoading ?
+            <p className="my-5">Loading... 👽</p>
+          :
+          <div className="row container justify-content-center my-5">
+            <div className="col-3">
+              <img src={this.state.imgSrc} className="img-fluid" alt="Mars Rover" />
+            </div>
+          </div>
+          }
+        </div>
+      )
+  }
+}
+```
+
+To catch a **fetch() error** we add an extra **then()** and useState().
+
+```
+class Num extends Component{
+  state = {
+    imgSrc: null,
+    date: "2019-01-01",
+    error: null
+  }
+
+  componentDidMount() {
+    const roverName = "disinterest";
+    fetch(
+      `https://api.nasa.gov/mars-photos/api/v1/rovers/${roverName}/photos?earth_date=${
+        this.state.date
+      }&api_key=gnesiqnKCJMm8UTYZYi86ZA5RAnrO4TAR9gDstVb`
+    )
+    .then(res => {
+      if (res.ok) {
+        return res;
+      } else {
+        throw new Error("HTTP error");
+      }
+    })
+    .then(res => 
+        res.json()
+    )
+    .then(data => {
+      this.setState({
+        isLoading: false,
+        imgSrc: data.photos[0].img_src
+      }); 
+    })
+    .catch(error => {
+      this.setState({
+        isLoading: false,
+        error: error
+      });
+    });
+  }
+
+  render() {
+      return (
+        <div>
+          {this.state.error ?
+            <p className="my-5">Something went wrong 😭</p>
+          :
+            <div className="row container justify-content-center my-5">
+              <div className="col-3">
+                <img src={this.state.imgSrc} className="img-fluid" alt="Mars Rover" />
+              </div>
+            </div>
+          }
+        </div>
+      )
+  }
+}
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/classFetch.png" alt=""><figcaption><p>Class component error catch, fetch, and isloading</p></figcaption></figure>
