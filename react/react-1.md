@@ -785,27 +785,53 @@ export default Num
 
 <details>
 
-<summary>Complete Class component with fetch and useState</summary>
+<summary>Class components with useState(), setState() and external component</summary>
 
-1
+We can't use the useState() hook in a class component, we can initialize multiple useState() in the **state object**.
 
-1
+We use a **this.method** with a callback function to **setState()**.
 
-1
+```
+// Some code
+const Message = () => <p>I'm shown when this.state.isShown is true âœ…</p>;
 
-1
+class Num extends Component{
+  state = {
+    away: 0
+  }
 
-1
+  increment = () => {
+    this.setState((x)=>{
+      return{
+        away: x.away + 1
+      }
+    });
+  }
 
-1
+  render() {
+    return (
+      <div>
+        <div className="d-flex justify-content-center align-content-center">
+          <h1 className="mx-3">{this.state.away}</h1>
+          <button
+            className="btn btn-primary my-2"
+            onClick={this.increment}    
+          >
+            more
+          </button>
+        </div>
+        {this.state.away ? null : <Message />}
+      </div>
+    )
+  }
+}
+```
 
-1
-
-1
+We can use **external functions** with a toggle operator.
 
 </details>
 
-1
+<figure><img src="../.gitbook/assets/useStateClassComp.png" alt=""><figcaption></figcaption></figure>
 
 1
 
