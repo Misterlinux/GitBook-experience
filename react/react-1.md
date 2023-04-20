@@ -752,8 +752,58 @@ function handleChange1(e) {
   <input type='text' ref={input} />
 </div>
 <div>Name is: {name}</div>
+```
+
+### Class component, useState() and fetch()
+
+Apart from **function components**, there are also **Class components**.
+
+We need the **component React hook** and the **render(){} method** for the DOM.
 
 ```
+//Class components are the older type of React components
+//we implements functions like this.methods
+import React, {Component} from "react"
+
+class Num extends Component{
+  lude = () =>{
+    console.log("kinda we got")
+  }
+
+  render() {
+    return (
+      <div>
+        <h1>I can smell your</h1>
+        <button className="btn btn-warning" onClick={this.lude}>super</button>
+      </div>
+    )
+  }
+}
+
+export default Num
+```
+
+<details>
+
+<summary>Complete Class component with fetch and useState</summary>
+
+1
+
+1
+
+1
+
+1
+
+1
+
+1
+
+1
+
+1
+
+</details>
 
 1
 
