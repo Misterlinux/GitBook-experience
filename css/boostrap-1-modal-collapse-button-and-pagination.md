@@ -178,65 +178,6 @@ We can **bs-dismiss** the current **modal** and **bs-toggle** a new one.
 {% endtab %}
 {% endtabs %}
 
-### Collapse Buttons and content
-
-So, the **Collapse** Js plugin allows us to toggle the height visibility of **Target** content:
-
-```
-//We can use both buttons or <a> links as buttons, it toggles the "collapse" plugin
-//AND the target for the content to collapse/show
-
-<a href="" 
-    class="pure-button close" 
-    data-bs-toggle="collapse" 
-    data-bs-target="#opened"> 
-    X 
-</a>
-
-//we need the COLLAPSE class and target, the rest is PureCSS
-<div class="collapse" id="opened">
-    <ul class="pure-menu-list centered">
-        <li class="pure-menu-item"><a href="" class="pure-menu-link">Rerum?</a></li>
-        <li class="pure-menu-item"><a href="" class="pure-menu-link">Repellendus.</a></li>
-        <li class="pure-menu-item last"><a href="" class="pure-menu-link">Maxime?</a></li>
-    </ul>
-</div>
-
-```
-
-{% tabs %}
-{% tab title="Collapse button" %}
-![With the X button](../.gitbook/assets/Collapse.PNG)
-{% endtab %}
-
-{% tab title="Collapse content" %}
-![This is the show content](../.gitbook/assets/CattCOLLAPSINGura.PNG)
-{% endtab %}
-{% endtabs %}
-
-Also, it's possible to open **multiple** collapses by targeting tags with the same class:
-
-```
-<button class="btn btn-primary" type="button" 
-      data-bs-target=".multi-collapse" data-bs-toggle="collapse">
-  Toggle both elements
-</button>
-
-//even if separated the 2 will open at the same time
-<div class="collapse multi-collapse" id="multiCollapseExample1">
-  <div class="card card-body">
-    Some placeholder content for the first collapse component of this multi-collapse example. This panel is hidden by default but revealed when the user activates the relevant trigger.
-  </div>
-</div>
-
-<div class="collapse multi-collapse" id="multiCollapseExample2">
-  <div class="card card-body">
-    Some placeholder content for the second collapse component of this multi-collapse example. This panel is hidden by default but revealed when the user activates the relevant trigger.
-  </div>
-</div>
-
-```
-
 ### Pagination and bootpag
 
 On **pagination** we create a list of links:
@@ -353,3 +294,204 @@ $('.demo1').bootpag({
 ![](../.gitbook/assets/bootpog2.PNG)
 {% endtab %}
 {% endtabs %}
+
+### Bootstrap Forms
+
+We design Boostrap forms using **form-label/form-input** pairs, linked by **htmlfor/ID** attributes.
+
+{% tabs %}
+{% tab title="Form design" %}
+Each input occupies 100% of the width unless a row>col is set.
+
+```
+//We can add read-only and form-control-plaintext to an input
+
+<div className="row justify-content-center">
+  <div className="col-6">
+    <form>
+
+      <div className="mb-3">
+        <label htmlFor="scritta" className="form-label">Primo texto</label>
+        <input id="scritta" type="text" className="form-control" />
+      </div>
+
+      <div className="mb-3">
+        <label htmlFor="plain" className="form-label">Set email</label>
+        <input id="plain" type="text" className="form-control-plaintext" 
+                value="clash92@gmail.com" readOnly />
+      </div>
+        
+      ....
+
+    </form>
+  </div>
+</div>
+
+```
+
+<figure><img src="../.gitbook/assets/basicform.PNG" alt=""><figcaption><p>form with Readonly input, switch checkbox and inline form</p></figcaption></figure>
+{% endtab %}
+
+{% tab title="Switch input" %}
+The **switch** is a styled checkbox input, so we need a **form-switch** container.
+
+```
+<div className="mb-3">
+
+  <div className="form-check form-switch">
+    <label for="spring" className="form-check-label">Resident </label>
+    <input id="spring" type="checkbox" className="form-check-input" />
+  </div>
+
+</d
+```
+{% endtab %}
+
+{% tab title="Inline form" %}
+An inline form can be added with a **row** container and col label/input.
+
+```
+//we use g(utters) to space the col, col-form-label is for the align
+
+<div className="row g-3 mb-3">
+
+  <div className="col-auto">
+    <label for="bugatti" className="col-form-label">contentID</label>
+  </div>
+  <div className="col-auto">
+    <input id="bugatti" type="text" className="form-control" placeholder="texto" />
+  </div>
+  <div className="col-auto">
+    <button className="btn btn-primary">submit</button>
+  </div>
+
+</div>
+
+```
+{% endtab %}
+{% endtabs %}
+
+We can add **multiple input**s to a single form **row.**
+
+{% tabs %}
+{% tab title="Multiple forms" %}
+We add a row container to the form to create **col** inputs.
+
+```
+//Textarea can increase its height with rows=""
+
+<div className="row justify-content-center">
+  <div className="col-6">
+  
+  <form>
+    <div className="row">
+
+      <div className="col-6"> floating input... </div>
+      <div className="col-6"> input+form-text... </div
+      <div className="col-12 mb-3">
+        <label for="muro" className="form-label">Your text here</label>
+        <textarea id="muro" rows="3" className="form-control"></textarea>
+      </div>
+
+      <div className="col-8 mb-2"> datalist... </div>
+      <div className="col-4 mb-2"> select... </div>
+
+      <div className="col-3"> radioButton... </div>
+      <div className="col-4"> radioButton... </div>
+      <div className="col-5"> reverseCheck... </div>
+
+      <div className="col-10 mt-3">
+        <button className="btn btn-primary" type="submit">Submit</button>
+      </div>
+
+    </div>
+    </form>
+
+  </div>
+</div>
+
+```
+
+<figure><img src="../.gitbook/assets/inputTextform.PNG" alt=""><figcaption><p>Floating label, form text, textarea, datalist, option, radio/reverse-checkbox</p></figcaption></figure>
+{% endtab %}
+
+{% tab title="Form-floating/form-text" %}
+**Form-floating** sets the **label inside** the input and keeps it visible when the input is set, for it to work we need the **input on top of the label**.
+
+**Form-text** puts text **below** the input, we can use aria-describedby/for to link it and input.
+
+```
+//we also need form-floating as a container
+
+<div className="col-6">
+  <div className="form-floating">
+    <input id="mailin" type="password" className="form-control" 
+            placeholder="mail" aria-describedby="mailindesc"/>
+    <label htmlFor="mailin">Email adress</label>
+
+    <div id="mailindesc" className="form-text">Password needs to be 6-12 characters long</div>
+  </div>
+</div>
+
+```
+
+<figure><img src="../.gitbook/assets/passwordForm.PNG" alt=""><figcaption><p>Form floating + form-text</p></figcaption></figure>
+{% endtab %}
+
+{% tab title="Datalist" %}
+**Datalist** allows us to include a series of options for the input type text.
+
+We need to add **list** to the \<input> and link it to the **datalist** using **ID.**
+
+```
+//We can add extra text in <option>, but only value will appear in the input
+
+<div className="col-8 mb-2">
+  <div className="form-floating">
+
+    <input id="lista" type="text" className="form-control" list="multipli" 
+            placeholder="molti"/>
+    <label htmlFor="lista">Datalist</label>
+    <datalist id="multipli">
+      <option value="ancona">provincia</option>
+      <option value="bari"></option>
+      <option value="Catania"></option>
+      <option value="Duccio"></option>
+      <option value="Empoli"></option>
+    </datalist>
+
+  </div>
+</div>
+```
+
+<figure><img src="../.gitbook/assets/datasetForm.png" alt=""><figcaption><p>Datalost options on input text</p></figcaption></figure>
+
+1
+
+1
+
+1
+
+1
+{% endtab %}
+
+{% tab title="select/options" %}
+1
+
+1
+
+1
+
+1
+
+1
+
+<figure><img src="../.gitbook/assets/selectForm.png" alt=""><figcaption><p>Select options on the form</p></figcaption></figure>
+{% endtab %}
+{% endtabs %}
+
+1
+
+1
+
+1
