@@ -476,21 +476,161 @@ We need to add **list** to the \<input> and link it to the **datalist** using **
 {% endtab %}
 
 {% tab title="select/options" %}
-1
+**Form-select** creates a select scrollbar with \<option>, the **selected** one appears first.
 
-1
+```
+//form-select-lg was still smaller so we had to add style
 
-1
+<div className="col-4 mb-2">
 
-1
+  <select className="form-select form-select-lg" style={{height: "58px"}}>
+    <option selected>Province</option>
+    <option value="ancona">AN</option>
+    <option value="bari">BA</option>
+    <option value="catania">CA</option>
+  </select>
 
-1
+</div>
+
+```
 
 <figure><img src="../.gitbook/assets/selectForm.png" alt=""><figcaption><p>Select options on the form</p></figcaption></figure>
 {% endtab %}
 {% endtabs %}
 
-1
+We use **form-check** (or **form-check reverse**) to add radio **form-check-input** buttons and **form-check-label,** in order to display them **inline** we used **col** containers for each**.**
+
+```
+//Radio buttons need to share the Input Name
+//Reverse swaps places between input and label
+
+<div className="col-3">
+
+  <div className="form-check">
+    <input id="uno" type="radio" className="form-check-input" name="residenza" />
+    <label for="uno" className="form-check-label">Resident</label>
+  </div>
+
+</div>
+
+<div className="col-4">
+
+  <div className="form-check">
+    <input id="due" type="radio" className="form-check-input" name="residenza" />
+    <label for="due" className="form-check-label">No resident</label>
+  </div>
+
+</div>
+
+<div className="col-5">
+
+  <div className="form-check form-check-reverse">
+    <input id="resident" type="checkbox" className="form-check-input" />
+    <label for="resident" className="form-check-label">Owned house</label>
+  </div>
+
+</div>
+
+```
+
+**Input-groups** can extend a **form-control** and include labels and buttons.
+
+We use **required** to validate the input before the form **submit**s.
+
+<details>
+
+<summary>Input-groups form and basic validation.</summary>
+
+**Input-groups** need a container class and an **input-group-text span.**
+
+```
+<div className="input-group mb-3 " >
+  <span className="input-group-text"> Name </span>
+  <input type="text" className="form-control" 
+         placeholder="What's your name?" required
+   />
+</div>
+```
+
+We can chain **multiple span/input** in the same form row, and implement form-control functions like **datalist**.
+
+```
+//span space will depend only on their text, can't use col
+
+<div className="input-group mb-3">
+  <input type="text" list="molti" className="form-control" placeholder="Set your email name" />
+  <datalist id="molti">
+    <option value="Catania"></option>
+    <option value="catanzaro"></option>
+    <option value="corsica"></option>
+    <option value="costanza"></option>
+  </datalist>
+  <span className="input-group-text">@</span>
+  <span className="input-group-text">gmail.com</span>
+</div>
+```
+
+It works with **textarea rows**, and the span text self-aligns.
+
+```
+<div className="input-group mb-3">
+  <span className="input-group-text">Write a short description</span>
+  <textarea type="text" className="form-control" rows="3"/>              
+</div>
+```
+
+It works for **\<select>** input and **button**s.
+
+```
+<div className="input-group">
+  <select className="form-select">
+    <option selected> Payment method </option>
+    <option value="mas">Mastercard</option>
+    <option value="pay">Paypal</option>
+    <option value="visa">Visa</option>
+  </select>
+  <button className="btn btn-primary">Submit</button>
+</div>
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/InputForm.png" alt=""><figcaption><p>Input-groups with option,uttons and textarea</p></figcaption></figure>
+
+Bootstrap **validation** is implemented with the **has-validation** container class.
+
+<details>
+
+<summary>Implementing validation using is-valid/invalid and valid/invalid-feedback</summary>
+
+We can use **is-valid/invalid** to style **input, checkboxes, options, and input-groups.**
+
+The **valid/invalid-feedback** will appear depending on the is-valid/invalid input container.
+
+```
+//It will make the border/label red/green depending if valid or not
+
+<div className="input-group has-validation">
+  <span className="input-group-text">$</span>
+
+  <div className="form-floating is-valid">
+    <input type="text" className="form-control" id="float" placeholder="none" required/>
+    <label htmlFor="float">How much exactly</label>
+  </div>
+
+  <div className="valid-feedback">
+    This text is ok
+  </div>
+  <div className="invalid-feedback">
+    Retry the text
+  </div>
+</div>
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/valInvalform.png" alt=""><figcaption><p>valid/invalid-feedback HTML and is-valid/invalid style</p></figcaption></figure>
 
 1
 
