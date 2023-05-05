@@ -1,8 +1,8 @@
-# Boostrap 1 Modal, Collapse button and Pagination
+# Boostrap 1 Modal, Pagination, form layout and input component
 
-* [Modal & PureCSS](boostrap-1-modal-collapse-button-and-pagination.md#purecss-and-modal)
-* [Collapse Buttons](boostrap-1-modal-collapse-button-and-pagination.md#collapse-buttons-and-content)
-* [Pagination & Bootpag](boostrap-1-modal-collapse-button-and-pagination.md#pagination-and-bootpag)
+* [Modal & PureCSS](boostrap-1-modal-pagination-form-layout-and-input-component.md#purecss-and-modal)
+* [Collapse Buttons](boostrap-1-modal-pagination-form-layout-and-input-component.md#collapse-buttons-and-content)
+* [Pagination & Bootpag](boostrap-1-modal-pagination-form-layout-and-input-component.md#pagination-and-bootpag)
 
 Even if we include only some **modules** of bootstrap we use the entire package:
 
@@ -371,6 +371,8 @@ An inline form can be added with a **row** container and col label/input.
 {% endtab %}
 {% endtabs %}
 
+We can add the **disabled** or **readOnly** attribute to remove the interaction with inputs.
+
 We can add **multiple input**s to a single form **row.**
 
 {% tabs %}
@@ -631,7 +633,3 @@ The **valid/invalid-feedback** will appear depending on the is-valid/invalid inp
 </details>
 
 <figure><img src="../.gitbook/assets/valInvalform.png" alt=""><figcaption><p>valid/invalid-feedback HTML and is-valid/invalid style</p></figcaption></figure>
-
-1
-
-1
