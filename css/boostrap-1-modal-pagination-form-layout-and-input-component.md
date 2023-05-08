@@ -332,7 +332,7 @@ Each input occupies 100% of the width unless a row>col is set.
 <figure><img src="../.gitbook/assets/basicform.PNG" alt=""><figcaption><p>form with Readonly input, switch checkbox and inline form</p></figcaption></figure>
 {% endtab %}
 
-{% tab title="Switch input" %}
+{% tab title="Switch checkbox" %}
 The **switch** is a styled checkbox input, so we need a **form-switch** container.
 
 ```
@@ -343,8 +343,10 @@ The **switch** is a styled checkbox input, so we need a **form-switch** containe
     <input id="spring" type="checkbox" className="form-check-input" />
   </div>
 
-</d
+</div>
 ```
+
+<figure><img src="../.gitbook/assets/residenta.PNG" alt=""><figcaption><p>switch checkox</p></figcaption></figure>
 {% endtab %}
 
 {% tab title="Inline form" %}
