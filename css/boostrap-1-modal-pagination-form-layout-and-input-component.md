@@ -375,7 +375,7 @@ An inline form can be added with a **row** container and col label/input.
 
 We can add the **disabled** or **readOnly** attribute to remove the interaction with inputs.
 
-We can add **multiple input**s to a single form **row.**
+We can add **multiple input**s to a single form **row,** like **floating-form, Datalist,** and **\<select>.**
 
 {% tabs %}
 {% tab title="Multiple forms" %}
@@ -416,7 +416,7 @@ We add a row container to the form to create **col** inputs.
 
 ```
 
-<figure><img src="../.gitbook/assets/inputTextform.PNG" alt=""><figcaption><p>Floating label, form text, textarea, datalist, option, radio/reverse-checkbox</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/inputTextform.PNG" alt="" width="423"><figcaption><p>Floating label, form text, textarea, datalist, option, radio/reverse-checkbox</p></figcaption></figure>
 {% endtab %}
 
 {% tab title="Form-floating/form-text" %}
@@ -440,6 +440,27 @@ We add a row container to the form to create **col** inputs.
 ```
 
 <figure><img src="../.gitbook/assets/passwordForm.PNG" alt=""><figcaption><p>Form floating + form-text</p></figcaption></figure>
+
+We can use **\<select>** with **form-floating**.
+
+```
+//select goes on top of lab
+
+<form>
+  <div className="form-floating">
+    <select name="simple" id="nope" className="form-select">
+      <option value="1">goblin</option>
+      <option value="2">Barb</option>
+      <option value="3">Arch</option>
+      <option value="4">miner</option>
+    </select>
+    <label htmlFor="basic">base your choice</label>
+  </div>
+</form>
+
+```
+
+<figure><img src="../.gitbook/assets/floatingForm.png" alt=""><figcaption><p>select component with form-floating</p></figcaption></figure>
 {% endtab %}
 
 {% tab title="Datalist" %}
@@ -635,3 +656,31 @@ The **valid/invalid-feedback** will appear depending on the is-valid/invalid inp
 </details>
 
 <figure><img src="../.gitbook/assets/valInvalform.png" alt=""><figcaption><p>valid/invalid-feedback HTML and is-valid/invalid style</p></figcaption></figure>
+
+We use the **form-range** bootstrap for the **range input type.**
+
+We can set its **min-max** value (by default 0-100) and **steps** for the value of each range snap.
+
+```
+//It can be disabled and has a line background and a thumb
+
+<div>
+  <label htmlFor="follow" className="form-label">Range of values</label>
+  <input id="follow" min="0" max="5" steps="1" type="range" className="form-range" />
+</div>
+```
+
+<figure><img src="../.gitbook/assets/rangeForm.png" alt=""><figcaption><p>form-range input</p></figcaption></figure>
+
+We use the **form-control-color** Bootstrap for the **input type color.**
+
+```
+//We get rounded color window
+
+<div>
+  <label htmlFor="crayon" className="form-label">Pick a color</label>
+  <input id="crayon" type="color" className="form-control form-control-color" />
+</div>
+```
+
+<figure><img src="../.gitbook/assets/colorForm.png" alt="" width="134"><figcaption><p>input type color</p></figcaption></figure>
