@@ -356,6 +356,30 @@ const Conta = () =>{
 
 ### ReactJs Forms submit and input Props
 
+ReactJs **input props** allow us to have **controlled inputs**, in which we set an input's **value** using useState() and can edit it using an **onChange()** event handler.
+
+We re-**set** the value of the **useState()** based on the input current **e.target.value** (target being a property of the event interface, referencing the input).
+
+```
+const [costo, setCosto] = useState(0)
+
+<div>
+  <label htmlFor="cash" className="form-label">How much spending?</label>
+  <input id="cash" type="range" className="form-range" value={costo} 
+         onChange={(e)=> setCosto(e.target.value)} name="costo" />
+  <p className="text-center">Price being: {costo}$</p>
+</div>
+
+```
+
+<figure><img src="../.gitbook/assets/eventInput.png" alt=""><figcaption><p>Changing input value gets rendered with useState()</p></figcaption></figure>
+
+**Text** and **radio/checkbox** inputs use **defaultValue/checked** for the default status prop, if the checkbox doesn't have a value prop on submit it will be "on".
+
+1
+
+1
+
 1
 
 1
