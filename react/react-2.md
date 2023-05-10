@@ -354,7 +354,7 @@ const Conta = () =>{
 {% endtab %}
 {% endtabs %}
 
-### ReactJs Forms submit and input Props
+### React Input Props and onChange() event handler
 
 ReactJs **input props** allow us to have **controlled inputs**, in which we set an input's **value** using useState() and can edit it using an **onChange()** event handler.
 
@@ -449,9 +449,76 @@ We use the **max/min** input prop to set its _submit conditions_, the event hand
 
 <figure><img src="../.gitbook/assets/minprop.png" alt=""><figcaption><p>The error messae on failed submit is included</p></figcaption></figure>
 
-1
+### React Form onSubmit() event handler and FormData()
 
-1
+A **type="submit" button** will trigger the **form onSubmit()** event handler.
+
+```
+//You can use type="reset" to reset the form or type="button" to not form submit
+
+<form onSubmit={invia}>
+  <input type="text" className="form-control" name="elemento" 
+         value={mino} onChange={(e)=> setMino(e.target.value)} />
+
+  <input type="checkbox" name="checked" className="form-check-input" />
+
+  <button type="submit" className="btn btn-primary">Submit</button>
+</form>
+```
+
+We then use **new FormData(form, submitter)** **interface** to render the _e.target HTML form_ from onSubmit(), as a **name/value iterable**.
+
+We finally use the **Object.fromEntries(iterable)** static method to convert the _FormData_ into an _Object._
+
+```
+//The keys/names are gonna be in alphabetical order
+
+const [mino, setMino] = useState("")
+
+function manda(e){
+  e.preventDefault()
+
+  let forma= e.target
+  let formdata = new FormData(forma)
+  let dati = Object.fromEntries(formdata.entries())
+
+  console.log(dati)
+}
+```
+
+<figure><img src="../.gitbook/assets/formData.png" alt=""><figcaption><p>form onSubmit() and formData object</p></figcaption></figure>
+
+We use **FormData methods** to edit the form object.
+
+We can use **append(key, value)** and **set(key, value)** to add a new key/value pair, **delete(key)** to remove one, **get(key)** to return the first _value_ associated with the key, and **has(key)** which returns _true/false_ depending if the key is present.
+
+```
+//Values will be converted in strings (like "true" and "96")
+
+let form= e.target
+let formdata= new FormData(form)
+
+formdata.append("nuovo", 101)
+formdata.set("vecchio", "penny")
+
+console.log( formdata.get("nuovo") )    //"101"
+formdata.delete("nuovo")  
+console.log( formdata.has("nuovo") )   //"false"
+```
+
+We can use the **entries(), keys()**, and **values()** methods to return a key/values, keys, and values **iterable**.
+
+```
+//In order to get the values we need to loop the iterable
+
+for (const pair of formdata.entries()) {
+  console.log( pair );          //["checked", "on"], ["elemento","messo"]
+}
+
+formdata.values()               //checked, elemento
+formdata.keys()                 //on, messo
+
+```
 
 1
 
