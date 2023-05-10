@@ -374,7 +374,80 @@ const [costo, setCosto] = useState(0)
 
 <figure><img src="../.gitbook/assets/eventInput.png" alt=""><figcaption><p>Changing input value gets rendered with useState()</p></figcaption></figure>
 
-**Text** and **radio/checkbox** inputs use **defaultValue/checked** for the default status prop, if the checkbox doesn't have a value prop on submit it will be "on".
+<details>
+
+<summary>useState() with number input</summary>
+
+When **updating** an **integer useState()** outside the input we need to convert it with **Number()**, to maintain the single useState().
+
+```
+//while on the input onChange() is teh same as before
+
+<input type="number" className="form-input" value={numba}
+       onChange={(e)=> setNumba(e.target.value)} />
+<button type="button" className="btn btn-sm btn-secondary" 
+        onClick={()=> setNumba((x)=> Number(x) + 10) }>
+  Add 10
+</button>
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/inputNumber3.png" alt=""><figcaption><p>Input number with Onchange</p></figcaption></figure>
+
+**Text** and **radio/checkbox** inputs use **defaultValue/checked** for the default value prop, if the checkbox doesn't have a value prop on submit its value will be  "on".
+
+We use the **useId()** **React hook** to avoid conflicts when re-rendering multiple **labels/inputs**.
+
+```
+//We can add strings to the useId() to avoid callin it multiple times
+
+const testo= useId()
+
+<form className="row">
+  <div className="col-6">
+    <input id={testo} type="text" className="form-control" 
+           defaultValue="any useState()" />
+  </div
+
+  <div className="col-6">
+    <div className="form-check">
+      <label htmlFor={testo + "check"} className="form-check-label">checked</label>
+      <input id={test + "check"} type="checkbox" checked={true}  
+      value="any useState()" className="form-check-input" />
+    </div>
+  </div>
+
+  <div className="col-4">
+    <button className="btn btn-primary">Submit</button>
+  </div>
+</form>
+
+```
+
+<figure><img src="../.gitbook/assets/defaultInput.png" alt=""><figcaption><p>defaultValue text and checked checkbox</p></figcaption></figure>
+
+We use the **max/min** input prop to set its _submit conditions_, the event handler **onInvalid()** is triggered when the submit fails.
+
+```
+//For text input we use min/manLenght
+
+<form>
+  <input type="text" className="form-control" maxLength="10" minLength="4"
+         onInvalid={()=> {console.log("riprova")}}/>
+
+  <div>
+    <label htmlFor={testo} className="form-label">Numeri</label>
+    <input id={testo} type="number" className="form-control" min="120" max="400" />
+  </div>
+
+  <button className="btn btn-primary">Submit</button>
+</form>
+
+```
+
+<figure><img src="../.gitbook/assets/minprop.png" alt=""><figcaption><p>The error messae on failed submit is included</p></figcaption></figure>
 
 1
 
