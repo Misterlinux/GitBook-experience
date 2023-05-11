@@ -684,3 +684,17 @@ We use the **form-control-color** Bootstrap for the **input type color.**
 ```
 
 <figure><img src="../.gitbook/assets/colorForm.png" alt="" width="134"><figcaption><p>input type color</p></figcaption></figure>
+
+We use **form-control** for the **type="file" input**.
+
+```
+//we get the "scegli file" text included in the form-control with the file name
+
+<div>
+  <label htmlFor="face" className="form-label">Upload file</label>
+  <input id="face" type="file" className="form-control" />
+</div>
+
+```
+
+<figure><img src="../.gitbook/assets/inputFile.PNG" alt=""><figcaption><p>Input type file</p></figcaption></figure>
