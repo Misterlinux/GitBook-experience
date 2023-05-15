@@ -520,6 +520,108 @@ formdata.keys()                 //on, messo
 
 ```
 
+### Input file image render and multiple input attribute
+
+On **type="file" \<input>** we use the **accept** property which sets the **MIME file types** we can submit. We can use accept= "audio/\*_" and "image/\*_" and "video/\*" in case we want to accept any file type.
+
+```
+//With multiple accept properties we use (,), we use the formdata for image src
+
+<div className="col-3">
+  <form onSubmit={immagine} className="text-center">
+    <div className="mb-3">
+      <label htmlFor="nsa" className="form-label"></label>
+      <input id="nsa" type="file" className="form-control" 
+             name="sauce" accept=".png, .webp"/>
+    </div>
+
+    <button type="submit" className="btn btn-primary">Submit</button>
+  </form>
+</div>
+
+<div className="col-3" >
+  <img src={vedere} className="img-fluid" />
+  <p> {digitale} </p>
+</div>
+
+```
+
+<figure><img src="../.gitbook/assets/submitImage.png" alt="" width="513"><figcaption><p>form-control file input and image submit</p></figcaption></figure>
+
+Its returned formdata will be an object of image properties, the **lastModified** (the UNIX epoc number) in milliseconds, its **size** in bytes, the file's **name**, and its MIME **type**.
+
+<details>
+
+<summary>Input image file formdata</summary>
+
+The **accept** property isn't enough to filter the input files so we use a **server-side** function.
+
+```
+//We post the image only if its file type is Included in out array
+
+const fileTypes = [
+  'image/apng',
+  'image/bmp',
+  'image/gif',
+  'image/jpeg',
+  'image/pjpeg',
+  'image/png',
+  'image/svg+xml',
+  'image/tiff',
+  'image/webp',
+  `image/x-icon`
+];
+
+function tipo(poster){
+  return fileTypes.includes(poster.type)
+}
+
+```
+
+The **Byte** is the basic unit of file storage, based on the **binary** system the **Kilobyte** will be 1024 bytes (2^10) while the **Megabyte** is 1024^2.
+
+```
+//we convert the image file size 
+
+function grande(size){
+  if(size < 1024) {
+    return size + 'bytes';
+  } else if(size > 1024 && size < 1048576) {
+    return (size/1024).toFixed(1) + 'KB';
+  } else if(size > 1048576) {
+    return (size/1048576).toFixed(1) + 'MB';
+  }
+}
+
+```
+
+To render the image src we need to **URL.createObjectURL()** the entire **image object**.
+
+```
+//We useState() to render the src in the DOM
+
+function immagine(e){
+  e.preventDefault()
+
+  let form= e.target
+  let formdata= new FormData(form)
+  let result= Object.fromEntries(formdata.entries())
+
+  if(tipo(result.sauce)){
+    let abb = grande(result.sauce.size)
+    setDigitale("The file size is " + abb )
+    setVedere( URL.createObjectURL(result.sauce) )
+  }
+}
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/imagefileObject.png" alt="" width="197"><figcaption><p>Image formdata properties</p></figcaption></figure>
+
+1
+
 1
 
 1
