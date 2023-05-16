@@ -620,12 +620,136 @@ function immagine(e){
 
 <figure><img src="../.gitbook/assets/imagefileObject.png" alt="" width="197"><figcaption><p>Image formdata properties</p></figcaption></figure>
 
-1
+The **multiple input attribute** allows submitting of multiple values in a single input.
 
-1
+If used on a **type="text"** input, the values need to be _separated with a comma_ (,), any space will be cut in the formdata value.
 
-1
+If added to **\<select> it will expand its size**, we will use ctrl + click to multiple select on pc (while we get a **pop-up on mobile**)
 
-1
+<details>
 
-1
+<summary>Multiple attribute &#x3C;input> and Javascript expression render</summary>
+
+We can limit the **size** of an **\<select>** after we add multiple.
+
+```
+//we use the useId() hook to create id for the input/labels
+
+let base = useId()
+
+<form onSubmit={manda}>
+  <div className="my-3">
+    <label htmlFor={base+"one"} className="form-label">Multi email</label>
+    <input id={base+"one"} type="email" name="posta" 
+            className="form-control" multiple />
+  </div>
+
+  <div>
+    <label htmlFor={base+"tre"} className="form-label">Multi files</label>
+    <input id={base + "base"} type="file" className="form-control" 
+            name="imma" accept="image/*" multiple/>
+  </div>
+
+  <div className="my-3">
+    <label htmlFor={base+"due"} className="form-label">Multi select</label>
+    <select id={base + "due"} name="insieme" className="form-select" 
+            size="3" multiple>
+      <option value="primo">uno</option>
+      <option value="secondo">due</option>
+      <option value="terzo">tre</option>
+      <option value="quarto">quattro</option>
+      <option value="quinto">cinque</option>
+      <option value="sei">sei</option>
+    </select>
+  </div>
+
+  <button className="btn btn-primary">submit</button>
+</form>
+
+```
+
+We will **render** the **javascript expressions** after the formdata is submitted.
+
+```
+//they are not components tho, they are useState() with node elements
+
+<div className="col-7">
+  <div className="row text-center">
+      <h3> Images sent to: {mail} </h3>
+  </div>
+
+  <div className="row align-items-center">
+    {gruppo}
+  </div>
+
+  <div className="row my-2">
+    <p> The selected values: {choice}</p>
+  </div>
+</div>
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/multipleInputReact.png" alt="" width="375"><figcaption><p>multiple input submit and render</p></figcaption></figure>
+
+<details>
+
+<summary>Rendering formdata entries for multiple &#x3C;input></summary>
+
+The **formdata** object from a **multiple** \<input> will only show the LAST value of each **name/key** but the **formdata iterable** will keep track of every multiple input value.
+
+We use an **useState(\[])** to render an array of **React node elements** as a **javascript expression {}**.
+
+```
+//The image property value is an object so we need {} to deconstruct it
+//We use array deconstruct in the setter useState() function
+//The multiple type="text" input formdata will return all the values at once
+
+const [gruppo, setGruppo] = useState( [] )
+const [ mail, setMail ] = useState("")
+const [ choice, setChoice ] =useState([])
+
+function manda(e){
+  e.preventDefault()
+
+  let form= e.target
+  let formdata= new FormData(form)
+  
+  for(const sor of formdata.entries()){
+    if( sor[0] == "imma" ){
+    
+      const {size, name, lastModified, type} = sor[1]
+
+      setGruppo( gru => [
+        ...gru, 
+        <div className="col-4" key={lastModified} >
+          <img src={URL.createObjectURL(sor[1])} className="img-fluid" />
+        </div>
+      ])
+    }else if( sor[0] == "insieme" ){
+
+      setChoice( mal => [
+        ...mal,
+        <span key={sor[1]}>
+          {sor[1] + " "}
+        </span>
+       ]
+      )
+    }
+  }
+
+  let formula= Object.fromEntries(formdata.entries())
+
+  let uno = formula.posta.split(",")
+
+  for( const sent of uno ){
+    setMail(item => item + sent + ", " )
+  }
+}
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/MultipleinputFormdata.png" alt="" width="318"><figcaption><p>multiple input formdata object</p></figcaption></figure>
