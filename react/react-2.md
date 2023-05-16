@@ -1,9 +1,9 @@
-# REACT 2
+# REACT 2, React routes, Input props and onChange(), React form onSubmit() and formData, input multiple attribute and input file images rendering
 
-* 1
-* 1
-* 1
-* 1
+* [Using \<Outlet/> with React Routes](react-2.md#using-less-than-outlet-greater-than-with-react-routes)&#x20;
+* [React Input Props and onChange() event handler](react-2.md#react-input-props-and-onchange-event-handler)
+* [React Form onSubmit() event handler and FormData()](react-2.md#react-form-onsubmit-event-handler-and-formdata)
+* [Input file image render and multiple input attribute](react-2.md#input-file-image-render-and-multiple-input-attribute)
 
 We use **Client-side routing** to render **\<Routes> components** without requesting **external documents**.
 
@@ -517,7 +517,6 @@ for (const pair of formdata.entries()) {
 
 formdata.values()               //checked, elemento
 formdata.keys()                 //on, messo
-
 ```
 
 ### Input file image render and multiple input attribute
@@ -700,6 +699,8 @@ We will **render** the **javascript expressions** after the formdata is submitte
 The **formdata** object from a **multiple** \<input> will only show the LAST value of each **name/key** but the **formdata iterable** will keep track of every multiple input value.
 
 We use an **useState(\[])** to render an array of **React node elements** as a **javascript expression {}**.
+
+We can't use push() for the useState() because it returns the array's length, not the edited array, while **concat()** returns the "new" array.
 
 ```
 //The image property value is an object so we need {} to deconstruct it

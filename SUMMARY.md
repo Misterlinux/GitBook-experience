@@ -36,7 +36,7 @@
 ## REACT
 
 * [REACT 1, React props, event handlers, useState(), useEffect(), React forms/inputs and Class components](react/react-1.md)
-* [REACT 2](react/react-2.md)
+* [REACT 2, React routes, Input props and onChange(), React form onSubmit() and formData, input multiple attribute and input file images rendering](react/react-2.md)
 * [REACT 3](react/react-3.md)
 
 ## NODEJS
