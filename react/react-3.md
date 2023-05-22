@@ -46,6 +46,48 @@ try{
 
 ```
 
+To configure the **OpenAi translate API** in ReactJs
+
+```
+import { Configuration, OpenAIApi } from "openai";
+
+const configuration = new Configuration({
+  apiKey: "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",
+});
+const openai = new OpenAIApi(configuration);
+
+```
+
+We can prompt single or multiple language translations.
+
+{% tabs %}
+{% tab title="Single language" %}
+1
+
+1
+
+1
+
+1
+{% endtab %}
+
+{% tab title="Multiple languages" %}
+1
+
+1
+
+1
+
+1
+
+1
+{% endtab %}
+{% endtabs %}
+
+1
+
+1
+
 1
 
 1
