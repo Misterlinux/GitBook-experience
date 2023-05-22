@@ -398,6 +398,25 @@ When **updating** an **integer useState()** outside the input we need to convert
 
 **Text** and **radio/checkbox** inputs use **defaultValue/checked** for the default value prop, if the checkbox doesn't have a value prop on submit its value will be  "on".
 
+```
+//We use an useState() to set a defaultChecked(works for value too)
+const [lenguage, setLenguage] = useState( "Hindi" );
+
+<div className="form-check">
+  <input type="radio" name='language' defaultChecked={true} value="hindi"
+         onChange={(e)=> setLenguage(e.target.value) } />
+  <label >Hindi</label>
+</div>
+<div className="form-check">
+  <input type="radio" name='language' value="spanish"
+         onChange={(e)=> setLenguage(e.target.value) } />
+  <label>Spanish</label>
+</div>
+
+```
+
+<figure><img src="../.gitbook/assets/Defaulter.png" alt=""><figcaption><p>Defaultchecker() value set</p></figcaption></figure>
+
 We use the **useId()** **React hook** to avoid conflicts when re-rendering multiple **labels/inputs**.
 
 ```
