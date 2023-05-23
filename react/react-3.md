@@ -52,7 +52,7 @@ To configure the **OpenAi translate API** in ReactJs
 import { Configuration, OpenAIApi } from "openai";
 
 const configuration = new Configuration({
-  apiKey: "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",
+  apiKey: "__Open_AI_key__",
 });
 const openai = new OpenAIApi(configuration);
 
@@ -62,7 +62,26 @@ We can prompt single or multiple language translations.
 
 {% tabs %}
 {% tab title="Single language" %}
-1
+For a single-language translation, we modify the **prompt**.
+
+```
+//trim() removes the extra white spaces included in the translation
+//it works for longer strings too
+
+const response = await openai.createCompletion({
+  model: "text-davinci-003",
+  prompt:  `Translate this into Spanish : cipolla`,
+  temperature: 0.3,
+  max_tokens: 100,
+  top_p: 1.0,
+  frequency_penalty: 0.0,
+  presence_penalty: 0.0,
+});
+
+console.log( response )
+console.log( response.data.choices[0].text.trim() );    //cebolla
+
+```
 
 1
 
@@ -72,15 +91,42 @@ We can prompt single or multiple language translations.
 {% endtab %}
 
 {% tab title="Multiple languages" %}
-1
+To translate into **multiple languages** we **join()** an array into the **prompt**.
 
-1
+```
+//On ReactJs a useState() won't work, so we use an array variable
+//The API will respond with a string with the language: translated
 
-1
+const handleOnSubmit = async (e) => {
+  e.preventDefault()
 
-1
+  colonna = []
+  let form = e.target
+  let formdata = new FormData(form)
 
-1
+  for( const x of formdata.entries() ){
+    if(x[0] == "languages" ){
+      colonna.push( x[1] )
+    }
+  }
+
+  const response = await openai.createCompletion({
+    model: "text-davinci-003",
+    prompt:  `Translate this into ${ colonna.join(", ") } : ${testo}`,
+    temperature: 0.3,
+    max_tokens: 100,
+    top_p: 1.0,
+    frequency_penalty: 0.0,
+    presence_penalty: 0.0,
+  });
+
+  console.log( response )
+  console.log( response.data.choices[0].text.trim() );    
+}
+
+```
+
+<figure><img src="../.gitbook/assets/multipleAItranslate.png" alt="" width="563"><figcaption><p>translation response and .text.trim()</p></figcaption></figure>
 {% endtab %}
 {% endtabs %}
 
