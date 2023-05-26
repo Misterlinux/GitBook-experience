@@ -26,6 +26,18 @@ let primo= 1, secondo= 2, terzo= 3;
 
 //ALSO, we can only use _ or - on let names
 ```
+
+We can create **multi-line** **strings** using **' '** and **/n.**
+
+```
+let poetry = `
+Nel mezzo del cammin di nostra vita \n
+mi ritrovai per una selva oscura, \n `
+
+console.log( poetry )        //Nel mezzo del cammin di nostra vita
+                             //mi ritrovai per una selva oscura,
+
+```
 {% endtab %}
 
 {% tab title="Const" %}

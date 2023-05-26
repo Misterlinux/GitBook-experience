@@ -1,5 +1,11 @@
 # REACT 3
 
+* 1
+* 1
+* 1
+* 1
+* 1
+
 The **fetch() API** provides us a javascript interface to access the protocol, by using the **global method fetch()** and an URL path it returns a promise that will resolve into a **response object**.
 
 The **protocol** is the set of rules used to define **data formats**, needed to allow data exchange between devices.
@@ -82,12 +88,6 @@ console.log( response )
 console.log( response.data.choices[0].text.trim() );    //cebolla
 
 ```
-
-1
-
-1
-
-1
 {% endtab %}
 
 {% tab title="Multiple languages" %}
@@ -130,11 +130,85 @@ const handleOnSubmit = async (e) => {
 {% endtab %}
 {% endtabs %}
 
-1
+We use **regex** to create a **useState()** array of **Node elements** to render in the DOM.
 
-1
+<details>
 
-1
+<summary>To render a multi-line string variable as an useState() array</summary>
+
+We use **regex** to create an **array** of a **multi-line** string variable.
+
+```
+let texto= `
+Nel mezzo del cammin di nostra vita \n
+mi ritrovai per una selva oscura, \n
+ché la diritta via era smarrita. \n `
+
+const versi = new RegExp( /\n/g )
+let cantica = texto.split(versi)
+```
+
+Then we use **map()** to create an useState() array with **Node elements.**
+
+```
+//we need to invoke it only once, useState() would trigger twice
+//whitespaces are array elements as well, we need to edit the index
+
+const [canto, setCanto] = useState( [] )
+
+function compile(){
+
+  if(canto.length == 0){
+    cantica.map(((carta, index)=>{
+      if(carta !== "" ){ 
+        index = (index -1)/2
+        setCanto((x)=> [...x,<div id={index} key={chiave+index}>{carta}</div>])
+      }
+    }))
+  }
+}
+
+compile()
+
+```
+
+Then we can render it.
+
+```
+<div className="row mt-2 my-sm-2">
+  {canto}
+</div>
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/regexuseState.png" alt="" width="315"><figcaption></figcaption></figure>
+
+We loop through the useState() node elements and, using **regex**, we modify **useState()** to render the translation using **map()**.
+
+```
+const trova =  new RegExp( "("+ word + ")", 'ig');
+
+for(let x of canto){
+  if( trova.test( x.props.children[1] ) ){
+
+    tradotto = await traduce(toTranslate, Language)
+
+    setCanto((x)=> x.map( (str, index) =>
+      (index == id) ? 
+      <div id={id} key={key} style={ {backgroundColor: "blue", color:"white"} }> 
+        {tradotto} 
+      </div> 
+      : 
+      str
+    ))
+  }
+}
+
+```
+
+<figure><img src="../.gitbook/assets/RenderedTranslation.png" alt="" width="467"><figcaption><p>We update the useState() to get the translation to render</p></figcaption></figure>
 
 1
 
