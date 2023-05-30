@@ -210,6 +210,91 @@ for(let x of canto){
 
 <figure><img src="../.gitbook/assets/RenderedTranslation.png" alt="" width="467"><figcaption><p>We update the useState() to get the translation to render</p></figcaption></figure>
 
+### Render useEffect() arrays and objects
+
+The **useState()** is a react Hook we use to have **state variables** in function components
+
+To modify useState() arrays we use the **spread syntax** and **slice()** method.
+
+```
+//slice() doesn't modify the starting useState() it creates a new one
+const [linea, setLinea] = useState( [2, 3, 4, 5, 6, 7] )
+
+function add(){
+  setLinea((x)=>( [11, ...x, 10] ) )          //[10, 2, 3, 4, 5, 6, 7, 10]
+}
+
+function remove(){
+  setLinea((x)=> (x.slice(1, x.length - 1)) )  //[2, 3, 4, 5, 6, 7]
+}
+```
+
+The spread operator works for **useState() objects** too.
+
+<details>
+
+<summary>Add, Remove and modify useState() objects guide</summary>
+
+To render useState() objects in the DOM we use the **static method JSON.stringify()**
+
+```
+//It converts a javascript value into a JSON string and works on arrays
+const [linea, setLinea] = useState( [2, 3, 4, 5, 6, 7] )
+
+const [ cosa, setCosa ] = useState({
+  terzo: "tre",
+  quarto: "quattro"
+})
+
+<div> { JSON.stringify(cosa) } </div>
+<div> { JSON.stringify(linea) } </div>
+```
+
+We use the spread syntax to add **key/value objects** to the object useState()
+
+```
+//We need "" for both the key and the value
+
+function adding(){
+  let adding = {"primo": "valore"}
+  setCosa((x)=> ({
+    ...adding,
+    ...x, 
+  }))
+}
+```
+
+To delete a property from the **useState()** we **copy** it and use the **delete operator,** then we set it as the new useState().
+
+```
+//remember the "" on the property
+
+function removing(){
+  let copia = {...cosa}
+  delete copia["primo"]
+
+  setCosa((x)=>({
+    ...copia
+  }))
+}
+```
+
+To add and modify existing properties we.
+
+```
+//We can use the current object properties to create new ones
+
+function multing(){
+  setCosa((x)=> ({ zero: "zero", ...x, terzo: x.terzo + "anew" }) )
+}
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/tripleObject.png" alt="" width="370"><figcaption><p>useState(9 object, add, delete and editing existing properties</p></figcaption></figure>
+
+1
+
 1
 
 1
