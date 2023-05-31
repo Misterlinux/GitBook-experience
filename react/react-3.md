@@ -293,9 +293,70 @@ function multing(){
 
 <figure><img src="../.gitbook/assets/tripleObject.png" alt="" width="370"><figcaption><p>useState(9 object, add, delete and editing existing properties</p></figcaption></figure>
 
-1
+<details>
 
-1
+<summary>Modify useState() on nested objects</summary>
+
+We need to use the spread syntax multiple times to access **nested object properties**.
+
+```
+const [messob, setMessob] = useState({
+  author: 'me',
+  message: {
+    id: 1,
+    text: 'This was added'
+  }
+});
+
+//We need to keep the other properties even if we don't edit them
+function second(){
+  setMessob((x)=>({
+    ...x,
+    message: {
+      ...x.message,
+      id: 123
+    }
+    })
+  )
+}
+
+```
+
+The same goes for first-level object properties.
+
+```
+//we need to keep the other object properties values still
+
+function primo(){
+  setMessob((x)=>({
+    author: "franco mergellini",
+    message: {
+      ...x.message
+    }
+  }
+  ))
+}
+
+```
+
+We can combine them.
+
+```
+function doppio(){
+  setMessob((x)=>({
+    author: "Doppio cambio",
+    message:{
+      ...x.message,
+      text: "We did a double change guys" 
+    }
+  }))
+}
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/nestedObj.png" alt="" width="466"><figcaption><p>editing different nested properties in the object</p></figcaption></figure>
 
 1
 
