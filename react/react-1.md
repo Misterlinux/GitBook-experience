@@ -1,4 +1,4 @@
-# REACT 1, React props, event handlers, useState(), useEffect(), React forms/inputs and Class components
+# REACT 1, React props, event handlers, basic useState(), useEffect(), React forms/inputs and Class components
 
 * [React Props, event handlers and useState](react-1.md#react-props-event-handlers-and-usestate)
 * [React useEffect with setInterval()](react-1.md#react-useeffect-with-setinterval)
@@ -109,9 +109,9 @@ export default App;
 
 <figure><img src="../.gitbook/assets/components.PNG" alt=""><figcaption><p>rendered React component</p></figcaption></figure>
 
-We use **CamelCase** for **component names** to differentiate from default HTML tags.
+We use **CamelCase** for **component names** to differentiate from default HTML tags.:
 
-On **JSX** we can use _javascript expressions_ using **{}**:
+We use _javascript expressions_ and **{}** to render logic and variables on **JSX**.
 
 <details>
 
