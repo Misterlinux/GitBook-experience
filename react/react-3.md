@@ -210,7 +210,7 @@ for(let x of canto){
 
 <figure><img src="../.gitbook/assets/RenderedTranslation.png" alt="" width="467"><figcaption><p>We update the useState() to get the translation to render</p></figcaption></figure>
 
-### Render useEffect() arrays and objects
+### Render useState() arrays and objects
 
 The **useState()** is a react Hook we use to have **state variables** in function components
 
@@ -357,6 +357,67 @@ function doppio(){
 </details>
 
 <figure><img src="../.gitbook/assets/nestedObj.png" alt="" width="466"><figcaption><p>editing different nested properties in the object</p></figcaption></figure>
+
+1
+
+### Conditional rendering using components props
+
+The if statement is not a **{**javascript expression**}**, so we use the **component's props** in the **function component** to return and render **JSX**.
+
+```
+//We first use && logical operator to render the components onClick()
+//do not use single numeric conditions, it will return {0} instead of false
+
+const [press, setPress] = useState(false)
+
+<div className="text-center">
+  <button className="btn btn-warning my-2" onClick={()=> setPress(true)} >Open</button>
+</div>
+
+{press &&
+  <div>
+    <Item name="valoriano" back="bg-warning" pack={press} />
+    <Item name="iride" back="bg-primary text-white" pack={press} />
+    <Item name="losco" back="bg-danger" pack={!press} />
+  </div>
+}
+```
+
+<figure><img src="../.gitbook/assets/components.png" alt="" width="134"><figcaption><p>conditional rendered componentc</p></figcaption></figure>
+
+```
+//We then use the props in the function component
+
+function Item({name, back, pack}){
+  return (
+    <li className={back}>
+      {name} {pack && "✔"}
+    </li>
+  )
+}
+
+function Item1({name, back, pack}){
+  let itemContent = name;
+  if (pack) {
+    itemContent = name + " ✔" ;
+  }
+
+  return (
+    <li className={back}>
+      {itemContent}
+    </li>
+  )
+}
+
+```
+
+1
+
+1
+
+1
+
+1
 
 1
 
