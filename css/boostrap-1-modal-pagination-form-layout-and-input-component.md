@@ -1,7 +1,7 @@
 # Boostrap 1 Modal, Pagination, form layout and input component
 
 * [Modal & PureCSS](boostrap-1-modal-pagination-form-layout-and-input-component.md#purecss-and-modal)
-* [Collapse Buttons](boostrap-1-modal-pagination-form-layout-and-input-component.md#collapse-buttons-and-content)
+* [Bootstrap collapse button and content](boostrap-1-modal-pagination-form-layout-and-input-component.md#bootstrap-collapse-buttons-and-content)
 * [Pagination & Bootpag](boostrap-1-modal-pagination-form-layout-and-input-component.md#pagination-and-bootpag)
 
 Even if we include only some **modules** of bootstrap we use the entire package:
@@ -292,6 +292,80 @@ $('.demo1').bootpag({
 
 {% tab title="Second pag" %}
 ![](../.gitbook/assets/bootpog2.PNG)
+{% endtab %}
+{% endtabs %}
+
+### Bootstrap collapse buttons and content
+
+The **data-bs-toggle="collapse"** uses **href/data-bs-target** to animate the height/width of the **collapse** element.
+
+{% tabs %}
+{% tab title="Vertical collapse" %}
+When using a non-button we use **href="#"** to target the collapse Id content,&#x20;
+
+```
+//The trigger container and the collapse can be located anywhere
+
+<div className="row justify-content-center me-0">
+  <div className="col-5">
+
+    <div className="d-flex justify-content-between align-items-center p-2" 
+         href="#apri" role='button' data-bs-toggle="collapse">
+      <p>Click to collapse</p>
+      <i className="fa-solid fa-angle-down"></i>
+    </div>
+
+    <div className="collapse" id="apri">
+      <div className='card card-body'>
+        ...Lorem
+      </div>
+    </div>
+
+  </div>
+</div>
+
+```
+
+<figure><img src="../.gitbook/assets/collapsedVertical.png" alt="" width="518"><figcaption><p>Vertical collapse trigger</p></figcaption></figure>
+
+To **data-bs-target/href** multiple collapse we use _classes_.
+{% endtab %}
+
+{% tab title="Horizontal collpse" %}
+We add **collapse-horizontal** to the collapse content.
+
+```
+//By adding role="button" we can use data-bs-target
+
+<div className="row">
+
+  <div className="col-4 d-flex justify-content-between align-items-start pt-3" 
+       role='button' data-bs-toggle="collapse" data-bs-target="#ampio">
+    <h1>Title</h1>
+    <i className="fa-solid fa-angles-right my-3"></i>
+  </div>
+
+  <div className="col-8 collapse collapse-horizontal" id='ampio'>
+    <div className="card card-body">
+
+      <h1>This is the start</h1>
+      <div className="row me-0">
+        <div className="col-3">
+          <img src={imag} className='img-fluid' />
+        </div>
+        <div className="col-9">
+          <p> ...Lorem </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+```
+
+<figure><img src="../.gitbook/assets/HorizontalColl.png" alt="" width="375"><figcaption><p>Vertical collapse content</p></figcaption></figure>
 {% endtab %}
 {% endtabs %}
 
