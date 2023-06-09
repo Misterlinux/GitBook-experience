@@ -358,7 +358,35 @@ function doppio(){
 
 <figure><img src="../.gitbook/assets/nestedObj.png" alt="" width="466"><figcaption><p>editing different nested properties in the object</p></figcaption></figure>
 
-1
+<details>
+
+<summary>Modify useState() object property using a variabl</summary>
+
+We use the **\[variable]** to substitute an object property with its **splice()** copy.
+
+```
+//We can't use splice() on the useState() property, and slice() isn't
+//precise enough, so we splice() a copy
+
+const [deck, setDeck] = useState({
+  spade: [ 1, 2, 3, 4, 5 ],
+  fiori: [ 1, 2, 3, 4, 5 ],
+  cuori: [ 1, 2, 3, 4, 5 ],
+  quadri: [ 1, 2, 3, 4, 5 ],
+})
+
+let carte = "fiori"
+let raggio = deck[carte]
+raggio.splice( _index_, 1 )
+
+setDeck((x)=>({
+  ...x,
+  [carte]: raggio
+}))
+
+```
+
+</details>
 
 ### Conditional rendering using components props
 

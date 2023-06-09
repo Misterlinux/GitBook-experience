@@ -421,6 +421,24 @@ const Ray= () =>{
 
 <figure><img src="../.gitbook/assets/usestato.png" alt=""><figcaption><p>useState() after onClick() </p></figcaption></figure>
 
+We can **pass** the useState() and its **setter function** as **props**:
+
+```
+//and use the setter function to change the useState
+
+const [versus, setVersus] = useState(false)
+
+<GameStart 
+  versus={versus}
+  setVersus={setVersus}
+/>
+
+<button className="btn btn-danger ms-1" disabled={props.versus} 
+        onClick={ ()=> props.setVersus(true) }> 
+  Stand 
+</button>
+```
+
 ### React useEffect with setInterval()
 
 We use the **useEffect(function, dependency)** **hook** to **synchronize** a component with an external **variable.**
