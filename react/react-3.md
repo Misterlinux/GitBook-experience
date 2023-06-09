@@ -1,10 +1,7 @@
-# REACT 3
+# REACT 3, Fetch() API, OpenAI API translation, useState() objects and conditional rendering&#x20;
 
-* 1
-* 1
-* 1
-* 1
-* 1
+* [Render useState() arrays and objects](react-3.md#render-usestate-arrays-and-objects)
+* [Conditional rendering using components props](react-3.md#conditional-rendering-using-components-props)
 
 The **fetch() API** provides us a javascript interface to access the protocol, by using the **global method fetch()** and an URL path it returns a promise that will resolve into a **response object**.
 
@@ -399,7 +396,9 @@ The if statement is not a **{**javascript expression**}**, so we use the **compo
 const [press, setPress] = useState(false)
 
 <div className="text-center">
-  <button className="btn btn-warning my-2" onClick={()=> setPress(true)} >Open</button>
+  <button className="btn btn-warning my-2" onClick={()=> setPress(true)}>
+    Open
+  </button>
 </div>
 
 {press &&
@@ -438,19 +437,3 @@ function Item1({name, back, pack}){
 }
 
 ```
-
-1
-
-1
-
-1
-
-1
-
-1
-
-1
-
-1
-
-1
