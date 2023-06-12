@@ -437,3 +437,56 @@ function Item1({name, back, pack}){
 }
 
 ```
+
+### UseContext() and Provider components
+
+To **share data** between separate and nested **components** we don't use **props** (prop-drilling), we **useContext()**.
+
+<details>
+
+<summary>Prop-drilling example</summary>
+
+Prop drilling happens when we **repeat** a **prop** multiple times on multiple nested components.
+
+```
+//Even if all 3 components are connected we need to use prop
+//even in <HomePage> that doesn't use it
+
+const ProfilePage = () => {
+  const user = {
+    firstName: 'Jane',
+    lastName: 'Doe'
+  }
+  return (
+    <HomePage person={user}/>
+  )
+}
+
+const HomePage = ({ person }) => {
+  return (
+    <SettingsPage person={person} />
+  )
+}
+
+const SettingsPage = ({ person }) => {
+  return (
+    <div>
+      {person.firstName}
+      {person.lastName}        //Jane Doe
+    </div>
+  )
+}
+
+```
+
+</details>
+
+1
+
+1
+
+1
+
+1
+
+1
