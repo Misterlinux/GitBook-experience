@@ -481,6 +481,72 @@ const SettingsPage = ({ person }) => {
 
 </details>
 
+The **createMethod API** sets a global state **context object** that components can **Provide** and read. The **useContext() React hook** reads the **component.provide**d context.
+
+```
+//The createContext() is the default value when no parent.provider value is available
+
+const ThemeContext = createContext('red')
+
+const Page = () =>{<p>We have the value useContext(ThemeContext)</p>}
+
+<ThemeContext.Provider value={"stripes"}>
+  <Page />                  //We have the value stripes
+</ThemeContext.Provider>
+
+```
+
+<details>
+
+<summary>Nested component.Provider and useState value prop</summary>
+
+We can have **multiple** component.Provide and each child will **inherit** each parent **context values**.
+
+```
+//Page will only have access to ThemeContext prop value
+
+<ThemeContext.Provider value={"stripes"}>
+  <Page />
+  <SideContext.Provider value={theme}>
+    <Second />
+  </SideContext.Provider>
+</ThemeContext.Provider>
+
+<button className='btn btn-sm btn-warning' 
+        onClick={ ()=>(setTheme( ()=>({first: "the 33th number"})) )}>
+  On change
+</button>
+
+```
+
+The children need to be **function component** to **useContext()**.
+
+The **value prop** can be a useState(), an object, or a function, when changed it triggers a **re-render** of the **children**'s components
+
+```
+//{" "} used to space text from javascript expressions
+
+const ThemeContext = createContext('red')
+const SideContext = createContext(null)
+
+const [theme, setTheme] = useState({first: 33});
+
+const Page = () =>{<p>We have the value useContext(ThemeContext)</p>}
+
+function Second(){
+  return(
+    <p>Re-used context {" "} {useContext(ThemeContext)} {" "}
+      and also {useContext(SideContext).first}
+    </p>
+  )
+}
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/contextReact.png" alt="" width="473"><figcaption><p>Context provided value child component</p></figcaption></figure>
+
 1
 
 1
