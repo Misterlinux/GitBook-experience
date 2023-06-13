@@ -488,10 +488,8 @@ The **createMethod API** sets a global state **context object** that components 
 
 const ThemeContext = createContext('red')
 
-const Page = () =>{<p>We have the value useContext(ThemeContext)</p>}
-
 <ThemeContext.Provider value={"stripes"}>
-  <Page />                  //We have the value stripes
+  <p>This is the {useContext(ThemeContext)} </p>    //We have the value stripes
 </ThemeContext.Provider>
 
 ```
@@ -519,8 +517,6 @@ We can have **multiple** component.Provide and each child will **inherit** each 
 
 ```
 
-The children need to be **function component** to **useContext()**.
-
 The **value prop** can be a useState(), an object, or a function, when changed it triggers a **re-render** of the **children**'s components
 
 ```
@@ -547,7 +543,36 @@ function Second(){
 
 <figure><img src="../.gitbook/assets/contextReact.png" alt="" width="473"><figcaption><p>Context provided value child component</p></figcaption></figure>
 
+We **import createContext()** to create multiple different Context providers.
+
+```
+import { useContext, createContext } from "react";
+
+export const OutsideContext = createContext(15);
+export const OutContext = createContext("Saul goodman");
+
+import { OutContext, OutsideContext} from './components/Context';
+```
+
+<details>
+
+<summary>Nested example</summary>
+
 1
+
+1
+
+1
+
+1
+
+1
+
+1
+
+</details>
+
+<figure><img src="../.gitbook/assets/contextForm.png" alt="" width="419"><figcaption></figcaption></figure>
 
 1
 
