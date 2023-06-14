@@ -442,44 +442,90 @@ function Item1({name, back, pack}){
 
 To **share data** between separate and nested **components** we don't use **props** (prop-drilling), we **useContext()**.
 
-<details>
+{% tabs %}
+{% tab title="useContext() Providers" %}
+We set the Context provided **values once**.
 
-<summary>Prop-drilling example</summary>
+<pre><code>import Relevant from './components/Externals';
+<strong>const [drill, setDrill] = useState("element")
+</strong>
+&#x3C;OutContext.Provider value={{drill,setDrill}}>
+  &#x3C;Relevant />
+&#x3C;/OutContext.Provider>
+</code></pre>
 
-Prop drilling happens when we **repeat** a **prop** multiple times on multiple nested components.
+In the imported component we **deconstruct** the context **value object** property.
 
 ```
-//Even if all 3 components are connected we need to use prop
-//even in <HomePage> that doesn't use it
+function Relevant(){
+  const {drill, setDrill} = useContext(OutContext)
+  let dodice = drill + " added"
 
-const ProfilePage = () => {
-  const user = {
-    firstName: 'Jane',
-    lastName: 'Doe'
-  }
-  return (
-    <HomePage person={user}/>
-  )
-}
-
-const HomePage = ({ person }) => {
-  return (
-    <SettingsPage person={person} />
-  )
-}
-
-const SettingsPage = ({ person }) => {
-  return (
+  return(
     <div>
-      {person.firstName}
-      {person.lastName}        //Jane Doe
+      Woglio vedere da extern l' {drill} and the {dodice}
+      <button className="btn btn-primary"
+          onClick={()=> setDrill("arco")}>
+        submit
+      </button>
+
+      <Sollievo />
+    </div>
+  )
+}
+```
+
+And its **nested components** will have access to the **same context value** (even if imported).
+
+```
+function Sollievo(){
+  const {drill} = useContext(OutContext) 
+  let dodice = drill + " 12"
+
+  return(
+    <div>
+      Abbiamo il tempo {dodice}
+    </div>
+  )
+}
+```
+{% endtab %}
+
+{% tab title="prop-drilling" %}
+The **props** will work on the imported component but they will need to be **re-declared** for any **nested** one.
+
+```
+const [drill, setDrill] = useState("element")
+<Relevant1 empire={drill} setempire={setDrill} />
+
+function Relevant1(prop){
+
+  return(
+    <div>
+      <p> This is the imported prop value <b> {prop.empire} </b> </p>
+    
+      <button className="btn btn-warning btn-sm" 
+        onClick={()=> prop.setempire("Vicenza")}>
+        Cambio
+      </button>
+      <Empirico empire={prop.empire} />
+    </div>  
+  )
+}
+
+function Empirico(prop){
+  let alluce = prop.empire + 12
+
+  return(
+    <div>
+      While this is the modified prop {alluce}
     </div>
   )
 }
 
 ```
-
-</details>
+{% endtab %}
+{% endtabs %}
 
 The **createMethod API** sets a global state **context object** that components can **Provide** and read. The **useContext() React hook** reads the **component.provide**d context.
 
@@ -553,26 +599,6 @@ export const OutContext = createContext("Saul goodman");
 
 import { OutContext, OutsideContext} from './components/Context';
 ```
-
-<details>
-
-<summary>Nested example</summary>
-
-1
-
-1
-
-1
-
-1
-
-1
-
-1
-
-</details>
-
-<figure><img src="../.gitbook/assets/contextForm.png" alt="" width="419"><figcaption></figcaption></figure>
 
 1
 
