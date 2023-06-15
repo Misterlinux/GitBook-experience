@@ -600,6 +600,63 @@ export const OutContext = createContext("Saul goodman");
 import { OutContext, OutsideContext} from './components/Context';
 ```
 
+We can **override** specific **context values** for specific children.
+
+```
+<ThemeContext.Provider value="dark">
+  <ThemeContext.Provider value="light">
+    <Footer />
+  </ThemeContext.Provider>
+</ThemeContext.Provider>
+```
+
+### UseCallback() and UseMemo()
+
+The **context value** object/props can pass **functions()**, and if any **nested component** changes then the passed function will be **re-rendered**, even if it returns the same value.
+
+To optimize updating the component we **useCallback()** and **useMemo().**
+
+```
+const [currentUser, setCurrentUser] = useState(null);
+
+function login(response) {
+  storeCredentials(response.credentials);
+  setCurrentUser(response.user);
+}
+
+return (
+  <AuthContext.Provider value={{ currentUser, login }}>
+    <Page />
+  </AuthContext.Provider>
+);
+```
+
+The **useCallback()** React Hook **caches**/saves a function and **won't trigger** it unless one of its **dependencies** array elements changes.
+
+```
+//All dependencies need to be present inside the function
+
+useCallback(function, dependencies) 
+
+const handleSubmit = useCallback((orderDetails) => {
+  posting('/product/' + productId + '/buy', {
+    referrer,
+    orderDetails,
+  });
+}, [productId, referrer]);
+
+function posting(url, data) {
+  console.log('POST /' + url);
+  console.log(data);
+}
+```
+
+Any function (){} or ()=>{} will be considered a new function, even if it includes the same values, and gets **re-rendered**, to avoid that we **useMemo()**.
+
+The **useMemo()** caches a function returned value while **useCallback()** keeps that function from re-rendering.
+
+1
+
 1
 
 1
