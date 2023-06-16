@@ -655,11 +655,129 @@ Any function (){} or ()=>{} will be considered a new function, even if it includ
 
 The **useMemo()** caches a function returned value while **useCallback()** keeps that function from re-rendering.
 
-1
+<details>
 
-1
+<summary>Optimizing nested component with useMemo() and useCallback()</summary>
 
-1
+The background-color, the onSubmit() event, and the counter useState() are part of the **same component** but the latter updates much slower.
+
+```
+//We pass 2 static and 1 useState() to the child component 
+
+const [isDark, setIsDark] = useState(false);
+
+<div className="col-4">
+
+  <div className="form-check">
+    <label className="form-check-label">Change back</label>
+    <input type="checkbox" className="form-check-input" 
+           onChange={e => setIsDark(e.target.checked)}
+    />
+  </div>
+
+  <ProductPage
+    referrerId="wizard_of_oz"
+    productId={123}
+    theme={isDark ? 'bg-primary' : 'bg-warning'}
+  />
+</div>
+```
+
+In the child component, we cache a **useCallback() function** and pass it as a **prop** to the \<ShippingForm/>
+
+The theme **prop** is not a **dependency** so it **won't re-render** the child component.
+
+```
+
+function posting(url, data) {
+  console.log('POST /' + url);
+  console.log(data);
+}
+
+function ProductPage({ productId, referrer, theme }) {
+
+  const handleSubmit = useCallback( (orderDetails) => {
+    posting('/product/' + productId + '/buy', {
+      referrer,
+      orderDetails
+    });
+  }, [productId, referrer]);
+
+  return (
+    <div className={theme}>
+      <ShippingForm calling={handleSubmit} />
+    </div>
+  );
+}
+```
+
+A more generic function would have **re-rendered** the **child** component.
+
+```
+//Even if the child component doesn't use theme useState()
+
+function handleSubmit(orderDetails){
+  posting('/product/' + productId + '/buy', {
+    referrer,
+    orderDetails
+  });
+}
+```
+
+We **useMemo()** the function component, it **renders** the function **once** and **caches** it, while **useCallback()** keeps it un-rendered, ignoring other components' props changing.
+
+```
+//performance.now() counts the milliseconds since the app started 
+//we use it twice for the time delay
+
+const ShippingForm = memo( function ShippingForm({ calling }) {
+  const [count, setCount] = useState(1);
+
+  let startTime = performance.now();
+  while (performance.now() - startTime < 500) {
+    // Do nothing for 500 ms to emulate extremely slow code
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const orderDetails = {
+      ...Object.fromEntries(formData),
+      count
+    };
+    calling(orderDetails);
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className='p-2'>
+      <label> Number of items:
+        <button type="button" onClick={() => setCount(count - 1)}>–</button>
+        {count}
+        <button type="button" onClick={() => setCount(count + 1)}>+</button>
+      </label>
+
+      <div>
+        <div className='form-floating my-2'>
+          <input type="text" className="form-control" placeholder='uno' />
+          <label> Street: </label>
+        </div>
+
+        <button className="btn btn-secondary">Submit</button>
+      </div>
+
+    </form>
+)} 
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/useCallback.PNG" alt="" width="288"><figcaption><p>Checkbox and form ae fast while counter is slow</p></figcaption></figure>
+
+**Rendering** a component is different from **triggering a function within it**.
+
+The **onSubmit()** will trigger the **useCallback()** function, and if the dependencies it uses don't change, the child component **doesn't get re-rendered.**
+
+The useState() **counter** gets rendered, so it **re-renders** the entire components **on change**.
 
 1
 
