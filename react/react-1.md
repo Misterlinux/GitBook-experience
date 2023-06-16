@@ -621,6 +621,28 @@ useEffect(() => {
 
 <figure><img src="../.gitbook/assets/resetinterval.gif" alt=""><figcaption><p>start/reset/re-start on single button</p></figcaption></figure>
 
+Including a **function** inside **useEffect()** dependencies will _<mark style="color:orange;">Error: This dependency changes on every render.</mark>_
+
+We use the React Hook **useCallback()** to call the function only when Its dependency changes.
+
+```
+//We call also include the entire function within useEffect() without useCallback()
+
+const [message, setMessage] = useState('');
+
+const createOptions = useCallback(() => {
+  return {
+    serverUrl: 'https://localhost:1234',
+    roomId: roomId
+  };
+}, [roomId]);                     //✅ Only changes when roomId changes
+
+useEffect(() => {
+  const options = createOptions();
+  return () => options();
+}, [createOptions]);              //✅ Only changes when createOptions changes
+```
+
 To implement **font-awesome** in **Reactjs** we:
 
 ```

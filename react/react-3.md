@@ -1,7 +1,9 @@
-# REACT 3, Fetch() API, OpenAI API translation, useState() objects and conditional rendering&#x20;
+# REACT 3, Fetch() API, OpenAI API translation, useState() objects and conditional rendering, useContext() Providers and useCallback()&#x20;
 
 * [Render useState() arrays and objects](react-3.md#render-usestate-arrays-and-objects)
 * [Conditional rendering using components props](react-3.md#conditional-rendering-using-components-props)
+* [UseContext() and Provider components](react-3.md#usecontext-and-provider-components)
+* [useCallback() React hook with useMemo()](react-3.md#usecallback-react-hook-with-usememo)
 
 The **fetch() API** provides us a javascript interface to access the protocol, by using the **global method fetch()** and an URL path it returns a promise that will resolve into a **response object**.
 
@@ -610,7 +612,7 @@ We can **override** specific **context values** for specific children.
 </ThemeContext.Provider>
 ```
 
-### UseCallback() and UseMemo()
+### UseCallback() React hook with useMemo()
 
 The **context value** object/props can pass **functions()**, and if any **nested component** changes then the passed function will be **re-rendered**, even if it returns the same value.
 
@@ -775,10 +777,68 @@ const ShippingForm = memo( function ShippingForm({ calling }) {
 
 **Rendering** a component is different from **triggering a function within it**.
 
-The **onSubmit()** will trigger the **useCallback()** function, and if the dependencies it uses don't change, the child component **doesn't get re-rendered.**
+The **onSubmit()** will trigger the **useCallback()** function, and if the dependencies it uses don't change, the child component **doesn't get re-rendered.**                                                                                    The useState() **counter** gets rendered, so it **re-renders** the entire components **on change**.
 
-The useState() **counter** gets rendered, so it **re-renders** the entire components **on change**.
+We can **update** an **useState()** in a **useCallback()** function without including it in the dependencies.
 
-1
+```
+//Instead of calling the useSatte() inside we pass an update function
 
-1
+const [todos, setTodos] = useState([]);
+
+const handleAddTodo = useCallback((text) => {
+  const newTodo = { id: nextId++, text };
+  setTodos(todos => [...todos, newTodo]);       //setTodos([...todos, newTodo]);
+}, []);                                         //[todos]
+```
+
+We **useCallback()** to optimize **custom react hooks** use.
+
+```
+//custom hooks are components that return javascript and not JSX
+//they need to be called 
+
+import { useDispatch } from './dispatch.js';
+const { dispatch } = useDispatch();
+
+const navigate = useCallback((url) => {
+  dispatch({ type: 'navigate', url });
+}, [dispatch]);
+
+return {
+  navigate,
+};
+```
+
+You can't call **useCallback() in a loop**, extract a **component** for the items, and useCallback() there
+
+<details>
+
+<summary>useCallback() component  in a .map() loop</summary>
+
+We pass the map() loop item as a **prop**, and we return the **useCallback()** function using the **component**.
+
+```
+function ReportList({ items }) {
+  return (
+    <article>
+      {items.map(item =>
+        <Report key={item.id} item={item} />
+      )}
+    </article>
+  );
+}
+
+function Report({ item }) {
+  const handleClick = useCallback(() => {
+    sendReport(item)
+  }, [item]);
+
+  return (
+    <div> <Chart onClick={handleClick} /> </div>
+  );
+}
+
+```
+
+</details>
