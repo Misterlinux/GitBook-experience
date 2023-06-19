@@ -169,6 +169,79 @@ function handleInputChange(e) {
 
 ```
 
+<details>
+
+<summary>Reducer return objects</summary>
+
+The **reducer()** function doesn't update _single properties_, it **returns new state objects**.
+
+```
+//we can decostrcut the state and change some props
+//or we can use methods to return or delete specific props from the object
+
+function tasksReducer(tasks, action) {
+  switch (action.type) {
+    case 'added': {
+      return [...tasks, {
+        id: action.id,
+        text: action.text,
+        done: false
+      }];
+    }
+    case 'changed': {
+      return tasks.map(t => {
+        if (t.id === action.task.id) {
+          return action.task;
+        } else {
+          return t;
+        }
+      });
+    }
+    case 'deleted': {
+      return tasks.filter(t => t.id !== action.id);
+    }
+    default: {
+      throw Error('Unknown action: ' + action.type);
+    }
+  }
+}
+
+```
+
+1
+
+1
+
+1
+
+1
+
+1
+
+1
+
+1
+
+</details>
+
+An **initial state** object returned from a **function**, even if called once, will be re-called each re-render.
+
+We add an **initializer function** to the **useReducer()** hook.
+
+```
+//Any argument in the initializer function will be the second useReducer() argument
+const [state, dispatch] = useReducer(reducer, createInitialState(username));
+const [state, dispatch] = useReducer(reducer, username, createInitialState);
+
+//If no argument is needed in the initializer function then it's null
+const [state, dispatch] = useReducer(reducer, none, createInitialState);
+
+```
+
+1
+
+1
+
 1
 
 1
