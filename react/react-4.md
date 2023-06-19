@@ -6,6 +6,13 @@
 
 **useMemo(**function, dependencies**)** is a React Hook that **caches** the **return value** of a function _between re-renders_.
 
+```
+const memoized = useMemo(
+  () => memoize(depend),
+  [depend]
+);
+```
+
 A useMemo() function will be **re-called** only if one of its **dependencies** changes.
 
 <details>
@@ -45,34 +52,33 @@ const [isDark, setIsDark] = useState(false);
 
 We **useMemo()** a slow imported function using 2 props, any _theme_ useState() changes will **re-render** the parent component but **won't re-call** the useMemo() function.
 
-```
-import { filterTodos } from './External1'
+<pre><code>import { filterTodos } from './External1'
 
 function Todolist({ todos, theme, tab }) {
 
-  const visibleTodos = useMemo(
-    () => filterTodos(todos, tab),
+<strong>  const visibleTodos = useMemo(
+</strong>    () => filterTodos(todos, tab),
     [todos, tab]
   );
 
   return (
-    <div className={theme}>
-      <p>Note: filterTodos is artificially slowed down!</p>
-      <ul>
+    &#x3C;div className={theme}>
+      &#x3C;p>Note: filterTodos is artificially slowed down!&#x3C;/p>
+      &#x3C;ul>
         {visibleTodos.map(todo => (
-          <li key={todo.id}>
+          &#x3C;li key={todo.id}>
             {todo.completed ?
-              <s>{todo.text}</s> :
+              &#x3C;s>{todo.text}&#x3C;/s> :
               todo.text
             }
-          </li>
+          &#x3C;/li>
         ))}
-      </ul>
-    </div>
+      &#x3C;/ul>
+    &#x3C;/div>
   );
 }
 
-```
+</code></pre>
 
 The useMemo() function is a delayed function that filters the array object to be rendered
 
@@ -101,6 +107,75 @@ export function filterTodos(todos, tab) {
 </details>
 
 <figure><img src="../.gitbook/assets/useMemo().png" alt="" width="375"><figcaption><p>slow button useMemo() change and fast checkbox</p></figcaption></figure>
+
+### The useReducer() React Hook
+
+The **useReducer(reducer, state)** adds a reducer function to change the state object.
+
+```
+//The reducer function uses (initial) state and (dispatch) action as arguments. 
+//some cases return update the state, other replace it with action properties
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'incremented_age': {
+      return {
+        name: state.name,
+        age: state.age + 1
+      };
+    }
+    case 'changed_name': {
+      return {
+        name: action.nextName,
+        age: state.age
+      };
+    }
+  }
+  throw Error('Unknown action: ' + action.type);
+}
+
+const initialState = { name: 'Taylor', age: 42 };
+const [state, dispatch] = useReducer(reducer, initialState);
+```
+
+The **useReducer()** returns the current **state** and the **dispatch** update function to **re-render** the state.
+
+```
+//dispatch() objects needs a type for its reducer() 
+const [state, dispatch] = useReducer(reducer, initialState);
+
+function handleButtonClick() {
+  dispatch({ type: 'incremented_age' });
+}
+
+function handleInputChange(e) {
+  dispatch({
+    type: 'changed_name',
+    nextName: e.target.value
+  }); 
+}
+
+<div>
+  <input
+    value={state.name}
+    onChange={handleInputChange}
+  />
+
+  <button onClick={handleButtonClick}>
+    Increment age
+  </button>
+  <p>Name: {state.name}. Age: {state.age}.</p>
+</div>
+
+```
+
+1
+
+1
+
+1
+
+1
 
 1
 
