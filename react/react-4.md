@@ -238,15 +238,160 @@ const [state, dispatch] = useReducer(reducer, none, createInitialState);
 
 ```
 
-1
+### Scaling up React components with useContext() and useReducer()
 
-1
+A parent component includes its **{children}** components as a **prop.**
 
-1
+```
+//we can style ANY children component in the Parent
+const Text = () => <p>This is favorable</p>
 
-1
+function Sentence({children}){
+  return(
+    <div className='text-danger text-center'>
+      {children}
+    </div>
+  )
+}
 
-1
+<Sentence>
+  <p>These are children</p>
+  <Text />
+</Sentence>
+
+```
+
+We **useContext()** and **useReducer()** to manage complex states and event handlers at **every component level.**
+
+<details>
+
+<summary>Single component useContext() and useReducer() </summary>
+
+We **createContext()** Provider values for the **\[state, dispatch]** of **useReducer().**
+
+Any imported nested **component** will have access to both the state and event handler functions.
+
+```
+//while rendering any {children} component 
+import { useReducer, useContext, createContext} from 'react';
+
+const Stato = createContext(null);
+const Statodis = createContext(null);
+
+export default function Task({children}) {
+
+  function reducer(state, action) {
+    switch (action.type) {
+      case 'incremented_age': {
+        return {
+          name: state.name,
+          age: state.age + 1
+        };
+      }
+      case 'changed_name': {
+        return {
+          name: action.nextName,
+          age: state.age
+        };
+      }
+    }
+    throw Error('Unknown action: ' + action.type);
+  }
+  const initialState = { name: 'Taylor', age: 42 };
+  const [instate, dispatch] = useReducer(reducer, initialState);
+
+  return (
+    <div>
+      <Stato.Provider value={instate}>
+        <Statodis.Provider value={dispatch} >
+          {children}
+        </Statodis.Provider>
+      </Stato.Provider>
+    </div>
+    );
+}
+```
+
+The **useContext()** needs to be in the same page as the provider to work.                           We need to **export** it as a **custom Hook**.
+
+```
+//It won't work on an imported component
+import Task from "./components/External1"
+let instate = useContext(Task)
+
+//We export the provided values 
+export function useStato() {
+  return useContext(Stato);
+}
+export function useStatodis() {
+  return useContext(Statodis);
+}
+
+import Task, { useStato, useStatodis } from "./components/External1"
+
+let stato = useStato()
+let dispatch = useStatodis()
+
+```
+
+We **import** the _component_ and the _custom hooks_:
+
+```
+import Task, { useStato, useStatodis } from "./components/External1"
+
+<div className='row me-0 '>
+  <Florida>
+    <p>Children components</p>
+    <Text />
+  </Florida>
+
+  <Task>
+    <Increase />
+  </Task>
+</div>
+
+```
+
+Now any **children** component has access to the **dispatch()** event handler.
+
+```
+//and will share the useReducer() state
+function Increase(){
+
+  let stato = useStato()
+  let dispatch = useStatodis()
+
+  function handleButtonClick() {
+    dispatch({ type: 'incremented_age' });
+  }
+  
+  function handleInputChange(e) {
+    dispatch({
+      type: 'changed_name',
+      nextName: e.target.value
+    }); 
+  }
+
+  return(
+    <div>
+      <input
+        value={ stato.name }
+        onChange={handleInputChange}
+      />
+
+      <button onClick={handleButtonClick}>
+        Increase
+      </button>
+      <p>Name: {stato.name}. Age: {stato.age}.</p>
+    </div>
+  )
+}
+
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/scaleUp.PNG" alt=""><figcaption><p>Scaled up useReducer() and useContext()</p></figcaption></figure>
 
 1
 
