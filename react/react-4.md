@@ -393,6 +393,60 @@ function Increase(){
 
 <figure><img src="../.gitbook/assets/scaleUp.PNG" alt=""><figcaption><p>Scaled up useReducer() and useContext()</p></figcaption></figure>
 
+### The useRef() React Hook
+
+The **useRef()** lets us reference a value that’s not needed for rendering
+
+```
+//It returns an object with a single property .current
+
+const valref = useRef(0);
+valref.current == 0
+```
+
+Contrary to **useState()**, **useRef()** changes _won't re-render_ the page and its new value will be **immediately available** between different functions (unlike useState() which has to render it first).
+
+<details>
+
+<summary>Difference in updating useRef() and useState()</summary>
+
+In this example, we show the useRef() value using a handler function.
+
+```
+let ref = useRef(0);
+const [ refe, setRefe ] = useState(0) 
+
+console.log("gets re-called only with useState")
+
+function handleClick() {
+  ref.current = ref.current + 1;
+  alert('After click useRef() is ' + ref.current);
+}
+
+function altroClick(){
+  setRefe((x)=> x + 1)
+  alert("After click useState() is " + refe)
+}
+
+<div>
+  <button onClick={handleClick}>
+    The useRef()
+  </button>
+  <button onClick={altroClick}>
+    the useState()
+  </button>
+  <button onClick={separate}>
+    Calling both
+  </button>
+</div>
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/useReff().png" alt="" width="276"><figcaption><p>Returned useRef() and useState() values</p></figcaption></figure>
+
+1
+
 1
 
 1
