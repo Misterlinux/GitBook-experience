@@ -612,6 +612,96 @@ We can **override** specific **context values** for specific children.
 </ThemeContext.Provider>
 ```
 
+Each time an **exported** Context.**Provider** component is used it will **retain** the value of its **useContext()** and can modify it.
+
+```
+const level = useContext(LevelContext);
+
+<LevelContext.Provider value={level + 1}>
+  {children}
+</LevelContext.Provider>
+```
+
+<details>
+
+<summary>Nested component providers value increase</summary>
+
+The parent component **provides** all its **children** with the **useContext() value.**
+
+```
+
+function Section({ children }) {
+  const level = useContext(LevelContext);
+
+  return (
+    <section>
+      <LevelContext.Provider value={level + 1}>
+        {children}
+      </LevelContext.Provider>
+    </section>
+  );
+}
+```
+
+We render the useContext() value on another component.
+
+```
+function Heading({ children }) {
+  const level = useContext(LevelContext);
+
+  switch (level) {
+    case 0:
+      throw Error('Heading must be inside a Section!');
+    case 1:
+      return <h1>{children} no section </h1>;
+    case 2:
+      return <h2>{children}</h2>;
+    case 3:
+      return <h3>{children}</h3>;
+    default:
+      throw Error('Unknown level: ' + level);
+  }
+}
+```
+
+The first level render is \<h1>.
+
+```
+<Section>
+  <Heading>This is the h1</Heading>
+  
+  <AllPosts />
+</Section>
+```
+
+Any **nested** component that uses \<Section> **provider** will render its increased **value**.
+
+```
+//<h2> nested once inside a <section>
+function AllPosts() {
+  return (
+    <Section>
+      <Heading>Posts</Heading>
+      
+      <RecentPosts />
+    </Section>
+  );
+}
+
+//<h3> nested thrice inside multiple <section>
+function RecentPosts() {
+  return (
+    <Section>
+      <Heading>Recent Posts</Heading>
+    </Section>
+  );
+}
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/nested-provider.png" alt="" width="173"><figcaption></figcaption></figure>
+
 ### UseCallback() React hook with useMemo()
 
 The **context value** object/props can pass **functions()**, and if any **nested component** changes then the passed function will be **re-rendered**, even if it returns the same value.
