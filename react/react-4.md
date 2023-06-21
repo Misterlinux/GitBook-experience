@@ -544,6 +544,36 @@ We clearTimeout() onClick() to **debounce** the button, to start its timeout() o
 
 </details>
 
+### DOM manipulation with useRef()&#x20;
+
+We **useRef()** to access the React Node **JSX** elements.
+
+```
+//To access the ref data we use event handlers, we can also use Browser API methods
+let pink = useRef()
+
+function handle(){
+  console.log("ref after click")
+  pink.current.focus();
+  console.log( pink.current )
+}
+
+<div ref={pink}>
+  <p>Ref element</p>
+
+  <button onClick={refer}>
+    Access Dom ref
+  </button>
+</div>
+
+```
+
+<figure><img src="../.gitbook/assets/useRefDom.png" alt="" width="411"><figcaption><p>Accessing a JSX Node element</p></figcaption></figure>
+
+1
+
+1
+
 1
 
 1
