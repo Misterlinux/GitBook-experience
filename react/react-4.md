@@ -445,7 +445,104 @@ function altroClick(){
 
 <figure><img src="../.gitbook/assets/useReff().png" alt="" width="276"><figcaption><p>Returned useRef() and useState() values</p></figcaption></figure>
 
-1
+**useRef()** is stored in React and won't need any setter function because it always _returns the same object._
+
+**useRef()** is used to communicate with external API, timeID variables, and DOM manipulation, if rendered It won't update its value.
+
+```
+//Don't relay too much logic on useRef() and remember to use its .current property 
+
+timeoutID.current = setTimeout(() => {
+  alert("Sent!");
+}, 3000);
+
+clearTimeout(timeoutID.current);
+```
+
+On inputs, you can render the **useState()** input AND a **useRef()**.current value.
+
+```
+//In case we need an instant input value for javascript functions
+
+value={e.target.value}
+onChange={(e) => {
+  setText(e.target.value);
+  reffe.current = e.target.value;
+}}
+```
+
+Don't **useRef()** on a **javascript expression**, its value won't update.
+
+```
+/This won't work, useSatte() instead
+const isOnRef = useRef(false);
+
+<button>
+  {isOnRef.current ? 'On': 'Off'}
+</button>
+```
+
+The same **useRef()** created inside **repeated components** won't interfere with each other.
+
+<details>
+
+<summary>Indipendent useRef() on repeated components and debounced buttons</summary>
+
+An useRef() can't be initialized inside a normal function, only on a component.
+
+```
+//And if we initialize it outside it will return only the last trigger
+let mia = useRef(null)
+
+function chiama(alerta){
+  clearTimeout(mia.current)
+  mia.current = setTimeout(() => {
+    alert(alerta)    //useRef() will be re-set on each click
+  }, 1000)
+}
+
+<button onClick={()=> chiama("Primo avviso")}>
+  Alerta1
+</button>
+
+<button onClick={()=> chiama("Secondo avviso credo")}>
+  Alerta due
+</button>
+```
+
+_Multiple components_ can **useRef()** independently from each other.
+
+```
+//multiple buttons for multiple different timeout() alerts
+
+function DebouncedButton({ chiama, children }) {
+  const timeoutRef = useRef(null);
+
+  return (
+    <button
+      onClick={() => {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = setTimeout(() => {
+          chiama();    //launch / boiled alerts
+        }, 1000);
+      }}
+    >
+      {children}
+    </button>
+  )
+}
+
+<DebouncedButton onlick={() => alert("launch")}>
+  Launch the spaceship
+</DebouncedButton>
+<DebouncedButton onlick={() => alert("boiled")}>
+  Boil the soup
+</DebouncedButton>
+```
+
+We clearTimeout() onClick() to **debounce** the button, to start its timeout() only after the button stops being clicked.
+
+</details>
 
 1
 
