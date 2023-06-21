@@ -596,6 +596,111 @@ function cliccato(){
 
 <figure><img src="../.gitbook/assets/refonRender.png" alt="" width="404"><figcaption><p>Callback function on useState() render</p></figcaption></figure>
 
+The **ref attribute** can't be assigned to Node elements on loops or javascript expressions.
+
+```
+//Any React hook has to be on a component
+
+{items.map((item) => {
+  const ref = useRef(null);
+  return <li ref={ref} />;
+})}
+```
+
+We create a Map object of Node elements using ref callback function.
+
+<details>
+
+<summary>ref callback function on looped Node elements</summary>
+
+We create an array of 20 image objects and a getMap() function for the **ref.**
+
+```
+const catList = [];
+
+for (let i = 0; i < 10; i++) {
+  catList.push({
+    id: i,
+    imageUrl: 'https://placekitten.com/250/200?image=' + i
+  });
+}
+
+//We set ref with a Map object once
+const itemsRef = useRef(null);
+function getMap() {
+  if (!itemsRef.current) {
+    itemsRef.current = new Map();
+  }
+  return itemsRef.current;
+}
+```
+
+We use Node IDs from the **ref map object** for the **scrollIntoView()** method.
+
+```
+function scrollToId(itemId) {
+  const map = getMap();
+  
+  const node = map.get(itemId);
+  node.scrollIntoView({
+    behavior: 'smooth',
+    block: 'nearest',
+    inline: 'center'
+  });
+}
+
+<nav>
+  <button onClick={() => scrollToId(0)}>
+    Tom
+  </button>
+  <button onClick={() => scrollToId(5)}>
+    Maru
+  </button>
+  <button onClick={() => scrollToId(9)}>
+    Jellylorum
+  </button>
+</nav>
+```
+
+We use the **ref callback function** to loop through each rendered **\<li>** element, and we set the ref map object with key/value pairs of Images **ID** and **Node element**.
+
+```
+//We render with map() but set the ref separately and push node elements
+
+<div>
+  <ul>
+    {catList.map(cat => (
+      <li
+        key={cat.id}
+        ref={(node) => {
+          const map = getMap();
+
+          if (node) {
+            map.set(cat.id, node);
+          } else {
+            map.delete(cat.id);
+          }
+        }}
+      >
+        <img
+          src={cat.imageUrl}
+        />
+      </li>
+    ))}
+  </ul>
+</div>
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/scrollView1.gif" alt="" width="148"><figcaption></figcaption></figure>
+
+1
+
+1
+
+1
+
 1
 
 1
