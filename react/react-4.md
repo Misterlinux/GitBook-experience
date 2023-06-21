@@ -695,15 +695,22 @@ We use the **ref callback function** to loop through each rendered **\<li>** ele
 
 <figure><img src="../.gitbook/assets/scrollView1.gif" alt="" width="148"><figcaption></figcaption></figure>
 
-1
+We can't pass a children component ref from its parent.
 
-1
+```
+//Will return the error "function components cannot be given refs"
 
-1
 
-1
+```
 
-1
+The forwardRef() API opts for the rep prop to be received as the second argument into the child component.
+
+```
+//We import forwardRef from "react"
+
+
+
+```
 
 1
 
