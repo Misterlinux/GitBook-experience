@@ -570,7 +570,31 @@ function handle(){
 
 <figure><img src="../.gitbook/assets/useRefDom.png" alt="" width="411"><figcaption><p>Accessing a JSX Node element</p></figcaption></figure>
 
-1
+The **ref attribute** can contain a **callback function**, it uses the DOM as an _argument_, and it triggers on _render_.
+
+<pre><code>//On re-render it uses null on its argument and then re-calls its callback function.
+//Other ref changes won't have any effects
+
+let doll= useRef(0)
+const [malon, setMalon] = useState(0)
+
+function cliccato(){
+  doll.current = doll.current + 1 
+  console.log( "ref: " + doll.current )
+}
+
+<a data-footnote-ref href="#user-content-fn-1">&#x3C;div ref={(node) => console.log(node)}></a>  
+  &#x3C;p>We have it&#x3C;/p>
+  &#x3C;button className='btn btn-primary' onClick={()=> cliccato()}>Reff&#x3C;/button>
+
+  &#x3C;p>{malon}&#x3C;/p>
+  &#x3C;button className="btn btn-warning" onClick={()=> setMalon((e)=> e+1 )}>
+    State
+  &#x3C;/button>
+&#x3C;/div>
+</code></pre>
+
+<figure><img src="../.gitbook/assets/refonRender.png" alt="" width="404"><figcaption><p>Callback function on useState() render</p></figcaption></figure>
 
 1
 
@@ -580,6 +604,4 @@ function handle(){
 
 1
 
-1
-
-1
+[^1]: This is teh callback function
