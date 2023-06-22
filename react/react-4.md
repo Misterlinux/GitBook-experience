@@ -695,21 +695,33 @@ We use the **ref callback function** to loop through each rendered **\<li>** ele
 
 <figure><img src="../.gitbook/assets/scrollView1.gif" alt="" width="148"><figcaption></figcaption></figure>
 
-We can't pass a children component ref from its parent.
+We can't pass a **children ref** from its parent component.
 
 ```
 //Will return the error "function components cannot be given refs"
 
+function MyInput(props) {
+  return <input {...props} />;
+}
 
+<MyInput ref={inputRef} />
 ```
 
-The forwardRef() API opts for the rep prop to be received as the second argument into the child component.
+The **forwardRef() API** opts for the rep prop to be received as the second argument into the child component.
 
 ```
-//We import forwardRef from "react"
+//We import forwardRef from "react", now we can call the child ref.current
 
+const MyInput = forwardRef((props, ref) => {
+  return <input {...props} ref={ref} />;
+});
 
+function handleClick() {
+  console.log( inputRef.current )
+  inputRef.current.focus();
+}
 
+<MyInput ref={inputRef} />
 ```
 
 1
