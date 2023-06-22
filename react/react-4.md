@@ -707,7 +707,7 @@ function MyInput(props) {
 <MyInput ref={inputRef} />
 ```
 
-The **forwardRef() API** opts for the rep prop to be received as the second argument into the child component.
+The **forwardRef() API** opts for receiving the rep prop as the second argument into the child component.
 
 ```
 //We import forwardRef from "react", now we can call the child ref.current
@@ -723,6 +723,66 @@ function handleClick() {
 
 <MyInput ref={inputRef} />
 ```
+
+Each **React update** includes a **render** (when it calls its function components) and a **commit** (where it applies the changes).
+
+**Ref** isn't defined during the first **render** and will be null when no Node has been created yet.                    **During commit ref** is first set to null and then gets **updated** with the Node DOM element.
+
+**Updating** a **DOM element** won't immediately update its **ref Node** element, DOM methods won't have the updated ref value either.
+
+We use a **flushSynch()** call to wrap the **update DOM function**, so both can update synchronously.
+
+```
+//React DOM updates are queued, flushSynch() updates the ref before for the render
+import { flushSync } from 'react-dom';
+
+flushSync(()=>{
+  setTodos([ ...todos, newTodo]);
+})
+
+listRef.current.lastChild.scrollIntoView({
+  behavior: 'smooth',
+  block: 'nearest'
+});
+
+<ul ref={listRef} >
+  {todos.map(todo => ... }
+</ul>
+```
+
+<details>
+
+<summary>Reder ref update exmaple</summary>
+
+11
+
+1
+
+1
+
+1
+
+1
+
+1
+
+1
+
+1
+
+1
+
+</details>
+
+1
+
+1
+
+1
+
+1
+
+1
 
 1
 
