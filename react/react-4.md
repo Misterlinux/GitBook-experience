@@ -817,13 +817,113 @@ function handleAdd() {
 
 <figure><img src="../.gitbook/assets/fleshUpdate.png" alt="" width="375"><figcaption><p>Scroll onClick() without and then with Flushsynch()</p></figcaption></figure>
 
-1
+**ref** shouldn't be used to edit the DOM, limit it to elements that aren't updated by React.
 
-1
+```
+//If we delete a ref Node element its Dom element is deleted as well.
+<button
+  onClick={() => {
+    ref.current.remove();
+  }}>
+  Remove from DOM
+</button>
 
-1
+<p ref={ref}>Soon to be removed</p>
+```
 
-1
+We can trigger the **play()** and **pause()** DOM method on a \<video> Node ref.
+
+```
+let vedo= useRef(null)
+const [acceso, setAcceso] = useState(false)
+
+function handleClick() {
+  const nextIsPlaying = !acceso;
+  setAcceso(nextIsPlaying);
+  
+  {(nextIsPlaying) ? vedo.current.play() : vedo.current.pause() }
+}
+
+<button onClick={handleClick}> {acceso ? 'Pause' : 'Play'} </button>
+
+<video width="250" ref={vedo}>
+  <source
+    src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+    type="video/mp4"
+  />
+</video>
+```
+
+<figure><img src="../.gitbook/assets/videoref1.gif" alt=""><figcaption></figcaption></figure>
+
+We can create **conditional ref attributes**, using **flushSync()** to keep the ref condition updated.
+
+<details>
+
+<summary>conditional ref atrtributes</summary>
+
+We create an array of image objects, we set the **ref**, the useState(), and the **index** (condition) **flushSync()** function.
+
+```
+const [index, setIndex] = useState(0);
+let referal = useRef(null)
+
+const catList = [];
+for (let i = 0; i < 10; i++) {
+  catList.push({
+    id: i,
+    imageUrl: 'https://placekitten.com/250/200?image=' + i
+  });
+}
+
+function indexref(){
+  
+  flushSync(() => { 
+    (index < catList.length - 1) ? setIndex(index + 1) : setIndex(0)
+  });
+
+  referal.current.scrollIntoView({
+    behavior: 'smooth',
+    block: 'nearest',
+    inline: 'center'
+  });  
+}
+```
+
+We render the image array and set the **conditional ref attribute** on the Node element with ID **matching the useState()** index (that's why we need _flushSync()_)
+
+The moment a new Node element gets the **ref attribute** it will be **scrollIntoView()**.
+
+```
+//For the no matching images ref will be null
+<button onClick={ () => indexref() }>
+  Next
+</button>
+
+<ul ref={referal}>
+
+  {catList.map((cat, i) => (
+    <li key={cat.id}
+        ref={ index === i ? referal : null }
+    >
+      <img src={cat.imageUrl} />
+    </li>
+  ))}
+</ul>
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/Catlist.png" alt="" width="563"><figcaption><p>Scrolling onClick() using ref attributes and DOM methods</p></figcaption></figure>
+
+The Node element ref can receive a DOM method while in a different component
+
+```
+//We set the ref attribute and DOM method in different components
+
+
+
+```
 
 1
 
