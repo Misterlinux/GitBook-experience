@@ -752,29 +752,70 @@ listRef.current.lastChild.scrollIntoView({
 
 <details>
 
-<summary>Reder ref update exmaple</summary>
+<summary>FlushSynch() to scrollIntoView of updated DOM list</summary>
 
-11
+We set an array of objects, the **ref** for the **\<ul>** node, and the \<ul> and input useState().
 
-1
+```
+//We trigger the loop once without functions()
+let nextId = 0;
+let initialTodos = [];
 
-1
+for (let i = 0; i < 20; i++) {
+  initialTodos.push({
+    id: nextId++,
+    text: 'Todo #' + (i + 1)
+  });
+}
 
-1
+const listRef = useRef(null);
+const [text, setText] = useState('');
+const [todos, setTodos] = useState(
+  initialTodos
+);
+```
 
-1
+We render the array as **\<li>** elements, the **ref** is set on the **\<ul>** but we can access its children using ref property **.children** and **.childNode**.
 
-1
+```
+<button onClick={handleAdd}>
+  Ultimo
+</button>
+<input
+  value={text}
+  onChange={e => setText(e.target.value)}
+/>
 
-1
+<ul ref={listRef}>
+  {todos.map(todo => (
+    <li key={todo.id}>{todo.text}</li>
+  ))}
+</ul>
+```
 
-1
+On input, we create a new object to push to the \<ul> DOM.
 
-1
+Without **flushSync()** the **ref** DOM method would have scrolled at #20, instead of the new element.
+
+```
+function handleAdd() {
+  const newTodo = { id: nextId++, text: text };
+  setText('');
+
+  flushSync(()=>{
+    setTodos([ ...todos, newTodo]);   // listRef.current.children/childNodes
+  })
+
+  listRef.current.lastChild.scrollIntoView({
+    behavior: 'smooth',
+    block: 'nearest'
+  });
+}
+```
 
 </details>
 
-1
+<figure><img src="../.gitbook/assets/fleshUpdate.png" alt="" width="375"><figcaption><p>Scroll onClick() without and then with Flushsynch()</p></figcaption></figure>
 
 1
 
