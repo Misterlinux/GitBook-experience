@@ -19,75 +19,74 @@ Some methods are **Pure**, which means they return a new array without modifying
 
 ```
 
-**Map() will return a new array** applying its callback function, it's pure:
+**Map() will return a new array** applying its callback function, it's **pure**:
 
 ```
-let namesArray = ['antigoni', 'chris', 'elamin']
-namesArray.sort().map( (x) => x.toUpperCase() )        //['ANTIGONI', 'CHRIS', 'ELAMIN',]
+let namesArray = ['elamin', 'antigoni', 'chris']
+namesArray.sort().map( (x) => x.toUpperCase() )  //['ANTIGONI', 'CHRIS', 'ELAMIN',]
 
-//with callback functions we can also use functions in calls without the ()
+//or we can reference an external function (without calling it using () )
 function upper(x){
     return x.toUpperCase()
 }
 namesArray.map(upper)
-
 ```
 
-**.forEach()** is different:
+**.forEach()** won't return an array, but a looped **list of returns**:
 
 ```
-//it doesn't return an array, but it still loops trought the array 
 let anni = [1964, 2008, 1999, 2005, 1978, 1985, 1919]
 
 anni.forEach( (x) => {
-  console.log( 2022-x )    //we will get a list of results not an array, 58 14 23 17 44 37 103
-})
-
-//you can use a forEach after a .map() but not the opposite
-let numeronia = [4,6,8,2,4,1]
-numeronia.map( (x)=> x+2 ).forEach( (x) => console.log( "the number is " + x))  //the number is 6...
-
+  console.log( 2022-x )    //separated results: 58 14 23 17 44 37 103
+})  
 ```
 
-**.filter()** will return an array with only the ones that satisfy, is pure:
+You can use **forEach()** after a **map()/filter()** but not the opposite:
 
 ```
-//It will create a new array with only the passed elements if we store it with
+//map() and filter() return arrays, while forEach() returns a list 
+
+let numeronia = [4,6,8,2,4,1]              //the number is 6.../8/10
+numeronia.map( (x)=> x+2 ).forEach( (x) => console.log( "the number is " + x )  
+numeronia.filter((x)=> x>4 ).forEach((x)=> console.log( "The number is " + x )
+```
+
+**.filter()** will return an array with the elements that satisfy the callback function condition, is **pure**:
+
+```
 let anni = [1964, 2008, 1999, 2005, 1978, 1985, 1919]
+
 const unicovo = anni.filter( (x) =>
-  2022-x > 21
+  2022-x > 21        // [1964, 1999, 1978, 1985, 1919]
 )
 
-console.log( "these people can drive " + unicovo)    //these people can drive 1964,1999,1978,1985,1919
-
-//we can also add callback functions to objects values using filter
-
+//We return object properties based on the filtered number of sauce/noodles
 function quantities(layers) {
-  //we filter and array noodles, we count them and multiply as object values
   return {
     noodles: layers.filter((layer) => layer === 'noodles').length * 50,
     sauce: layers.filter((layer) => layer === 'sauce').length * 0.2,
   }
 }
 
-quantities(["noodles", "noodles", "noodles", 'sauce'])      //{noodles: 150, sauce: 0.2}
-
+quantities(["noodles", "noodles", "noodles", 'sauce'])  //{noodles: 150, sauce: 0.2}
 ```
 
-About how to **.filter() falsy values** and _arrays_ in the callback function:
+To **filter(e) falsy values** and arrays remember always to put **e== true** as the first condition:
 
 ```
-//to filter the falsy values ("", null, false, NaN, undefined), the array (which is an object) and the .lenght 2 
+//falsy values ("", null, false, NaN, undefined) can crash the code if we don't
+//then we filter to return 2 values objects
 
 var pairsByIndexRaw = [
     [0, 3], [1, 2], [2, 1], null, [1], false, "whoops", [1,2,4], "lo", 12
 ];
 
-var pairsByIndex = pairsByIndexRaw.filter((n) => n && typeof(n) == "object" && n.length == 2);
-
+var pairsByIndex = 
+    pairsByIndexRaw.filter((n) => n && typeof(n) == "object" && n.length == 2);
 ```
 
-**.find()** on the other hand, will return the _first_ element matching:
+**.find()** will return the _first element matching_:
 
 ```
 var product1 = {
@@ -99,16 +98,16 @@ var product1 = {
 
 var producTs = [product1, ... ];
 
-//we use find() not only to return the first element matching but also to not have an array
-//products.find()would return    { id: 4, name: 'Star Ship', price: 100, stock: 5 }
-//products.filter() would return [ { id: 4, name: 'Star Ship', price: 100, stock: 5 } ]
+//The find() return won't be an array, unlike filter()
+//products.find()   returns   { id: 4, name: 'Star Ship', price: 100, stock: 5 }
+//products.filter() returns [{ id: 4, name: 'Star Ship', price: 100, stock: 5 }]
 
+//We can find() objects properties from arrays
 function add(x){
-    return producTs.find( (xx)=> xx.id == x)
+    return producTs.find((xx) => xx.id == x)
 }
 
-add(1)    //being producTs an array of objects we can use the method to find one with id property
-
+add(1)
 ```
 
 **findindex()** works as a find() but is focused on indexes:
@@ -123,73 +122,20 @@ let stack= [1,3,4,5,6]
 
 ```
 
-**Map() and filter()** can be different when returning properties and objects, especially if used with **.forEach()**:
+**Map()** and **Filter()** have different returns:
 
 ```
 let quatt = {
     cosa: [2, 9 ,6, 2 ]
 }
 
-//they return different values
 quatt.cosa.filter( (x)=> x<10 )    //[ 2, 9, 6, 2 ]
 quatt.cosa.map( (x)=> x<10 )       //[ true, true, true, true ]
-
-//and to chain you will have to use filter(), we can use forEach() INSIDE .filter() but not the opposite, 
-//.forEach doesnt return an array for .filter to work() / .filter does create an array that can get .forEach()
-quatt.cosa.filter( (x)=> x<10 ).forEach( (x) =>  console.log( "This shoudl work with " + x ) )    //This shoudld work with 2 
-
-//having an array of objects and properties with arrays 
-let terzo = {
-    name: "terzo",
-    totali: 30,
-    already: 8,
-    dove: {
-        citta: "naples",
-        posto: "sud"
-    },
-    cosa: [ 10,5,6, 3]
-}
-
-let quatt = {
-    name: "quatt",
-    totali: 12,
-    already: 8,
-    dove: {
-        citta: "roma",
-        posto: "centro"
-    },
-    cosa: [2, 9 ,6,2 ]
-}
-
-let tutti = [primo, secondo, terzo, quatt]
-//we can have an object with methods 
-let app = {
-    cibo: function(x){
-        let fin = []
-        tutti.map((xx) =>{
-            if(xx.cosa.includes(x) ){
-                return fin.push( xx.name )
-            }
-        })
-        return fin
-    },
-//with map we need an extra array to push the specific properties of the if()
-    filto: function(zona){
-        return tutti.filter( (x)=> x.dove.posto == zona ).length
-    }
-//filter() returns the objects as an array and we get the length
-}
-
-console.log( app.cibo(10) )            //[ 'terzo' ]
-console.log( app.filto("centro")  )    // 1 ,we get the length of the array of objects filtered
-
 ```
 
 **Some()** run tests on _each element_ of an array, returning **true/false** if at **least one satisfies** the **callback function** :
 
 ```
-//we can use logic operators without using .forEach()
-
 let pairs = [1,4,0,12,7]
 
 function nullifing(ind){
@@ -199,10 +145,9 @@ function nullifing(ind){
 //and it will return true/false, without returning an array of results for each
 console.log(pairs.some(nullifing))      //true
 console.log(pairs.map(nullifing))       //[false, true, false, false, false]
-
 ```
 
-**Every()** checks if all values of the array satisfy the callback function:
+**Every()** check if all values of the array satisfy the callback function:
 
 ```
 //it returns true/false
@@ -217,32 +162,16 @@ console.log(pairs.map(nullifing))       //[false, true, false, false, false]
 ```
 let arr = [1, 2, 3, 4];
 
-//We also need a second parameter which is the current element we are summing/looping
-arr.reduce((accumulator, current) => accumulator + current, 0)    //0+1,+2,+3,+4= 10
-//We also need a ,Startingvalue 0 from which the sum is gonna start
-
-//we don't necessarily need to return the sum values, we can use the accumulator/starter
-console.log(
-  arr.reduce(
-    (acc, cur) => {
-      (cur % 2 === 0) ? acc.even.push(cur) : acc.odd.push(cur);
-      return acc;
-    },
-    { even: [], odd: [] }
-  )
-)
-//form the reduce() we return the modyfied object after looping trought the elements
-//the acc(umulator) is the startingValue if we don't sum, so we retunr an object
-
+//It loops through the array and return a single value
+arr.reduce((accumulator, start) => accumulator + start, 0)    //0+1,+2,+3,+4= 10
 ```
 
-**Reverse()** modifies the original array.
+**Reverse()** modifies the original array, it is **pure**.
 
-**Flat()** creates a _new array_ with all sub-array elements concatenated in the same level:
+**Flat()** creates a _new array_ with all sub-array elements concatenated a, it is pur the same level:
 
 ```
-//substituting a specific number with an array
-
+//We can ...spread the elements of a nested array 
 let deck= [1,2,3,4, 3]
 
 deck.map((number, index)=>{
@@ -253,21 +182,20 @@ deck.map((number, index)=>{
 
 deck             //[1, 2, Array(3), 4, Array(3)]
 deck.flat()      //[1, 2, 3, 3, 3, 4, 3, 3, 3]
-//we could also specify .flat(2) in case we have multiple nested arrays OR .flat(Infinity);
 
-//if we wanted to substitute we could use .reduce() and .concat() to "sum" to an empty array
-deck.reduce((acc, val) => acc.concat(val), [])
-
+//We can specify the nested levels to flat(2) or flat(Infinity)
 ```
 
-**FlatMap()** returns a new array by applying the callback fucntion to each element and flattends it:
+**FlatMap()** returns a new array by applying the callback function to each element and **flattens** it:
 
 ```
 let schab= [1,2,3,4,5,3]
+
 schab.flatMap((card) => card === 3 ? [card, card, card] : [card])
 //[1, 2, 3, 3, 3, 4, 5, 3, 3, 3]
-
 ```
+
+1
 
 before we start with objects let's check the **for() and while() loop**
 
