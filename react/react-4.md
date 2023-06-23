@@ -860,7 +860,7 @@ We can create **conditional ref attributes**, using **flushSync()** to keep the 
 
 <details>
 
-<summary>conditional ref atrtributes</summary>
+<summary>scollIntoView() DOM method on conditional red attribute</summary>
 
 We create an array of image objects, we set the **ref**, the useState(), and the **index** (condition) **flushSync()** function.
 
@@ -895,12 +895,12 @@ We render the image array and set the **conditional ref attribute** on the Node 
 The moment a new Node element gets the **ref attribute** it will be **scrollIntoView()**.
 
 ```
-//For the no matching images ref will be null
+//For the no-matching images ref will be null
 <button onClick={ () => indexref() }>
   Next
 </button>
 
-<ul ref={referal}>
+<ul>
 
   {catList.map((cat, i) => (
     <li key={cat.id}
