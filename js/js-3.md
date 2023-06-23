@@ -195,41 +195,21 @@ schab.flatMap((card) => card === 3 ? [card, card, card] : [card])
 //[1, 2, 3, 3, 3, 4, 5, 3, 3, 3]
 ```
 
-1
-
-before we start with objects let's check the **for() and while() loop**
+To loop through _arrays_ we use **for() and while().**
 
 ```
 //for() is a more specific loop with a set counter and stop limit
 for(let tin= 0; tin < limes.length; tin++ ){
-    console.log( tin)        //0,1,2,3,4,(limes.length-1)
+    console.log(tin)        //0,1,2,3,4,...(limes.length-1)
 }
 
-//but sometimes you may need a looser condition for the loop, also some object keys in advance
-//we can get the values for properties in the wedges, object["string"] = number
+//while() only needs its condition with an external counter
+let x= 0;
 
-function limesToCut4(wedgesNeeded, limes) {
-    let index = 0;
-    const wedges = {
-        'small': 6,
-        'medium': 8,
-        'large': 10
-      }
-    while(wedgesNeeded > 0 && index < limes.length){
-        if(limes[index]) {
-            wedgesNeeded -= wedges[limes[index]] ;
-            index++;
-        } else {
-            return index;
-        }
-    }
-    return index;
+while( x < limes.length ){
+  console.log( x )          //0,1,2,3,4,...(limes.length-1)
+  x += 1
 }
-
-console.log( limesToCut(0, ['small', 'large', 'medium']) )        //we get 0
-
-//while( condition ) we can modify the index somewhere else and then close it with else
-
 ```
 
 ### Objects, methods, and keys
@@ -252,7 +232,7 @@ Object.keys(car)[0]   //type
 //you don't need to "" it unless using special syntax like "-[]/1234 5"
 ```
 
-We can also use variables as property:values pairs:
+We can create **objects** out of **variables** as _property:values_ pairs:
 
 ```
 const a123 = 'foo';
@@ -262,32 +242,27 @@ const c123 = {};
 const object3 = { a123, b123, c123 };
 
 console.log( object3.a123 )    //"foo"
-
 ```
 
 Objects can be **edited** by assigning a new property:value and use _\[variables]_ to **dynamically access** property values::
 
 ```
-//we don't need keywords 
-car.type = "BMW"     //it changes the "Fiat" 
-car.age = 50;        //will add a new property age: 50
+//To edit and add car properties
+car.type = {first: "BMW", later: "wolk"}    //it changes the "Fiat" 
+car.age = [49, 50];        //will add a new array property
 
 let uno = "age"
-car[age] = 50        //we can both add and access objects using variables
+car[uno] = 33        //We use variables to access objects' properties using []
 
-//also we can add different types of data
-car.nuovo = [1,2,3]            //like array
-car.altro = {uno: [1,2,3,4,5], due: [1,2,3,4,5], tre: [1,2,3,4,5]}        //and objects of arrays
-
-//we can also use this on an empty object
+//we can fill an empty object 
 const person = {};
 person.firstName = "John";
 person.lastName = "Doe";
 
-//To delete properties and values we use the keywords
+//To delete properties and values we use the delete keyword
 delete car.color;
 
-//To check if the key exist in the object
+//To check if the key exists in the object
 car.hasOwnProperty("color")        //true/false if it exist 
 ```
 
@@ -295,14 +270,12 @@ Or we could use **Object.assign()** to change an object property:
 
 ```
 //we need 2 arguments, the objects and the { new property }
-
 const obj12={
     tre: "well"
 }
 
 Object.assign( obj12, { tre: 12345 } );
 console.log( obj12 )                    //{tre: 12345}
-
 ```
 
 How we handle _**undefined/null**_ results in _objects_:
@@ -325,7 +298,7 @@ console.log(obj.residence?.street)  //undefined, wont block the page on JS error
 We can also use **instanceof** to check if empty or null objects are still _objects_:
 
 ```
-//empty objects still count as
+//empty objects still count as objects
 
 let lettera= {
 }
@@ -334,7 +307,6 @@ let nulla= Object.create(null)
 lettera instanceof Object        //true
 ({})    instanceof Object        //true
 nulla   instanceof Object        //false, even if Object.create is used
-
 ```
 
 **Primitive Data types** can be _objects_ with or without **coercion**, being Javascript a **weakly typed language:**
@@ -357,7 +329,7 @@ let parola= new String("stringa")
 //It works for new Number() and New Boolean() too.
 ```
 
-With different types of data, we can use **Object.keys()** on them:
+With different types of data, we can use **Object.keys()** **iterable** on them:
 
 ```
 //and we can use it on the array
@@ -365,17 +337,16 @@ With different types of data, we can use **Object.keys()** on them:
 Object.keys(car.nuovo)        //will return the indexes as an array ['0', '1', '2']
 Object.keys(car.altro)        //will return properties [ 'uno', 'due', 'tre' ]
 Object.keys(car.altro.due)    //will be of the array inside the object ['0', '1', '2', '3', '4']
-
 ```
 
 **Object Methods** are functions stored in the object that can use **.this** for properties in the object:
 
 ```
-//the function stored in the fullo method can use the property:values of the object it's in
+//The fullo object method can use the property:values of the object it's in
 const car = {
-  type:"Fiat", 
-  model:"500", 
-  color:"white",
+  type: "Fiat", 
+  model: "500", 
+  color: "white",
   fullo: function() {
     return this.type + " " + this.model;
   },
@@ -387,7 +358,6 @@ const car = {
 person.fullo()                        //Fiat 500 
 person.fullon(car.type, car.model)    //Fiat 500
 person.fullo                          //[Function (anonymous)]
-
 ```
 
 Property functions can be shortened:
@@ -403,103 +373,29 @@ const tost1={
 
 ```
 
-We can use the **for()** loop with both properties and values of an object:
+We use **Object.keys()/values()/entries()** to access an object data or a **for...of loop**.
 
 ```
 const person = {
   firstName: 'John',
   lastName: 'second',
   cars: [
-    {name:"Ford", models:["Fiesta", "Focus", "Mustang"] },
+    {name: "Ford", models:["Fiesta", "Focus", "Mustang"] },
     {name:"BMW", models:["320", "X3", "X5"] },
-    {name:"Fiat", models:["500", "Panda"] }
   ]
 }
 
-//Instead of doing the .forEach on the Object.keys(__) we do a loop
-Object.keys(person).forEach(function (x) {
-  console.log(person[x]);
-});
+Object.keys(person)     //['firstName', 'lastName', 'cars']
+Object.values(person)   //['John', 'second', Array(3)]
+Object.entries(person)  //[['firstName', 'John'], ['cars', Array(3)] ]
 
-//with for(), we set the counter/Object.keys IN object and also use it for vlues too
-for (let x in person) {                  //key        object[key]=value
-  console.log( x + ": " + person[x] )    //firstName: John,             lastName: second
+//We use the for...of to loop through its [keys, values] pairs
+for (const [key, val] of Object.entries(person)) {
+  console.log([key, val]);       //['name', 'Porter'],['age', 32], ['cars', Array(3)]
 }
-
-//as for the array, its keys would be the index, we can also go beyond for nested properties
-for (let i in myObj.cars) {
-  yy = myObj.cars[i].name + " " ;
-  console.log( yy )                  //this will print the "Ford" name but
-  
-  for (let j in myObj.cars[i].models) {
-    y = myObj.cars[i].models[j] + " ";
-    console.log( y )                 //also the array elements of the name[i] "Fiesta Focus Mustang" 
-
-  }
-}
-
 ```
 
-We can also **return property values** as _arrays_ with for() and **.values()**:
-
-```
-//This is useful with NODElist
-
-let objin = {
-  name: "Porter",
-  age: 32
-};
-
-//in 2017 it was introduced the .values to go along with .keys()
-console.log(Object.values(objin));        //['Porter', 32]
-console.log(Object.keys(objin));         //['name', 'age'] 
-
-//we can also get an array using .map with obj11["property-name"]
-const vals = Object.keys(obj11).map(key => obj11[key]);
-
-//or we can get arrays or property:values couples, 
-for (const [key, val] of Object.entries(obj222)) {
-  console.log([key, val]);                            //['name', 'Porter'],['age', 32]
-}
-
-//We can use for Object loop to rebuild an object
-
-function scaleRecipe1(recipe, portions) {
-  const scaled = recipe                    //taking the passed object
-
-  for (let ingredient in scaled) {
-    scaled[ingredient] *= portions/2       //we get the key from for and use object[key] to modify the values   
-  }
-  return scaled                            //then we get the object
-}
-
-```
-
-This can help us for more precise loops of if statement:
-
-```
-const prepTime = {
-    'Pure Strawberry Joy': 0.5,
-    'Energizer': 1.5,
-    'Green Garden': 1.5,
-    'Tropical Island': 3,
-    'All or Nothing': 5
-  }
-
-//IF between the properties/keys is present the parameter we return the VALUE of the property
-function timeToMixJuice(name) {
-    if(Object.keys(prepTime).includes(name)) {
-      return prepTime[name]
-    } else {
-      return 2.5;
-    }
-}
-
-//timeToMixJuice("Energizer")            //1.5
-
-```
-
-**Methods** can edit and return other properties:
+**Objects methods** can edit and return their own properties:
 
 ```
 let univa ={
@@ -507,17 +403,17 @@ let univa ={
     molti: ["uno", 2, 3, 45],
     money: 0,
     aggiung: function(inn){
-        this.nuovo = inn
+        this.nuovo = inn        //univa.aggiung("this") add a new property
     },
     ancori: function(on){
-        this.nuovo += " " + on
+        this.nuovo += " " + on  // .ancori("new") we add to new property "this new"
     },
     yunn: function(oll){
-        this.molti.push(oll) 
+        this.molti.push(oll)    //univa.yunn( 23 ) adding to property array
     },
     spicc: function(we){
-        this.money += we
-    },
+        this.money += we       //univa.spicc(24) "finally, you got it"
+    },                         //univa.spicc(-16) "no money ;(?"  with money=8< 10
     compra: function(){
         if(this.money > 10){
             return "finally, you got it"
@@ -527,15 +423,11 @@ let univa ={
     }
 }
 
-univa.aggiung("this")     //we first add a new property this.nuovo and then we set its value 
-univa.ancori("new")       //at "this", then with ancori method we change it with "this new"
-univa.yunn( 23 )          //we can have the argument be added at an array property, this.molti.push(oll) 
-univa.spicc(24)           //univa.compra() would return "finally, you got it" with money 24 > 10
-univa.spicc(-16)          //"no money ;(?"  with money=8< 10
-
 ```
 
 Javascript doesn't have **Static types** or **Static dispatching,** everything is an instance(object) or a function(constructor), and even functions are instances of a function constructor.
+
+\-----------------
 
 Each object has a _private property_ **\[\[prototype]]**, that can be swapped or edited:
 
