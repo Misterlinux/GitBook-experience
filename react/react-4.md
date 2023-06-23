@@ -916,17 +916,37 @@ The moment a new Node element gets the **ref attribute** it will be **scrollInto
 
 <figure><img src="../.gitbook/assets/Catlist.png" alt="" width="563"><figcaption><p>Scrolling onClick() using ref attributes and DOM methods</p></figcaption></figure>
 
-The Node element ref can receive a DOM method while in a different component
+The Node element **ref** can receive a **DOM method** while in a **different component,** using **forwardRef().**
 
 ```
-//We set the ref attribute and DOM method in different components
+//DOM methods triggered on separate components will still trigger the current ref
+const inputRef = useRef(null);
 
+<nav>
+  <SearchButton onClick={() => {
+    inputRef.current.focus();
+  }} />
+</nav>
+<SearchInput ref={inputRef} />
 
+//This will .focus() the ref on a separate component
+function SearchButton({ vision }) {
+  return (
+    <button onClick={vision}>
+      Search
+    </button>
+  );
+}
 
+//The DOM method will affect the Node element that received the ref
+const SearchInput = forwardRef((props, ref)=>{
+  return( 
+    <input
+      ref={ref}
+      placeholder="Looking for something?"
+    />
+  )
+})
 ```
-
-1
-
-1
 
 [^1]: This is teh callback function
