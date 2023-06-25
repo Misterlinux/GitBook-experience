@@ -425,14 +425,14 @@ let univa ={
 
 ```
 
+### Object Prototype and more
+
 Javascript doesn't have **Static types** or **Static dispatching,** everything is an instance(object) or a function(constructor), and even functions are instances of a function constructor.
 
-\-----------------
-
-Every object has a _private Object property_ **\[\[prototype]]**, that can be swapped or edited:
+Every object has a built-in _private Object property_ **\[\[prototype]]**, that can be swapped or edited:
 
 ```
-//It can be created and it has to be an object
+//It can be created and it has to be an object (which also has a [prototype]
 
 const uno={
   ol: "siamo",
@@ -446,14 +446,15 @@ const uno={
 }
 
 //The [prototype] chain is accessed with uno.__proto.__proto__ etc
-//{ ol: "siamo" } --> { ol: "siamo stati", vid: "quasistati" } --> {rin: 'secondo'} --> Object.prototype --> null
+//{ ol: "siamo" } -> { ol: "siamo stati", vid: "quasistati" } -> {rin: 'secondo'} --> Object.prototype --> null
 
+//can be accessed with Object.getPrototypeOf(uno) -> { ol: "...", vid: "..." }
 ```
 
-We can use **\_\_**_**proto\_\_**_ in objects for **inheritance**:
+The **\_\_proto\_\_** property and **Object.setPrototypeOf**(to, from) allow objects to inherit \[prototype]:
 
 ```
-//The parent object doesn't need it
+//Now the child object has the parent object properties and can call/edit them
 
 const genitore={
   dopp: 3,
@@ -466,17 +467,16 @@ const fig={
   __proto__: genitore
 }
 
-//The child object fig can use methods from the parent object, when needing this.dopp
-//property, not being present in the child, it will search for it in the [[prototype]]
+Object.setPrototypeOf(fig, genitore)
+
+//Searching the methodo it will follow the __proto__ chain and find it in [prototype]
 console.log( fig.metodo() )    //13    
 
 fig.dopp= 12
 console.log( fig.metodo() )    //22
-//after we set a new property it will use it instead
-
 ```
 
-Setting up \_\__proto_\_\_ can be done with .prototype:
+We set up _\_\_proto\_\__ with the **.prototype** method:
 
 ```
 function Scatola(rega){
@@ -495,35 +495,13 @@ const katt= [
 ]
 
 //Object.getPrototypeOf(new Scatola()) === Scatola.prototype
-
-```
-
-
-
-We can also set _other construction functions_ as \[\[prototype]]:
-
-```
-function Base() {}
-function Derived() {}
-
-//we can set Derived.[[prototype]] to be Base.[[prototype]]
-Object.setPrototypeOf(
-  Derived.prototype,
-  Base.prototype,
-);
-
-//we made the [[prototype]] chain longer
-console.log( Derived.prototype )        //Base {constructor: ƒ}
-
-//and it would be
-const obje = new Derived();
-// Derived.prototype ---> Base.prototype ---> Object.prototype ---> null
-
 ```
 
 When creating instances from constructors, the **constructor.prototype** **will become the \[\[prototype]] of the instance:**
 
 ```
+Object.setPrototypeOf(obje, Derived)
+
 console.log( Derived.prototype )    //Base {constructor: ƒ}
 console.log( obje.__proto__ )       //Base {constructor: ƒ}
 console.log( obje.prototype)        //undefined
@@ -532,7 +510,7 @@ console.log( obje.prototype)        //undefined
 
 ```
 
-**Instances** are new objects with methods and properties copied from a class:
+**Instances** are new objects from a constructor class:
 
 ```
 function doSomething() {
@@ -541,7 +519,7 @@ function doSomething() {
 
 doSomething.prototype.lin= "accidenti"
 
-//You can simply add properties to the instance
+//The new Instance will inherit the constructor __proto__
 let finn= new doSomething()
 finn.liberi= "muriatico"
 
@@ -549,24 +527,40 @@ console.log( doSomething.oltre )        //Both undefined, even if the property i
 console.log( doSomething.lin )          //in the constructor and prototype
 console.log( doSomething.prototype.lin) //"accidenti"
 
-//.liberi and .oltre will be included in the constructor 
-
 ```
 
-<figure><img src="../.gitbook/assets/InstancePrototype.PNG" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/InstancePrototype.PNG" alt=""><figcaption><p>Instance object with prototype</p></figcaption></figure>
 
 We can also use **Object.create()** to set the \[\[prototype]] and properties of a new object:
 
 ```
-//This allow us to create null prototypes with
+//This allows us to create null prototypes
 Object.create(null)
 
 const a1 = { a: 1 };
 
 const b1 = Object.create(a1);
-// b ---> a ---> Object.prototype ---> null
+// b1.__proto__ -> a.__proto__ -> Object.prototype ---> null
 
 ```
+
+<details>
+
+<summary>Instances and isPrototype()</summary>
+
+1
+
+1
+
+1
+
+1
+
+1
+
+</details>
+
+\-------------------------
 
 Or we can set the **prototype** as a **new instance,** and use **.isPrototypeOf()** to check the instance prototype:
 
