@@ -429,7 +429,7 @@ Javascript doesn't have **Static types** or **Static dispatching,** everything i
 
 \-----------------
 
-Each object has a _private property_ **\[\[prototype]]**, that can be swapped or edited:
+Every object has a _private Object property_ **\[\[prototype]]**, that can be swapped or edited:
 
 ```
 //It can be created and it has to be an object
@@ -445,7 +445,7 @@ const uno={
   }
 }
 
-//here the chain of [[prototypes]], from uno.__proto__... , will be:
+//The [prototype] chain is accessed with uno.__proto.__proto__ etc
 //{ ol: "siamo" } --> { ol: "siamo stati", vid: "quasistati" } --> {rin: 'secondo'} --> Object.prototype --> null
 
 ```
