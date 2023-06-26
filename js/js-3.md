@@ -1,7 +1,7 @@
-# JS 3
+# JS 3 Array methods, Objects, Instances, prototypes, Object constructor and extends
 
 * [Objects, methods, and keys](js-3.md#objects-methods-and-keys)
-* [ES6 syntax and more objects](js-3.md#es6-syntax-and-more-objects)
+* [Object instances and prototype inheritance](js-3.md#object-instances-and-prototype-inheritance)
 * [Object constructor and extends](js-3.md#object-constructor-and-extends)
 
 ### Filter(), map(), find() and forEach() on arrays
@@ -425,7 +425,7 @@ let univa ={
 
 ```
 
-### Object Prototype and more
+### Object Instances and Prototype inheritance
 
 Javascript doesn't have **Static types** or **Static dispatching,** everything is an instance(object) or a function(constructor), and even functions are instances of a function constructor.
 
@@ -497,20 +497,7 @@ const katt= [
 //Object.getPrototypeOf(new Scatola()) === Scatola.prototype
 ```
 
-When creating instances from constructors, the **constructor.prototype** **will become the \[\[prototype]] of the instance:**
-
-```
-Object.setPrototypeOf(obje, Derived)
-
-console.log( Derived.prototype )    //Base {constructor: ƒ}
-console.log( obje.__proto__ )       //Base {constructor: ƒ}
-console.log( obje.prototype)        //undefined
-
-//Object.getPrototypeOf(Constructor.prototype) === Object.prototype
-
-```
-
-**Instances** are new objects from a constructor class:
+**Instances** are **new** objects created from a constructor class functions:
 
 ```
 function doSomething() {
@@ -531,100 +518,25 @@ console.log( doSomething.prototype.lin) //"accidenti"
 
 <figure><img src="../.gitbook/assets/InstancePrototype.PNG" alt=""><figcaption><p>Instance object with prototype</p></figcaption></figure>
 
-We can also use **Object.create()** to set the \[\[prototype]] and properties of a new object:
+**Objects.create()** inherit the parent object as \_\_proto\_\_ while **instances** inherit the **constructor \[prototype]** as **\_\_proto\_\_**.
 
 ```
-//This allows us to create null prototypes
-Object.create(null)
-
+//The parent object becomes part of the __proto__ chain
 const a1 = { a: 1 };
-
 const b1 = Object.create(a1);
-// b1.__proto__ -> a.__proto__ -> Object.prototype ---> null
+
+b1.__proto__    //{ a: 1 }
+
+//On constructor functions instead
+function foo() { }
+function Bar() { }
+
+Bar.prototype = Object.create(foo.prototype);
+
+const bar = new Bar();
+bar.__proto__ == Bar.prototype == foo{}
 
 ```
-
-<details>
-
-<summary>Instances and isPrototype()</summary>
-
-1
-
-1
-
-1
-
-1
-
-1
-
-</details>
-
-\-------------------------
-
-Or we can set the **prototype** as a **new instance,** and use **.isPrototypeOf()** to check the instance prototype:
-
-```
-function Foo() {}
-function Bar() {}
-function Baz() {}
-
-console.log( Bar.prototype )        //Object.prototype
-
-//We chain the Baz1.prototype-> Bar1.prototype--> new Foo()  
-//Bar.prototype = Object.create(Foo.prototype);
-Bar.prototype= new Foo()
-Baz.prototype= new Bar()
-
-console.log( Bar.__proto__)        //Foo {}
-console.log( Baz.__proto__)        //Foo {} [[Prototype]]:Foo1
-
-const foo1 = new Foo();
-const bar1 = new Bar();
-const baz1 = new Baz();
-
-//The prototype of Baz1, Bar1, Foo1 are the same and present in the intance baz1
-//By checking the prototype chain we find that Bar and baz1.__proto__ are a new Foo()
-console.log(Baz1.prototype.isPrototypeOf(baz1));    // true
-console.log(Bar1.prototype.isPrototypeOf(baz1));    // true
-console.log(Foo1.prototype.isPrototypeOf(baz1));    // true
-
-//This means that Baz1 instanceof all 3
-console.log( baz1 instanceof Baz1)    //true
-console.log( baz1 instanceof Bar1)    //true
-console.log( baz1 instanceof Foo1)    //true
-
-//bar1.__proto__ is a steps ahead of Baz1.prototype and the opposite for Baz1 and foo1 
-console.log(Baz1.prototype.isPrototypeOf(bar1));    // false
-console.log(Baz1.prototype.isPrototypeOf(foo1));    // false
-
-//baz1 was created by new Baz1(), which is Baz.prototype= new Bar(), so it's its prototype
-console.log(Bar1.prototype.isPrototypeOf(baz1));    // true
-console.log(Bar1.prototype.isPrototypeOf(foo1));    // false
-//even if Foo1() is contained in Bar1 , Baz.prototype= new Bar(), it's step ahead 
-
-console.log(Foo1.prototype.isPrototypeOf(bar1));    // true
-console.log(Object.prototype.isPrototypeOf(baz1));  // true
-
-//the prototype chain for baz1 being
-//baz1->Baz1.prototype-> Bar1.prototype-> Foo1.prototype-> Object.prototype-> null
-
-```
-
-This can be useful when needing specific prototypes to be part of instances:
-
-```
-//Some properties or methods present in Foo1 have to be present for example
-
-if (Foo1.prototype.isPrototypeOf(baz1)) {
-  console.log( "baz1 is the correct instance to use")
-}
-
-```
-
-
-
-
 
 **Javascript** uses **prototypical objects** as _Templates_ from which **new** Objects **inherit** properties and methods (states and behaviors) in their \[\[prototype]].
 
@@ -640,11 +552,11 @@ function Person(name){
   }
 }
 
-//[prototype] won't be present in primitive data type BUT in their intances
+//[prototype] won't be present in primitive data type BUT in their instances
 let num= 5                //won't have [prototype]
 let num= new Number(5)    //will have [prototype]:number
 
-//Arrays and RegEx are intances
+//Arrays and RegEx are instances
 let fila= [1,2,3,4]      //new Array(1, 2, 3, 4);
 const regexp = /abc/;    //new RegExp("abc");
 
@@ -659,10 +571,9 @@ To access the \[\[prototype]] methods and properties:
 ```
 console.log( fila.__proto__ )
 console.log( Object.getPrototypeOf(fila) )
-
 ```
 
-<figure><img src="../.gitbook/assets/Arrayprototype.PNG" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/Arrayprototype.PNG" alt=""><figcaption><p>An array object __proto__ (a constructor function)</p></figcaption></figure>
 {% endtab %}
 
 {% tab title=".prototype" %}
@@ -682,39 +593,27 @@ console.log( RegExp.prototype )     // /(?:)/.
 {% endtab %}
 {% endtabs %}
 
-All Javascript **Objects inherit** \[\[prototype]], a property/function that contains all the _properties and methods avaiable_ to the object.
+All Javascript **Objects inherit** \[\[prototype]], a property/function that contains all the _properties and methods available_ to the object.
 
 Any method/property in the prototypical **object constructor function** body can _be added_ to the **prototype,** which is **more memory efficient** and allows for **object-specific syntax:**
 
-```
-//This can only be done to the Construction Object, not the instance/object
-
-let prim = new Primo(11)
-
+<pre><code>//This can only be done to the Construction Object, not the instance/object
+<strong>let prim = new Primo(11)
+</strong>
 Primo.prototype.somma1 = function(){
   return "ecco il numero " + this.value + " and " + this.somma(10) 
 }
 
 console.log( prim.somma1() )      //ecco il numero 11 and 22
 
-//If we wanted we could access JUST the [[prototype]] 
-console.log( prim.__proto__ ) 
-//but we are still referencing the constructor prototype, the one that actually has it
-console.log( Primo.prototype )
-//if we tried to get the .prototype from the Instance/object
-console.log( prim.prototype )      //undefined
-
-console.log( prim ) 
-//And the object prototype will be changed
-```
+</code></pre>
 
 ![The new method is in the \[\[prototype\]\]](../.gitbook/assets/added.PNG)
 
-About **inheritance** and **.hasOwnProperty()** in _Instances_:
+We use **.hasOwnProperty()** on **Instances** to check the **constructor function properties:**
 
 ```
-//Any new method/property will be added to the Instances, even those precedents
-
+//Any new method/property will be added to the Instances, even after
 let secondo = new Primo(33)
 
 Primo.prototype.messo= false
@@ -722,23 +621,15 @@ Primo.prototype.retro= function(){
   console.log( this.messo+ " is our way")    //false is our way
 }
 
-console.log( secondo )
-//Both secondo are gonna now have the .retro() method and .messo property
-
-//In Instances/objects we can use .hasOwnProperty() for True/False on specific properties
-secondo.hasOwnProperty("messo")    //True, secondo has the intance messo
-Object.hasOwn( secondo, 'messo')   //True, we can also use it
-
-secondo.hasOwnProperty("retro")    //False, retro method is not in the constructor
-secondo.__proto__.hasOwnProperty('retro')    //True, the method is in the prototype
-Object.getPrototypeOf(secondo).hasOwnProperty('messo')
-
+secondo.hasOwnProperty("messo")            //false
+secondo.__proto__.hasOwnProperty("messo")  //true
 ```
 
-After defining default values and .methods, we can modify properties inside instances
+**This** values returned from prototype.**methods** will become **instance properties**,
 
 ```
-//We start with default values and a method that interacts with it
+//It will remain false in prototype but will become new property in instance
+let nino = new Primo()
 
 Primo.prototype.messo= false
 Primo.prototype.vedo= function(){
@@ -747,38 +638,13 @@ Primo.prototype.vedo= function(){
   }
 }
 
-console.log( prim )
-prim.vedo()
-console.log( prim )
+console.log( nino )
+nino.vedo()
+console.log( nino )
 
 ```
 
-{% tabs %}
-{% tab title="Before method" %}
-![](../.gitbook/assets/propertyBEFORE.PNG)
-
-This is before the method .vedo() is called, **both have the method and default property in prototype.**
-{% endtab %}
-
-{% tab title="Second Tab" %}
-![](../.gitbook/assets/prototypebefroeAFTER.PNG)
-
-Even if both had the .messo property in the prototype, after the method the second one has the .messo **property in the object body**.
-{% endtab %}
-
-{% tab title="Prototypes after method" %}
-![](../.gitbook/assets/BeforeAfterprototype.PNG)
-
-It's prim.messo **property changed** (true) after the .vedo() method and **we still have** the \[\[prototype]] messo with its default values in our instance.
-
-```
-//the instance prim now has a different property from prototype
-
-prim.messo        //true
-
-```
-{% endtab %}
-{% endtabs %}
+<figure><img src="../.gitbook/assets/instance.png" alt=""><figcaption><p>Instance prototype returned new This instance</p></figcaption></figure>
 
 We can use **Object.assign** to more easily add properties and methods to prototypes:
 
@@ -798,32 +664,30 @@ Object.assign(
   }
 )
 
+let anello = new Rings()
+anello.theme      //"giallo
 ```
 
-We can make a _constructor_ Object **Inherit an entire constructor**, and have _access_ to its \[\[prototype]], the instance will have a **chain of prototypes**, inheriting multiple constructor prototypes:
+A constructor function can **inherit another constructor**, its instances will have access to both:
 
 ```
-//While using the created Rings constructor
-
+//Using the Rings() constructor 
 function Potato(sauce){
   this.sauce= sauce
 }
 
-//You don't need to add the arguments to the constructor
 Potato.prototype= new Rings()
-
 let tomato = new Potato("ketchup")
-console.log(tomato.inn)      //undefined, from the this.inn Rings property
 
-//now any instance of Potato has access to Rings properties and methods
-console.log(tomato.texttogo() )      //"ecco la stringa"
-console.log(tomato.color() )         //giallo
+tomato.texttogo()       //"ecco la stringa"
+tomato.color("red")     //"giallo / red"
+tomato.theme            //"giallo"
 
-//doing that to an Instance won't work
-//And inheriting another will invalidate all previous access
+//If the prototype constructor is changed 
+Potato.prototype= new Rings1()
 
-Potato.prototype= new Extra()
-console.log(tomato.texttogo() )    //error .texttogo is not a function
+let tomato1 = new Potato("mustard")
+tutto.theme           //undefined
 
 ```
 
@@ -831,7 +695,6 @@ console.log(tomato.texttogo() )    //error .texttogo is not a function
 {% tab title="Simple constructor" %}
 ```
 //A normal constructor will have [[property]] Object and constructor potato
-
 function Potato(sauce){
   this.sauce= sauce
 }
@@ -842,165 +705,79 @@ Potato.prototype.ordine= function(cosa){
 
 ```
 
-![](<../.gitbook/assets/Chainof (1).PNG>)
+![one level inherit constructor](<../.gitbook/assets/Chainof (1).PNG>)
 {% endtab %}
 
 {% tab title="Inherited contructor" %}
 ```
-//its [[prototype]] changed and even its constructor is now Rings, with its properties
-
 function Potato(sauce){
   this.sauce= sauce
 }
 
 Potato.prototype= new Rings()    //no argumenst mean undefined property values
-let tomato = new Potato("ketchup")
+let tomato = new Potato("mayo")
 
 ```
 
-![](../.gitbook/assets/inheritedobject.PNG)
+![The inherited Rings() constrcutor in the prototype](../.gitbook/assets/inheritedobject.PNG)
 {% endtab %}
 {% endtabs %}
 
-**.Call()** is a Javascript method, it invokes (call) **a method from another object** using **this.** owner object as an argument.
+**.Call()** is a Javascript method, it invokes (call) **a method from another object** using **this.**owner object as an argument.
 
 ```
-//The method we created requires 2 properties called UNO and DUE 
-
+//This allows us to use any object with uno/due property as argument
 function Cosa(uno2, due2){
   this.uno= uno2
   this.due= due2
 }
 
-//we could use any .uno and .due property from objects
 Cosa.prototype.altro= function(){
   return this.uno + " " + this.due + " is the other"
 }
 
+//uno/due are normally set on new instance
 let occa= new Cosa("numero", "second")
 
+//but we can create an external object with the same properties to use in .call()
 const exem = {
   uno: "ecco",
   due: "altro"
 }
-
-//Even if the function didn't have a parameter, with .call() we can use ANOTHER
-//object as argument and pass the .uno and .due property
 console.log( occa.altro.call(exem))      //ecco altro is the other
 
-//we can even add more arguments, the order of which is important
-
+//when adding more arguments, the order matters
 Cosa.prototype.ancora = function(sapore, forma){
   return this.uno + " is the " + sapore + " " + this.due + " is indeed " + forma
 }
 
-occa.ancora.call(exem, "dolce", "quadrato")    //ecco is the dolce altro is indeed quadrato
-//we used both properties and arguments
+occa.ancora.call(exem, "1", "quadrato")    //ecco is the 1 altro is indeed quadrato
 
 ```
-
-We use **.call()** in order to **inherit just some** properties or methods from the **constructor object**:
-
-```
-//we .CALL() the constructor function, with THIS. HAMB object as argument, and
-//arguments for ITS properties
-
-function Hamb(meat, sauce1){
-  Potato.call(this, sauce1, meat)
-  this.meat= meat
-}
-
-let chicken = new Hamb("pollo", "garlic", "upwards")
-
-```
-
-{% tabs %}
-{% tab title="Hamb object" %}
-![](../.gitbook/assets/CalledOBJ.PNG)
-
-It will indicate Rings constructor but **It won't have access to its methods**, just its properties.
-{% endtab %}
-
-{% tab title="Potato object" %}
-![](../.gitbook/assets/Potatone.PNG)
-
-The object has access to its methods if they are with the \[\[prototype]]
-{% endtab %}
-{% endtabs %}
 
 **instanceof** checks if a prototype chain of an **instance** has **a constructor.prototype,** returning a boolean value**:**
 
 ```
-//From our previous code
-//after the Potato.prototype= new Rings()
-//let tomato = new Potato("ketchup")
+function Pro(){ this.primo= "primo" }
 
-tomato instanceof Potato        //True tomato gets to be instance of both 
-tomato instanceof Rings         //True
+function Hamb(){ this.meat= "secondo" }
+Hamb.prototype = new Pro()
 
-chicken instanceof Hamb     //true
-chicken instanceof Potato   //false the .call() inherits just the properties, not any prototype
+function Potato(){}
+Potato.prototype = new Hamb()
 
+let dove = new Potato()
+
+(dove.primo + " / " + dove.meat)    //primo / secondo
+(dove instanceof Potato)            //true
+(dove instanceof Pro)               //true
+(Hamb instanceof Pro)               //false
 ```
-
-More about **.constructor** and **.constructor.prototype:**
-
-{% tabs %}
-{% tab title="Tomato instance" %}
-![](../.gitbook/assets/INSIDEPROTOTYPE.PNG)
-
-```
-//from the first line you see is an instance of Potato{properties}
-//its [[prototype]] is gonna be Rings, which tomato is instaceof
-//Also, Potato.prototype.ordine is inside [[prototype]] with the 
-//Rings[[prototype]] and inside of it there is the Rings() methods
-console.log( tomato )
-
-//the constructor is gonna be the function constructor body, without the 
-//prototype.methods added
-console.log( tomato.constructor )
-
-```
-
-![](../.gitbook/assets/CONSTRUCTIONPROTP.PNG)
-
-```
-//[[prototype]] Rings => [[prototype]] Object => the list of methods and
-//properties assigned to Tomato.constructor (Ring)
-
-tomato.constructor.prototype
-
-```
-{% endtab %}
-
-{% tab title="Chicken instance" %}
-![](../.gitbook/assets/HAMBonlyconst.PNG)
-
-```
-//chicken only is an instance of Hamb, its [[prototype]] is just object
-//Its actual constructor isn't Rings, its Hamb
-console.log( chicken )
-console.log( chicken.constructor )
-
-```
-
-![](../.gitbook/assets/ACTUALconstructor.PNG)
-
-```
-//Its constructor prototype ends up being
-
-console.log( chicken.constructor.prototype )
-
-```
-{% endtab %}
-{% endtabs %}
 
 We can use **instanceof** for other types of data too:
 
 ```
-//It can help to see the difference between a primitive typeof and an Object
-//for Booleans, strings and numbers
-
+//Primitive boolean, string, and number data are not instances
 let str= 'This is a literal string';
 let obj= new String('String');
 
@@ -1014,214 +791,34 @@ console.log(obj instanceof Object)    //true
 
 ```
 
-Using **instanceof** in any **if statement** requires:
-
-```
-//you need an extra () if working with FALSE instanceof
-
-if(!(chicken instanceof Rings )){
-  console.log("its not an instaceof then this apply")
-}
-
-if(!chicken instanceof Rings){
-  console.log("this will never apply")
-}
-
-//!chicken will be evaulated before, so it will end up as False instaceof Rings, which can't happen
-```
-
-In this **exercise**, we build a **construction function** in which we use **other construction as property**:
-
-{% tabs %}
-{% tab title="Size constructor" %}
-```
-
-class Size{
-  constructor(uno= 80, due=60){
-    this.width= uno;
-    this.height= due;
-  }
-}
-
-Size.prototype.resize = function(uni, dui) {
-  this.width = uni
-  this.height = dui
-}
-
-```
-{% endtab %}
-
-{% tab title="Position constructor" %}
-```
-
-class Position{
-  constructor(uno=0, due=0){
-    this.x= uno;
-    this.y= due;
-  }
-
-  move(newuno, newdue){
-    this.x= newuno;
-    this.y= newdue;
-  }
-}
-
-```
-
-
-{% endtab %}
-{% endtabs %}
-
-```
-//We assign the property screenSize the instance of Size with set arguments
-//size and position can work without parameters thanks to their default values
-
-class ProgramWindow{
-  constructor(){
-      this.screenSize = new Size(800, 600)
-      this.size= new Size()
-      this.position= new Position()
-  }
-}
-
-//and we can access the height and width property from the screenSie property
-const prop = new ProgramWindow()
-console.log( prop.screenSize.width )    //800
-console.log( prop.screenSize.height )   //600
-
-```
-
-Next we have a **resize()** method that will resize any new object that surpasses the set width, height of screenSize:
-
-```
-//the Size1 width and height will be resized IF it's bigger than the difference
-//between the fixed screenSize and the current position X Y
-
-//with Math.min is a simpley way to do Size1.width < topwidth
-//We also use Math.max(1) to cerrect the lower value to 1 if negative
-
-  resize(Size1){
-
-    const topheight= this.screenSize.height - this.position.y
-    const topwidth= this.screenSize.width - this.position.x
-
-    const neoheight= Math.max(1, Math.min(Size1.height, topheight))
-    const neowidth= Math.max(1, Math.min(Size1.width, topwidth))
-
-    this.size.resize(neowidth, neoheight)
-    Size1.width= this.size.width
-    Size1.height= this.size.height
-  }
-  
-//to access the method itself we need to first create an instace of it
-const programWindow = new ProgramWindow();
-
-//Then we create an instace we want to use as argument of said method
-let max= new Size(850, 650)
-
-programWindow.resize(max)
-console.log(max)      //its height and width will be resized at 800, 600, based on
-                      //the screenSize and 0,0 position
-```
-
-We do a symilar operation with the **move()** method:
-
-```
-//it's symilar to the previous method, the position object in the parameter
-//will be modyfied if it plus the Size exceed teh screenSize proportions
-
-  move(Pos){
-    const topheight= this.screenSize.height - this.size.height
-    const topwidth= this.screenSize.width - this.size.width
-
-    const neoheight= Math.max(0, Math.min(Pos.y , topheight))
-    const neowidth= Math.max(0, Math.min(Pos.x , topwidth))
-
-    Pos.x= neowidth
-    Pos.y= neoheight
-
-    this.position.move(neowidth, neoheight)
-  }
-
-//both methods modify the property of out new ProgramWindow() instance
-const programWindow2 = new ProgramWindow();
-
-const newPosition2 = new Position(410, 750);
-programWindow2.move(newPosition2);
-console.log( newPosition2 )        //410, 540
-//Position.Y exceeds the screenSize so with default Size.height at 60, we round at 540
-
-const newSize2 = new Size(1000, 1000);
-programWindow2.resize(newSize2);
-console.log(newSize2)             //390, 60
-//Both sizes will be resized BASED on the previous position results, that changed
-//the Size() and Position() that ProgramWindow uses as instances
-
-```
-
-We can **optimize** the entire process further:
-
-```
-//we use the instance objects as argument for the Instance method
-
-function changeWindow(prowin){
-  prowin.move(new Position(100, 150))
-  prowin.resize(new Size(900, 900))
-
-  return prowin
-}
-
-//we use the instace as argument
-const updatedWindow = changeWindow( new ProgramWindow() );
-console.log( updatedWindow )    //position be 100, 150 while size be 800, 450
-
-```
-
 ### Object constructor and extends
 
 **Functions are callable objects,** so they can contain properties and methods:
 
-We use **Constructions functions** as template to create new objects using the **new** keyword:
+We use **Constructions functions** as templates to create new objects using the **new** keyword:
 
 ```
-function Person(first, last, age, eye) {            //we set the properties/VALUES
-    this.firstName = first;                         //we assign its internal properties with the parameter value
+//The constructor function arguments are passed by the instances
+function Person(first, last, age, eye) {    
+    this.firstName = first;                     
     this.lastName = last;                    
     this.age = age;
     this.eyeColor = eye;
-    this.minimal = function(age){                   //methods that can modify the this.properties
+    this.minimal = function(age){                   
         this.age = age
-        return this.age + " maybe"                  //and then return 
+        return this.age + " maybe"
     };
     this.summary = function(){                      
         return this.eyeColor + " " + this.firstName
     }
 }
-               //we need to call a new function constructor
+
 let myFather = new Person("John", "Doe", 50, "blue");
-myFather.minimal(10) , myFather.age, myFather.summary(12)    //10 maybe, 10, blue John
+myFather.summary(12)    //10, blue John
 
 ```
 
-Using **Prototype** we can add properties and methods to already objects:
-
-```
-//the property added won't be visible in console.log( myFather )
-Person.prototype.bahamas = "volato"
-//it will be set in the [[prototype]] property
-
-//we add the properties and methods to the constructor BUT has to be called on the new
-Person.prototype.masuda = function(yoga){
-    return this.age + " and also " + this.minimal(yoga)
-}
-//both methods use this.age but masuda() uses the this.age 12 THEN minimal() changes it to 900
-myFather.masuda( 900 )                 //123 and also 900 maybe
-
-```
-
-![The construction function is Person{}](../.gitbook/assets/firstprototype.PNG)
-
-We can use **extends** to extend pre-existing function constructor:
+We can use **extends** to extend function constructors, **super()** calls the previous constructor to include **all its properties**:
 
 ```
 function Animal(name){
@@ -1231,20 +828,21 @@ function Animal(name){
     }
 }
 
-//we put the new objects FIRST extends (old object)
+//A new class names and extends the constructor, added methods outside constructor{}
 class Dog extends Animal {
   constructor(surname, altro) {
-    super(surname); // call the super class constructor and pass in the NAME parameter
+    super(surname); 
     this.more = altro
   }
-                    //and if we want to add methods we them outside constructor
+
   speak() {
     console.log(`${this.name} barks.`);
   }
 }
 
-let d = new Dog('Mitzie', "maybe");    //Dog { name: 'Mitzie', speak: [Function: speak], more: 'maybe' }
-//Dog takes 2 arguments that will be used in contructor() and super('Mitzie') will be Animal(name)
+//The extended instance has 1 argument for the super and another for its own props 
+let d = new Dog('Mitzie', "maybe");    
+//Dog { name: 'Mitzie', speak: [Function: speak], more: 'maybe' }
 
 ```
 
@@ -1260,7 +858,6 @@ It creates **construction Objects templates** whose properties and methods can b
 
 ```
 //it needs a constructor that keeps the properties and parameters
-//while the methods are outside
 
 class Parv{
   constructor(rin){
@@ -1275,7 +872,7 @@ let rag = new Parv("winn")
 console.log( rag.dardo() )      //winn more
 ```
 
-Instances can still **modify the inherited** \[\[prototype]] from their constructor:
+Instances can **modify the inherited** \[prototype] into new properties:
 
 ```
 function Vehicle(make, model) {
@@ -1309,7 +906,7 @@ const triang = new Quada(200, 100)
 
 class Vast extends Quada{
   constructor(quado, all ,moe){
-    super(quado, all)      //with 2 arguments we can put at super() from Quada(alte, larg)
+    super(quado, all)      //Quada(alte, larg)
     this.moe = moe
   }
   get minus(){return this.alte + this.larg}

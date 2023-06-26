@@ -20,7 +20,7 @@
 
 * [JS 1: variables, functions, parameters, array methods, data types, Math operations  and HTML implementation](js/js-1.md)
 * [JS 2, String array methods, If and Switch statements, let and var properties, HTML forms and js validation and setInterval()/setTimeout()](js/js-2.md)
-* [JS 3](js/js-3.md)
+* [JS 3 Array methods, Objects, Instances, prototypes, Object constructor and extends](js/js-3.md)
 * [JS 4](js/js-4.md)
 * [JS 5](js/js-5.md)
 * [JS  6](js/js-6.md)
