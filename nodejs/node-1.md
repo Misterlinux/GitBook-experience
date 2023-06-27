@@ -45,11 +45,59 @@ Contrary to _React_, the server needs to re-start to update, to avoid that we **
 
 **Postman** is a scalable testing tool, it can retrieve information sent by the **server routes**.
 
-<figure><img src="../.gitbook/assets/Postman.png" alt="" width="437"><figcaption><p>The Get method retries the res.send() from the server</p></figcaption></figure>
+**Queries** are the url part that comes after a **?...=**, it is used to _pass information_ from the endpoint to the **server routes**.
 
-1
+```
+//We request them with req.query.___, and add them to the endpoint
+//we add a query with ?(name set in route)=(query value) in the URL
 
-1
+app.get('/', (req, res) => {
+  let cava = req.query.v
+  res.send("Hello World! , we have the " + cava );
+});
+
+```
+
+<figure><img src="../.gitbook/assets/postmanQuery1.png" alt="" width="314"><figcaption><p>Postaman Get method for a URL with query</p></figcaption></figure>
+
+<details>
+
+<summary>Multiple queries for Math operations routes</summary>
+
+To add **multiple queries** to the url we use **&**:
+
+```
+http://localhost:3000/add?value1=12&value2=21
+```
+
+**Queries values** are strings by default, we convert them for math functions.
+
+```
+//We first add the route endpoint and then the query values
+
+app.get("/add", function (req, res) {
+    let sum1 = Number( req.query.value1 )
+    let sum2 = Number( req.query.value2 )   
+    res.send("The result is " + (sum1 + sum2 ));
+});
+
+```
+
+</details>
+
+**Parameters** too can pass data to the routes, it is included in the **endpoint** and requested with **req.params.\_\_\_**.
+
+```
+http://localhost:3000/add1/12/74
+
+//we pass its multiple values in the Endpoint
+app.get("/add1/:primo/:second", function (req, res) {
+    let sum1 = Number( req.params.primo )
+    let sum2 = Number( req.params.second )
+    res.send("The result is " + (sum1 + sum2 ));
+});
+
+```
 
 1
 
