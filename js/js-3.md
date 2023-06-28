@@ -49,7 +49,7 @@ You can use **forEach()** after a **map()/filter()** but not the opposite:
 
 let numeronia = [4,6,8,2,4,1]              //the number is 6.../8/10
 numeronia.map( (x)=> x+2 ).forEach( (x) => console.log( "the number is " + x )  
-numeronia.filter((x)=> x>4 ).forEach((x)=> console.log( "The number is " + x )
+numeronia.filter((x)=>{return x>4 }).forEach((x)=> console.log("The number is " + x)
 ```
 
 **.filter()** will return an array with the elements that satisfy the callback function condition, is **pure**:
