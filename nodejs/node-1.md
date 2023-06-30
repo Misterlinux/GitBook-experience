@@ -217,7 +217,25 @@ app.delete("/quotes/:id", function(req, res){
 
 </details>
 
-1
+### CORS and JWT autentification
+
+**CORS**, _Cross-Origin Resource Sharing_, allows servers to set specific **origins** for their **request**.           Origins are defined by their **protocol HTTP** and **port** number.
+
+HTTP is a _stateless protocol_, it won't record any request data, so to **authenticate** the user and to share data between the browser and server we used **sessions**.
+
+**Session objects** track users by comparing their **cookies** (string files downloaded on website access) to the ID session. When **users** make a **request** _(log in)_ it checks if they have an already open session and what permits they have.
+
+**Sessions** need storage space and extra security when sent to the server, they make the app harder to scale, and it's hard to implement on apps that contain many back-end micro-services or _don't use the browser for their cookies_.
+
+<figure><img src="../.gitbook/assets/sessiontoken.png" alt=""><figcaption><p>Sessions cookies and session ID </p></figcaption></figure>
+
+The **JSONWebToken** (JWT) _registers_ the user directly **to the app** without any sessions.               **JSON** stands for _Javascript Object Notation_, a text-based data format transferable between all languages and standard syntax for APIs.
+
+The **JWT** is made of **clains** (string sections) separated by a comma, clains are encoded in <mark style="background-color:blue;">code-64</mark>.
+
+The **first** _header_ clain contains the **hashing algorithm** and the token **type.**                                              The **second** contains the JSON object sent to the user, visible to anyone.                                       The **third** is a **secret hash**, kept by the **server** and it resets if the original request changes.
+
+<figure><img src="../.gitbook/assets/JWT.png" alt=""><figcaption><p>JWT token</p></figcaption></figure>
 
 1
 
