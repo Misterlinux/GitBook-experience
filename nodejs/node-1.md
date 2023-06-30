@@ -237,13 +237,112 @@ The **first** _header_ clain contains the **hashing algorithm** and the token **
 
 <figure><img src="../.gitbook/assets/JWT.png" alt=""><figcaption><p>JWT token</p></figcaption></figure>
 
-1
+### Implementing JWT registration to the server
 
-1
+On the **server.js** we implement **npm install cors** by setting the allowed **Port** origin.
 
-1
+```
+const express = require("express");
+const app = express();
+app.use(express.json());
+const cors = require("cors");
 
-1
+const corsOptions = {
+  origin: "http://localhost:3000"    
+};
+app.use(cors(corsOptions));        //We use() the CORS middleware
+
+```
+
+We _import_ the **routes.js** as _middleware_ for all **/user** endpoint routes.
+
+```
+const user = require("./routes/user.js");
+app.use("/user", user);
+```
+
+In the **routes/user.js** we **npm install bcrypt fs** to _hash the password_ and save it to the _JSON database_.
+
+```
+const express = require("express");
+const bcrypt = require("bcrypt");   
+const fs = require("fs"); 
+
+//The user router comes from the expressJs built-in method
+const router = express.Router();   
+
+```
+
+We import both the JSON **database** to update and the JWT **generator**, then we deconstruct the **req**uest **body** for the **/user/sign-up** route (**router** is the middleware of /user endpoint).
+
+If the **Post** **email** is already being in the database we return an error **(400) response**.                    We **bcrypt** the **password** body property and add a random **salt() hash** to it.                                          The _response.send()_ **JWT** is created after the user is registered.
+
+<pre><code><strong>const usersDb = require("../database/db.json");
+</strong>const generateJWT = require("../utils/generateJWT");
+
+router.post("/sign-up", async (req, res) => {
+  const {  name, email, password } = req.body;
+
+  try {
+    const user = await usersDb.filter(user => user.email === email);
+    if (user.length > 0) {
+      return res.status(400).json({error: "User already exist!"});
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const bcryptPassword = await bcrypt.hash(password, salt);
+    let newUser = {
+      id: usersDb.length,
+      name: name,
+      email: email,
+      password: bcryptPassword
+    }
+
+    usersDb.push(newUser);
+    await fs.writeFileSync('./database/db.json', JSON.stringify(usersDb));
+     
+    const jwtToken = generateJWT(newUser.id);
+    return res.status(201).send({ jwtToken: jwtToken, isAuthenticated: true});
+
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send({error: error.message});
+  }
+});
+
+module.exports = router;    //the router is then exported
+</code></pre>
+
+On the **utils/generateJWT.js** we **npm install jsonwebtoken dotenv**.                                                     We access the secret **env file** to generate JWT tokens, for the **payload** object we use public user data, the token is then **sign()** and given an **expiration** date.
+
+```
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+
+function generateJWT(user_id) {
+  const payload = {
+    user: {
+      id: user_id
+    }
+  };
+
+  return jwt.sign(payload, process.env.jwtSecret, { expiresIn: "1h" });
+}
+
+module.exports = generateJWT;    //the generate function is then exported
+```
+
+<figure><img src="../.gitbook/assets/JWTserver.png" alt=""><figcaption><p>Created Post user in teh JSON database and JWT user response.send()</p></figcaption></figure>
+
+The **env** and **database/db.json** files are:
+
+```
+//The .env file contains one value
+jwtSecret = "migracodeAuthJan2021"
+
+//The JSON database is an array for objects elements
+[]
+```
 
 1
 
