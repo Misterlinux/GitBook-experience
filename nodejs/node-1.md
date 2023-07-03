@@ -344,8 +344,102 @@ jwtSecret = "migracodeAuthJan2021"
 []
 ```
 
-1
+<details>
 
-1
+<summary>Sign-in endpoint with bcrypt.compare()</summary>
 
-1
+In the **user/sign-in** endpoint, we **bcrypt.compare()** the JSON database password with the **req.post** password.
+
+```
+//To sign-in we check if any user has the req.post password
+//The JSON database passwords are encrypted, so to compare we de-crypt them.
+//It returns a JSW using the matched user ID.
+
+router.post("/sign-in", async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await usersDb.filter(user => user.email === email);
+    if (user.length === 0) {
+      return res.status(401).json({
+        error: "Invalid Credential", 
+        isAuthenticated: false}
+      );
+    }
+
+    const isValidPassword = await bcrypt.compare(
+      password,
+      user[0].password
+    );
+    if (!isValidPassword) {
+      return res.status(401).json({
+        error: "Invalid Credential", 
+        isAuthenticated: false}
+      );
+    }
+
+    const jwtToken = generateJWT(user[0].id);
+    return res.status(200).send({ jwtToken, isAuthenticated: true });
+
+  } catch (error) {
+    res.status(500).send({error: error.message});
+  }
+});
+
+```
+
+</details>
+
+We implement the **authentification** _middleware_ in the **user/auth** endpoint.
+
+```
+//if authenticated it res.send() the success code 200
+
+const authenticate = require("../middleware/authentificate.js");
+
+router.post("/auth", authenticate, (req, res) => {
+  try {
+    res.status(200).send({isAuthenticated: true});
+  } catch (error) {
+    res.status(500).send({error: error.message, isAuthenticated: false});
+  }
+});
+```
+
+In the **auth** middleware we use the **env** file and the **JWT** token (received during sign-up/sign-in), as an _authorization/bearer_ in the **req.header("authorization")**.&#x20;
+
+We **JWT.verify()** the bearer JWT with the _env.JSWsecret_ string, to find the user assigned to the token.
+
+```
+//we require the jwt and dotenv modules
+
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+
+function authenticate (req, res, next) {
+
+  let token = req.header("authorization");
+
+  if (!token) {
+    return res.status(403).send({ 
+      message: "Authorization denied", 
+      isAuthenticated: false }
+    );
+  }
+  token = token.split(" ")[1];
+
+  try {
+    const verify = jwt.verify(token, process.env.jwtSecret);
+    req.user = verify.user;
+
+    next();
+    
+  } catch (err) {
+    res.status(401).send({ message: "Token is not valid", isAuthenticated: false });
+  }
+};
+
+module.exports = authenticate; 
+```
+
+<figure><img src="../.gitbook/assets/authMiddleware.png" alt="" width="563"><figcaption><p>Sign-in JWT and JWTBearer on Postman with code 200 res.send()</p></figcaption></figure>
