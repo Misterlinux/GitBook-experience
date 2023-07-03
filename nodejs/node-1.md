@@ -337,7 +337,8 @@ module.exports = generateJWT;    //the generate function is then exported
 The **env** and **database/db.json** files are:
 
 ```
-//The .env file contains one value
+//The external .env file value is used to set variables 
+//It's secret so keep it from git commits using .gitignore
 jwtSecret = "migracodeAuthJan2021"
 
 //The JSON database is an array for objects elements
