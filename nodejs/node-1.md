@@ -1,9 +1,7 @@
-# NODE 1
+# NodeJs, Server request/responses with Postman, CORS, and JWT authentification
 
-* 1
-* 1
-* 1
-* 1
+* [Modify a local JSON file with Postman POST data](node-1.md#modify-a-json-file-with-postman-post-data)
+* [CORS and JWT autentification](node-1.md#cors-and-jwt-autentification)
 
 **NodeJs** is a server-side javascript environment for app development.
 
