@@ -12,6 +12,20 @@ A **database** is a structured set of data, it checks **data validity** and **se
 
 **DBeaver** is a _SQL client software application_ and a _relational database administrative tool_, we create PostgreSQL database connections and SQL scripts to create database objects (like tables, etc).
 
+### DBeaver tables and SQL script&#x20;
+
+On DBeaver we create a **connection**-> select the **PostSQL driver**-> open the **SQL script** file (f3).            To find our tables we _schemas_-> _public_-> _tables_.
+
+<figure><img src="../.gitbook/assets/Dbeaverstart.png" alt="" width="563"><figcaption><p>Deaver database startup for the SQL scriopt</p></figcaption></figure>
+
+1
+
+1
+
+1
+
+1
+
 1
 
 1
