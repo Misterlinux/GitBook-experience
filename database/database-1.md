@@ -20,7 +20,7 @@ On DBeaver we create a **connection**-> select the **PostSQL driver**-> open the
 
 In a **relational database**, data is stored in **tables** of rows and columns.
 
-We **create table()**, and set its **column** properties **name (keys)** and **data type**, **not null** is for mandatory values on user rows.                                                                                                                         **Varchar(n)** for strings, **int** for integers, **date** for date() objects, and **boolean** for true/false values.    The **Serial primary key** is a unique identifier for the user rows, it increments after each insert.
+We **create table()** and set its **column** properties **name (keys)** and **data type**, **not null** for mandatory values on user rows.                                                                                                                         **Varchar(n)** for strings, **int** for integers, **date** for date() objects, and **boolean** for true/false values.    The **Serial primary key** is a unique identifier for the user rows, it increments after each insert.
 
 ```
 //The Varchar(n) is the max string.length(n)
@@ -97,6 +97,8 @@ VALUES
 
 ```
 
+For _logical operations_ use **'='** instead of '=='.
+
 We use **select from** to see Tables' **data**, and we can add logical operators.
 
 ```
@@ -111,33 +113,42 @@ SELECT * FROM hotels WHERE name='Royal Cosmos Hotel' OR rooms > 10;
 
 <details>
 
-<summary>non c'è</summary>
+<summary>More Select options and matching pattern table strings</summary>
 
 **ORDER** the table rows based on columns.
 
 ```
-//crescent order is the default, add DESC for de-crescent order
+//crescent order is the default unless you use DESC
 
 select * from varietas order by anni
 select * from varietas order by anni DESC
-
 ```
 
-1
+We **Limit** the _number of rows_ selected or their **key values**.
 
-1
+```
+//We limit the select rows returned
+select * from varietas limit 4
 
-1
+//select the rows with id= (1, 3, 5, 6)
+select * from varietas where id in (1, 3, 5, 6)
 
-1
+//will work if multiple rows have same column value
+select * from varietas where anni in ('22')
+```
 
-1
+We select **query** elements by **pattern matching** using **like %**.
 
-1
+```
+//At the end when matching the first digits of a string
+//at the end when matching the last digits of a string
+//doesn't work on int
 
-1
+select * from varietas where name like 'b%'
 
-1
+select * from varietas where name like '%man'
+
+```
 
 </details>
 
@@ -189,6 +200,13 @@ alter table varietas alter column anni type VARCHAR(5)
 
 </details>
 
+You can return the **alter** rows by adding **returning**:
+
+```
+//It returns all columns of the alter row
+update varietas set numba=12311 where name='lory' returning *;
+```
+
 **INNER** joins multiple **table columns**, we use **(.)** to access a _table property_ and add logical operators, we can select columns from **multiple tables**, as long as we JOIN them.
 
 ```
@@ -214,6 +232,18 @@ table drop varietas
 delete from varietas where id=4;
 
 ```
+
+### Database integration with Node-Postgres.
+
+1
+
+1
+
+1
+
+1
+
+1
 
 1
 
