@@ -87,10 +87,13 @@ To add a row we **Insert into table\_name() Values()**.
 
 ```
 //We use -- to comment in a SQL file, any inserted string needs ''
+//to add multiple values use (,)
 //Table keys and inserted values need to be the same number
 
 INSERT INTO hotels (name, rooms, postcode) 
-VALUES ('Triple Point Hotel', 10, 'CM194JS');
+VALUES 
+('Triple Point Hotel', 10, 'CM194JS'),
+('The 2-star palace', 7, 'AW124T5');
 
 ```
 
@@ -106,6 +109,38 @@ SELECT * FROM bookings WHERE checkin_date > '2019/10/01' AND nights >= 2;
 SELECT * FROM hotels WHERE name='Royal Cosmos Hotel' OR rooms > 10;
 ```
 
+<details>
+
+<summary>non c'è</summary>
+
+**ORDER** the table rows based on columns.
+
+```
+//crescent order is the default, add DESC for de-crescent order
+
+select * from varietas order by anni
+select * from varietas order by anni DESC
+
+```
+
+1
+
+1
+
+1
+
+1
+
+1
+
+1
+
+1
+
+1
+
+</details>
+
 **Alter table** and **Update** are used to modify the **table's keys** and row **properties** respectively.
 
 ```
@@ -116,8 +151,43 @@ ALTER TABLE customers ADD COLUMN date_of_birth DATE;
 //The night's property on the bookings table will be set at 25 
 //if id and customer_id are 1
 update bookings set nights=25 where id= 1 and customer_id= 1
+```
+
+<details>
+
+<summary>More Alter columns SQL scripts</summary>
+
+**Alter table** can include more table operations, like **drop column**.
 
 ```
+alter table multi drop column employed
+```
+
+**Rename** to change the name of the table.
+
+```
+alter table multi rename to varietas
+```
+
+**Rename column** to change a column's name.
+
+```
+alter table varietas rename column age to anni;
+```
+
+We can "**drop**" the **not null** constraint from keys and **change** their **data type**.
+
+```
+//The key drops or can become mandatory in each INSERT
+alter table varietas alter column birthday drop not null/set not null
+
+//Will work only if the previous column elements are convertible
+//(int -> Varchar()) will work (varchar() to int) won't
+alter table varietas alter column anni type VARCHAR(5)
+
+```
+
+</details>
 
 **INNER** joins multiple **table columns**, we use **(.)** to access a _table property_ and add logical operators, we can select columns from **multiple tables**, as long as we JOIN them.
 
@@ -126,6 +196,7 @@ update bookings set nights=25 where id= 1 and customer_id= 1
 SELECT * FROM customers INNER JOIN bookings ON customers.id = bookings.customer_id;
 
 //A select made of columns from different tables, with condition
+//remember to use the FROM table as the second element in any logical operation
 SELECT bookings.checkin_date, customers.name, hotels.name FROM bookings
 INNER JOIN customers ON customers.id=bookings.customer_id
 INNER JOIN hotels ON hotels.id=bookings.hotel_id
@@ -133,9 +204,16 @@ WHERE customers.id=1;
 
 ```
 
-1
+**DROP** and **DELETE** to remove _tables_ and _rows_ respectively:
 
-1
+```
+//To remove a table
+table drop varietas
+
+//delete a row with condition
+delete from varietas where id=4;
+
+```
 
 1
 
