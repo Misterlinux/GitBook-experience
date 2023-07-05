@@ -18,11 +18,120 @@ On DBeaver we create a **connection**-> select the **PostSQL driver**-> open the
 
 <figure><img src="../.gitbook/assets/Dbeaverstart.png" alt="" width="563"><figcaption><p>Deaver database startup for the SQL scriopt</p></figcaption></figure>
 
-1
+In a **relational database**, data is stored in **tables** of rows and columns.
 
-1
+We **create table()**, and set its **column** properties **name (keys)** and **data type**, **not null** is for mandatory values on user rows.                                                                                                                         **Varchar(n)** for strings, **int** for integers, **date** for date() objects, and **boolean** for true/false values.    The **Serial primary key** is a unique identifier for the user rows, it increments after each insert.
 
-1
+```
+//The Varchar(n) is the max string.length(n)
+//In SQL you need to select the code and execute it with crtl+enter
+
+create table multi(
+  id		SERIAL primary key,
+  name		VARCHAR(15) not null,
+  employed	boolean,
+  age		int not null,
+  birthday	date not null
+)
+
+```
+
+<details>
+
+<summary>Reference keys between tables</summary>
+
+To avoid repeating data between related tables we **reference keys** (also called foreign keys).
+
+We set a **data type** (most of the time ID int) and **reference** another **table** property, the referenced key will contain the entire table row.
+
+```
+//when selecting/executing multiple scripts, remember to use (;)
+
+CREATE TABLE customers (
+  id        SERIAL PRIMARY KEY,
+  name      VARCHAR(30) NOT NULL,
+  email     VARCHAR(120) NOT NULL,
+  address   VARCHAR(120),
+  city      VARCHAR(30),
+  postcode  VARCHAR(12),
+  country   VARCHAR(20)
+);
+
+//The customer int ID row == bookings.customer_id
+CREATE TABLE bookings (
+  id               SERIAL PRIMARY KEY,
+  customer_id      INT REFERENCES customers(id),
+  hotel_id         INT REFERENCES hotels(id),
+  checkin_date     DATE NOT NULL,
+  nights           INT NOT NULL
+);
+
+```
+
+To **insert** values in a **table** with **referenced keys** we:
+
+```
+//we are basically creating an expanded row with added column 
+
+insert into bookings 
+( customer_id, hotel_id, checkin_date, nights) 
+values 
+( 1, 1, '10/4/2010', 5 )
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/TableReferenceKeys.png" alt="" width="563"><figcaption><p>Reference keys on different tables</p></figcaption></figure>
+
+To add a row we **Insert into table\_name() Values()**.
+
+```
+//We use -- to comment in a SQL file, any inserted string needs ''
+//Table keys and inserted values need to be the same number
+
+INSERT INTO hotels (name, rooms, postcode) 
+VALUES ('Triple Point Hotel', 10, 'CM194JS');
+
+```
+
+We use **select from** to see Tables' **data**, and we can add logical operators.
+
+```
+//* selects every column, WHERE used for keys conditions
+
+Select * from customers
+select name, email from customers 
+SELECT * FROM hotels WHERE rooms > 7;
+SELECT * FROM bookings WHERE checkin_date > '2019/10/01' AND nights >= 2;
+SELECT * FROM hotels WHERE name='Royal Cosmos Hotel' OR rooms > 10;
+```
+
+**Alter table** and **Update** are used to modify the **table's keys** and row **properties** respectively.
+
+```
+//a new date_of_birth column was added to the customer's table, 
+//it will be empty for every pre-existing row
+ALTER TABLE customers ADD COLUMN date_of_birth DATE;
+
+//The night's property on the bookings table will be set at 25 
+//if id and customer_id are 1
+update bookings set nights=25 where id= 1 and customer_id= 1
+
+```
+
+**INNER** joins multiple **table columns**, we use **(.)** to access a _table property_ and add logical operators, we can select columns from **multiple tables**, as long as we JOIN them.
+
+```
+//We JOIN the customers and bookings columns when their properties are the same
+SELECT * FROM customers INNER JOIN bookings ON customers.id = bookings.customer_id;
+
+//A select made of columns from different tables, with condition
+SELECT bookings.checkin_date, customers.name, hotels.name FROM bookings
+INNER JOIN customers ON customers.id=bookings.customer_id
+INNER JOIN hotels ON hotels.id=bookings.hotel_id
+WHERE customers.id=1;
+
+```
 
 1
 
