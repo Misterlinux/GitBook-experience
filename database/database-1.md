@@ -262,9 +262,115 @@ app.get("/hotels", function(req, res) {
 
 <figure><img src="../.gitbook/assets/DatabaseNodePooling.png" alt="" width="563"><figcaption><p>Database connection and SQL script row return</p></figcaption></figure>
 
-1
+<details>
 
-1
+<summary>NodeJs Insert, Select, Delete and update SQL queries</summary>
+
+We add an extra <mark style="background-color:blue;">**' '**</mark> to **Insert string** values, and we use **returning** for the added row in **result.rows.**
+
+```
+//Post endpoint to insert a new row, anni is int so no extra ''
+
+app.post("/insert", (req, res)=>{
+  const {nome, anni, comple} = req.body
+  
+  pool.query(
+    `Insert into tavola(nome, anni, comple) values('${nome}', ${anni}, '${comple}') 
+     returning * `,(error, result)=>{
+      res.json(result.rows)
+     }
+  )
+})
+
+//This Post endpoint returns the added row
+```
+
+If **Select** returns no match the result.rows array will be empty.
+
+```
+app.get("/cerca/:index", (req, res)=>{
+  let index = Number( req.params.index )
+
+  pool.query(`Select * from tavola where id= ${index}`, (error, result)=>{
+      
+    (result.rows.length) ? res.json(result.rows) : res.send("No index" )
+  })
+})
+```
+
+On **Delete**, we need **returning** to get the deleted value.
+
+```
+app.get("/cancella/:index", (req, res)=>{
+  let index = Number( req.params.index )
+
+  pool.query(
+    `delete from tavola where id= ${index} returning *`, (error, result)=>{
+      
+    res.json( result.rows )
+  })
+})
+```
+
+On **Update**, make sure the client puts all the columns to avoid the "missing column" error.
+
+```
+// Some code
+
+app.put("/nuovo/:num", (req, res)=>{
+  let num = req.params.num
+  const { nome, anni, comple } = req.body
+
+  pool.query(
+    `update tavola set nome='${nome}', anni=${anni}, comple='${comple}' where id=${num} returning *`, (error, result)=>{
+
+        (result) ? res.json( result.rows ) : res.send( error )
+  })
+})
+
+//we use error to read the error properties
+```
+
+</details>
+
+To add **multiple SQL queries** to a single endpoint we.
+
+{% tabs %}
+{% tab title="Separate SQL queries" %}
+We put them one after the other (the **result.rows** will be from the last **SQL query**).
+
+```
+//we select all the rows that haven't been deleted
+
+app.get("/cancella/:index", (req, res)=>{
+   let index = Number( req.params.index )
+
+  pool.query(`delete from tavola where id= ${index}`, (error, result)=>{
+    
+    pool.query(`select * from tavola`, (error, result)=>{
+      res.json( result.rows )
+    })
+  })
+```
+{% endtab %}
+
+{% tab title="Single SQL query with array [result]" %}
+We **separate** the **SQL** queries with a **(;)**, which returns an array of **result**, with each result's **index** being their **position** in the query.
+
+```
+//result[0] would be the delete SQL script
+
+app.get("/cancella/:index", (req, res)=>{
+  let index = Number( req.params.index )
+
+  pool.query(`delete from tavola where id= ${index}; select * from tavola`, (error, result)=>{
+    
+    res.json( result[1].rows )
+  })
+})
+```
+{% endtab %}
+{% endtabs %}
 
 1
 
