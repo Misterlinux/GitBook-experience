@@ -235,6 +235,33 @@ delete from varietas where id=4;
 
 ### Database integration with Node-Postgres.
 
+A **PostgreSQL server** can handle a limited number of **NodeJs client** connections, due to the "handshake" data exchanges that could slow down the application.
+
+**node-postgres** has built-in _connection pooling_ in the **pg-pool** _module_, a reusable pool for clients' interactions with the PostgreSQL server.
+
+We create a **new Pool** instance with the **credentials** to connect to the **database**, we add **SQL queries** to the Node endpoints and **res.rows** as an _array of objects_.
+
+```
+const { Pool } = require('pg');
+
+const pool = new Pool({
+  user: 'postgres',
+  host: 'localhost',
+  database: 'postgres',
+  password: 'mrlzarate',
+  port: 5432
+});
+
+app.get("/hotels", function(req, res) {
+    pool.query('SELECT * FROM hotels', (error, result) => {
+        res.json(result.rows);
+    });
+});
+
+```
+
+<figure><img src="../.gitbook/assets/DatabaseNodePooling.png" alt="" width="563"><figcaption><p>Database connection and SQL script row return</p></figcaption></figure>
+
 1
 
 1
