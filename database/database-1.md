@@ -113,7 +113,7 @@ SELECT * FROM hotels WHERE name='Royal Cosmos Hotel' OR rooms > 10;
 
 <details>
 
-<summary>More Select options and matching pattern table strings</summary>
+<summary>More Select options and matching pattern table %strings%</summary>
 
 **ORDER** the table rows based on columns.
 
@@ -142,17 +142,17 @@ We select **query** elements by **pattern matching** using **like %**.
 ```
 //At the end when matching the first digits of a string
 //at the end when matching the last digits of a string
+//On both ends when matching any digits inside a string
 //doesn't work on int
 
 select * from varietas where name like 'b%'
-
 select * from varietas where name like '%man'
-
+select * from varietas where name like '%in%'
 ```
 
 </details>
 
-**Alter table** and **Update** are used to modify the **table's keys** and row **properties** respectively.
+**Alter table** and **Update** are used to modify the **table's keys** and row **properties** respectively.                When **updat**ing any _not-included_ **key** will use its old values.
 
 ```
 //a new date_of_birth column was added to the customer's table, 
@@ -230,7 +230,6 @@ table drop varietas
 
 //delete a row with condition
 delete from varietas where id=4;
-
 ```
 
 ### Database integration with Node-Postgres.
@@ -262,73 +261,80 @@ app.get("/hotels", function(req, res) {
 
 <figure><img src="../.gitbook/assets/DatabaseNodePooling.png" alt="" width="563"><figcaption><p>Database connection and SQL script row return</p></figcaption></figure>
 
-<details>
-
-<summary>NodeJs Insert, Select, Delete and update SQL queries</summary>
-
-We add an extra <mark style="background-color:blue;">**' '**</mark> to **Insert string** values, and we use **returning** for the added row in **result.rows.**
+To implement **CRUD** operations in a **pool.query()** we use **then()** and **catch()**.                                    &#x20;
 
 ```
-//Post endpoint to insert a new row, anni is int so no extra ''
+//We added an alternative pool.query() on endpoint route query
+
+app.get("/fila", (req, res)=>{
+  let nomefila = req.query.name
+  let query;
+
+  if( nomefila ){
+     query = `select * from tavola where nome like '%${nomefila}%' order by id;`
+  }
+
+  pool
+    .query(query)
+    .then((result)=>{res.send(result.rows)})
+    .catch((error)=>{res.send(error)})
+})
+```
+
+<details>
+
+<summary>NodeJs Insert, Delete and update with $ variables and [] SQL queries</summary>
+
+We separate the **query** and insert an array of **\[variables]** using **$**, based on their index.
+
+```
+// $1/nome, $2/anni , $3/comple, we return the added row.
 
 app.post("/insert", (req, res)=>{
   const {nome, anni, comple} = req.body
   
-  pool.query(
-    `Insert into tavola(nome, anni, comple) values('${nome}', ${anni}, '${comple}') 
-     returning * `,(error, result)=>{
-      res.json(result.rows)
-     }
-  )
-})
+  let query=
+    `Insert into tavola(nome, anni, comple) values( $1, $2, $3 ) returning *`
 
-//This Post endpoint returns the added row
-```
-
-If **Select** returns no match the result.rows array will be empty.
-
-```
-app.get("/cerca/:index", (req, res)=>{
-  let index = Number( req.params.index )
-
-  pool.query(`Select * from tavola where id= ${index}`, (error, result)=>{
-      
-    (result.rows.length) ? res.json(result.rows) : res.send("No index" )
-  })
+  pool
+    .query( query, [nome, anni, comple] )
+    .then( (result)=>{res.json(result.rows) })
+    .catch( (error)=>{res.send(error) })
 })
 ```
 
-On **Delete**, we need **returning** to get the deleted value.
+On **delete**, we **return(ing)** the deleted row.
 
 ```
 app.get("/cancella/:index", (req, res)=>{
   let index = Number( req.params.index )
 
-  pool.query(
-    `delete from tavola where id= ${index} returning *`, (error, result)=>{
-      
-    res.json( result.rows )
-  })
+  let query=
+      `delete from tavola where id=$1 returning * `
+
+  pool
+    .query( query, [index] )
+    .then((result)=>{res.json(result.rows) })
+    .catch((error)=>{res.send(error) })
 })
 ```
 
-On **Update**, make sure the client puts all the columns to avoid the "missing column" error.
+On **Update**, we can send a **patch** request, if a **key** is _not updated_ it will be **NULL**, and will return **error** if it's a **not null** key.
 
 ```
-// Some code
+//all empty req.body properties will update with NULL
 
-app.put("/nuovo/:num", (req, res)=>{
-  let num = req.params.num
+app.patch("/scambia/:num", (req, res)=> {
   const { nome, anni, comple } = req.body
+  const num = Number( req.params.num )
 
-  pool.query(
-    `update tavola set nome='${nome}', anni=${anni}, comple='${comple}' where id=${num} returning *`, (error, result)=>{
-
-        (result) ? res.json( result.rows ) : res.send( error )
-  })
-})
-
-//we use error to read the error properties
+  let query= `UPDATE tavola SET nome=$1, anni=$2, comple=$3 WHERE id=$4`
+  
+  pool
+    .query(query, [nome, anni, comple, num])
+    .then((result) =>{ res.send("we have " + nome ) })
+    .catch((e) =>{ res.send(e) });
+});
 ```
 
 </details>
@@ -372,11 +378,60 @@ app.get("/cancella/:index", (req, res)=>{
 {% endtab %}
 {% endtabs %}
 
-1
+We **validate** the client's **req.body** data by **res.status(400)**.
 
-1
+```
+invalid//If the req.body data is invalid we return an error status 400
 
-1
+if (!Number.isInteger(anni) || anni <= 0 || typeof anni == "string" || typeof comple !== "string"){
+  return res
+    .status(400)
+    .send("The number of rooms should be a positive integer.");
+}
+
+```
+
+siamo
+
+<details>
+
+<summary>Postgre database query data validation</summary>
+
+We use an additional **pool.query()** to check if any of the **req.body** data is **repeated**.&#x20;
+
+```
+//we return error status 400 if the first query finds a match
+
+app.put("/nuovo/:num", (req, res)=>{
+  let num = req.params.num
+  const { nome, anni, comple } = req.body
+
+  const query = 
+    "select * from tavola where nome=$1"
+
+  const query1 =
+    "update tavola set nome=$1, anni=$2, comple=$3 where id=$4 returning *"
+
+  pool
+    .query( query, [nome] )
+    .then( (result)=>{
+
+      if (result.rows.length > 0) {
+        return res
+          .status(400)
+          .send("This name already exist");
+      } else {
+          pool
+            .query(query1, [nome, anni, comple, num])
+            .then((result)=> res.json( result.rows ) )
+            .catch((error)=> res.send( error ))
+      }
+    })
+})
+
+```
+
+</details>
 
 1
 
