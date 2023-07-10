@@ -391,8 +391,6 @@ if (!Number.isInteger(anni) || anni <= 0 || typeof anni == "string" || typeof co
 
 ```
 
-siamo
-
 <details>
 
 <summary>Postgre database query data validation</summary>
@@ -427,16 +425,82 @@ app.put("/nuovo/:num", (req, res)=>{
             .catch((error)=> res.send( error ))
       }
     })
+    .catch((error)=> res.send("no nome found in the table"))
 })
 
 ```
 
 </details>
 
-1
+To **Select Join reference tables** we need additional _conditions_.
 
-1
+```
+//we need the 2 int properties to be equal AND the referenced id params.value
 
-1
+app.get("/sopra/:num", (req, res)=>{
+  let num= Number( req.params.num );
+  let query = 'select * from sopra inner join tavola on tavola.id=sopra.persona 
+               and sopra.persona = $1'
 
-1
+  pool
+    .query(query, [num])
+    .then((result)=>{ res.send( result.rows )})
+    .catch((error)=>{ res.send(error) } )
+})
+
+```
+
+<details>
+
+<summary>Deleting and validating composed tables values</summary>
+
+We **reference** a table **int ID** with an **int** persona **key**.
+
+```
+create table tavola(
+  id      serial primary key,
+  nome	  VARCHAR(15) not null,
+  anni	  Int,
+  comple  date
+)
+
+create table sopra(
+  id	     SERIAL primary key,
+  titolo     VARCHAR(15),
+  persona    int references tavola(id)
+)
+```
+
+We can't directly **delete** a **row** that is being used as a **foreign key** on another **table**, we first **delete** the **references** row.
+
+```
+//we also use the first query to validate if there ARE rows to delete 
+
+app.delete("/togli/:num", (req, res)=>{
+  let num = Number( req.params.num )
+  let query = "delete from sopra where persona = $1"
+  let query1 = "delete from tavola where id = $1 returning *"
+
+  pool
+    .query( query, [num] )
+    .then((result)=>{
+
+        if( result.rows.length ){
+          pool
+            .query( query1, [num] )
+            .then((result)=> res.json(result.rows))
+            .catch((error)=> res.send(error))
+
+        }else{  
+          return res
+            .send(400)
+            .send((error)=> res.send(error))
+        }
+    })
+    .catch((error)=> res.send("No element to delete" + error) )
+})
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/ReferencedTab2.png" alt="" width="563"><figcaption><p>Select Inner Join on NodeJs Postman Response</p></figcaption></figure>
