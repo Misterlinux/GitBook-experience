@@ -48,11 +48,42 @@ On DOM we:
 
 </details>
 
-<figure><img src="../.gitbook/assets/eventObject.png" alt="" width="538"><figcaption></figcaption></figure>
-
-1
+<figure><img src="../.gitbook/assets/eventObject.png" alt="" width="538"><figcaption><p>React Event Object properties</p></figcaption></figure>
 
 ### Instance methods on useRef() DOM elements.
+
+We can **useRef()** to access DOM element attributes with **hasAttribute()** and **getAttribute()**.
+
+```
+//className won't work as an attribute
+<button ref={bot} className="btn btn-primary" onClick={check}>
+  Check attr    
+</button>
+
+bot.current.hasAttribute("class") 	//true
+bot.current.getAttribute("class") 	//btn btn-primary
+```
+
+We edit a useRef() attribute with **setAttribute(**attribute, value**)**:
+
+```
+//or we modify the className property of the ref
+
+bot.current.className = "btn btn-warning"
+bot.current.setAttribute("class", "btn btn-warning")
+```
+
+We **removeAttribute()** (instead of setting it as null) and **toggleAttribute()** (to toggle in/out attributes on React Events)
+
+```
+//toggle won't return the past attribute values 
+//it works best on attributes that don't need values, like disable.
+
+bot.current.removeAttribute( "class" )
+bot.current.toggleAttribute("disabled")    //remove if it's present and vice versa
+```
+
+1
 
 We **useRef()** an input **current.value** to **append()** it in a JSX tag.
 
