@@ -254,6 +254,68 @@ In the DOM we useRef() the **scrollIntoView()** on the element, not the containe
 
 <figure><img src="../.gitbook/assets/scrollRef (1).png" alt="" width="563"><figcaption><p>scrollIntoView(), scroll() and scrollBy()</p></figcaption></figure>
 
+**animate()** applies a **CSS keyframe()** and a **timing object** to a **useRef()** DOM element.
+
+{% tabs %}
+{% tab title="animate()" %}
+The **keyframe** is an _array of objects_ to **iterate** and the **timing** object has the **animation properties**.
+
+```
+const roll = useRef(null)
+
+function mosso(){
+  const rotate = [
+    {
+     backgroundColor: "red",
+     transform: "translateX(200px)"
+    }
+  ]
+
+  const timing = {
+    duration: 3000,
+    iterations: 2,
+  };
+
+  roll.current.animate(rotate, timing)
+}
+
+<h1 ref={roll}> Are we sure </h1>
+
+```
+{% endtab %}
+
+{% tab title="CSS keyframe()" %}
+**animate()** is the equivalent of adding an **animation class** to a **DOM** element.
+
+```
+const [rosso, setRosso] = useState("")
+
+function old(){
+  setRosso("rosso")
+}
+
+.rosso{
+  animation: example 2s;
+  animation-delay: 1s;
+}
+
+@keyframes example {
+  100% {background-color: red;}
+}
+
+<h1 className={rosso}>Here the rest</h1>
+```
+{% endtab %}
+{% endtabs %}
+
+1
+
+1
+
+1
+
+1
+
 1
 
 1
