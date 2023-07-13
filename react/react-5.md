@@ -169,15 +169,90 @@ On the **DOM** we:
 
 <figure><img src="../.gitbook/assets/refAppend.png" alt="" width="563"><figcaption><p>useRef() append() DOM elements</p></figcaption></figure>
 
-1
+We use **scroll()**, **scrollBy()**, and **scrollIntoView()** on an **overflow:scroll** useRef() **DOM** element.              The **scroll()** method moves the element **to a** **set of coordinates** inside a container.
+
+```
+//We set the X/Y coordinates or a top/left/behavior object
+
+function preci(){
+  roll5.current.scroll(200, 450)
+
+  riga.current.scroll({
+    top: 0,
+    left: 400,
+    behavior: "smooth",
+  })
+}
+```
+
+<details>
+
+<summary>scrollBy() and scrollIntoView() guide</summary>
+
+**scrolllBy()** **adds up** its **X/Y coordinates** to the **current** position.
+
+<pre><code><strong>//unlike scroll() that if repeated doesn't move.
+</strong><strong>const riga = useRef(null)
+</strong>
+function back(){
+
+  riga.current.scrollBy({
+    top: 0,
+    left: -200,
+    behavior: "smooth",
+  })
+}
+</code></pre>
+
+**scrollIntoView()** scrolls the _container_ so the **element** which calls it gets into the **user** **browser viewpoint**.
+
+```
+//Its behavior object uses block/Y axis and inline/X axis 
+//it uses start/center/end/nearest for positioning
+
+function goto(){
+  let modo={
+      behavior: 'smooth',
+      block: 'start',
+      inline: 'center'
+  }
+
+  roll.current.scrollIntoView(modo)
+```
+
+In the DOM we useRef() the **scrollIntoView()** on the element, not the container.
+
+```
+<ul className="scorri flex-nowrap" ref={riga}>
+  <div>
+    <img src="https://placekitten.com/250/200?image=1" className="img-fluid"/>
+  </div>
+  <div> 
+    <img src="https://placekitten.com/250/200?image=2" className="img-fluid"/> 
+  </div>
+  <div> 
+    <img src="https://placekitten.com/250/200?image=3" className="img-fluid"/> 
+  </div>
+  <div> 
+    <img src="https://placekitten.com/250/200?image=4" className="img-fluid"/> 
+  </div>
+  <div ref={roll}> 
+    <img src="https://placekitten.com/250/200?image=5" className="img-fluid"/> 
+  </div>
+  <div> 
+    <img src="https://placekitten.com/250/200?image=6" className="img-fluid"/> 
+  </div>
+</ul>
+
+
+
+```
 
 1
 
-1
+</details>
 
-1
-
-1
+<figure><img src="../.gitbook/assets/scrollRef (1).png" alt="" width="563"><figcaption><p>scrollIntoView(), scroll() and scrollBy()</p></figcaption></figure>
 
 1
 
