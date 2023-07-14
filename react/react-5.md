@@ -308,9 +308,19 @@ function old(){
 {% endtab %}
 {% endtabs %}
 
-1
+The _timing object_ contains the **animation properties**.
 
-1
+```
+const timing = {
+  direction: "alternate",		    //animation-direction
+  easing: "cubic-bezier(0, 0.5, 1, 0.5)",   //animation-timing-function
+  fill: "forwards",                         //animation-fill-mode
+  delay: 1000,	                            //animation ms delay before start
+  delayEnd: 1000,	//delay at the end, used when sequencing multiple animations
+  iterationStart: 0.5,	                    //how much animation skips at the start
+};
+
+```
 
 1
 
