@@ -404,11 +404,35 @@ function copia1(){
 {% endtab %}
 {% endtabs %}
 
-1
+We store the **onCopy() event** value with **document.getSelection()** and useRef().
 
-1
+```
+//We then use a button to print it in another useRef() DOM element
 
-1
+let tron= useRef(null)
+let coss= useRef(null)
+
+function copia1(){
+  coss= document.getSelection().toString().toLowerCase()
+}
+
+function copiato(){
+  array.current.value = coss
+}
+
+<div className="text-center">
+  <p>We edit copied string </p>
+  <input type="text" disabled value="1WE34FANN9" onCopy={copia1}/>
+  <p>and paste it with a button </p>
+  <input type="text" ref={array}/>
+</div>
+
+<button className="btn btn-primary" onClick={copiato}>
+  Siamo
+</button>
+```
+
+<figure><img src="../.gitbook/assets/copySelector.png" alt="" width="155"><figcaption><p>Copied getSelection() element printed on input</p></figcaption></figure>
 
 1
 
