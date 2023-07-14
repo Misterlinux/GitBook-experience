@@ -318,8 +318,8 @@ const timing = {
   delay: 1000,	                            //animation ms delay before start
   delayEnd: 1000,	//delay at the end, used when sequencing multiple animations
   iterationStart: 0.5,	                    //how much animation skips at the start
+  pseudoElement: ":before"              //to animate the pseudoSelector of the target
 };
-
 ```
 
 1
