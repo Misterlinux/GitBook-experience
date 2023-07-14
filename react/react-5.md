@@ -324,6 +324,96 @@ const timing = {
 
 1
 
+The **animate()** method on useRef() DOM elements **won't trigger** the **onAnimationStart**, **onAnimationIteration**, or **onAnimationEnd** events (we need _CSS keyframes_).
+
+{% tabs %}
+{% tab title="CSS keyframes" %}
+**onAnimationIteration**() will trigger only when _iteration-count > 1_.
+
+```
+const [naso, setNaso] = useState("")
+function copia(){
+  setNaso("muove")
+}
+
+.muove{
+  color: red;
+  animation: dodo 2s;
+  animation-iteration-count: 3;
+}
+
+@keyframes dodo {
+  100% {
+    color: green;
+  }
+}
+```
+
+The events go on the animated DOM element.
+
+```
+<div>
+  <h1 
+    className={naso}
+    onAnimationStart={e => console.log('started')}
+    onAnimationIteration={e => console.log('repeated')}
+    onAnimationEnd={e => console.log('finished')}
+  >
+    CSS keyframes element
+  </h1>
+
+  <button className="btn btn-primary" onClick={copia}>
+    Anima
+  </button>
+</div>
+```
+{% endtab %}
+
+{% tab title="animate() useRef()" %}
+The events won't trigger even if the animation is replicated.
+
+```
+let fly= useRef(null)
+function copia1(){
+  let chiavi= [
+    {color: "green"}
+  ]
+
+  let timing={
+    duration: 1000,
+    iterations: 2
+  }
+
+  fly.current.animate(chiavi, timing)
+}
+
+<div>
+  <h1 ref={fly} 
+    	onAnimationStart={e => console.log('started')}
+    	onAnimationIteration={e => console.log('repeated')}
+    	onAnimationEnd={e => console.log('finished')}
+  >
+    useRef() animate() method
+  </h1>
+
+  <button className="btn btn-primary" onClick={copia1}>
+    Anima
+  </button>
+</div>
+```
+{% endtab %}
+{% endtabs %}
+
+1
+
+1
+
+1
+
+1
+
+1
+
 1
 
 1
