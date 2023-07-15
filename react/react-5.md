@@ -50,6 +50,34 @@ On DOM we:
 
 <figure><img src="../.gitbook/assets/eventObject.png" alt="" width="538"><figcaption><p>React Event Object properties</p></figcaption></figure>
 
+We **e.target mouseEnter**, **mouseLeave**, **mouseOver**, **mouseOut**, and **mouseMove** React events, and render with _useState()_.
+
+```
+//mouseEnter /mouseLeave trigger once the mouse leaves the DOM element
+//mouseMove /mouseOver and mouseOut trigger for each pixel moved in their areas
+
+const [rec, setRec]= useState("")
+function capta(e){
+  setRec( e.target.innerText )
+}
+
+<div className="col-6 text-center">
+  <p onMouseEnter={capta} >MouseEnter event</p>
+  <p onMouseEnter={capta} >Then we print its text</p>
+</div>
+
+<div className="col-6 text-center">
+  <p onMouseEnter={capta} > On each p tag </p>
+  <p onMouseEnter={capta} > into the input </p>
+</div>
+
+<div className="text-center my-2">
+  <input type="text" value={rec}/>
+</div>
+```
+
+<figure><img src="../.gitbook/assets/mouseOver.png" alt=""><figcaption><p>Mouse React events</p></figcaption></figure>
+
 ### Instance methods on useRef() DOM elements.
 
 We can **useRef()** to access DOM element attributes with **hasAttribute()** and **getAttribute()**.
