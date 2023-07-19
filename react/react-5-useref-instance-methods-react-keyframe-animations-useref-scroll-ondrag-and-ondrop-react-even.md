@@ -1,8 +1,7 @@
-# REACT 5
+# REACT 5, useRef() instance methods, React keyframe animations, useRef() scroll, onDrag() and onDrop() React Events
 
-* 1
-* 1
-* 1
+* [Instance methods on useRef() DOM elements](react-5-useref-instance-methods-react-keyframe-animations-useref-scroll-ondrag-and-ondrop-react-even.md#instance-methods-on-useref-dom-elements.)
+* [onDrag() and onDrop() ReactJS events](react-5-useref-instance-methods-react-keyframe-animations-useref-scroll-ondrag-and-ondrop-react-even.md#ondrag-and-ondrop-reactjs-events)
 
 **React events** (onClick) and their **Event handlers** (onClick(()=>())) have access to the **React Event Object**. We use it to access the (event) **type**, DOM **target**, and **clientX, pageX, and screenX** positions.
 
@@ -110,8 +109,6 @@ We **removeAttribute()** (instead of setting it as null) and **toggleAttribute()
 bot.current.removeAttribute( "class" )
 bot.current.toggleAttribute("disabled")    //remove if it's present and vice versa
 ```
-
-1
 
 We **useRef()** an input **current.value** to **append()** it in a JSX tag.
 
@@ -349,8 +346,6 @@ const timing = {
   pseudoElement: ":before"              //to animate the pseudoSelector of the target
 };
 ```
-
-1
 
 The **animate()** method on useRef() DOM elements **won't trigger** the **onAnimationStart**, **onAnimationIteration**, or **onAnimationEnd** events (we need _CSS keyframes_).
 
@@ -700,5 +695,3 @@ The DOM drag and drop elements are:
 </details>
 
 <figure><img src="../.gitbook/assets/finalDragexample.png" alt="" width="563"><figcaption><p>Drag and Drop events with CSS and appendChild() elements</p></figcaption></figure>
-
-1
