@@ -473,7 +473,7 @@ The HTML **Drag and Drop API** implements **draggable** elements in the browser.
   draggable= "true"      
   onDrag={}              //triggers for each pixel the element is dragged
   onDragStart={}         //triggers once when the drag starts
-  onDragEnd={}           //triggers at the end of drag BEFORE onDrop()
+  onDragEnd={}           //triggers at the end of drag AFTER onDrop()
 >
   Dragged element
 </p>
@@ -499,9 +499,10 @@ We use the **dataTransfer** object during the _drag-and-drop_ events.           
 We set the **dropEffect** _onDragOver()/onDragStart()_ and check it **onDragEnd()** to **filter** drag operations.
 
 ```
-//If the drop operation/effect is not allowed the dropEffect will be "none"
+//If the drop operation/effect is not allowed the dropEffect == "none"
 //Multiple setData() with the same data format will replace each other
-//For the drag to work we need onDragOver() e.preventDefault()
+//For the onDrag to work we need onDragOver() e.preventDefault()
+//The dragImage X/Yoffset is on the cursor, and the image is the original size
 
 function dragStart(e){
   let image= new Image()
@@ -538,7 +539,13 @@ function drop(e){
 
 <figure><img src="../.gitbook/assets/dragImageGet.png" alt="" width="326"><figcaption><p>onDrag() with dragImage() and dataTransfer data</p></figcaption></figure>
 
-1
+The **onDragEnd()** event returns a _dropEffect= "none"_ if the onDrop() fails.                                                 We use **dataTransfer.types.includes(**data format**)** to filter the dataTransfer object.                                         We can use **e.clientX/Y** to check the **dropped position**.                              &#x20;
+
+We can dataTransfer.**clearData(**data format**)** to delete the setData() (it seems to work only onDragStart() )
+
+<details>
+
+<summary>1</summary>
 
 1
 
@@ -553,5 +560,9 @@ function drop(e){
 1
 
 1
+
+</details>
+
+<figure><img src="../.gitbook/assets/finalDragexample.png" alt="" width="563"><figcaption><p>Drag and Drop events with CSS and appendChild() elements</p></figcaption></figure>
 
 1
