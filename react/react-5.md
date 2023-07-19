@@ -462,7 +462,81 @@ function copiato(){
 
 <figure><img src="../.gitbook/assets/copySelector.png" alt="" width="155"><figcaption><p>Copied getSelection() element printed on input</p></figcaption></figure>
 
-1
+### onDrag() and onDrop() ReactJS events
+
+The HTML **Drag and Drop API** implements **draggable** elements in the browser. DOM elements with the draggable **attribute** trigger **onDrag()** React events.                   &#x20;
+
+```
+//Drag and Drop events are inherited from the mouse events
+
+<p
+  draggable= "true"      
+  onDrag={}              //triggers for each pixel the element is dragged
+  onDragStart={}         //triggers once when the drag starts
+  onDragEnd={}           //triggers at the end of drag BEFORE onDrop()
+>
+  Dragged element
+</p>
+```
+
+The **onDrop() target** DOM element can trigger:
+
+```
+//it's better to use dragLeave than dragOver
+
+<div
+  onDragEnter={}          //once when the dragged element Enters the drop target
+  onDragLeave={}          //once when the dragged element leaves the drop target
+  onDragOver={}           //when the dragged element is on top of the drop target
+  onDrop={}               //when the mouse is released, end of operation
+>
+  Drop area target
+</div>
+```
+
+We use the **dataTransfer** object during the _drag-and-drop_ events.                                                     We **setData(**"type format", "value"**)**, **setDragImage(**image, Xoffset, Yoffset**)** for the feedback image and **effectsAllowed** for the _cursor dropEffect_.
+
+We set the **dropEffect** _onDragOver()/onDragStart()_ and check it **onDragEnd()** to **filter** drag operations.
+
+```
+//If the drop operation/effect is not allowed the dropEffect will be "none"
+//Multiple setData() with the same data format will replace each other
+//For the drag to work we need onDragOver() e.preventDefault()
+
+function dragStart(e){
+  let image= new Image()
+  image.src= "https://placekitten.com/150/100?image=1"
+  e.dataTransfer.setDragImage(image, 70, 35);
+
+  e.dataTransfer.effectAllowed= "move
+}
+
+function dragOver(e){
+  e.preventDefault()
+  e.dataTransfer.dropEffect= "link"
+}
+
+function dragEnd(e){
+  e.preventDefault()
+  console.log( e.dataTransfer.dropEffect )
+}
+
+function drop(e){    
+  console.log( e.dataTransfer.getData("text/html") )
+  console.log( e.dataTransfer.getData("application/json") )
+}
+
+<div>
+  <div draggable="true" onDragStart={dragStart} onDragEnd={dragEnd} >
+    <p>Copy or Drag</p>
+  </div>
+
+  <div className="spazio" onDragOver={dragOver} onDrop={drop}>
+  </div>
+</div>
+```
+
+<figure><img src="../.gitbook/assets/dragImageGet.png" alt="" width="326"><figcaption><p>onDrag() with dragImage() and dataTransfer data</p></figcaption></figure>
 
 1
 
@@ -476,3 +550,8 @@ function copiato(){
 
 1
 
+1
+
+1
+
+1
