@@ -545,21 +545,157 @@ We can dataTransfer.**clearData(**data format**)** to delete the setData() (it s
 
 <details>
 
-<summary>1</summary>
+<summary>Image drag and drop DOM elements stacking and CSS responsive</summary>
 
-1
+We color the _50/50_ bicolor **dropzone CSS** with:
 
-1
+```css
+//we are gonna append extra CSS onDragEnter() elements
+.bicolor{
+  position: relative;
+  width: 300px;
+  height: 350px;
+}
 
-1
+.uno{
+  background-color: pink;
+  width: 50%;
+  height: 100%;
+}
+.uno.over{
+  background-color: coral;
+}
 
-1
+.due{
+  background-color: lightblue;
+  width: 50%;
+  height: 100%;
+}
+.due.over{
+  background-color: cadetblue;
+}
 
-1
+```
 
-1
+We useRef() for the 2 columns and the image counter, then we set the **dataTransfer** data **onDragstart()**.
 
-1
+```jsx
+//we use a cats API for the setDragImage()
+let primo = useRef(null)
+let secon = useRef(null)
+
+let gato = useRef(1)
+let picture;
+
+function dragstart(e){
+  picture= "https://placekitten.com/250/200?image=" + gato.current
+  e.dataTransfer.setData("text/html", picture)
+
+  let image= new Image()
+  image.src= picture
+  e.dataTransfer.setDragImage(image, 70, 35);
+
+  console.log( e.dataTransfer )
+  e.dataTransfer.effectAllowed= "move"
+}
+```
+
+In **onDragEnd()** <mark style="background-color:blue;">if the onDrop() fails</mark> we return the columns to their starter colors.
+
+```jsx
+function dragend(e){
+  e.preventDefault()
+
+  if( e.dataTransfer.dropEffect == "none" ){
+    secon.current.className= "due"
+    primo.current.className= "uno"
+  }
+}
+```
+
+In **onDragEnter()** we modify the **CSS** using **classList** depending on the "entered" column. In case of <mark style="background-color:blue;">overlaying images</mark> we use their ID to check the column, **onDragOver()** is necessary for the onDrag() event.
+
+```jsx
+function dragenter(e){
+  e.preventDefault()
+
+  if( e.target.className == "uno" || e.target.id == "uno" ){
+
+    secon.current.className= "due"
+    primo.current.classList.add("over")
+  }else if( e.target.className == "due" || e.target.id == "due" ){
+  
+    primo.current.className= "uno"
+    secon.current.classList.add("over")
+  }
+}
+
+function dragover(e){
+  e.preventDefault()
+  e.dataTransfer.dropEffect= "move"
+}
+```
+
+We _appendChild()_ an ID image **onDrop()** using the **e.target.id** for the **columns**, we also **filter** the **dataTransfer** data to avoid **different onDrag()** from triggering the onDrop().
+
+```jsx
+//we increase the useRef() for different cat API images
+function drop(e){
+  let image= e.dataTransfer.getData("text/html")
+
+  if( !image.includes(" ") ){
+
+    let imma= document.createElement("img")
+    imma.className= "img-fluid"
+    imma.src= image
+    imma.id= e.target.id 
+
+    gato.current += 1;
+    e.target.classList.remove("over")
+    let dropped = (e.target.id== "uno") ? 
+        primo.current.appendChild(imma) : secon.current.appendChild(imma)
+  }else{
+    alert("drag the correct element")
+    secon.current.className= "due"
+    primo.current.className= "uno"
+  }
+}
+```
+
+The DOM drag and drop elements are:
+
+```jsx
+<div
+  className="dragged"
+  draggable="true"
+  onDragStart={dragstart}
+  onDragEnd={dragend}
+>
+  <h4 className="text-center">Drag to see the image</h4>
+</div>
+
+<div>
+  <div 
+    className="uno"
+    id="uno"
+    ref={primo}
+    onDragOver={dragover}
+    onDrop={drop}
+    onDragEnter={dragenter}
+  >
+  </div>
+
+  <div 
+    className="due"
+    id="due"
+    ref={secon}
+    onDragOver={dragover}
+    onDrop={drop}
+    onDragEnter={dragenter}
+  >
+  </div>
+</div>
+```
 
 </details>
 
