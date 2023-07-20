@@ -1,4 +1,4 @@
-# REACT 4
+# REACT 4, useMemo(), useReducer(), ReactJs scaling and useRef() Dom manipulation.
 
 * 1
 * 1
@@ -635,7 +635,7 @@ function getMap() {
 }
 ```
 
-We use Node IDs from the **ref map object** for the **scrollIntoView()** method.
+We use Node IDs from the **ref map object** and the map.get() for the **scrollIntoView()** method.
 
 ```
 function scrollToId(itemId) {
@@ -662,7 +662,7 @@ function scrollToId(itemId) {
 </nav>
 ```
 
-We use the **ref callback function** to loop through each rendered **\<li>** element, and we set the ref map object with key/value pairs of Images **ID** and **Node element**.
+We use a new **ref callback function** to loop through each rendered **\<li>** element, and we set the ref map object with key/value pairs of Images **ID** and **Node element**.
 
 ```
 //We render with map() but set the ref separately and push node elements
