@@ -40,6 +40,7 @@
 * [REACT 3, Fetch() API, OpenAI API translation, useState() objects and conditional rendering, useContext() Providers and useCallback() ](react/react-3.md)
 * [REACT 4, useMemo(), useReducer(), ReactJs scaling and useRef() Dom manipulation.](react/react-4-usememo-usereducer-reactjs-scaling-and-useref-dom-manipulation..md)
 * [REACT 5, useRef() instance methods, React keyframe animations, useRef() scroll, onDrag() and onDrop() React Events](react/react-5-useref-instance-methods-react-keyframe-animations-useref-scroll-ondrag-and-ondrop-react-even.md)
+* [REACT 6](react/react-6.md)
 
 ## NODEJS
 
