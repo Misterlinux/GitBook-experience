@@ -354,6 +354,82 @@ const Conta = () =>{
 {% endtab %}
 {% endtabs %}
 
+**Route elements** **replace** their _previous Route elements_ **unless** they are **fixed components outside Router** (like navbars and other UI components).
+
+**\<Outlet />** can **render** parent routes with their **children's routes** element by **nesting** their **\<Route>**
+
+{% tabs %}
+{% tab title="Outlet Route" %}
+Nested \<Route/> elements can use \<Outlet/> to keep rendering their parent route element.
+
+```
+<Router>
+  <Routes>
+    <Route path="/" element={<Home />}> 
+      <Route path="primo" element={<Primo/>}></Route>
+    </Route>
+
+    <Route path="secondo" element={ <Secondo/> }></Route>
+  </Routes>
+</Router>
+```
+{% endtab %}
+
+{% tab title="Outlet component" %}
+\<Outlet/> will only render the nested Route Home element, while Second will replace it.
+
+```
+//
+
+function Home(){
+
+  return(
+    <div>
+      <h3>Homepage</h3>
+
+      <div className="remove">
+        <li> <Link to="primo"> Outlet element</Link> </li>
+        <li> <Link to="secondo"> Replaced route element </Link> </li>
+      </div>
+
+      <Outlet />
+    </div>
+  )
+}
+```
+
+1
+
+```
+//
+
+function Primo(){
+
+  return(
+    <div className="text-center">
+      <p>Outlet component</p>
+    </div>
+  )
+}
+
+function Secondo(){
+
+  return(
+    <div className="text-center">
+      <p>Replaced Route component</p>
+    </div>
+  )
+}
+```
+{% endtab %}
+{% endtabs %}
+
+<figure><img src="../.gitbook/assets/OutletRouter.png" alt="" width="473"><figcaption><p>Outlet nested component and not</p></figcaption></figure>
+
+1
+
+1
+
 ### React Input Props and onChange() event handler
 
 ReactJs **input props** allow us to have **controlled inputs**, in which we set an input's **value** using useState() and can edit it using an **onChange()** event handler.
