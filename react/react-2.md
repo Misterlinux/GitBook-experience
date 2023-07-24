@@ -122,238 +122,6 @@ return(
 
 ### Using \<Outlet /> with React Routes&#x20;
 
-The \<Outlet/> component renders the child route elements in the \<Routes/>
-
-{% tabs %}
-{% tab title="Home <Route />" %}
-The **outlet** component can be outside \<routes />
-
-```
-//We create the first Route
-
-return(
-  <div className="container-fluid">
-    <nav className="row navbar navbar-expand-md bg-primary navbar-dark"></nav>
-
-    <Router>
-      <Routes>
-        <Route path="/" element={<Cringe />} />
-        <Route path="/venere/*" element={<Venere />} />
-      </Routes>
-    </Router>
-
-    <Outlet />
-  </div>
-)
-
-```
-
-Each **route** element component is gonna be **rendered separately** and will **inherit the DOM** set with \<Router />.
-
-```
-//When we move to another route using <Link> we will change component
-
-const Binge = () =>{
-  return(
-    <div>
-      <ul>
-        <li> <Link to="/"> Go back </Link> </li>
-        <li> <Link to="/venere"> Nested route </Link> </li>
-      </ul>
-
-      <p>This is the Home page</p>
-    </div>
-  )
-}
-```
-
-and then go back to the home component using \<Link />
-
-```
-const Venere = () =>{
-
-  return(
-    <div>
-      <ul>
-        <li> <Link to="/"> back </Link> </li>
-      </ul>
-      
-      <h4>Matteo flora e la robba aniamata</h4>
-      <div className="row">
-        <div className="col-4">
-          <img src="https://live.staticflickr.com/65535/52783297762_a92b9b9580_k.jpg" className="img-fluid" />
-        </div>
-      </div>
-    </div>
-  )
-}
-```
-
-<figure><img src="../.gitbook/assets/forstOutlet.png" alt=""><figcaption><p>Home component and normal route</p></figcaption></figure>
-{% endtab %}
-
-{% tab title="Nested outlet route " %}
-The **\<Outlet />** will work on variable nested \<route/> and imported components.
-
-```
-import Primo from "./components/Primo";
-import Second from "./components/Second";
-
-return(
-  <div className="container-fluid">
-
-    <Router>
-      <Routes>
-        <Route path="/" element={<Cringe />} />
-        <Route path="/venere/*" element={<Venere />} />
-        
-        <Route path="/venere/:nuovo/*" element={<Primo />} />
-      </Routes>
-    </Router>
-
-    <Outlet />
-  </div>
-)
-
-```
-
-\<Outlet /> will work for all the \<route/> in the App component.
-
-```
-//From the previous component
-<li> <Link to="qualunque"> variable and nested </Link> </li>
-
-const Primo = () =>{
-
-  return(
-    <div>
-      <h1>External Primo component</h1>
-      <p>This Route element component wss imported from another file</p>
-      <Link to="station"> final variable </Link>
-    </div>
-  )
-}
-
-```
-
-<figure><img src="../.gitbook/assets/nestedExternalroute.PNG" alt=""><figcaption><p>Outlet rendering variable URL path element component</p></figcaption></figure>
-{% endtab %}
-
-{% tab title="Render outside <Outlet/>" %}
-We use another variable nested \<route/>.
-
-```
-return(
-  <div className="container-fluid">
-
-    <Router>
-      <Routes>
-        <Route path="/" element={<Cringe />} />
-        <Route path="/venere/*" element={<Venere />} />
-        <Route path="/venere/:nuovo/*" element={<Primo />} />
-
-        <Route path="/venere/:nuovo/:altro/*" element={<Second />} />
-      </Routes>
-    </Router>
-
-    <Outlet />
-  </div>
-)
-
-```
-
-On the component, we put a **new \<Routes/>** component
-
-```
-const Done = () =>{
-
-  return(
-    <div>
-      <ul>
-        <li> <Link to="/">To start</Link> </li>
-        <li> <Link to="finale"> Append content </Link> </li>
-      </ul>
-      <h1>Final page</h1>
-      <p>We could add</p>
-
-      <Routes>
-        <Route path="/:stand/*" element={<Grade />} />
-      </Routes>
-    </div>
-  )
-}
-
-```
-
-The element component of the route will be **appended below the current component** (set with \<outlet/>)
-
-```
-const Grade = () =>{
-
-  return(
-    <div>
-      <hr/>
-      <p>Added element component below</p>
-      <Link to="odierna"> final outlet </Link>
-    </div>
-  )
-}
-
-```
-
-<figure><img src="../.gitbook/assets/noOutlet.png" alt=""><figcaption><p>Route render component outside outlet</p></figcaption></figure>
-{% endtab %}
-
-{% tab title="Re-render Outlet" %}
-We add a \<Route/> we want to be the **\<Outlet/>** again.
-
-```
-//We use variable path to cover the outside <outlet/> route coz it was nested
-
-return(
-  <div className="container-fluid">
-
-    <Router>
-      <Routes>
-        <Route path="/" element={<Cringe />} />
-        <Route path="/venere/*" element={<Venere />} />
-        <Route path="/venere/:nuovo/*" element={<Primo />} />
-        <Route path="/venere/:nuovo/:altro/*" element={<Second />} />
-
-        <Route path="/venere/:nuovo/:altro/:stand/odierna" element={<Conta />} />
-        
-      </Routes>
-    </Router>
-
-    <Outlet />
-  </div>
-)
-
-```
-
-From there we can nest a new path or go back to the \<Routes/> path.
-
-```
-<Link to="odierna"> final outlet </Link>
-//If the route is present in the <routes>, <Outlet/> renders it 
-
-const Conta = () =>{
-
-  return(
-    <div>
-      <Link to="/">Home page</Link>
-      <h3>We got back</h3>
-      <p>at using the principal Routes, and the past content is overwritten</p>
-    </div>
-  )
-}
-
-```
-
-<figure><img src="../.gitbook/assets/backRoute.png" alt=""><figcaption><p>re-rendering a Route component in the &#x3C;outlet/></p></figcaption></figure>
-{% endtab %}
-{% endtabs %}
-
 **Route elements** **replace** their _previous Route elements_ **unless** they are **fixed components outside Router** (like navbars and other UI components).
 
 **\<Outlet />** can **render** parent routes with their **children's routes** element by **nesting** their **\<Route>**
@@ -426,9 +194,218 @@ function Secondo(){
 
 <figure><img src="../.gitbook/assets/OutletRouter.png" alt="" width="473"><figcaption><p>Outlet nested component and not</p></figcaption></figure>
 
-1
 
-1
+
+<details>
+
+<summary>Render Route element components with useParams() variables</summary>
+
+We render **3 imported components** on a **single** Router>Routes>**Route Element**.
+
+```jsx
+import { getSites } from './Content';
+import Primo from './components/Primo';
+import Secondo from './components/Secondo';
+import Terzo from './components/Terzo';
+
+function App() {
+
+  return (
+    <div>
+      <div className="header bg-primary w-100">
+      </div>
+
+      <Router>
+
+        <Routes>
+          <Route path='/' element={ <House/> }/>
+          <Route path=':variable/*' element={ <Topic /> }/>
+        </Routes>
+      </Router>
+
+    </div>
+  );
+}
+```
+
+We **loop** the **JSON array** and set the **\<Link>** to the **id** of each array element (with the same name as the component).
+
+```jsx
+//The map() method needs the {params} coz they are object properties
+
+function House(){
+  let topico = getSites()
+
+  return(
+    <div>
+
+      <ul>
+        {topico.map(({id, name})=>(
+          <li key={id}>
+            <Link to={id} > {name} </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+```
+
+The content.js **JSON array** is:
+
+```javascript
+//its ID name is the variable we use for the imported components
+
+const topico = [
+    {
+        name: "This is the Primo window",
+        id: "Primo",
+        resources: [
+        ]
+    },
+    {
+        name: "This is the Secondo window",
+        id: "Secondo",
+        resources: [
+        ]
+    },
+    {
+        name: "This is the Terzo window",
+        id: "Terzo",
+        resources: [
+        ]
+    }
+]
+
+export function getSites(){
+    return topico
+}
+```
+
+We **useParams()** the **Route url** **:variable** to render the imported **components**.
+
+```jsx
+//The route element content depends on the Link id+
+//we create an "object" of components to filter with the params
+ 
+function Topic(){
+  const { variable } = useParams();
+
+  const modules = {
+    Primo,
+    Secondo,
+    Terzo,
+  };
+
+  const Module = modules[ variable ];
+
+  return(
+    <div>
+      <h1> {variable} </h1>
+
+      <Module fonte={variable} />
+    </div>
+  )
+}
+```
+
+On the imported **component**, using the **params prop**, we **render** the JSON element **properties**.
+
+```jsx
+//With the same Route path variable == Link id, 
+function Primo(prop){
+
+  let risorsa = getResor(prop.fonte)
+
+  return(
+    <div>
+
+      <ul>
+        {risorsa.resources.map((id)=> (
+          <li key={id.id}>
+            <Link to={id.id} >{id.name}</Link>
+          </li>
+        ))}
+      </ul>
+
+      <Routes>
+        <Route path=":articolo" element={<Final/>} />
+      </Routes>
+    </div>
+  )
+}
+
+//we need the ({}) to compare an object property to the params
+export function getResor(fonte){
+    return topico.find(({id})=> ( id == fonte ))
+}
+```
+
+The single _resource_ object **property** is.
+
+```jsx
+const topico = [
+    {
+        name: "This is the Primo window",
+        id: "Primo",
+        resources: [
+            {
+              name: "Why React Hooks?",
+              id: "why-react-hooks",
+              description:
+                `In this post you'll ...`
+            },
+            {
+              name: "Introduction to props in React",
+              id: "react-props",
+              description:
+                `In this post you'll ...`
+            },
+            {
+              name: "Understanding React's useRef Hook",
+              id: "useref",
+              description:
+                `In this post you'll ...`
+            }
+        ]
+    },
+    ...
+]
+```
+
+To filter the description property we need 2 **Route path variables.**
+
+```jsx
+//We need the exact Route path variables
+export function getDesc({variable, articolo}){
+    
+    return topico
+        .find( ({id}) => ( id == variable ) )
+        .resources.find( ({id}) => ( id == articolo ) )
+}
+```
+
+Then we render it on the Route element component.
+
+```jsx
+function Final(){
+
+  const {variable, articolo} = useParams()
+
+  let {name, description} = getDesc({variable, articolo})
+
+  return(
+    <div>
+      <h4> {name} </h4>
+      <p> {description} </p>
+    </div>
+  )
+}
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/JSONrouter.png" alt=""><figcaption><p>React-Dom-Router</p></figcaption></figure>
 
 ### React Input Props and onChange() event handler
 
