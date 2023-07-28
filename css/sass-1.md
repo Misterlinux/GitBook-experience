@@ -1,12 +1,21 @@
 # Sass 1
 
+* 1
+* 1
+* 1
+* 1
+* 1
+
 **Sass** (**S**yntactically **A**wesome **S**tyle**S**heet) is a _CSS_-compatible **pre-processor extension**, developed in 2006.
 
 In React, we **npm install sass** to **transpile** a sass file _into CSS_, due to the browser being unable to read sass.
 
-```scss
+{% tabs %}
+{% tab title="sass variables" %}
+**Global** and **local variables** are declared outside/inside selectors.
+
+```
 //Sass variables can store strings/numbers/booleans/colors/lists
-//Global and local variables are declared outside/inside selectors
 //Any variables will affect only the selectors below it
 $primo: red;
 
@@ -19,10 +28,12 @@ $primo: red;
   color: $primo ; 
 }
 ```
+{% endtab %}
 
+{% tab title="sass nested variables" %}
 A sass file (extension **.scss**) can **nest properties** part of a **DOM parent selector**.
 
-```
+```sass
 .parent{
   color: white;
   background-color: black;
@@ -47,6 +58,8 @@ import './App.scss';
   </div>
 <div>
 ```
+{% endtab %}
+{% endtabs %}
 
 <figure><img src="../.gitbook/assets/sassStyling.png" alt=""><figcaption><p>sass style DOM element</p></figcaption></figure>
 
@@ -66,7 +79,7 @@ Sass can **nest properties names** if they start with the same word.
 
 We can **@import** external **sass** files, usually to **separate** the **sass variables** file from the **sass selectors** file.
 
-```
+```sass
 //We add a _partial to the file's name to keep it from transpiring
 //@import on the top of the sass file for it to have global scope
 
@@ -80,6 +93,56 @@ App.scss
     background-color: $bicolor;
 }
 ```
+
+The **@mixin** and **@include** directives create blocks of sass properties to use on selectors.
+
+{% tabs %}
+{% tab title="Basic @mixin" %}
+Both **-** and **\_** are considered the **same digit** on mixin names.
+
+```sass
+@mixin bordi-y{
+    border-bottom: 2px solid blue;
+    border-top: 2px solid red;
+}
+
+@mixin testo{
+  font: {
+    size: 25px;
+    color: purple; 
+  }
+}
+
+.paper{
+    @include bordi-y;
+    @include testo;
+}
+```
+{% endtab %}
+
+{% tab title="@mixin() params and include() arguments" %}
+Similar to functions, **@mixin parameters** receive their own values from the **@include() arguments.**
+
+```sass
+@mixin bordo($width, $color, $color1: orange ){
+  border-bottom: $width solid $color;
+  border-top: $width solid $color1;
+}
+
+.mix{
+  @include bordo( 3px, lightblue)
+}
+
+.mix1{
+  @include bordo( 6px, orange, $color1: lightblue )
+}
+```
+{% endtab %}
+{% endtabs %}
+
+<figure><img src="../.gitbook/assets/MixinInclude.png" alt=""><figcaption><p>@mixin and @include sass</p></figcaption></figure>
+
+1
 
 1
 
