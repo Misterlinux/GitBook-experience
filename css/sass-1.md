@@ -142,9 +142,21 @@ Similar to functions, **@mixin parameters** receive their own values from the **
 
 <figure><img src="../.gitbook/assets/MixinInclude.png" alt=""><figcaption><p>@mixin and @include sass</p></figcaption></figure>
 
-1
+The **@extend** directive passes a set of properties between selectors.
 
-1
+```
+.primo{
+    border-top: 3px solid green;
+    border-bottom: 3px solid red;
+}
+
+//gets the .primo orders plus text
+.secondo{
+    @extend .primo;
+    color: lightseagreen;
+    font-size: 15px;
+}
+```
 
 1
 
