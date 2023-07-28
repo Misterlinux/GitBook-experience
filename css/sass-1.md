@@ -2,9 +2,7 @@
 
 **Sass** (**S**yntactically **A**wesome **S**tyle**S**heet) is a _CSS_-compatible **pre-processor extension**, developed in 2006.
 
-In React, we **npm install sass** to **transpile** a sass file _into CSS_, by default, the browser can't read sass.
-
-A sass file (extension **.scss**) can **nest properties** part of a **DOM parent selector**.
+In React, we **npm install sass** to **transpile** a sass file _into CSS_, due to the browser being unable to read sass.
 
 ```scss
 //Sass variables can store strings/numbers/booleans/colors/lists
@@ -12,11 +10,19 @@ A sass file (extension **.scss**) can **nest properties** part of a **DOM parent
 //Any variables will affect only the selectors below it
 $primo: red;
 
-.coral{ color: $primo; }
+.coral{ 
+  color: $primo; 
+}
 
-//use !global to reset the global variable
-.coral1{ $primo: green;  color: $primo ; }
+.coral1{ 
+  $primo: green;      //use !global to reset the global variable
+  color: $primo ; 
+}
+```
 
+A sass file (extension **.scss**) can **nest properties** part of a **DOM parent selector**.
+
+```
 .parent{
   color: white;
   background-color: black;
@@ -35,27 +41,45 @@ $primo: red;
 import './App.scss';
 
 <div>
-  <p className='coral'> Global variable </p>
-
-  <p className='coral1'> Local variable </p>
-
   <div className='parent'>
     <p>Nested element </p>
     <h6>Styled with nested sass </h6>
   </div>
 <div>
-
 ```
 
+<figure><img src="../.gitbook/assets/sassStyling.png" alt=""><figcaption><p>sass style DOM element</p></figcaption></figure>
 
+Sass can **nest properties names** if they start with the same word.
 
-1
+```
+//for font-family, font-size and font-weight
+.nested{
 
-1
+  font: {
+    family: Helvetica, sans-serif;
+    size: 18px;
+    weight: bold;
+  }
+}
+```
 
-1
+We can **@import** external **sass** files, usually to **separate** the **sass variables** file from the **sass selectors** file.
 
-1
+```
+//We add a _partial to the file's name to keep it from transpiring
+//@import on the top of the sass file for it to have global scope
+
+_Global.scss
+$bicolor: yellow;
+
+App.scss
+@import "Global";
+
+.exported{
+    background-color: $bicolor;
+}
+```
 
 1
 
