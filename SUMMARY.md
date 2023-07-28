@@ -15,6 +15,7 @@
 * [Boostrap 1 Modal, Pagination, form layout and input component](css/boostrap-1-modal-pagination-form-layout-and-input-component.md)
 * [Boostrap 2 Cards,Carousel, image overlay and dropdown](css/boostrap-2-cards-carousel-image-overlay-and-dropdown.md)
 * [Boostrap 3 Bootstrap grid, Scrollspy, Toast and responsive navbar](css/boostrap-3-bootstrap-grid-scrollspy-toast-and-responsive-navbar.md)
+* [Sass 1](css/sass-1.md)
 
 ## JS
 
