@@ -67,6 +67,7 @@ Sass can **nest properties names** if they start with the same word.
 
 ```
 //for font-family, font-size and font-weight
+//remember the space before {}
 .nested{
 
   font: {
@@ -116,6 +117,20 @@ Both **-** and **\_** are considered the **same digit** on mixin names.
 .paper{
     @include bordi-y;
     @include testo;
+}
+```
+
+We can also use it to **shorten vendor prefixes**.
+
+```
+@mixin transform($property) {
+  -webkit-transform: $property;
+  -ms-transform: $property;
+  transform: $property;
+}
+
+.myBox {
+  @include transform(rotate(20deg));
 }
 ```
 {% endtab %}
