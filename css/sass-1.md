@@ -173,6 +173,49 @@ The **@extend** directive passes a set of properties between selectors.
 }
 ```
 
+We **:export** **sass** variables to javascript:
+
+```
+app.scss
+$giallo: yellow;
+:export{
+    greeno: $giallo
+}
+
+//But we can't modify it on js
+App.js
+import extra from'./App.scss';
+console.log( extra.greeno )        //yellow
+```
+
+We use **CSS :root** **var**iables to dynamically change the **sass** variables.
+
+```
+App.css
+:root{
+  --verde: green;
+}
+
+App.scss
+$greeno: var(--verde);
+.verde{
+    color: $greeno;
+}
+
+//We access and edit the :root CSS variables
+App.js
+
+let r = document.querySelector(':root');
+var rs = getComputedStyle(r);
+console.log( rs.getPropertyValue('--verde') )      //green
+
+r.style.setProperty('--verde', 'red');
+```
+
+1
+
+1
+
 1
 
 1
