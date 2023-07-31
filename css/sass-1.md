@@ -259,6 +259,53 @@ r.style.setProperty("--rosso", basico + "px")
 
 </details>
 
+The **color-mix(in colorspace, color1 %, color2 %)** is a **CSS functional notation** to mix color values
+
+{% tabs %}
+{% tab title="srgb mix()" %}
+The default percentage values are 50% and **its return value can be passed as var().**
+
+```
+App.css
+:root{
+  --base: color-mix(in srgb, green 70%, red 20%);
+  --sopra: color-mix(in lch, green 20%, red 70%);
+}
+
+App.scss
+$base: var(--base);
+$sopra: var(--sopra);
+
+.mac{
+  background-color: $base;
+  color: $sopra;
+}
+```
+{% endtab %}
+
+{% tab title="hsl mix()" %}
+On the hsl **colorspace**, the shorter/longer **interpolation method** sets the color % on the **shorter/longer angle** of the **hsl circle**, the colors need to be in hsl() for it to work.
+
+```
+//hue is just a keyword
+.hue{
+  background-color: 
+    color-mix(in hsl shorter hue, hsl(270, 100%, 50%) , hsl(115, 100%, 50%) );
+  color: 
+    color-mix(in hsl longer hue, hsl(270, 100%, 50%) , hsl(115, 100%, 50%) );
+}
+
+//We get the 50% mix of 2 colors and their contrast (180deg hsl difference)
+```
+{% endtab %}
+{% endtabs %}
+
+<figure><img src="../.gitbook/assets/color-mix().png" alt="" width="328"><figcaption><p>Opposite color-mix() and hsl 50% contrast colors</p></figcaption></figure>
+
+1
+
+1
+
 1
 
 1
