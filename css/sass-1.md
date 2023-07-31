@@ -14,6 +14,8 @@ In React, we **npm install sass** to **transpile** a sass file _into CSS_, due t
 {% tab title="sass variables" %}
 **Global** and **local variables** are declared outside/inside selectors.
 
+**Sass** variables are **imperative**, any **change** will **only** affect the **following** variables, while **CSS** variables are **declarative**, and any **change** in value will **affect** the **previous** uses **too**.
+
 ```
 //Sass variables can store strings/numbers/booleans/colors/lists
 //Any variables will affect only the selectors below it
@@ -188,7 +190,7 @@ import extra from'./App.scss';
 console.log( extra.greeno )        //yellow
 ```
 
-We use **CSS :root** **var**iables to dynamically change the **sass** variables.
+The **Sass** file doesn't exist during **runtime**, so we need **CSS :root** **var**iables to change the Sass variables dynamically.
 
 ```
 App.css
@@ -209,10 +211,53 @@ let r = document.querySelector(':root');
 var rs = getComputedStyle(r);
 console.log( rs.getPropertyValue('--verde') )      //green
 
-r.style.setProperty('--verde', 'red');
+r.style.setProperty('--verde', 'red');   //Or ternary theme ? "#262833" : "#fff"
 ```
 
-1
+<details>
+
+<summary>Dynamically change a CSS property string and set it on sass.</summary>
+
+We **can't interpolate** var(--css) variables in **Sass**.
+
+```
+//It will be rendered always as var(--rosso)px
+App.css
+:root{
+  --rosso: 20;
+}
+
+App.scss
+$low: var(--rosso);
+.sposta{
+    margin-left: $low + px;
+}
+```
+
+We modify **sass variables** (passed from CSS) by editing the property **value** "**string**".
+
+```
+App.css
+:root{
+  --rosso: 20px;
+}
+
+App.scss
+$left: var(--rosso);
+.sposta{
+    margin-left: $left ;
+}
+
+//we slice() the integer from the "px" and edit it
+App.js
+let basico = Number( rs.getPropertyValue('--rosso').slice(0, -2) )
+basico += 10;
+r.style.setProperty("--rosso", basico + "px")
+
+//while still working as a sass variable
+```
+
+</details>
 
 1
 
