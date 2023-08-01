@@ -302,11 +302,25 @@ On the hsl **colorspace**, the shorter/longer **interpolation method** sets the 
 
 <figure><img src="../.gitbook/assets/color-mix().png" alt="" width="328"><figcaption><p>Opposite color-mix() and hsl 50% contrast colors</p></figcaption></figure>
 
-1
+We use **Sass** to modify **npm install bootstrap** _variables_.
 
-1
+```
+//The scss file has to o AFTER the bootstrap import
+App.js
+import 'bootstrap/dist/css/bootstrap.css';
+import "./Global.scss"
 
-1
+Global.scss
+$primary: darkred;
+$secondary: lightcoral;
+$success: lightgreen;
+
+@import '~bootstrap/scss/bootstrap.scss';
+
+//Also we can't export the global.scss to another scss to avoid slowing down the app
+```
+
+<figure><img src="../.gitbook/assets/customBootstrap.png" alt="" width="375"><figcaption><p>custom Bootstrap.css </p></figcaption></figure>
 
 1
 
