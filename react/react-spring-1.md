@@ -140,7 +140,39 @@ function sopra({ clientX, clientY }){
 
 <figure><img src="../.gitbook/assets/reactMeasure.png" alt="" width="294"><figcaption><p>Relative Cursor position on measured DOM element</p></figcaption></figure>
 
+<details>
+
+<summary>Animating measures with useSpring() conditional values.</summary>
+
+We **animate** a react-use-measure **width** with a **useState() trigger**, using a t**ernary operator** to change the **useSpring()** target **value** (to).
+
+The relative>absolute **child** component is **animated** using its **parent** measured **width**.
+
+```
+//we need the animated component to access the useSpring() prop
+
+const [open, toggle] = useState(false)
+const [ref, { width }] = useMeasure()
+const props = useSpring({ width: open ? width : 0})
+
+<div ref={ref} className="main" onClick={()=> toggle(!open) } >
+  <animated.div className="fill" style={props} />
+
+  <animated.div className="content">
+    {props.width.to(x => x.toFixed(0))}
+  </animated.div>
+</div>
+```
+
 1
+
+1
+
+1
+
+1
+
+</details>
 
 1
 
