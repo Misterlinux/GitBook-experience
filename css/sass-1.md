@@ -322,7 +322,45 @@ $success: lightgreen;
 
 <figure><img src="../.gitbook/assets/customBootstrap.png" alt="" width="375"><figcaption><p>custom Bootstrap.css </p></figcaption></figure>
 
-1
+We can use the **animated component** directly on the **JSX** while passing useString() as a style prop.
+
+```
+const mino = useSpring({
+  from: {x: 0, y: 0},
+  to: {x: 150, y: 50}  
+})
+
+<animated.div className="boxo text-white text-center" style={ mino }>
+  Texto
+</animated.div>
+```
+
+### React-use-measure on events and react-spring animations
+
+The React-use-measure tool references DOM elements to measure their boundaries.
+
+```jsx
+//The bounds objects contain { width, height, top, right, bottom, left, x, y}
+npm i react-use-measure 
+
+import useMeasure from 'react-use-measure'
+const [ref, bounds] = useMeasure()
+
+function sopra({ clientX, clientY }){
+  setXY([clientX, clientY])
+}
+
+<div className="inside" ref={ref} onMouseMove={sopra}>
+  <div className="box"></div>
+</div>
+
+<div>
+  <p> Mouse x {Math.round(xy[0] - bounds.left)}px </p>
+  <p> Mouse y {Math.round(xy[1] - bounds.top)}px </p>
+</div>
+```
+
+<figure><img src="../.gitbook/assets/reactMeasure.png" alt="" width="294"><figcaption><p>Relative Cursor position on measured DOM element</p></figcaption></figure>
 
 1
 
