@@ -140,6 +140,13 @@ function sopra({ clientX, clientY }){
 
 <figure><img src="../.gitbook/assets/reactMeasure.png" alt="" width="294"><figcaption><p>Relative Cursor position on measured DOM element</p></figcaption></figure>
 
+We access th from/to useSpring() properties with:
+
+```
+props.width.animation.to             //the to:{} width value
+props.width.to(x => x.toFixed(0))    //Dom rendering inside an <animated />
+```
+
 <details>
 
 <summary>Animating measures with useSpring() conditional values.</summary>
@@ -164,17 +171,66 @@ const props = useSpring({ width: open ? width : 0})
 </div>
 ```
 
-1
+The children **CSS** properties set its **starter animation condition** (from).
 
-1
+```css
+//the .fill element starts from the left and its height covers the parent
+.main {
+  position: relative;
+  width: 200px;
+  height: 50px;
+  cursor: pointer;
+  border-radius: 5px;
+  border: 2px solid #272727;
+  overflow: hidden;
+}
 
-1
+.fill {
+  position: absolute;
+  left: 0;
+  height: 100%;
+  background: hotpink;
+}
 
-1
+.content {
+  position: absolute;
+  display: flex;
+  color: #272727;
+  width: 100%; height: 100%;
+  align-items: center; justify-content: center;
+}
+```
+
+The useString() **api** for the event works too, but we **can't reset** the (from) **property** yet.
+
+```sass
+const [propa, api] = useSpring(()=>({
+  from: {width: 0 }
+}))
+
+function checkin(){
+  api.start({
+    from: {
+      width: 0,
+    },
+    to: {
+      width: width,
+    },
+  })
+}
+
+<div ref={ref} className="main" onClick={checkin} >
+  <animated.div className="fill" style={propa} />
+
+  <animated.div className="content">
+    {propa.width.to(x => x.toFixed(0))}
+  </animated.div>
+</div>
+```
 
 </details>
 
-1
+<figure><img src="../.gitbook/assets/fillAnimation.png" alt="" width="335"><figcaption><p>Animated width property on useState()</p></figcaption></figure>
 
 1
 
