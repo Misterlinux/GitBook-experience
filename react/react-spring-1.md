@@ -198,6 +198,43 @@ style= {{
 }}
 ```
 
+We use a **conditional springValue** and the <mark style="background-color:blue;">**to**</mark> method to **animate** the **style** properties.                             **Range** are the animated _springValues_ breakpoints, **output** are the style property **values** on each **breakpoint**.
+
+```
+//We need {} on the springValue to access the to method
+//The useSpring() breakpoint needs to share the name with springValue
+//We don't need the from{} property
+
+const [vedo, setVedo] = useState(false)
+const {dice} = useSpring({
+  dice: vedo ? 1 : 0,
+  config: {duration: 5000},
+})
+
+<animated.div 
+  onClick={ ()=> setVedo(!vedo) }
+  className="boxo" 
+  style={{
+    scale: dice.to({ range: [0, 1], output: [0.5, 1.5] }),
+    background: dice.to({ range: [0, 0.5, 1], output: ["red", "orange", "pink"] }),
+    y: dice.to({ range: [0, 0.8, 1], output: [0, 50, 50] }),
+    x: dice.to({ range: [0, 1], output: [0, 200] }),
+  }}>
+</animated.div>
+```
+
+<figure><img src="../.gitbook/assets/rangeOutput.png" alt="" width="293"><figcaption><p>Animated style properties onClick() </p></figcaption></figure>
+
+1
+
+1
+
+1
+
+1
+
+1
+
 1
 
 1
