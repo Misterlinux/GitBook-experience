@@ -225,9 +225,25 @@ const {dice} = useSpring({
 
 <figure><img src="../.gitbook/assets/rangeOutput.png" alt="" width="293"><figcaption><p>Animated style properties onClick() </p></figcaption></figure>
 
-1
+We use an **array** of <mark style="background-color:blue;">**to**</mark> style **objects** for multiple animations, the array has to **include** the <mark style="background-color:blue;">**from**</mark> object **(**any object before it will be ignored**)**.
 
-1
+```
+//A loop: true would skip to the starter point, we need to add reverse.
+//This will trigger the animation on mount
+let auto = useSpring({
+  from: { x: 0, y: 0, scale: 0.5, background: "red"},
+  to: [
+    { x: 0, y: 0, scale: 0.5, background: "red" },
+    { x: 100, y: -50, scale: 1, background: "orange" },
+    { x: 200, y: 50, scale: 1.5, background: "pink" },
+  ],
+  config:{ duration: 1000 },
+  loop:{ reverse: true }
+})
+
+<animated.div className="boxo" style={auto}>
+</animated.div>
+```
 
 1
 
