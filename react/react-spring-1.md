@@ -113,6 +113,95 @@ const mino = useSpring({
 </animated.div>
 ```
 
+The useSpring() **config property** contains **mass, tension, friction, easing**, and **duration** (used for its "timing function")
+
+```
+const basic = useSpring({
+  from: {background: 'brown'},
+  config:{
+    tension: 280, friction: 120,
+    easing: "easeOutQuart", duration: 3000,
+  },
+}
+
+//We can edit the config on the api event handler function.
+const handleClick = () => {
+  basic.start({
+    y: 20,
+    config: {
+      friction: 10,
+    },
+  })
+}
+```
+
+<details>
+
+<summary>List of useString() presets configs</summary>
+
+We can use **both** a **preset** and a **custom** config property.
+
+```
+const basic = useSpring({
+  from: {background: 'brown'},
+  config: config.wobbly,
+  config:{
+    duration: 3000,
+  },
+}
+```
+
+There are the presets configs.
+
+```
+default – { tension: 170, friction: 26 }
+gentle – { tension: 120, friction: 14 }
+wobbly – { tension: 180, friction: 12 }
+stiff – { tension: 210, friction: 20 }
+slow – { tension: 280, friction: 60 }
+molasses – { tension: 280, friction: 120 }
+```
+
+</details>
+
+Using the <mark style="background-color:blue;">**to**</mark> _method_, we **interpolate** the **springValue** data on a different **style** property (we can animate both).
+
+```
+// 0/360 used for rotate and translateX if the useSpring is included
+
+import { animated, useSpring , config, to } from '@react-spring/web'
+const props = useSpring({
+  from: { x: 0 },
+  to: { x: 360 },
+  config: {duration: 2500}
+})
+
+style={{ 
+  transform: smal.x.to(value => `rotateZ(${value}deg)`),
+  ...props
+}}
+```
+
+We use the **springValue** as a **breakpoint** to animate a style property.
+
+```
+const auto = useSpring({
+  from: { x: 0 },
+  to: { x: 1 },
+  config: {duration: 3000}
+})
+
+style= {{
+  transform: auto.x
+    .to([0, 1], [0, 100])
+    .to((x) => `translate(${x}px)`),
+}}
+```
+
+1
+
+1
+
 ### React-use-measure on events and react-spring animations
 
 The React-use-measure tool references DOM elements to measure their boundaries.
