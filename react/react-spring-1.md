@@ -32,8 +32,7 @@ function MyComponent() {
   return (
     <animated.div
       style={{
-        width: 80,
-        height: 80,
+        width: 80, height: 80,
         background: '#ff6d6d',
         borderRadius: 8,
         ...springs
@@ -42,9 +41,7 @@ function MyComponent() {
   )
 }
 
-<div>
-  <MyComponent />
-</div>
+<div> <MyComponent /> </div>
 ```
 {% endtab %}
 
@@ -58,8 +55,7 @@ We **deconstruct** the **api object** from the **useString({})** hook, and use i
 
 .box{
     display: flex;
-    width: 80px;
-    height: 80px;
+    width: 80px; height: 80px;
     background-color: brown;
     border: solid 5px yellow;
     border-radius: 10px;
@@ -100,18 +96,38 @@ function MyComponent() {
 
 <figure><img src="../.gitbook/assets/moved1.gif" alt="" width="293"><figcaption><p>Spring animation object + onClick api</p></figcaption></figure>
 
-We can use the **animated component** directly on the **JSX** while passing useString() as a style prop.
+The <**animated**> **component** can be used directly on the **JSX** with a useString() as a style prop.
+
+We can use the **useSpringRef()** hook to **reference** the imperative **API** on event handlers.                         &#x20;
+
+Any **difference** between the useSpring() and the api.method **from:{}** will be **skipped**, to be animated style properties need to be both on <mark style="background-color:blue;">from</mark> and <mark style="background-color:blue;">to</mark>.
 
 ```
-const mino = useSpring({
-  from: {x: 0, y: 0},
-  to: {x: 150, y: 50}  
+import { animated, useSpring, useSpringRef } from '@react-spring/web'
+let refe = useSpringRef()
+
+let init = useSpring({
+  from: {x: 0, transform: "rotate(0deg)"},
+  ref: refe
 })
 
-<animated.div className="boxo text-white text-center" style={ mino }>
-  Texto
+function mosso(){
+  refe.start({
+    from: {x: 50, transform: "rotate(30deg)"},
+    to: {x: 150, transform: "rotate(330deg)"},
+    config: {duration: 5500},
+    loop: {reverse: true}
+  })
+}
+
+<animated.div
+  onClick={mosso} className="boxo"
+  style={{ ...init }}
+>
 </animated.div>
 ```
+
+<figure><img src="../.gitbook/assets/rotated.png" alt="" width="416"><figcaption><p>useSpring(9 state and event handler function with useSringRef()</p></figcaption></figure>
 
 The useSpring() **config property** contains **mass, tension, friction, easing**, and **duration** (used for its "timing function")
 
