@@ -129,6 +129,17 @@ function mosso(){
 
 <figure><img src="../.gitbook/assets/rotated.png" alt="" width="416"><figcaption><p>useSpring(9 state and event handler function with useSringRef()</p></figcaption></figure>
 
+We can _useSpringRef()_ to **pause**/**resume** and **stop** animations.
+
+```
+//after stop() it won't resume()
+init.pause()
+init.resume()
+init.stop()
+
+//We can do the same on a useSpring() api.
+```
+
 The useSpring() **config property** contains **mass, tension, friction, easing**, and **duration** (used for its "timing function")
 
 ```
