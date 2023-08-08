@@ -272,6 +272,107 @@ let auto = useSpring({
 </animated.div>
 ```
 
+### The useTransition() animation styles and methods
+
+The **useTransition(**array, config**)** hook **sequentially** _animates_ datasets of elements on the DOM.
+
+```jsx
+//enter{} is the current style, from/leave are before/after the transition
+//exitbefore will repeat the transition to remove the current element before the next
+
+const transitions1 = useTransition(indice, {
+  from: { opacity: 0 },
+  enter: { opacity: 1 },
+  leave: { opacity: 0 },
+  exitbefore: true,
+  config: { duration: 5000 },
+})
+```
+
+{% tabs %}
+{% tab title="onRest() auto transitions" %}
+its array argument can also be an index while its config is different from useSpring()
+
+```jsx
+//We create an array of animated components to use the index in
+import { useTransition, animated, useSpringRef } from '@react-spring/web'
+const [indice, setIndice] = useState(0)
+const refe = useSpringRef()
+
+const pages = [
+  ({ style }) => (
+    <animated.div style={{ ...style, background: "pink"}}>A</animated.div>
+  ),
+  ({ style }) => (
+    <animated.div style={{ ...style, background: "blue"}}>B</animated.div>
+  ),
+  ({ style }) => (
+    <animated.div style={{ ...style, background: "green"}}>C</animated.div>
+  )
+]
+```
+
+The useTransition() onRest method triggers each time an animated transition is completed.
+
+```jsx
+//Its arguments are: animationResult (enter style object and the cancelled/finished properties)
+//the spring controller and the useTransition index
+
+const transitions1 = useTransition(indice, {
+  from: { opacity: 0, transform: 'translate3d(0,50%,0)' },
+  enter: { opacity: 1, transform: 'translate3d(0%,0,0)' },
+  leave: { opacity: 0, transform: 'translate3d(0,-50%,0)' },
+  config: { duration: 2000 },
+  ref: refe,
+  onRest: (string, crtl, item)=> {
+    if (indice === item) {
+      setIndice(x => (x+ 1) % 3 )
+    }
+  }
+})
+```
+
+The updated useState() index triggers the useEffect() which re-starts the transition.
+
+```jsx
+useEffect(() => {
+  refe.start()
+}, [indice])
+```
+
+The useTransition() hook returns the style objects and the index for the animated component to render.
+
+```jsx
+<div>
+  {transitions1((style, i) => {
+    const Page = pages[i]
+    return <Page style={style} />
+  })}
+</div>
+```
+
+<figure><img src="../.gitbook/assets/transition1.gif" alt=""><figcaption><p>automatic useTransition() updated onRest()</p></figcaption></figure>
+{% endtab %}
+
+{% tab title="Second Tab" %}
+1
+
+1
+
+1
+
+1
+
+1
+
+1
+
+1
+
+1
+{% endtab %}
+{% endtabs %}
+
 1
 
 1
