@@ -291,7 +291,7 @@ const transitions1 = useTransition(indice, {
 
 {% tabs %}
 {% tab title="onRest() auto transitions" %}
-its array argument can also be an index while its config is different from useSpring()
+its array **argument** can also be an **index** while its config is different from useSpring()
 
 ```jsx
 //We create an array of animated components to use the index in
@@ -303,19 +303,14 @@ const pages = [
   ({ style }) => (
     <animated.div style={{ ...style, background: "pink"}}>A</animated.div>
   ),
-  ({ style }) => (
-    <animated.div style={{ ...style, background: "blue"}}>B</animated.div>
-  ),
-  ({ style }) => (
-    <animated.div style={{ ...style, background: "green"}}>C</animated.div>
-  )
+  ...
 ]
 ```
 
-The useTransition() onRest method triggers each time an animated transition is completed.
+The useTransition() **onRest method** triggers each time an animated **transition** is **completed**.
 
 ```jsx
-//Its arguments are: animationResult (enter style object and the cancelled/finished properties)
+//Its arguments: animationResult(enter style object, cancelled/finished props)
 //the spring controller and the useTransition index
 
 const transitions1 = useTransition(indice, {
@@ -332,7 +327,7 @@ const transitions1 = useTransition(indice, {
 })
 ```
 
-The updated useState() index triggers the useEffect() which re-starts the transition.
+The updated useState() **index** triggers the **useEffect**() which re-starts the **transition**.
 
 ```jsx
 useEffect(() => {
@@ -410,7 +405,7 @@ function sopra({ clientX, clientY }){
 
 <figure><img src="../.gitbook/assets/reactMeasure.png" alt="" width="294"><figcaption><p>Relative Cursor position on measured DOM element</p></figcaption></figure>
 
-We access th from/to useSpring() properties with:
+We access the from/to useSpring() properties with:
 
 ```
 props.width.animation.to             //the to:{} width value
