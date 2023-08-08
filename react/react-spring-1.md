@@ -349,22 +349,54 @@ The useTransition() hook returns the style objects and the index for the animate
 <figure><img src="../.gitbook/assets/transition1.gif" alt=""><figcaption><p>automatic useTransition() updated onRest()</p></figcaption></figure>
 {% endtab %}
 
-{% tab title="Second Tab" %}
-1
+{% tab title="onClick() index transition" %}
+We use an event listener to edit the useTransition() index and render the array of images.
 
-1
+```jsx
+//to keep the index from 0 to 2 (images indexes) we use % 3
+const IMAGES = [
+  'https://images/art-piece-for-you.png',
+  'https://images/generative-waves.jpg',
+  'https://images/generative-art.jpg',
+]
 
-1
+const [activeIndex, setActiveIndex] = useState(0)
+function clicka(){
+  setActiveIndex(x => (x+ 1) % 3 )
+}
 
-1
+useEffect(() => {
+  springApi.start()
+}, [activeIndex])
 
-1
+const springApi = useSpringRef()
+```
 
-1
+We animate the clipPath height from 0-100-0 while keeping the width at 100.
 
-1
+```jsx
+const transitions = useTransition(activeIndex, {
+  from: {  clipPath: 'polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%)' },
+  enter: { clipPath: 'polygon(0% 0%, 0% 100%, 100% 100%, 100% 0%)' },
+  leave: { clipPath: 'polygon(100% 0%, 100% 100%, 100% 100%, 100% 0%)' },
+  exitBeforeEnter: true,
+  config: {
+    duration: 3000,
+  },
+  delay: 1000,
+  ref: springApi,
+})
 
-1
+<div>
+  {transitions((springs, item) => (
+    <animated.div className="img__container" style={springs} onClick={clicka}>
+      <img src={IMAGES[item]} />
+    </animated.div>
+  ))}
+</div>
+```
+
+<figure><img src="../.gitbook/assets/clicktrans1.gif" alt=""><figcaption><p>exitbeforeenter useTransition() animation onClick()</p></figcaption></figure>
 {% endtab %}
 {% endtabs %}
 
