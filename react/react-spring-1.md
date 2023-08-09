@@ -291,7 +291,7 @@ let {opacity, transform: tran} = useSpring({
 
 The 2 **absolute** images are **overlayed** in the same container.
 
-<pre><code><strong>&#x3C;div className="carta" onMouseEnter={ronda} onMouseLeave={ronda}>
+<pre class="language-jsx"><code class="lang-jsx"><strong>&#x3C;div className="carta" onMouseEnter={ronda} onMouseLeave={ronda}>
 </strong>  &#x3C;animated.div className="carta davanti">
   &#x3C;/animated.div>
 
@@ -322,8 +322,8 @@ The 2 **absolute** images are **overlayed** in the same container.
 
 We **useState()** the _useSpring()_ destructured style **properties**, and use them on the **animated** components.
 
-```
-//We use perspective() for a better rotateX effect
+```jsx
+//We use perspective() for a better rotateX effect, or add rotateY()
 const [conta, setConta] = useState(false)
 
 let {opacity: opa, transform: tran } = useSpring({
@@ -337,7 +337,7 @@ const ronda = () => { setConta(!conta) }
 
 Both **images share** the useSpring() style **properties**, the **front** image **opacity** needs to be **opposite** from the back one, we edit it using the <mark style="background-color:blue;">to</mark> method.
 
-```
+```jsx
 //we add an opposite rotateX to the back image to avoid it being upside down.
 <div className="carta" onMouseEnter={ronda} onMouseLeave={ronda}>
 
