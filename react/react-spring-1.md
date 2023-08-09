@@ -272,6 +272,99 @@ let auto = useSpring({
 </animated.div>
 ```
 
+We can directly **destruct** a **useSpring()** object and re-assign **property** names.
+
+```
+//The destructured property then the assigned name
+let {opacity, transform: tran} = useSpring({
+  opacity: 0.5,
+  transform: rotateX(180deg)
+})
+
+<animated.div style={{ opacity }}></animated.div>	
+<animated.div style={{ transform: tran }} > </animated.div>
+```
+
+<details>
+
+<summary>Destruct useSpring() rotateX property on 2 display absolute images</summary>
+
+The 2 **absolute** images are **overlayed** in the same container.
+
+<pre><code><strong>&#x3C;div className="carta" onMouseEnter={ronda} onMouseLeave={ronda}>
+</strong>  &#x3C;animated.div className="carta davanti">
+  &#x3C;/animated.div>
+
+  &#x3C;animated.div className="carta dietro">
+  &#x3C;/animated.div>
+&#x3C;/div>
+
+//The event handlers are on the container coz the images will be rotated
+.carta{
+  position: absolute;
+  width: 200px;
+  height: 120px;
+}
+
+.davanti,
+.dietro{
+  background-size: cover;
+}
+
+.davanti{
+  background-image: url(https://images.neon.com);
+}
+
+.dietro{
+  background-image: url(https://images.sea.com);
+}
+</code></pre>
+
+We **useState()** the _useSpring()_ destructured style **properties**, and use them on the **animated** components.
+
+```
+//We use perspective() for a better rotateX effect
+const [conta, setConta] = useState(false)
+
+let {opacity: opa, transform: tran } = useSpring({
+  opacity: conta ? 1 : 0,
+  transform: `perspective(600px) rotateX(${conta ? 180 : 0}deg) `,
+  config: {duration: 1000}
+})
+
+const ronda = () => { setConta(!conta) }
+```
+
+Both **images share** the useSpring() style **properties**, the **front** image **opacity** needs to be **opposite** from the back one, we edit it using the <mark style="background-color:blue;">to</mark> method.
+
+```
+//we add an opposite rotateX to the back image to avoid it being upside down.
+<div className="carta" onMouseEnter={ronda} onMouseLeave={ronda}>
+
+  <animated.div 
+    className="carta davanti"
+    style={{ 
+      opacity: opa.to(x=> 1- x),
+      transform: tran
+    }}
+  >
+  </animated.div>
+
+  <animated.div 
+    className="carta dietro"
+    style={{ 
+      opacity: opa, transform: tran,
+      rotateX: "-180deg"
+    }}
+  >
+  </animated.div>
+</div>
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/rotating.gif" alt=""><figcaption><p>rotateX and opacity useString() on 2 absolute images</p></figcaption></figure>
+
 ### The useTransition() animation styles and methods
 
 The **useTransition(**array, config**)** hook **sequentially** _animates_ datasets of elements on the DOM.
@@ -338,6 +431,7 @@ useEffect(() => {
 The useTransition() hook returns the style objects and the index for the animated component to render.
 
 ```jsx
+//We also need position: absolute for the effect to work
 <div>
   {transitions1((style, i) => {
     const Page = pages[i]
