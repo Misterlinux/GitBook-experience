@@ -545,15 +545,91 @@ let colore = useTransition(
 const rein = () => setLista1(shuffle)
 ```
 
-1
+<details>
 
-1
+<summary>useTransition() to set and update style properties with imported objects.</summary>
 
-1
+We npm install lodash (javascript library) and import the shuffle method.
 
-1
+```
+import shuffle from 'lodash.shuffle'
+shuffle([1,2,3,4,5])	//[3, 5, 4, 2, 1]
+```
 
-1
+We **useState()** an array of **style objects** to render and animate with **useTransition()**.                                                                                                                         We _useEffect()_ setInterval() to trigger the **shuffle method.**
+
+```jsx
+//we need to cleanInterval() it before re-starting
+
+export default [
+  {
+    name: 'Rare Wind',
+    description: '#a8edea → #fed6e3',
+    css: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
+    width: 120,
+  },
+  ...
+]
+
+import data1 from './Data1'
+const [lista, setLista] = useState(data1)
+
+useEffect(() => {
+  const t = setInterval(() => setLista(shuffle), 2000)
+  return () => clearInterval(t)
+}, [])
+```
+
+We update the **counter** on the **array**.**method** argument and to set the **style property (x)**.
+
+```jsx
+//We update the counter and set spring objects with the imported object
+
+let spazio = 0
+
+const transitions = useTransition(
+  lista.map(data => ({ ...data, x: (spazio += data.width) - data.width })),
+  {
+    key: (item) => item.name,
+    from: { width: 0, opacity: 0 },
+    update: ({ x }) => ({ x }),
+    enter: ({ x, width }) => ({ x, width, opacity: 1, height: 80 }),
+    leave: { width: 0, opacity: 0 },
+  }
+)
+```
+
+We use the **counter** to style the **container**, the **spring** object to style the <mark style="background-color:blue;">\<animated></mark>, and the imported **object properties** to style the single-_child components_.
+
+<pre class="language-jsx"><code class="lang-jsx"><strong>&#x3C;div className="list1" style={{ width: spazio }} onClick={mischia} >
+</strong>
+  {transitions( (style, item, t, index) => (
+    &#x3C;animated.div className="card1" style={{ ...style }}>
+
+      &#x3C;div className="details1" style={{ backgroundImage: item.css }} />
+
+    &#x3C;/animated.div>
+  ))}
+&#x3C;/div>
+</code></pre>
+
+The components share the same space (width) with position: absolute.
+
+```
+.card1 {
+  position: absolute;
+  height: inherit;
+  padding: 15px;
+}
+
+.details1 {
+  height: 100%;
+}
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/useTransition1.gif" alt=""><figcaption><p>useTransition() on {x} updated style property</p></figcaption></figure>
 
 ### React-use-measure on events and react-spring animations
 
