@@ -494,6 +494,57 @@ const transitions = useTransition(activeIndex, {
 {% endtab %}
 {% endtabs %}
 
+To render **multiple \<animated>** elements we put an **array** as a **useTransition**() argument.
+
+```jsx
+//The elements will overlay if position: absolute
+let lista = [{ numba: 1,chiave: "unn"}, ... ]
+
+let multipli = useTransition(
+  lista1.map((x)=> ({...x})),
+  {
+    key: (item)=> (item.chiave),
+    from: {opacity: 0},
+    enter: { opacity: 1, background: "red", x: 20, margin: 10 },
+    leave: {opacity: 0}
+  }
+)
+
+<div>
+  {multipli( (style, item, t, index)=>(
+    <animated.div className="boxo text-center" style={{...style}}>
+      <p className='text-white'>Index {index}</p>
+    </animated.div>
+    ))
+  }
+</div>
+```
+
+<figure><img src="../.gitbook/assets/firstoTrans.png" alt="" width="299"><figcaption><p>useTransition() multiple elements</p></figcaption></figure>
+
+We can **dynamically** create **style** properties during the array methods, which we extract and use in the <mark style="background-color:blue;">**enter**</mark> object.
+
+The **update()** property **animates** its extracted style **properties** each time the array **argument changes**, it also requires the property value to be set using an **external counter.**
+
+```jsx
+//The elements don't change, only their properties
+//Each ypdate will translate3D() the previous x properties values.
+let y= 0;
+
+let colore = useTransition( 
+  lista1.map((x)=> ({ ...x, x: y+= x.numba*25}) ), 
+  {
+    key: (item)=> (item.chiave ),
+    from: { opacity: 0 },
+    update: ({x}) => ({x}),
+    enter: ({x}) => ({ opacity: 1, background: "red", x}),
+    leave: { opacity: 0 },
+  }
+)
+
+const rein = () => setLista1(shuffle)
+```
+
 1
 
 1
