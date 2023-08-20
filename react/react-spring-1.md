@@ -750,6 +750,18 @@ function checkin(){
 
 <figure><img src="../.gitbook/assets/fillAnimation.png" alt="" width="335"><figcaption><p>Animated width property on useState()</p></figcaption></figure>
 
+The **matchMedia()** method returns the **media-query string** value and the **useMeasure()** on _resize._
+
+1
+
+1
+
+1
+
+1
+
+1
+
 1
 
 1
