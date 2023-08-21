@@ -750,15 +750,49 @@ function checkin(){
 
 <figure><img src="../.gitbook/assets/fillAnimation.png" alt="" width="335"><figcaption><p>Animated width property on useState()</p></figcaption></figure>
 
-The **matchMedia()** method returns the **media-query string** value and the **useMeasure()** on _resize._
+The **matchMedia()** method returns _true_ if the document **matches** (or is higher) than its _media-query string_.
 
-1
+```
+//If width > 1000 then matchMedia("(min-width:1000px)").matches == true
+//We add/remove an eventListener ("resize") to update the useState() match value
 
-1
+const colonne = useMedia(
+  ['(min-width: 1100px)', '(min-width: 900px)', '(min-width: 600px)'], [5, 4, 3], 2)
 
-1
+//The array integers are linked to the media queries, 2 is returned if not match
+function useMedia(queries, values, defaultValue) {
 
-1
+  function match(){      
+    return values[queries.findIndex(q => matchMedia(q).matches)] || defaultValue
+  }
+  const [value, set] = useState(match)
+
+  useEffect(() => {
+    const handler = () => set(match)
+    window.addEventListener("resize", handler)
+    return () => window.removeEventListener("resize", handler)
+  }, [])
+
+  return value
+}
+```
+
+We **useMeasure()** to dynamically **set** the column's **width** on **media queries**.
+
+```
+//On resize the number and width of the columns will vary
+
+const [ref, { width }] = useMeasure()
+const [items, set] = useState(Data)
+
+let wide = width / colonne
+
+<div ref={ref} className="text-center">
+  <p> Each of the {colonne} columns will be {wide} px</p>
+</div>
+```
+
+<figure><img src="../.gitbook/assets/columnsWidth.png" alt="" width="428"><figcaption><p>columns and with on resize</p></figcaption></figure>
 
 1
 
