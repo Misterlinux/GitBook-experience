@@ -759,7 +759,7 @@ The **matchMedia()** method returns _true_ if the document **matches** (or is hi
 const colonne = useMedia(
   ['(min-width: 1100px)', '(min-width: 900px)', '(min-width: 600px)'], [5, 4, 3], 2)
 
-//The array integers are linked to the media queries, 2 is returned if not match
+//value being the array integer sharing the media-query index
 function useMedia(queries, values, defaultValue) {
 
   function match(){      
@@ -794,11 +794,102 @@ let wide = width / colonne
 
 <figure><img src="../.gitbook/assets/columnsWidth.png" alt="" width="428"><figcaption><p>columns and with on resize</p></figcaption></figure>
 
+We **import** an **array** of images objects as an **useState**(), to use in the useTransition().
+
+```
+export default [
+  { css: 'https://images.pexels.com/.../pexels-photo-416430.jpeg', height: 150 },
+  ...
+]
+
+import Data from './Data';
+const [items, set] = useState(Data)
+
+```
+
+{% tabs %}
+{% tab title="Render and shuffle images" %}
 1
 
 1
 
 1
+
+1
+
+1
+
+1
+
+1
+{% endtab %}
+
+{% tab title="Add column images onClick()" %}
+We _useState()_ the "columns **height**" array and the **current** rendered **images**.
+
+```
+let [hel, setHel] = useState( new Array(colonne).fill(0) )
+let [images, setImages] = useState([ ])
+```
+
+We **useState()** to **update** the current **index** image from the imported array.
+
+```
+let [indice, setIndice] = useState(0)
+function add(){
+  setIndice((x)=> x+ 1 )
+}
+
+//we set the columns height (on min index),the x, y and height style props
+useEffect(()=>{
+
+  let imma = items[indice]
+  let column = hel.indexOf(Math.min(...hel)) 
+  let newhel = [...hel]
+
+  let x = (width / colonne) * column;
+  let y = ( newhel[column] += imma.height ) - imma.height
+  setHel( newhel )
+
+  let cred = [...images]
+  cred.push( {  ...imma ,x, y, height: imma.height } )
+  setImages( cred )
+
+}, [indice])
+
+```
+
+We use the returned image object in the array for the useTransition()
+
+```
+
+const transitions = useTransition(images, {
+  key: item => item.css,
+  from: ({ x, y, width, height }) => ({ x, y, width: 0, height, opacity: 0}),
+  enter:({ x, y, width, height }) => ({ x, y, width: wide, height, opacity: 1})
+  update: ({ x, y, width, height }) => ({ x, y, width: wide, height }),
+})
+
+<div ref={ref} className="text-center list" style={{ height:Math.max(...hel)}}>
+  {transitions((style, item) => (
+    <animated.div style={style}>
+      <div style={
+        {backgroundImage: `url(${item.css}?auto=compress&dpr=2&h=500&w=500)`}
+       }/>
+    </animated.div>
+  ))}
+</div>
+
+
+```
+
+1
+
+1
+
+1
+{% endtab %}
+{% endtabs %}
 
 1
 
