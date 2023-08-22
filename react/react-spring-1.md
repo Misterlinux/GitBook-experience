@@ -804,24 +804,71 @@ export default [
 
 import Data from './Data';
 const [items, set] = useState(Data)
-
 ```
 
 {% tabs %}
 {% tab title="Render and shuffle images" %}
-1
+We import the **lodash.shuffle** method to use on useEffect().
 
-1
+```
+//npm install lodash is a javascript utility library
+//or npm install lodash.shuffle if it doesn't work
+import shuffle from 'lodash.shuffle'
 
-1
+useEffect(() => {
+  const t = setInterval(() => set(shuffle), 50000)
+  return () => clearInterval(t)
+}, [])
+```
 
-1
+We store the (container) **height** and the spring-style **images array** on a **useMemo**(), it will change on dependency shuffle (items order change).
 
-1
+```
+//Height values are set during y
 
-1
+const [heights, gridItems] = useMemo(() => {
+  let heights = new Array(columns).fill(0) 
 
-1
+  let gridItems = items.map((child, i) => {
+    const column = heights.indexOf(Math.min(...heights)) 
+
+    const x = (width / columns) * column 
+    const y = (heights[column] += child.height / 2) - child.height / 2 
+
+    return { ...child, x, y, width: width/ columns, height: child.height / 2 }
+  })
+
+  return [heights, gridItems]
+}, [columns, items, width])
+```
+
+On shuffle the images **translate-X/Y**, change **column** array **position**, and the (max) height container is updated.
+
+```
+//trail is the delay of images overlapping during the transition
+
+const transitions = useTransition(gridItems, {
+  key: item => item.css,
+  from: ({ x, y, width, height }) => ({ x, y, width, height, opacity: 0 }),
+  enter: ({ x, y, width, height }) => ({ x, y, width, height, opacity: 1 }),
+  update: ({ x, y, width, height }) => ({ x, y, width, height }),
+  leave: { height: 0, opacity: 0 },
+  config: { mass: 5, tension: 500, friction: 100 },
+  trail: 5,
+})
+
+<div ref={ref} className="list" style={{ height: Math.max(...heights) }}>
+  {transitions((style, item) => (
+    <animated.div style={style}>
+      <div style={
+       { backgroundImage: `url(${item.css}?auto=compress&dpr=2&h=500&w=500)`}
+      } />
+    </animated.div>
+  ))}
+</div>
+```
+
+<figure><img src="../.gitbook/assets/shuffleColumn.png" alt=""><figcaption><p>shuffle useTransition() images array</p></figcaption></figure>
 {% endtab %}
 
 {% tab title="Add column images onClick()" %}
@@ -840,7 +887,7 @@ function add(){
   setIndice((x)=> x+ 1 )
 }
 
-//we set the columns height (on min index),the x, y and height style props
+//we set the column's height (on min index), the x, y, and height style props
 useEffect(()=>{
 
   let imma = items[indice]
@@ -859,9 +906,10 @@ useEffect(()=>{
 
 ```
 
-We use the returned image object in the array for the useTransition()
+We **render** the **useTransition**() image array on the **max**-height-**column** styled container&#x20;
 
 ```
+//we need the auto=compresses to load the images faster
 
 const transitions = useTransition(images, {
   key: item => item.css,
@@ -880,18 +928,35 @@ const transitions = useTransition(images, {
   ))}
 </div>
 
-
 ```
 
-1
+<figure><img src="../.gitbook/assets/addedColonne.png" alt="" width="563"><figcaption><p>added useTransition() images and higher container</p></figcaption></figure>
+{% endtab %}
 
-1
+{% tab title="CSS images" %}
+In both examples, the images need position absolute to share the same line.
 
-1
+```
+.list {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.list > div {
+  position: absolute;
+  padding: 15px;
+}
+
+.list > div > div {
+  background-size: cover;
+  background-position: center center;
+  width: 100%;
+  height: 100%;
+}
+```
 {% endtab %}
 {% endtabs %}
-
-1
 
 1
 
