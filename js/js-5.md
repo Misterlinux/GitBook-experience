@@ -50,21 +50,21 @@ let maximus = Math.max( ...mat )              //100
 This depends on **iterals,** including objects, **spread** enumerates/expands its elements while **rest** "condenses" them:
 
 ```
-//we can .concat() objects, but if same properties overwrite happens
+//we can .concat() objects, but if the same properties overwrite happens
 
 const obj1 = { foo: 'bar', x: 42 };
 const obj2 = { foo: 'baz', y: 13 };
 
-console.log( {...obj1, ...obj2} )    //{foo: "baz"; x: 42; y: 13 } including a [[prototype]]
+console.log( {...obj1, ...obj2} )    
+//{foo: "baz"; x: 42; y: 13 } including a [[prototype]]
 
 //BUT you won't be able to iterate an object into an array in any way
-
 const obje = { key1: 'value1' }
 const hel = { key2: "value2"}
 console.log( [ ...obj, ...hel] )    //ERROR, obje is not iterable
 
 const obj = { 0: "a", 1: "b", length: 2 };
-const [a, b] = obj;                //ERROR obj ot iterable
+const [a, b] = obj;                //ERROR obj is not iterable
 
 //BUT ALSO you can iterate arrays into objects
 //in an array, all indices are enumerable's own properties 
@@ -84,29 +84,22 @@ Also kind of fringe but we can **parse variables over functions**:
 
 ```
 //We can take a function returned values
-
-function f(){
-    return [12, 13]
-}
+const f = () => { [12, 13] }
 
 const [a,b]= f()
-
 console.log(a, b)    //12, 13
-
 ```
 
-This allows us to work with **Index** _without_ \[] or methods:
+We can **extract** or change the **order** of the array's **indexes** without \[] or methods.
 
 ```
-//For example by using REST on the other arrays elements, we don't get an array in this case
-//instead of using .shift()
+//We use REST instead of .shift() and don't get an array
 let deck = [1,1,1,2,3,4,55,6,6,5,4,6]
 
 function getFirstCard(deck) {
     const [uno, ...rest] = deck
     return uno
 }
-
 console.log( getFirstCard(deck) )        // 1  
 
 //and we can use the SPREAD to change the order of array indexes
@@ -116,67 +109,51 @@ function getFirstCard(deck) {
   const [uno, due, ...rest] = deck
   return [due, ...rest, uno]
 }
-
 console.log( getFirstCard(deck1) )        //[500, 1, 2, 3, 55, 6, 5, 4, 6, 1]
-
 ```
 
-As for using them **as parameters and variables** remember that:
+A **parameter** can be **destructed** and its value changes with **\[...]**.
 
 ```
-//we can destruct the array parameter of a function
-
 let deck = [ 100, 23, 45, 12, 34 ]
 
-function first( [uno,due, ...resto ]=deck ){
+function first( [uno,due, ...resto ]= deck ){
   return [...rest, uno, due]      //[45, 12, 34, 100, 23]
   return [rest, uno, due]         //[Array(3), 100, 23]
 }
 
-//resto variable can be used without the ..., instead of just passing its values it becomes an array
-//we can use it to also pick indexes
+//Without the spread operator it returns an array
+//we can use empty commas for array variables 
 
 function second([,due]= deck ){
   return due          //2
   return [due]        //[2] if you need it as an array
 }
-
 ```
 
-And in _**objects**_ we can edit the properties:
+The _rest operator_ can **edit**, **add**, and keep object **properties**.
 
 ```
+//We added and edited properties while keeping the rest with ...dog
 const dog = {
   name: "Lucas",
   age: 7,
   breed: "cocker"
 }
-
 const dogOwner = { ...dog, owner: "Juan", breed: "cocker spaniel"}
-//we changed the breed and added a "OWNER" property in the new object
-console.log( dogOwner )          //{ name: 'Lucas', age: 7, breed: 'cocker spaniel', owner: 'Juan' }
 
+console.log( dogOwner )         
+//{ name: 'Lucas', age: 7, breed: 'cocker spaniel', owner: 'Juan' }
 ```
 
-We can use **destructuring assignment** syntax to extract values from arrays (or objects):
+We can use **destructuring assignment** syntax to extract values from **objects**:
 
 ```
-//we can assign variable to array elements in order
-const x = [1,2,3,4,5] 
-const [well, lol] = x
-console.log( well )            // 1
-console.log( lol )             // 2
-//and in case we want to skip some we useempty comma
-let [ , , ,wen] = x
-console.log( wen )             //4
-
 let horse = {
-  name: "uni",
-  age: 10,
-  breed: "winn"
+  name: "uni", age: 10, breed: "winn"
 }
 
-//we keep the objects property name on objects as parameters
+//We keep the object's property name on objects as parameters
 function destructuring(obj) {
   let { name, age, breed } = obj
   return age ;
@@ -190,10 +167,8 @@ console.log( breed )              //"winn"
 We can use it in different ways:
 
 ```
-let [firstName, surname] = "John Doe oltre".split(' ');    //the .split returnes [ 'John', 'Doe', 'oltre' ]
-console.log( firstName, surname )    //"John Doe" we can assign the first 2 values 
-
-//we can add properties to pre-existent objects using __proto__ (the [[prototype]] of the object)
+//We can add properties to pre-existent objects using __proto__ 
+(the [[prototype]] of the object)
 
 let novo = { 
   tent: 1,
