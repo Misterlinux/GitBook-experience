@@ -164,43 +164,6 @@ let {name, breed} = horse
 console.log( breed )              //"winn"
 ```
 
-We can use it in different ways:
-
-```
-//We can add properties to pre-existent objects using __proto__ 
-(the [[prototype]] of the object)
-
-let novo = { 
-  tent: 1,
-  cove: 2
-}
-
-novo.__proto__.gron = "il nuovo"
-console.log( novo.unn )      //"il nuovo"
-
-```
-
-We can edit \[\[prototype]] also using **.setPrototypeOf(),** for additional objects**:**
-
-```
-let har = {
-  state: "Haryana",
-  country: "nevada"
-}
-
-let inn = {
-  country: "India"
-}
-
-Object.setPrototypeOf(har, inn);
-
-//it the first object body properties still take priority so you will get
-console.log(har.country)    //"nevada"
-
-```
-
-<figure><img src="../.gitbook/assets/PROTOTYPEobjects.PNG" alt=""><figcaption><p>har.__<em>proto</em>__.country will be "india"</p></figcaption></figure>
-
 And for _nested objects,_ we can assign**:**
 
 ```
@@ -389,9 +352,9 @@ for(let x of l){
 }
 ```
 
+1
 
-
-
+1
 
 **Error is a javascript object**, with **.message** and **.name** being its main **property**:
 
