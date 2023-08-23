@@ -16,7 +16,7 @@ defaultParameter()           //"sam"
 
 ```
 
-We can also use the **spread/rest operator** on arrays and objects:
+The **rest/spread operators** store and expand array/object elements.
 
 ```
 //The REST operator can store the latter portion of the array,
