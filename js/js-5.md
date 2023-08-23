@@ -13,74 +13,100 @@ function defaultParameter(name = "sam") {
 
 defaultParameter("oltre")    //"oltre"
 defaultParameter()           //"sam"
-
 ```
 
 The **rest/spread operators** store and expand array/object elements.
 
+{% tabs %}
+{% tab title="Array iterals" %}
+The Rest operator can store only at the end of its array.
+
 ```
-//The REST operator can store the latter portion of the array,
-//It has to be the last element of the array because it can't be followed by a comma
+//Rest collect the array values as a variable
 let [uno, ...due] = [1,2,2,3,4,5,6,8]
 console.log( due )                      //[2, 2, 3, 4, 5, 6, 8]
 
-//The SPREAD operator can sum arrays or use it to perform operations
+//Spread expands an army into the element
 const oneToFive = [1, 2, 3, 4, 5];
-const oneToTen = [...oneToFive, 6, 7, 8, 9, 10];
+const oneToTen = [...oneToFive, 6, 7, 8];    //[1, 2, 3, 4, 5, 6, 7, 8]
+```
 
-console.log(oneToTen)        //[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+We can **spread** the **rest** variable in **any** array **index** position.
 
-//We can use it as .concat() method followng the order of the function parameters
+```
+let deck1 = [1,500,1,2,3,55,6,5,4,6]
+
+const [uno, due, ...rest] = deck
+console.log( [due, ...rest, uno] )    //[500, 1, 2, 3, 55, 6, 5, 4, 6, 1]
+
+//without the ...spread it would return an array
+console.log( [due, rest, uno] )    //[500, [1, 2, 3, 55, 6, 5, 4, 6] , 1]
+```
+
+We can **rest** a **parameter** and use **empty commas** to skip array elements:
+
+```
+let deck = [ 100, 23, 45, 12, 34 ]
+
+function skip( [, , ...rest] ){
+  return [..rest]    
+}
+
+skip( deck )    //[45, 12, 34]
+```
+
+1
+{% endtab %}
+
+{% tab title="Objects iterals" %}
+To **spread objects** you still need to use use **{}:**
+
+```
+//If we concat() objects with the same property there is overwrite
+const obj1 = { foo: 'bar', x: 42 };
+const obj2 = { foo: 'baz', y: 13 };
+
+console.log( {...obj1, ...obj2} }    //{foo: "baz"; x: 42; y: 13 }
+
+//you cant iterate objects into an array wisth spread
+console.log( [ ...obj1, ...obj2] )    //ERROR, obje is not iterable
+
+const obj = { 0: "a", 1: "b", length: 2 };
+const [a, b] = obj;                //ERROR obj is not iterable
+
+//But arrays can iterate in object
+const array = [11, 21, 31];
+console.log( {..array} )    //{ 0: 11; 1: 21; 2: 3
+```
+{% endtab %}
+{% endtabs %}
+
+It can work as a **concat**() and **split**() method, also for **Math** operations.
+
+```
+//Spread as concat() will render using the variables order
 function combineArrays(arr1, arr2, arr3) {
   return [...arr3 , ...arr2, ...arr1];
 }
 combineArrays( [12, 34], [23, 45], [100] )    //[ 100, 23, 45, 12, 34 ]
 
-//Or as .split("") method on strings
+//We can use Spread on strings
 let siamo = "siamo"
 [...siamo]                   //['s', 'i', 'a', 'm', 'o']
 siamo.split("")              //['s', 'i', 'a', 'm', 'o']
 
-//Or for Math operations without needing to loop/filter the array elemets
+//On Math we don't need loops/filters
 let mat = [1, 25, 50, 100]
 let maximus = Math.max( ...mat )              //100 
-
 ```
 
-This depends on **iterals,** including objects, **spread** enumerates/expands its elements while **rest** "condenses" them:
-
-```
-//we can .concat() objects, but if the same properties overwrite happens
-
-const obj1 = { foo: 'bar', x: 42 };
-const obj2 = { foo: 'baz', y: 13 };
-
-console.log( {...obj1, ...obj2} )    
-//{foo: "baz"; x: 42; y: 13 } including a [[prototype]]
-
-//BUT you won't be able to iterate an object into an array in any way
-const obje = { key1: 'value1' }
-const hel = { key2: "value2"}
-console.log( [ ...obj, ...hel] )    //ERROR, obje is not iterable
-
-const obj = { 0: "a", 1: "b", length: 2 };
-const [a, b] = obj;                //ERROR obj is not iterable
-
-//BUT ALSO you can iterate arrays into objects
-//in an array, all indices are enumerable's own properties 
-
-const array = [11, 21, 31];
-console.log( {..array} )    //{ 0: 11; 1: 21; 2: 31 }
-
-```
-
-Which is also the better way to **clone** arrays:
+Which is also the better way to **clone**:
 
 ```
 let newDeck = [...deck];
 ```
 
-Also kind of fringe but we can **parse variables over functions**:
+We can **parse variables** on **function return**:
 
 ```
 //We can take a function returned values
@@ -88,47 +114,6 @@ const f = () => { [12, 13] }
 
 const [a,b]= f()
 console.log(a, b)    //12, 13
-```
-
-We can **extract** or change the **order** of the array's **indexes** without \[] or methods.
-
-```
-//We use REST instead of .shift() and don't get an array
-let deck = [1,1,1,2,3,4,55,6,6,5,4,6]
-
-function getFirstCard(deck) {
-    const [uno, ...rest] = deck
-    return uno
-}
-console.log( getFirstCard(deck) )        // 1  
-
-//and we can use the SPREAD to change the order of array indexes
-let deck1 = [1,500,1,2,3,55,6,5,4,6]
-
-function getFirstCard(deck) {
-  const [uno, due, ...rest] = deck
-  return [due, ...rest, uno]
-}
-console.log( getFirstCard(deck1) )        //[500, 1, 2, 3, 55, 6, 5, 4, 6, 1]
-```
-
-A **parameter** can be **destructed** and its value changes with **\[...]**.
-
-```
-let deck = [ 100, 23, 45, 12, 34 ]
-
-function first( [uno,due, ...resto ]= deck ){
-  return [...rest, uno, due]      //[45, 12, 34, 100, 23]
-  return [rest, uno, due]         //[Array(3), 100, 23]
-}
-
-//Without the spread operator it returns an array
-//we can use empty commas for array variables 
-
-function second([,due]= deck ){
-  return due          //2
-  return [due]        //[2] if you need it as an array
-}
 ```
 
 The _rest operator_ can **edit**, **add**, and keep object **properties**.
