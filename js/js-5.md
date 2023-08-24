@@ -53,8 +53,6 @@ function skip( [, , ...rest] ){
 }
 skip( deck )    //[45, 12, 34]
 ```
-
-1
 {% endtab %}
 
 {% tab title="Objects iterals" %}
@@ -132,19 +130,35 @@ console.log( unato + " " + mode)                        //123 wannabe
 console.log( scato.listato[0] + " " + scato.yuse.mode ) //123 wannabe
 ```
 
-1
+We can also **Loop** through a **deconstructed object parameter**:
 
 ```
-// Some code
+//We loop through an array of objects
+const people = [
+  {
+    name: 'MIKE',
+    family: {
+      mother: 'Jane Smith',
+      father: 'Harry Smith',
+      sister: 'Samantha Smith',
+    }
+  },
+  ...
+];
 
+//We deconstruct and OF loop
+for (const { name: n, family: { father } } of people) {
+  console.log(`Name: ${n}, Father: ${father}`);
+}
 
+//Name: MIKE, Father: Harry Smith; Name: TOM, Father: Richard Jones
 ```
 {% endtab %}
 {% endtabs %}
 
 It can work as a **concat**() and **split**() method, also for **Math** operations.
 
-```
+```jsx
 //Spread as concat() will render using the variables order
 function combineArrays(arr1, arr2, arr3) {
   return [...arr3 , ...arr2, ...arr1];
@@ -190,175 +204,62 @@ let [gui, pui] = guiss(5,1)        //the returns will be in array order
 console.log( gui, pui )            //6, 4
 ```
 
-1
+### Error constructor and Object
 
-1
-
-1
-
-We can also **Loop** through a **deconstruct object parameter**:
+**Error is a javascript object**, with **.message** and **.name** being its main **property,** and when **throw** it will stop the code.
 
 ```
-//We loop trought an array of objects
-
-const people = [
-  {
-    name: 'MIKE',
-    family: {
-      mother: 'Jane Smith',
-      father: 'Harry Smith',
-      sister: 'Samantha Smith',
-    }
-  },
-  {
-    name: 'TOM',
-    family: {
-      mother: 'Norah Jones',
-      father: 'Richard Jones',
-      brother: 'Howard Jones',
-    }
-  }
-];
-
-//while being const we can't modify property n and father, AND first we deconstruct
-//Then we loop with OF array
-for (const { name: n, family: { father } } of people) {
-  console.log(`Name: ${n}, Father: ${father}`);
-}
-
-//Name: MIKE, Father: Harry Smith; Name: TOM, Father: Richard Jones
-
-```
-
-And we can also get **.entries()** for property/key-value pairs, **array iteration**:
-
-```
-//arrays will have their index
-let frut = [123, "wall", "proll"]   //we get index and value
-const f = frut.entries()          
-
-for( const entry of f){
-  console.log( entry )              //[ 0, 123 ],[ 1, 'wall' ],[ 2, 'proll' ]
-}
-
-
-//for Objects we would need a loop to show the array iteration object
-let ultron = {
-  doing: "firsto",
-  dell: "secondo"
-}
-Object.entries(ultron)      //[ [ 'doing', 'firsto' ], [ 'dell', 'secondo' ] ]
-//we get the an array with arrays of pairs
-
-const l = Object.entries(ultron)
-for(let x of l){
-  console.log( x )          //  ['doing', 'firsto'], ['dell','secondo']
-}
-```
-
-1
-
-1
-
-**Error is a javascript object**, with **.message** and **.name** being its main **property**:
-
-```
-//we can create Error objects with their message, THEN throw them if we want to block
-//the code with red messages
-
+//new Error being its constructor
 let errore= "Error number " + Math.random()
-const blokka= new Error(errore)    //we include in () the Error.message
+const blokka= new Error(errore)    //the argument being the error.message
 
 console.log(blokka)
 console.log(blokka.message)
 throw blokka                       //throw new Error(errore)
-
-//when we throw we block the entire code sequence
-
 ```
 
 <figure><img src="../.gitbook/assets/ERRORATO.PNG" alt=""><figcaption><p>we get the error printed and its .message property</p></figcaption></figure>
 
-There are **Built-in constructor errors** SyntaxError, ReferenceError and TypeError:
+There are **Built-in constructor errors** SyntaxError, ReferenceError, and TypeError:
 
 ```
 //their object.name is included
-
 let error = new ReferenceError("this is the argument");
 
 console.log(error.name);    // ReferenceError
 console.log(error.message); // this is the argument
-
 ```
 
-To Error handling the code we use **TRY** and **CATCH**:
+To _Error handling_, we **TRY** (the throw error) and **CATCH** (a response) without breaking the code:
 
-```
-//We use TRY to see if we get a throw Error, if we do we CATCH the (error) and perform an action
+```jsx
+//Both need to share the same space (like in a function)
 
 try{
     throw new Error("printed after try")
 }catch(error){
     console.log(error.message)        //printed after try
-    //we get printed the error.message without blocking the code 
 }
-
 ```
 
-**Try** and **Catch** will work only on runnable code:
-
-```
-//if the code itself has syntaxErrors it won't work
-
-try {
-  {{{{{{{{{{{{
-} catch (err) {
-  console.log("this won't work")
-}
-
-```
-
-If errors occur in "scheduled code" like setTimeout(), we need to place the Try and Catch inside:
-
-```
-//The function will be executed after the try catch, so it won't work
-
-try {
-  setTimeout(function() {
-    //won't be catched
-  }, 1000);
-} catch (err) {
-  alert( "won't work" );
-}
-
-//catching the entire setTimeout function()
-setTimeout(function() {
-  try {
-    error;         //will be cought
-  } catch(err) {
-    alert(err)
-  }
-}, 1000);
-
-```
-
-When **parsing** some **JSON() code** into a **Js object** we can test more errors:
+**TRY** can also catch standard code errors:
 
 ```
 try {
-  let jj= { errorato }      
+  let jj= { element }      
   let user = JSON.parse(jj); 
 } catch (err) {
-  console.log( err );      //ReferenceError for errorato not being defined
+  console.log( err );      //ReferenceError for element not being defined
 }
-
 ```
 
-We may need to **throw new Errors** for Errors that don't stop the runtime code:
+<details>
+
+<summary>Filtering and reThrowing Errors</summary>
+
+We can put **TRY conditions** to trigger and catch a **new Error**():
 
 ```
-//This code returns undefined, but we need for it to be visible as an error
-
 let jia = '{ "age": 301 }'; 
 
 try {
@@ -369,90 +270,27 @@ try {
   }
   
 } catch (err) {
-  console.log( "even if .name returns undefined, we need it as an Error" );
+  console.log( "There is no name, use a backup" );
 }
-
 ```
 
-We use **reThrowing** when we need a specific type of Error:
+We **filter** the **error**.name with **instanceof**  on **catch**{}
 
 ```
-//Catch gets an object, we check if it's an instance of the error we want
-
-let jin = '{ "age": 30 }'; 
-
-try {
-  uker = JSON.parse(pizza);   //object being not defined
-} catch (err) {
-
+catch (err) {
   if (err instanceof ReferenceError) {
-    console.log('just ReferenceError'); 
+    console.log( "There is no name, use a backup" );
   }
 }
-
 ```
 
-We can have multiple and specific **Try, Catch** in and out of a function:
+1
 
-```
-//The function will return an error only for a specific error
+1
 
-function readData() {
-  let json = '{ "age": 30 }';
+1
 
-  try {
-    blabla();                  //this ReferenceError won't be cought  
-  } catch (err) {
-  
-    if (!(err instanceof SyntaxError)) {
-      throw err;               //will block the runtime only on SyntaxError
-    }
-  }
-}
-
-//Any error in the function will be cought by this catch tho
-try {
-  readData();
-} catch (err) {
-  console.log( "EXTERNAL : " + err ); // caught any!
-}
-
-```
-
-If we need code executed _no matter if an error gets caught_ or not we use **finally{}:**
-
-```
-//We create an alert with Error catch/ or not
-
-try {
-  alert( 'try' );
-  if (confirm('Make an error?')) BAD_CODE();
-} catch (err) {
-  alert( 'catch' );
-} finally {
-  alert( 'finally' );
-}
-
-//the finally alert will play in any case
-
-```
-
-Without a Catch{}, Finally{} will execute **right before** the error code crashes, even before the _return_ in the try{} _:_
-
-```
-//Even if the function returns a ReferenceError, we will get the finally
-
-function funcin() {
-    console.log(nonBe)
-}
-
-try{
-  funcin()
-}finally{
-  console.log("play before crash")    //just before the crash
-}
-
-```
+1
 
 In this **Fibonacci** example we use outside variables and Date():
 
@@ -483,26 +321,24 @@ try {
 
 alert(result || "error occurred");
 alert(`execution took ${diff}ms` );
-//comparing the Date() we get the ms it took for the operation, be it error or not
-
+//comparing the Date() we get the ms it took for the operation, 
+be it error or not
 ```
 
-We **extend objects to** have specific **errors**:
+</details>
+
+The **finally{}** code gets executed right **before** an error is **catch**:
 
 ```
-class CustomError extends Error {
-    //if it has a constructor() you need to include a Super() for it to work
-}
+//finally{} can trigger without a catch{}
 
 try {
-    throw new CustomError();
-} catch (error) {
-  if (error instanceof CustomError) {
-    console.log('The error thrown is an instance of the CustomError');
-  }else{
-    console.log("This didn't work")
-  }
+  alert( 'try' );
+  if (confirm('Make an error?')) BAD_CODE();
+} catch (err) {
+  alert( 'catch' );
+} finally {
+  alert( 'finally' );
 }
-
 ```
 
