@@ -31,7 +31,7 @@ const oneToFive = [1, 2, 3, 4, 5];
 const oneToTen = [...oneToFive, 6, 7, 8];    //[1, 2, 3, 4, 5, 6, 7, 8]
 ```
 
-We can **spread** the **rest** variable in **any** array **index** position.
+We can **spread** the **rest** variables in **any** array **index** position.
 
 ```
 let deck1 = [1,500,1,2,3,55,6,5,4,6]
@@ -39,7 +39,7 @@ let deck1 = [1,500,1,2,3,55,6,5,4,6]
 const [uno, due, ...rest] = deck
 console.log( [due, ...rest, uno] )    //[500, 1, 2, 3, 55, 6, 5, 4, 6, 1]
 
-//without the ...spread it would return an array
+//Without the ...spread it would return an array
 console.log( [due, rest, uno] )    //[500, [1, 2, 3, 55, 6, 5, 4, 6] , 1]
 ```
 
@@ -51,7 +51,6 @@ let deck = [ 100, 23, 45, 12, 34 ]
 function skip( [, , ...rest] ){
   return [..rest]    
 }
-
 skip( deck )    //[45, 12, 34]
 ```
 
@@ -59,16 +58,16 @@ skip( deck )    //[45, 12, 34]
 {% endtab %}
 
 {% tab title="Objects iterals" %}
-To **spread objects** you still need to use use **{}:**
+To **spread objects** you still need to use **{}:**
 
 ```
-//If we concat() objects with the same property there is overwrite
+//If we concat() objects with the same property there is an overwrite
 const obj1 = { foo: 'bar', x: 42 };
 const obj2 = { foo: 'baz', y: 13 };
 
 console.log( {...obj1, ...obj2} }    //{foo: "baz"; x: 42; y: 13 }
 
-//you cant iterate objects into an array wisth spread
+//you cant iterate objects into an array with spread
 console.log( [ ...obj1, ...obj2] )    //ERROR, obje is not iterable
 
 const obj = { 0: "a", 1: "b", length: 2 };
@@ -77,6 +76,68 @@ const [a, b] = obj;                //ERROR obj is not iterable
 //But arrays can iterate in object
 const array = [11, 21, 31];
 console.log( {..array} )    //{ 0: 11; 1: 21; 2: 3
+```
+
+The **destructuring assignment** syntax extracts **properties** by **keep**ing their **names**:
+
+```
+let horse = {
+  name: "uni", age: 10, breed: "winn"
+}
+
+function destructuring(obj) {
+  let { name, age, breed } = obj
+  return age ;
+}
+destructuring(horse)              //10
+
+let {name, breed} = horse
+console.log( name )              //"uni"
+
+//We set the extracted property's new name with
+let {name: nuovo, breed } = horse
+console.log( nuovo )             //"uni
+```
+
+The _rest operator_ can **edit**, **add**, and keep object **properties**.
+
+```
+//We added and edited properties while keeping the rest with ...dog
+const dog = {
+  name: "Lucas",
+  age: 7,
+  breed: "cocker"
+}
+const dogOwner = { ...dog, owner: "Juan", breed: "cocker spaniel"}
+
+console.log( dogOwner )         
+//{ name: 'Lucas', age: 7, breed: 'cocker spaniel', owner: 'Juan' }
+```
+
+We **extract nested** objects with double **{}**:
+
+```
+let scato = {
+  yuse: {
+    mode: "wannabe",
+    ultro: 1234
+  },
+  listato: [123, 456],
+  alto: true
+}
+
+let {yuse: {mode, ultro},listato: [unato, duato] } = scato
+
+console.log( unato + " " + mode)                        //123 wannabe
+console.log( scato.listato[0] + " " + scato.yuse.mode ) //123 wannabe
+```
+
+1
+
+```
+// Some code
+
+
 ```
 {% endtab %}
 {% endtabs %}
@@ -109,107 +170,14 @@ let newDeck = [...deck];
 We can **parse variables** on **function return**:
 
 ```
-//We can take a function returned values
+//We can take a function returns values
 const f = () => { [12, 13] }
 
 const [a,b]= f()
 console.log(a, b)    //12, 13
 ```
 
-The _rest operator_ can **edit**, **add**, and keep object **properties**.
-
-```
-//We added and edited properties while keeping the rest with ...dog
-const dog = {
-  name: "Lucas",
-  age: 7,
-  breed: "cocker"
-}
-const dogOwner = { ...dog, owner: "Juan", breed: "cocker spaniel"}
-
-console.log( dogOwner )         
-//{ name: 'Lucas', age: 7, breed: 'cocker spaniel', owner: 'Juan' }
-```
-
-We can use **destructuring assignment** syntax to extract values from **objects**:
-
-```
-let horse = {
-  name: "uni", age: 10, breed: "winn"
-}
-
-//We keep the object's property name on objects as parameters
-function destructuring(obj) {
-  let { name, age, breed } = obj
-  return age ;
-}
-destructuring(horse)              //10
-
-let {name, breed} = horse
-console.log( breed )              //"winn"
-```
-
-And for _nested objects,_ we can assign**:**
-
-```
-//You can deconstruct object but you neeed to keep the property's name
-let scato = {
-  yuse: {
-    mode: "wannabe",
-    ultro: 1234
-  },
-  listato: [123, 456],
-  alto: true
-}
-
-//so, we can assign object properties {yuse} and array [listato]
-let {
-  yuse: {
-    mode, 
-    ultro
-  },
-  listato: [unato, duato]
-} = scato
-
-//and we can call an objects and array element
-console.log( unato + " " + mode)                        //123 wannabe
-console.log( scato.listato[0] + " " + scato.yuse.mode ) //123 wannabe
-
-```
-
-You can also use **deconstruct objects as parameters**, but need to keep the property name:
-
-```
-//The decostructed properties will pass the property VALUE
-const meta11={
-    uno: "darth",
-    more:{
-        lazer: "guns",
-        ammo: "fire"
-    }
-}
-
-function show11( {more:{lazer}} ){
-    console.log( lazer )
-}
-
-show11(meta11)        //"guns"
-//we can also have objects parameters AND default values in functions
-
-function drawChart({ size = 'big', coords = { x: 0, y: 20 }, radius = 25 } = {}){
-  console.log(size, coords, radius);
-}
-
-drawChart( {
-  coords: { x: 18, y: 30 },
-  radius: 130,
-});
-//"big {x: 18, y: 30} 130", ALSO, coords object will return both default properties
-//ONLY IF the coords: argument is totally absent
-
-```
-
-In **functions** we can also return assigns:
+And **deconstruct** functions' arrays/objects **returns**.&#x20;
 
 ```
 function guiss(q,w){
@@ -222,60 +190,11 @@ let [gui, pui] = guiss(5,1)        //the returns will be in array order
 console.log( gui, pui )            //6, 4
 ```
 
-We can deconstruct an array of function **return results**:
+1
 
-```
-//function to get the longest word in a string
-//without the rest pattern we couldn't work on the array by .split() and .map() for length
-function longino(sent){
-  return Math.max(
-    ...sent.split(" ").map(word=> word.length )
-  )
-}
+1
 
-console.log( longino("Lorem ipsum dolor sit amet consectetur, adipisicing elit. Assumenda, consequatur?"))
-
-```
-
-And in **function parameters**:
-
-```
-let obb = {
-    type: "working",
-    uno: 123,
-}
-//here we need to use the same name in the objects
-const dritto = ( {type, uno } ) => (type, uno)
-console.log( dritto(obb) )                      //working 123
-
-//we can nest a new object to the existing object
-obb.new = {
-    citta: "unova",
-    number: 34
-}
-//and to call it in the parameter we just need an extra {} for the object
-const dentro = ( {new:{number} } ) => console.log(number + " this is the nested values")
-dentro(obb)                  //34 this is the nested values
-
-let options = {
-  title: "Js book",
-  items: ["Item1", "Item2"]
-};
-
-//we create a default property in the function parameter
-function showBook({
-  title = "Javascript",
-  pages = 200,
-  species  = "programming",
-  items = []    //we get the default things EXCEPT THE ITEMS THAT ARE GONNA BE FROM OBJECT
-}) {
-  console.log(`${title} ${species} ${pages}`); // Javascript programming 200
-  console.log(items); // Item1, Item2
-}
-
-showBook(options);  //setting the object used
-
-```
+1
 
 We can also **Loop** through a **deconstruct object parameter**:
 
