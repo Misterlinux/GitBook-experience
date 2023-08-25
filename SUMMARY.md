@@ -22,7 +22,7 @@
 * [JS 1: variables, functions, parameters, array methods, data types, Math operations  and HTML implementation](js/js-1.md)
 * [JS 2, String array methods, If and Switch statements, let and var properties, HTML forms and js validation and setInterval()/setTimeout()](js/js-2.md)
 * [JS 3 Array methods, Objects, Instances, prototypes, Object constructor and extends](js/js-3.md)
-* [JS 5](js/js-5.md)
+* [JS 4, spread and rest operators, Error constructor and object, TRY, CATCH and FINALLY](js/js-4-spread-and-rest-operators-error-constructor-and-object-try-catch-and-finally.md)
 * [JS  6](js/js-6.md)
 * [JS 7](js/js-7.md)
 * [JS 8](js/js-8.md)

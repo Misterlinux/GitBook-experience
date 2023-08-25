@@ -1,8 +1,6 @@
-# JS 5
+# JS 4, spread and rest operators, Error constructor and object, TRY, CATCH and FINALLY
 
-* ERROR and stuff
-* there is more
-* accidenti
+* [Error Object and TRY, CATCH, and FINALLY constructors.](js-4-spread-and-rest-operators-error-constructor-and-object-try-catch-and-finally.md#error-constructor-and-object)
 
 We can use **ES6** Syntax for **default parameter** in a function:
 
@@ -156,7 +154,7 @@ for (const { name: n, family: { father } } of people) {
 {% endtab %}
 {% endtabs %}
 
-It can work as a **concat**() and **split**() method, also for **Math** operations.
+It can also work as a concat() and split() method for **Math** operations.
 
 ```jsx
 //Spread as concat() will render using the variables order
@@ -283,14 +281,6 @@ catch (err) {
   }
 }
 ```
-
-1
-
-1
-
-1
-
-1
 
 In this **Fibonacci** example we use outside variables and Date():
 
