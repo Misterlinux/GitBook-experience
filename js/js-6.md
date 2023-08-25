@@ -3,25 +3,20 @@
 * Promises
 * kinda
 
-A **Promise** is an **object,** it **resolves** or **rejects** an **asynchronous function** and its value, it has the methods _promise.then(), promise.catch() and promise.finally(),_ from Promise.prototype:
+A **Promise** is an **object,** that **resolves** or **rejects** an **asynchronous function** and its value, it has the methods _promise.then(), promise.catch() and promise.finally(),_ from Promise.prototype:
 
 ```
-//It can take one or both parameters (resolve, eject), for the.() and catch() 
+//resolve/reject arguments are the parameters in then(e) and catch(error)
 
 const myPromise = new Promise(function (resolve, reject) {
   let sampleData = [2, 4, 6, 8];
 
-  if (sampleData[1]) {
-    //both resolve/reject RETURN the value in ()
-    resolve( "resolved string" );  
-  } else {
-    reject('An error occured!');
-  }
+  (sampleData[1]) ? resolve( "resolved string" ) : reject('An error occured!');
 });
 
 myPromise
   .then(function (e) {
-    console.log(e);          //4
+    console.log(e);          //"resolved string"
   })
   .catch(function (error) {
     throw new Error(error);  //if reject we get Error('An error occured!')
@@ -29,21 +24,19 @@ myPromise
   .finally(function () {
     console.log('PROMISE COMPLETED');  //printed in any case
 })
-
 ```
 
-The **.then()** method can take 2 arguments, they are callback functions, for the cases of the Promise _resolve_ and _reject,_ while catch() has only one for handling errors:
+The **.then()** method can take **2 arguments**, they are callback functions, for the Promise _resolve_ and _reject,_ while **catch**() has only **one** for handling errors:
 
 ```
 const promise1 = new Promise(function (resolve, reject) {
-  (5> 10) ? resolve('Successo !') : reject("not pervenuted")
+  (5> 10) ? resolve('Successo !') : reject("not prevented")
 });
 
 promise1.then(function (value, none) {
-  console.log(value)      // expected output: "Successo!"
-  console.log(none )      //(in promise) not pervenuted?
+  console.log(value)      // "Successo!" (on resolve) 
+  console.log(none )      // not prevented (on reject)
 });
-
 ```
 
 **Promise.all()** takes an _iterable_ of promises as input, and returns a promise:
@@ -53,10 +46,9 @@ console.log(                //Promise {<pending>}
   Promise.all([1,2,3,4])    //  [[Prototype]]: Promise
 )                           //  [[PromiseState]]: "fulfilled"
                             //  [[PromiseResult]]: Array(4), [[Prototype]]: Array(0)
-
 ```
 
-Promise.all() needs **all its promises** to be resolved, it will wait until _all promises are fulfilled_:
+Promise.all() needs **all its promises** to be _resolved_, it will wait until _all promises are fulfilled_:
 
 ```
 const p1 = Promise.resolve(3);
@@ -93,33 +85,30 @@ Promise.all([
     console.error(values[1]);         // "Error: p2_immediate_rejection"
 })
 
-//if we did Promise.all([ph1, ph2]) we would just get the Error p2
-
+//Promise.all([ph1, ph2]) would just get the Error p2
 ```
 
 ### Api and Fetch()
 
-Fetch() allows us to **send network request** and **load information,** without reloading the page, it returns an **Promise**:
+Fetch() allows us to **send network request** and **load information,** without reloading the page, it returns a **Promise**:
 
 ```
 //without an [options] the fetch() is just a GET downloading content from the url
 
 let promise = fetch(url, [options])    //[options] can be methods/headers
-
 ```
 
 At this stage we don't have a body yet, we check the **HTTPS status** for errors:
 
 ```
+//response.ok refers to HTTP-status 200-299
 let response = await fetch(url);
 
 if (response.ok) { 
-  //if HTTP-status is 200-299 get the response body
   let json = await response.json();
 } else {
   alert("HTTP-Error: " + response.status);
 }
-
 ```
 
 The **response** promise object _provides_ methods to access it in **various formats**:
@@ -130,10 +119,9 @@ response.json() parse the response as JSON
 response.formData() – return the response as FormData object
 response.blob() – return the response as Blob (binary data with type),
 response.arrayBuffer() – return the response as ArrayBuffer (low-level binary data),
-
 ```
 
-The **response** needs to be **await**, for code that has yet to return we use **async functions**.
+The **response** needs to **await**, for code that has yet to return we use **async functions**.
 
 {% tabs %}
 {% tab title="await syntax" %}
@@ -144,15 +132,16 @@ The **response** needs to be **await**, for code that has yet to return we use *
   //without options this is a GET response object
   let response = await fetch(url2);
 
-  //we then Parse it as a json()
+  //We then Parse it as a JSON()
 <strong>  let commits = await response.json(); 
 </strong>
   console.log(response11)
-  console.log(commits7)
-  console.log(commits7[0].author.login);
+  console.log(commits)
+  console.log(commits[0].author.login);
 }
 
-test2()</code></pre>
+test2()
+</code></pre>
 {% endtab %}
 
 {% tab title="promise syntax" %}
