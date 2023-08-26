@@ -165,7 +165,7 @@ simple()
 {% endtab %}
 {% endtabs %}
 
-<figure><img src="../.gitbook/assets/FetchBody.PNG" alt=""><figcaption><p>Response.body / response.json() / a specific property</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/FetchBody.PNG" alt="" width="491"><figcaption><p>Response.body / response.json() / a specific property</p></figcaption></figure>
 
 We can use **await** on simple **promises**:
 
@@ -187,7 +187,7 @@ _Promises_ can only change **from pending to fulfilled** or pending to rejected.
 
 The **Blob** object can represent data as a file-like object that doesn't need to be in a javascript-native format, like **images**.
 
-The **Blob()** _method_ in the response returns a promise that resolves with a blob:
+The response**.blob()** method's promise renders an **image** with **URL.createObjectURL()**.
 
 ```
 //it will return empty("") if its prototype.type is opaque
@@ -200,27 +200,23 @@ async function blob(){
   //Promise to resolve in a Blob object 
   let blob = await response.blob(); 
 
-  //after creating an HTML tag
+  //After creating an HTML tag
   let img = document.createElement('img');
   img.style = 'position:fixed;top:10px;right:10px;width:100px';
   document.body.append(img);
 
-  //we go back to the URL
+  //We go back to the URL
   img.src = URL.createObjectURL(blob);
 
   setTimeout(() => { 
-  //hides it by revoking its URL call, necessary in case you don't need it anymore
-  img.remove();
+    //removes it or revokes its URL call, necessary in case you don't need it anymore
+    img.remove();
     URL.revokeObjectURL(img.src);
   }, 3000);
-
 }
-
 ```
 
-The **URL.createObjectURL()** is a static method that creates an URL representing the object given.
-
-The **headers** read-only property of the **Response** interface contains the Headers object associated with the response:
+The **response** interface returns the **header** read-only property object:
 
 ```
 async function zero(){
@@ -229,15 +225,13 @@ async function zero(){
   console.log( response.headers.get('Content-Type'));  
   //application/json; charset=utf-8
 
-  //we can also loop trought the map-like key/value pairs
+  //We can also loop through the map-like key/value pairs
   for (let [key, value] of response.headers) {
     console.log(`${key} = ${value}`);
   }
-
 }
 
 zero()
-
 ```
 
 The **bind()** method allows us to keep THIS argument when in a callback function:
@@ -245,10 +239,10 @@ The **bind()** method allows us to keep THIS argument when in a callback functio
 {% tabs %}
 {% tab title="Simple" %}
 ```
-//we can also use method on other objects
+//We can also use this method on other objects
 
 const person = {
-  firstName:"John",
+  firstName: "John",
   lastName: "Doe",
   fullName: function () {
     return this.firstName + " " + this.lastName;
@@ -272,7 +266,7 @@ console.log( fullName )    //Hege Nilsen
 //when used in a callback function
 
 const persona = {
-  firstName:"Not a",
+  firstName: "Not a",
   lastName: "Callback",
   display: function () {
     console.log( this.firstName + " " + this.lastName)
@@ -288,8 +282,6 @@ let bloccato= persona.display.bind( persona )
 setTimeout( bloccato, 5000)    //Not a Callback after 5 seconds
 
 ```
-
-
 {% endtab %}
 {% endtabs %}
 
