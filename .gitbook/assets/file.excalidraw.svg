@@ -1,0 +1,16 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 259 219" width="259" height="219">
+  <!-- svg-source:excalidraw -->
+  <!-- payload-type:application/vnd.excalidraw+json --><!-- payload-version:2 --><!-- payload-start -->eyJ2ZXJzaW9uIjoiMSIsImVuY29kaW5nIjoiYnN0cmluZyIsImNvbXByZXNzZWQiOnRydWUsImVuY29kZWQiOiJ4nGVSyW7CMFx1MDAxML3zXHUwMDE1UbhWkIUl4daFSqhVL1x1MDAxY1BbVZVJhsSKsS3bYSni32ubNFx1MDAwZdRcdTAwMDdL82Z582bm1PM8X1x1MDAxZDn4M8+HQ4ZcYs5cdTAwMDXa+3dcdTAwMDbfgZCYUe2KrC1ZLTJcdTAwMWJZKsXlbDhEnFx1MDAwZlxurNaMVYOMbS9pQGBcdTAwMGJUSVx1MDAxZPipbc872b9LRFxi5lx1MDAxMmy4dXSYRrfgXHUwMDFio5Y0XGaScFx1MDAxNMVJmLRcdTAwMTFYPmkyXHUwMDA1uXZvXHUwMDEwkeA8XHUwMDA28lx1MDAxN6Dwasu/X5b3r1x1MDAxZvL5PZnMp4Fj3WBClupILpJQVtai05NUglWwwrkqXHL7XHLe5kmmR+ayXHUwMDA0q4uSgpRXOYyjXGaro1VcdTAwMTG0KKKFreGQg7bGkcszXHUwMDE5UVx1MDAxNN9wPzLChOHuXHUwMDA39jn2NcqqQrdA8zZGXHREJUdCb8TF7Vx1MDAxYlVRnLZYXHS4KJVpMXWgXHUwMDA0O9x0NFx1MDAxZVx1MDAwN2kwdaM3LHyR2yV/ddXTvFH/t3W396hBzq5fXHUwMDEzP+/ciytV81x1MDAxY102XHUwMDFiTtI4XHUwMDFkheM4TpNJ6yeYVtpJa0JcdTAwMWPGsspcdTAwMWSDRc/6t0V9fatLpUu2rWlccjhf4lx1MDAxZrgq4+8w7Fx1MDAxZv7Psb+xz+81/ZvrXHUwMDAxq/PcO/9cdTAwMDJoadidIn0=<!-- payload-end -->
+  <defs>
+    <style class="style-fonts">
+      @font-face {
+        font-family: "Virgil";
+        src: url("https://unpkg.com/@excalidraw/excalidraw@0.15.3/dist/excalidraw-assets/Virgil.woff2");
+      }
+      @font-face {
+        font-family: "Cascadia";
+        src: url("https://unpkg.com/@excalidraw/excalidraw@0.15.3/dist/excalidraw-assets/Cascadia.woff2");
+      }
+    </style>
+  </defs>
+  <rect x="0" y="0" width="259" height="219" fill="#ffffff"/><g stroke-linecap="round" transform="translate(10 10) rotate(0 119.5 99.5)"><path d="M151.72 2.5 C165.33 4.16, 177.88 12.8, 189.46 20.02 C201.03 27.24, 213.12 35.75, 221.15 45.83 C229.18 55.92, 234.99 68.78, 237.63 80.53 C240.27 92.29, 239.55 104.53, 236.99 116.38 C234.43 128.22, 229.64 141.2, 222.26 151.58 C214.88 161.97, 204.27 171.48, 192.7 178.7 C181.12 185.92, 166.73 191.65, 152.81 194.9 C138.88 198.15, 123.47 199.11, 109.15 198.19 C94.84 197.27, 79.7 194.44, 66.92 189.39 C54.15 184.33, 42.32 176.58, 32.48 167.87 C22.64 159.16, 13.37 148.43, 7.88 137.1 C2.38 125.77, -0.35 112.16, -0.48 99.91 C-0.61 87.67, 1.9 74.77, 7.08 63.64 C12.27 52.52, 21.13 41.78, 30.63 33.15 C40.13 24.52, 51.36 17.24, 64.08 11.86 C76.8 6.48, 92.21 2.05, 106.95 0.86 C121.68 -0.32, 144.5 3.98, 152.49 4.75 C160.47 5.53, 155.29 4.02, 154.86 5.51 M73.75 7.17 C85.36 1.49, 101.29 -0.28, 115.67 -0.4 C130.05 -0.52, 146.34 2.37, 160.04 6.46 C173.74 10.56, 187.21 16.26, 197.88 24.17 C208.54 32.09, 217.44 43.12, 224.04 53.93 C230.65 64.74, 235.62 77.46, 237.49 89.03 C239.35 100.61, 238.95 112.04, 235.24 123.38 C231.53 134.72, 223.65 146.97, 215.23 157.08 C206.8 167.2, 196.49 177.31, 184.69 184.08 C172.89 190.85, 158.59 195.7, 144.41 197.71 C130.24 199.73, 113.9 198.35, 99.66 196.18 C85.42 194.02, 71.1 190.81, 58.97 184.72 C46.84 178.63, 35.75 169.09, 26.87 159.63 C17.99 150.17, 10.08 139.38, 5.68 127.96 C1.27 116.54, -0.64 102.75, 0.41 91.11 C1.46 79.47, 5.95 68.97, 11.98 58.14 C18 47.3, 26.16 34.4, 36.56 26.11 C46.97 17.82, 67.89 11.19, 74.42 8.41 C80.95 5.64, 75.06 7.94, 75.75 9.46" stroke="#000000" stroke-width="1" fill="none"/></g></svg>
