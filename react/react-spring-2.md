@@ -66,11 +66,106 @@ function changed(){
 
 <figure><img src="../.gitbook/assets/RepAnimation3.gif" alt="" width="297"><figcaption><p>useTransition() on updated() element update</p></figcaption></figure>
 
-1
+We _useTransition(_) 2 **absolute components** on the same level.
 
-1
+<pre class="language-css" data-overflow="wrap" data-full-width="false"><code class="lang-css"><strong>.centra{
+</strong>  position: relative;
+}
 
-1
+.sfondo{
+  position: absolute;
+  left: 0%;
+  width: 100%;
+  height: 10vh;
+}
+
+.testo{
+  position: absolute;
+  text-align: center;
+  font-size: 2em;
+}
+</code></pre>
+
+<details>
+
+<summary>Enter and Leave useTransition() on setTimeout() updated array elements</summary>
+
+A useTransition() updated array **won't animate** its **unchanging** values.
+
+The **setTimeout()** array updates will resolve **sequentially**, based on their timeout (2000 + 2000 + 1000), _not their syntax order_.
+
+```jsx
+//We empty the array element to re-start the animation
+//Even if rotateX(0) is the default, we declare it to Eenter animate
+
+const [testi, setTesti] = useState([])
+
+const transitions = useTransition(testi, {
+  from: {
+    innerHeight: 0,
+    opacity: 0, color: 'orange', height: 0,
+    transform: 'perspective(600px) rotateX(0deg)',
+  },
+  enter: [
+    { opacity: 1, height: 80, innerHeight: 80 , color: "green" },
+    { transform: 'perspective(600px) rotateX(180deg)', color: 'yellow' },
+    { transform: 'perspective(600px) rotateX(0deg)', color: "red" },
+  ],
+  leave: [
+    { color: 'purple' }, 
+    { innerHeight: 0 }, 
+    { opacity: 0, height: 0 }
+  ],
+  update: { color: 'pink' },  
+})
+
+const reset = useCallback(() => {
+  setTesti([])
+  setTimeout(() => setTesti(['Apples', 'Kiwis']) , 5000)
+  setTimeout(() => setTesti(['Apples', 'Bananas', 'Kiwis']) , 4000)
+  setTimeout(() => setTesti(['Apples', 'Oranges', 'Kiwis']), 2000)
+}, [])
+
+//useEffect() triggers the animation once during the initial render
+useEffect(() => {
+  reset()
+}, [])
+
+//Flex is for the Y-align while block is to render the words
+<div className='d-flex align-items-center' style={{ height: "320px" }} >
+  <div style={{display: "block"}}>
+  {transitions(({ innerHeight, ...rest }, item) => (
+    <animated.div className="transitionsItem" style={rest}>
+      <animated.div style={{ overflow: 'hidden', height: innerHeight }}> 
+        {item} 
+      </animated.div>
+    </animated.div>
+  ))}
+  </div>
+</div>
+
+```
+
+We use the CSS for the text.
+
+```css
+.main {
+  height: 320px;
+  display: flex;
+  align-items: center;
+}
+
+.transitionsItem {
+  font-size: 4em;
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 80px;
+}
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/EnterLeaveAn1.gif" alt="" width="375"><figcaption><p>Enter and Leave useTransition() array elements</p></figcaption></figure>
 
 1
 
