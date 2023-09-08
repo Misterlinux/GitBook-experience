@@ -167,6 +167,38 @@ We use the CSS for the text.
 
 <figure><img src="../.gitbook/assets/EnterLeaveAn1.gif" alt="" width="375"><figcaption><p>Enter and Leave useTransition() array elements</p></figcaption></figure>
 
+The **exitBeforeEnter** property **first** animates the **Leave** element, then **removes** it and renders the **Enter** element in the _same position_.
+
+The **expires** property animates and **doesn't remove** the **Leave** element while rendering the enter one.
+
+```jsx
+let animato = useTransition(element, {
+  from: {},
+  expires: false,
+  exitBeforeEnter: true,
+}
+```
+
+The useTransition() **events** can be linked to a specific **styler property**.
+
+```
+//onStart() triggers at the start of each frame.
+//onChange() on each pixel of animation 
+//onRest(), onPause(), and onResume() for paused/resumed animations
+//onProps() triggers on updates by new props, even if it remains idle
+//onDestroyed() when the element is un-mounted.
+
+//The TO property renders the target prop, not the current style.
+let animato = useTransition(element, {
+  from:{},
+  onStart: {
+    color: (x) => {console.log( "triggers on color" )},
+    backgroundColor: (x) => {console.log( "back is " + (x.value.animation.to) )}
+  },
+  onProps: () => {console.log("will cover each updated property")}
+}
+```
+
 1
 
 1
