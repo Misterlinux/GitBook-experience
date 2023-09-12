@@ -201,6 +201,83 @@ let animato = useTransition(element, {
 
 1
 
+### React use-gesture and useSpring()
+
+We **npm install @use-gesture/react**, a library that binds **mouse** and **touch events** to animate **useSpring()** NODE elements.
+
+```jsx
+//We extract the useDrag() hook to animate the useSpring() and useState()
+import { useDrag } from '@use-gesture/react'
+
+const [{x, dietro}, api] = useSpring(()=>({
+  x: 0,
+  dietro: "brown"
+}))
+
+let [mosso, setMosso] = useState(0)
+```
+
+The **useDrag()** returns an **object** that applies **event handlers** to **animated.div** components.          Its **parameters** are the drag **action** and the **movement** coordinates, and its _gesture data_ **animates** the **useSpring()** style properties.
+
+```jsx
+//The useDrag() includes the onPointerUp, onPointerDown, and onPointerMove events.
+//active/down event is not a variable, the movement's array is [X-axis, Y-axis]
+//We need the immediate property for a smooth property transition later
+const muovi = useDrag( ({active, movement: [mx]}) =>(
+  api.start({
+    x: active ? mx : 0,
+    dietro: active ? "orange" : "brown",
+    immediate: name => active && name === "mx"
+  }),
+
+  setMosso( Math.abs(mx) )
+))
+
+//We set a variable based on the useDrag() updated X-style property
+//The map property is a filter function for the input value
+//The extrapolate property used for the range/output breakpoints
+let kolor = x.to({
+  map: Math.abs,      //we absolute the negative x coordinates
+  range: [10, 300],
+  output: [1, 0.2],
+  extrapolate: "clamp"  //extends, extrapolate, extrapolateLeft, or extrapolateRight
+})
+```
+
+We spread the useDrag() variable in the animated.div element we want to interact with.
+
+```jsx
+//The useState()/style props are updated on useDrag() movement
+
+<div className="d-block">
+  <animated.div className="backo" style={{ backgroundColor: dietro }}>
+  </animated.div>
+
+  <div className="d-flex justify-content-center mt-3">
+    <animated.div className="boxo" {...muovi()} style={{ x, opacity: kolor }} >
+    </animated.div>
+  </div>
+
+  <animated.p className="text-center">
+    We moved it by {Math.floor(mosso/13)} em
+  </animated.p>
+</div>
+```
+
+<figure><img src="../.gitbook/assets/useGes().gif" alt="" width="563"><figcaption><p>The useDrag() used to animate a useSpring() component</p></figcaption></figure>
+
+1
+
+1
+
+1
+
+1
+
+1
+
+1
+
 1
 
 1
