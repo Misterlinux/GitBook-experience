@@ -266,15 +266,107 @@ We spread the useDrag() variable in the animated.div element we want to interact
 
 <figure><img src="../.gitbook/assets/useGes().gif" alt="" width="563"><figcaption><p>The useDrag() used to animate a useSpring() component</p></figcaption></figure>
 
-1
+<details>
 
-1
+<summary>Replacing useSpring() properties with the useDrag() hook</summary>
 
-1
+We create **variables** for the **useSpring()** REST style properties.
 
-1
+<pre class="language-jsx"><code class="lang-jsx"><strong>//We rest the bg and justifySelf and set them (left)
+</strong><strong>import { useDrag } from '@use-gesture/react'
+</strong>
+const [{ x, scale, bg, justifySelf }, api] = useSpring(() => ({
+  x: 0,
+  scale: 1,
+  ...left
+}))
 
-1
+const left = {
+  bg: `linear-gradient(120deg, #f093fb 0%, #f5576c 100%)`,
+  justifySelf: 'end',
+}
+const right = {
+  bg: `linear-gradient(120deg, #96fbc4 0%, #f9f586 100%)`,
+  justifySelf: 'start',
+}
+</code></pre>
+
+During **useDrag()** we **replace** the **REST** style properties based on the x-axis **position**.
+
+```jsx
+//A left X position is negative
+const bind = useDrag(({ active, movement: [x1] }) =>
+  api.start({
+    x: active ? x1 : 0,
+    scale: active ? 1.1 : 1,
+    ...(x1 < 0 ? left : right),
+    immediate: name => active && name === "x1"
+  })
+)
+
+const avSize = x.to({
+  map: Math.abs,
+  range: [50, 300],
+  output: [0.5, 1],
+  extrapolate: "clamp"
+})
+```
+
+We don't drag the cover, we **drag** its container and **animate** its **x** style property, _justifySelf_ and _bg_ are replaced during onDrag().
+
+```jsx
+//Scale is set based on the useDrag() but outside of it
+<div className="d-flex justify-content-center mt-5 mb-2">
+
+  <animated.div {...bind()} className="item" style={{ background: bg }}>
+    <animated.div className="circle" style={{ scale: avSize, justifySelf }}/>
+    <animated.div className="cover" style={{ x, scale }}>
+      Slide11
+    </animated.div>
+  </animated.div>
+</div>
+
+//We can render a useSpring value but we can't add text to it
+<animated.div className="text-center">
+  { avSize }
+</animated.div>
+```
+
+The CSS style being:
+
+```
+//display: grid used for the justifyself
+.item {
+  position: relative;
+  width: 300px;
+  height: 100px;
+  user-select: none;
+  display: grid;
+  align-items: center;
+}
+
+.cover {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  display: grid;
+  text-align: center;
+  background-color: #272727;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 3em;
+}
+
+.circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: white;
+}
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/useDrag1().gif" alt="" width="563"><figcaption><p>useDrag() used to replace useSpring()</p></figcaption></figure>
 
 1
 
