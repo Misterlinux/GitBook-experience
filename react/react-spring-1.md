@@ -225,7 +225,7 @@ style= {{
 }}
 ```
 
-We use a **conditional springValue** and the <mark style="background-color:blue;">**to**</mark> method to **animate** the **style** properties.                             **Range** are the animated _springValues_ breakpoints, **output** are the style property **values** on each **breakpoint**.
+We use a **conditional springValue** and the <mark style="background-color:blue;">**to**</mark> method to **animate** the **style** properties.                             **Range** are the animated _springValues_ breakpoints, **output** are the style property **values** on each **breakpoint,** and both only accept **integers** in their **array**.
 
 ```
 //We need {} on the springValue to access the to method
