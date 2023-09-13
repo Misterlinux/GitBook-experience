@@ -272,6 +272,48 @@ let auto = useSpring({
 </animated.div>
 ```
 
+We animate a **useSpring()** **background image** by only using output (will work on its first 2 values).
+
+```jsx
+const {value} = useSpring({
+  from: {value: 0}, to: {value: 1},
+  loop: {reverse: true},
+  config: {duration: 6000}
+})
+
+let x2= value.to({ output: ['0%', '20%'] })
+
+<div className="conta">
+  <animated.div className="suono" style= {{ x: x2 }} >
+  </animated.div>
+</div>
+```
+
+On the CSS we use [**inset** ](#user-content-fn-1)[^1]to **cover** the **X/Y** **margins** left by the useSpring() **animation**.
+
+```css
+//A bigger background avoids empty border spaces during the animation
+
+.conta{
+  position: relative;
+  width: 85vw;
+  height: 30vh;
+  overflow: hidden;
+  background-color: burlywood;
+}
+
+.treno{
+  inset: 0% -25%;
+  width: 125%; height: 100%;
+  position: absolute;
+  opacity: 0.3;
+  background: url('https://media.timeout.com/images/105782103/image.jpg') center;
+  background-size: cover;
+}
+```
+
+<figure><img src="../.gitbook/assets/backgroundInset1.gif" alt="" width="375"><figcaption><p>Animated useSpring() background image</p></figcaption></figure>
+
 We can directly **destruct** a **useSpring()** object and re-assign **property** names.
 
 ```
@@ -961,3 +1003,7 @@ In both examples, the images need position absolute to share the same line.
 1
 
 1
+
+[^1]: Negative internal margins,
+
+    same css syntax.                &#x20;
