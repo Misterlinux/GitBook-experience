@@ -302,6 +302,7 @@ On the CSS we use [**inset** ](#user-content-fn-1)[^1]to **cover** the **X/Y** *
   background-color: burlywood;
 }
 
+//use inset: -200%; width: 400%; height: 400%; for bigger animations
 .treno{
   inset: 0% -25%;
   width: 125%; height: 100%;
