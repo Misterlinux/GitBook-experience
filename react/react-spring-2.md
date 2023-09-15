@@ -368,6 +368,96 @@ The CSS style being:
 
 <figure><img src="../.gitbook/assets/useDrag1().gif" alt="" width="563"><figcaption><p>useDrag() used to replace useSpring()</p></figcaption></figure>
 
+The useDrag() <mark style="color:blue;">state attribute</mark> **velocity** matches the **drag speed** of the element, the config.**decay** triggers the **momentum** at the drag stop.
+
+{% tabs %}
+{% tab title="useDrag() Movement" %}
+The useDrag() <mark style="color:blue;">state attribute</mark> **movement** records the gesture **change of position** _relative_ to its _starter useSpring()_, which gets **reset** at the _end_ of useDrag()
+
+```jsx
+//decay:false returns the element to its useSpring(), no momentum tho
+const [{x1, y1}, api1] = useSpring(()=>({
+  x1: 100, y1: 0,
+}))
+
+let pinto = useDrag(({ down, movement: [mx, my], velocity, direction}) =>{
+  
+  api1.start({
+    x1: down ? mx: 100, y1: down ? my : 0,
+    config: { velocity , decay: false },
+    immediate: down,
+  })
+})
+
+<div>
+  <animated.div className="rocket" {...pinto()}
+    style={{ x: x1, y: y1}}
+  />
+</div>
+```
+
+<figure><img src="../.gitbook/assets/movement.gif" alt="" width="563"><figcaption><p>animated.div onDrag() movement event</p></figcaption></figure>
+{% endtab %}
+
+{% tab title="useDrag() Offset" %}
+The useDrag() <mark style="color:blue;">state attribute</mark> **offset** records the **absolute position** relative to its <mark style="color:blue;">container</mark>, it _stores_ the element **position** after the onDrag().
+
+```jsx
+//the decay:false to re-dra in the same position we left it
+const [{ x3, y3 }, api3] = useSpring(() => ({ 
+  x3: 0, y3: 0 
+}))
+
+const bind3 = useDrag(({ down, offset: [x3, y3], velocity }) => {
+
+  api3.start({ 
+    x3, y3,
+    immediate: down,
+    config: { velocity , decay: false },
+  })
+})
+	
+<div>
+  <animated.div className="rocket" {...bind3()} 
+    style={{x: x3, y: y3}} 
+  />
+</div>
+```
+
+<figure><img src="../.gitbook/assets/offset.gif" alt="" width="563"><figcaption><p>multiple useDrag() offset positions</p></figcaption></figure>
+{% endtab %}
+{% endtabs %}
+
+The _arcTangent_ (**Math.atan2**) of the [**direction** ](#user-content-fn-3)[^3]coordinates returns the current **rotation** position.
+
+```jsx
+//We keep the position but no momentum
+const [{x, y, transform}, apri] = useSpring(()=> ({
+  x: 0, y: 0,
+  transform: "rotate(0rad)",
+}))
+
+const bind4 = useDrag(({ down, offset: [x, y], velocity, direction }) => {
+
+  apri.start({ 
+    x, y,
+    transform: `rotate(${ Math.atan2(direction[0], -direction[1]) }rad)`,
+    immediate: down,
+    config: { velocity , decay: false },
+  })
+})
+
+<div>
+  <animated.div className="rocket" {...bind4()}
+    style= {{ x, y, transform }}
+  />
+</div>
+```
+
+<figure><img src="../.gitbook/assets/rotateuseDrag().gif" alt="" width="563"><figcaption><p>useDrag() element rotating based on user cursor direction</p></figcaption></figure>
+
+1
+
 1
 
 1
@@ -379,3 +469,5 @@ The CSS style being:
 [^1]: when the useTransition() element is changed.
 
 [^2]: useTransition() enter{} prop
+
+[^3]: useDrag() state attribute      &#x20;
