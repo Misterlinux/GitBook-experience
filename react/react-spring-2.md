@@ -454,7 +454,40 @@ const bind4 = useDrag(({ down, offset: [x, y], velocity, direction }) => {
 </div>
 ```
 
-<figure><img src="../.gitbook/assets/rotateuseDrag().gif" alt="" width="563"><figcaption><p>useDrag() element rotating based on user cursor direction</p></figcaption></figure>
+1
+
+### Waving transitions with animated SVG filters and useSpring()
+
+**SVG**, short for **S**calable **V**ector **G**raphics, uses the **viewBox** _attribute_ to define a visible window **area** _within_ the SVG element.
+
+The **viewBox** can **scale** or **pan** its element **proportionally** to the container **size** (while maintaining its aspect ratio).
+
+```
+//The zoom depends on the proportion between the container and the viewBox
+//50/100 = 0.5x scale on the SVG, while 50/25 = 2x scale. 
+
+<div>
+  <svg width="100" height="100">
+    <ellipse fill="orange" cx="50" cy="50" rx="50" ry="50"></ellipse>
+  </svg>
+
+  <svg width="50" height="50">
+    <ellipse fill="orange" cx="50" cy="50" rx="50" ry="50"></ellipse>
+  </svg>
+
+  <svg width="50" height="50" viewBox='0 0 100 100'>
+    <ellipse fill="orange" cx="50" cy="50" rx="50" ry="50"></ellipse>
+  </svg>
+
+  <svg width="50" height="50" viewBox='0 0 25 25'>
+    <ellipse fill="orange" cx="50" cy="50" rx="50" ry="50"></ellipse>
+  </svg>
+</div>
+```
+
+<figure><img src="../.gitbook/assets/vectorViewBox.png" alt="" width="431"><figcaption><p>circles rendered inside &#x3C;svg> tag using viewBox</p></figcaption></figure>
+
+1
 
 1
 
