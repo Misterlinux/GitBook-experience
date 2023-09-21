@@ -487,6 +487,64 @@ The **viewBox** can **scale** or **pan** its element **proportionally** to the c
 
 <figure><img src="../.gitbook/assets/vectorViewBox.png" alt="" width="431"><figcaption><p>circles rendered inside &#x3C;svg> tag using viewBox</p></figcaption></figure>
 
+The **\<filter>** tag contains the filter **primitive elements**, used to create _svg visual effects_.                     The **\<g>** tag can render **multiple** _svg_ elements, its **d**(ata) attribute defines the **path** and shape of the element.
+
+We animate the <mark style="color:blue;">useSpring()</mark> **between** its **starting/ending state** with the useState() **reverse** property and **dependency**.                                                                                                                    We use the <mark style="color:blue;">React-spring</mark> **animated() function** to create **animatable** _filter primitive_ components.
+
+To animate the **SVG wave** effect, we use the **baseFrequency** attribute for its _frequency_ and _direction_ (X/Y values) and the **scale** (factor) for the **strength** of the _displacement effect_.
+
+```jsx
+//The filter primitives <feTurbulence> and <feDisplacementMap> create the wave effect
+//We can use animated.feDisplacementMap
+//A +/- factor changes the direction of the waves
+//frequency is 0 at the ending state to not have a distorted image
+
+const AnimFeTurbulence = animated('feTurbulence')
+const AnimFeDisplacementMap = animated('feDisplacementMap')
+
+const [aperto, setAperto] = useState(false)
+
+const [{ freq, factor, scale, opacity }] = useSpring(() => ({
+    reverse: aperto,
+    from: { factor: 10, opacity: 0, scale: 0.9, freq: '0.0, 0.025' },
+    to: { factor: 150, opacity: 1, scale: 1, freq: '0.0, 0.0' },
+    config: { duration: 3000 },
+  }),
+  [aperto]
+)
+
+<div onClick={() => setAperto(!aperto)}>
+  <animated.svg className="svg" style={{ scale, opacity }} viewBox="0 0 850 480">
+
+    <div>
+      <filter id="acqua">
+        <AnimFeTurbulence type="fractalNoise" baseFrequency={freq} />
+        
+        <AnimFeDisplacementMap in="SourceGraphic" scale={factor} />
+      </filter>
+    </div>
+    
+    <g filter="url(#acqua)" >
+      <path fill="orange" d="svg-path..."></path>
+    </g>
+  </animated.svg>
+</div>
+```
+
+<figure><img src="../.gitbook/assets/waveAnimation1.gif" alt="" width="203"><figcaption><p>vawe effect on useSpring() svg primitive filters</p></figcaption></figure>
+
+1
+
+1
+
+1
+
+1
+
+1
+
+1
+
 1
 
 1
