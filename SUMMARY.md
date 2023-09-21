@@ -43,6 +43,7 @@
 * [REACT 6](react/react-6.md)
 * [React-Spring 1](react/react-spring-1.md)
 * [React-Spring 2](react/react-spring-2.md)
+* [React-Spring 3](react/react-spring-3.md)
 
 ## NODEJS
 
