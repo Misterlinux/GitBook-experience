@@ -533,27 +533,60 @@ const [{ freq, factor, scale, opacity }] = useSpring(() => ({
 
 <figure><img src="../.gitbook/assets/waveAnimation1.gif" alt="" width="203"><figcaption><p>vawe effect on useSpring() svg primitive filters</p></figcaption></figure>
 
-1
+<details>
 
-1
+<summary>Complete list of &#x3C;feDisplacementMap> and &#x3C;feTurbulence> attributes.</summary>
 
-1
+We repeat the wave effect including **all** the fiter primitive **attributes**.
 
-1
+```
+<feTurbulence/>
+filter: output result of the filter
+numOctaves: turbulence detail value 
+seed: number used for the random generator on the filter
+stitchTiles: "stitch" and "noStich"
+type: "fractalNoise" or "turbulence" for a smoother effect
 
-1
+<feDisplacementMap> 
+IN: used with an ID for the sourceGraphic of the filter
+IN2: second input for the filter
+scale: scale factor of the displacement, direction dependant on +/-
+xChannelSelector: RGB color of the IN2 map that affects the X-axis
+yChannelSelector: RGB color of the IN2 map that affects the Y-axis
+result: name of the filter result
+```
 
-1
+In the ReactJs:
 
-1
+```
+<div onClick={() => toggle(!open)}>
+  <animated.svg className="svg" style={{ scale, opacity }} 
+    viewBox="0 0 1276 400">
 
-1
+    <div>
+      <filter id="water">
+        <AnimFeTurbulence type="fractalNoise" baseFrequency={freq} 
+          numOctaves="2" result="TURB" seed="18" />
+        
+        <AnimFeDisplacementMap
+          xChannelSelector="B"
+          yChannelSelector="R"
+          in="SourceGraphic"
+          in2="TURB"
+          result="DISP"
+          scale={factor}
+        />
+      </filter>
+    </div>
+    
+    <g filter="url(#water)">
+      <path d="svgPath..." fill="green" />
+    </g>
+  </animated.svg>
+</div>
+```
 
-1
-
-1
-
-1
+</details>
 
 1
 
