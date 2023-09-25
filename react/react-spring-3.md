@@ -124,9 +124,89 @@ We use **display:grid** on the useTransition() elements.
 
 <figure><img src="../.gitbook/assets/useChain.gif" alt="" width="257"><figcaption><p>useChain() on useTransition() and useSpring()</p></figcaption></figure>
 
-1
+<details>
 
-1
+<summary>The useChain() on useTransition() grid elements</summary>
+
+We **import** an array of **gradient** objects for the **useTransition**().
+
+```jsx
+import data from './Data'
+
+[
+  {
+    name: 'Rare Wind',
+    description: '#a8edea → #fed6e3',
+    css: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
+    height: 200,
+  },
+  ...
+]
+```
+
+We set the useState() trigger like the previous **useChain**() example.
+
+<pre class="language-jsx"><code class="lang-jsx">//The trail adds a delay between each useTransition() renders element
+const [open, set] = useState(false)
+
+const springApi = useSpringRef()
+const { size, ...rest } = useSpring({
+  ref: springApi,
+  from: { size: '20%', background: 'hotpink' },
+  to: {
+    size: open ? '100%' : '20%',
+    background: open ? 'white' : 'hotpink',
+  },
+})
+
+const transApi = useSpringRef()
+const transition = useTransition(open ? data : [], {
+  ref: transApi,
+  trail: 400 / data.length,
+  from: { opacity: 0, scale: 0 },
+  enter: { opacity: 1, scale: 1 },
+  leave: { opacity: 0, scale: 0 },
+})
+
+useChain(open ? [springApi, transApi] : [transApi, springApi], 
+  [0, open ? 0.1 : 0.6,]
+)
+<strong>
+</strong>&#x3C;div className="wrapper">
+  &#x3C;animated.div
+    style={{ ...rest, width: size, height: size }}
+    className="container"
+    onClick={() => set(open => !open)}
+  >
+    
+    {transition((style, item) => (
+      &#x3C;animated.div
+        className="item"
+        style={{ ...style, background: item.css }}
+      />
+    ))}
+
+  &#x3C;/animated.div>
+&#x3C;/div>
+</code></pre>
+
+With the same **grid** style.
+
+```css
+.container {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(100px, 1fr));
+  grid-gap: 25px;
+
+  padding: 25px;
+  background: white;
+}
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/useChainImport.png" alt="" width="375"><figcaption><p>useChain() grid effect</p></figcaption></figure>
 
 1
 
