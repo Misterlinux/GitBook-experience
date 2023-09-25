@@ -41,7 +41,7 @@ The **useChain**( \[**useSpringRef**() array], \[timesets], timeframe ) hook _li
 
 We useState() as a trigger for the **useChain()**, which will **revert** the animation's **order** and delays.
 
-```
+```jsx
 //Their timing delays will be timeset-array-value * timeframe (1000ms if not set)
 const [open, set] = useState(false)
 
@@ -53,7 +53,7 @@ useChain(
 
 The _useSpring()_ values and the _useTransition()_ element depend on the useState(), to not trigger before the useChain() timing.
 
-```
+```jsx
 //Without a useChain() useSpringRef() would block the animation
 
 const colonna = useSpringRef()
@@ -76,6 +76,63 @@ let muro = useTransition( open ? lego : [], {
   config: {duration: 3000}
 })
 ```
+
+We change the **order** of the **useTrasition()** elements with its _second property_ (**item**).
+
+```jsx
+//The button is relative>absolute width animated background 
+
+<div className="d-block contenitore">
+  <div className="fila">
+    {muro((style, item) => (
+      <animated.div style={{ ...style, backgroundColor: item, 
+        order: (lego.length - lego.indexOf( item )) }}>
+      </animated.div>
+    ))
+    }
+  </div>
+
+  <div className='blocco' onClick={ ()=> set(!open) } >
+    <animated.div className="sfondo" style={{ width: largo }}></animated.div>
+    <div className="testo">Building</div>
+  </div>
+</div>
+```
+
+We use **display:grid** on the useTransition() elements.
+
+```jsx
+//We used a right movement to offset the grid-gap movement 
+.contenitore{
+  width: 60%;
+  height: 350px;
+}
+
+.fila {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax( 25%, 25% ));
+  grid-gap: 5px;
+  padding: 5px 10px 5px 10px;
+
+  right: 10px;
+  width: 60%;
+  margin: auto;
+  background: white;
+}
+```
+
+<figure><img src="../.gitbook/assets/useChain.gif" alt="" width="257"><figcaption><p>useChain() on useTransition() and useSpring()</p></figcaption></figure>
+
+1
+
+1
+
+1
+
+1
+
+1
 
 1
 
