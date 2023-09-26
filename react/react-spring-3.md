@@ -208,7 +208,53 @@ With the same **grid** style.
 
 <figure><img src="../.gitbook/assets/useChainImport.png" alt="" width="375"><figcaption><p>useChain() grid effect</p></figcaption></figure>
 
-1
+### Staggering animations with useTrail()
+
+The **useTrail()** hook generates a trail of sequential animations.
+
+We set the starting _useTrail()_ **properties** and **animate** them on **api methods** (<mark style="color:blue;">from/to would trigger the animation on start</mark>), each element's **duration adds up** to the previous ones.
+
+```
+//The integer sets the number of elements rendered
+//We need the ()=> ({}) syntax, the 4th element takes 8 seconds to complete
+
+const [ gira, setGira ] = useState( false )
+let lista = [0, 50, 100, 150]
+
+const [tasse, api] = useTrail( lista.length, ()=> ({
+  mosso: 0,
+  reverse: gira,
+  config: {duration: 1500}
+}))
+
+function nuota(){
+  (gira) ? api.start({ mosso: 0 }) : api.start({ mosso: 100 })
+  setGira((x)=> !x )
+}
+```
+
+We need **position absolute** to avoid _margins being influenced_ by the container area.                       We **extract useTrail()** style props and **i**ndex to access the initial array.
+
+```
+//To string interpolate useTrail() values we need the to() method. 
+//marginLeft needed to not overlay the absolute elements
+
+<div className="d-block position-relative">
+  {tasse.map(({mosso}, i) => (
+    <animated.div className="scatola position-absolute" onClick={ nuota } 
+      style={{ 
+        marginLeft: ( 65*i ) +"px", 
+        marginTop: mosso,
+        backgroundColor: mosso.to( val => `hsl( ${lista[i] + val}, 100%, 50% )` )
+      }}
+    >
+      {lista[i]}
+    </animated.div>
+  ))}
+</div>
+```
+
+<figure><img src="../.gitbook/assets/useTrail().gif" alt="" width="349"><figcaption><p>useTrail() elements on animated style properties</p></figcaption></figure>
 
 1
 
