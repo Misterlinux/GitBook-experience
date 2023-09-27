@@ -256,9 +256,100 @@ We need **position absolute** to avoid _margins being influenced_ by the contain
 
 <figure><img src="../.gitbook/assets/useTrail().gif" alt="" width="349"><figcaption><p>useTrail() elements on animated style properties</p></figcaption></figure>
 
-1
+<details>
 
-1
+<summary>Backface-visibility on useTrail() rotated elements</summary>
+
+We set and api animate the **useTrail()** props like the previous example.
+
+```jsx
+const items = ['W', 'O', 'R', 'D', 'L', 'E']
+const [gira, setGira] = useState(false)
+
+const [trail, api] = useTrail(items.length, () => ({
+  rotateX: 0,
+  reverse: gira
+}))
+
+const handleClick = () => {
+  (gira) ? api.start({ rotateX: 0, }) : api.start({ rotateX: 180, }) 
+  setGira((x)=> !x)
+}
+```
+
+We **rotateX() 2** opposite useTrail() elements with the **to()** _API method_.
+
+```jsx
+<div className="d-flex">
+
+{trail.map(({ rotateX }, i) => (
+  <animated.div className="Box" key={i} onClick={handleClick}>
+
+    <animated.div
+      className="shared FrontBox"
+      key={items[i]}
+      style={{
+        transform: rotateX.to(
+          val => `perspective(600px) rotateX(${180 - val}deg)`
+        ),
+      }}>
+      {'?'}
+    </animated.div>
+
+    <animated.div
+      className="shared BackBox"
+      key={items[i]}
+      style={{
+        transform: rotateX.to(
+          val => `perspective(600px) rotateX(${val}deg)`
+        ),
+      }}>
+      { items[i] }
+    </animated.div>
+
+  </animated.div>
+))}
+</div>
+```
+
+We use **backface-visibility** to hide the **rotated** useTrail() absolute element.
+
+```css
+//without using opacity
+
+.Box1{
+  position: relative;
+  height: 50px;
+  width: 50px;
+}
+
+.shared1{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  backface-visibility: hidden;
+}
+
+.FrontBox1{
+  background-color: #fafafa;
+  border: solid 1px black;
+}
+
+.BackBox1{
+  background-color: #6cab64;
+  border: solid 1px black;
+  color: #fafafa;
+}
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/rotate.png" alt="" width="375"><figcaption></figcaption></figure>
 
 1
 
