@@ -351,6 +351,98 @@ We use **backface-visibility** to hide the **rotated** useTrail() absolute eleme
 
 <figure><img src="../.gitbook/assets/rotate.png" alt="" width="375"><figcaption></figcaption></figure>
 
+### Scroll sections with Parallax and ParallaxLayers.
+
+We **npm install @react-spring/parallax** and extract the **Parallax** and **ParallaxLayer**.
+
+A _Parallax_ container animates its _ParallaxLayer_ **children** on scroll position.                                                            It's composed of **pages**, each **100%** height/width of the viewpoint, and fires its scroll events from the _container_ not the window.
+
+```css
+import { Parallax, ParallaxLayer } from '@react-spring/parallax'
+
+Parallax attributes:
+page: value of the page total height of the container
+config: to set tension, mass, friction
+enabled/horizontal: true/false for vertical/horizontal scroll
+innerStyle: CSS object for the inner Parallax object
+
+ParallaxLayer attributes:
+factor: Page scale of the parallaxLayer
+offset: 0-index starting page position of the component
+enabled/horizontal: by default inherited from the container
+speed: for the rate of scroll
+sticky: with start/end offset position of the sticky component
+```
+
+The Parallax **page** has to _include_ all the different _offset positions_ and _factor parallaxLayers_.
+
+```jsx
+//Page is 1+ 0.8+ 1.5, the sticky layers are included in the offset:{1} page
+
+<Parallax pages={3.3} className='meno' >
+  <ParallaxLayer offset={0}>
+  </ParallaxLayer>
+
+  <ParallaxLayer offset={1} sticky={{ start: 1, end: 1.8 }}>
+  </ParallaxLayer>
+
+  <ParallaxLayer offset={1.5}>
+  </ParallaxLayer>
+
+  <ParallaxLayer offset={1.8} factor={1.5}>
+  </ParallaxLayer>
+</Parallax>
+```
+
+The Parallax **ref.current** can trigger **scrollTo()** events using the **offset** position.                                    We **remove** the included scrollbar with a _pseudo:selector_ and set **left** to fill the gap.
+
+```jsx
+//ParallaxLayers have position-absolute and can overlay each other
+
+.meno{
+  background: linear-gradient(lightblue, #9198e5);
+  left: 0px;
+}
+.meno::-webkit-scrollbar{
+  width: 0;
+  height: 0;
+}
+
+<Parallax pages={3.3} className='meno'>
+  <ParallaxLayer offset={0} className='d-flex justify-content-center'>
+    <div className="d-block w-25 mx-auto"> ... </div>
+  </ParallaxLayer>
+
+  <ParallaxLayer offset={1} sticky={{ start: 1, end: 1.8 }} className='d-flex'>
+    <div className="d-block w-100">
+      <div className="bg-warning d-flex" style={{ height: 55 }} >
+      </div>
+
+      <div className='w-25 ms-5 bg-danger mt-2'>
+      </div>
+    </div>
+  </ParallaxLayer>
+
+  <ParallaxLayer offset={1.5} className='d-flex justify-content-center'>
+    <div className="d-block w-100">
+      <div className='w-25 bg-success mt-2 me-5 ms-auto'> ... </div>
+    </div>
+  </ParallaxLayer>
+
+  <ParallaxLayer offset={1.8} factor={1.5} className='d-flex justify-content-end'>
+    <div className="d-block w-100">
+      <div className="bg-success d-flex justify-content-end" style={{ height: 55 }} >
+      </div>
+
+      <div className='w-25 me-5 bg-danger mt-2 ms-auto'>
+      </div>
+    </div>
+  </ParallaxLayer>
+</Parallax>
+```
+
+1
+
 1
 
 1
