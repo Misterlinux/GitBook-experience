@@ -441,7 +441,7 @@ The Parallax **ref.current** can trigger **scrollTo()** events using the **offse
 </Parallax>
 ```
 
-1
+<figure><img src="../.gitbook/assets/Parallax1.gif" alt="" width="188"><figcaption><p>Sticky Parallax scroll elements</p></figcaption></figure>
 
 1
 
