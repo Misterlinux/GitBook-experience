@@ -443,6 +443,110 @@ The Parallax **ref.current** can trigger **scrollTo()** events using the **offse
 
 <figure><img src="../.gitbook/assets/Parallax1.gif" alt="" width="188"><figcaption><p>Sticky Parallax scroll elements</p></figcaption></figure>
 
+<details>
+
+<summary>Horizontal Parallax and sticky parallaxLayer viewpoint area</summary>
+
+The ParallaxLayer **speed** attribute adds a _translate effect_ on a scrolled element.                     The **\<Page/>** container returns **multiple** _ParallaxLayers_ sharing the _same offset_.
+
+The horizontal **sticky absolute** space occupies the entire **viewpoint**, _independently_ from its width/height, we reduce it to not interfere with the \<Page/> onClick().
+
+```jsx
+//backgroundImage is set on a backgroundSize polygon-cut background
+
+let refe = useRef(null)
+
+function Page({offset, back, onClick, image}){
+
+  return(
+  <>
+    <ParallaxLayer className='taglio1' speed={0.5} 
+      offset={offset} onClick={onClick}
+      style={{ backgroundImage: `url( ${image} )`, backgroundSize:"cover" }}>
+    </ParallaxLayer>
+
+    <ParallaxLayer className={`taglio2 bg-${back}`} speed={0.5} 
+      offset={offset} onClick={onClick}>
+    </ParallaxLayer>
+
+    <ParallaxLayer className={`numero text-${back}`} speed={1} 
+      offset={offset} onClick={onClick}>
+      <span> 0{offset +1} </span>
+    </ParallaxLayer>
+  </>
+  )
+}
+
+function muove(to){
+  if(refe.current){
+    refe.current.scrollTo(to)
+  }
+}
+
+<Parallax pages={4} ref={refe} className='dietro' horizontal>
+
+  <ParallaxLayer offset={0} sticky={{start: 0.5, end: 1}} 
+    style={{ height: "10vh" }}>
+    <div className="p-2 bg-warning text-center">first section</div>
+  </ParallaxLayer>
+
+  <Page offset={0} back="warning" onClick={()=>muove(1)} image="ht:/.jpg"/>
+  <Page offset={1} back="success" onClick={()=>muove(2)} image="ht:/.jpg"/>
+  
+  <ParallaxLayer offset={2} sticky={{ start: 2, end: 2.5}} 
+    style={{ height: "10vh" }}>
+    <div className="p-2 bg-primary text-center">second section</div>
+  </ParallaxLayer>
+  
+  <Page offset={2} back="danger" onClick={()=>muove(3)} image="ht:/.jpg"/>
+  <Page offset={3} back="primary" onClick={()=>muove(0)} image="ht:/.jpg"/>
+</Parallax>
+```
+
+Each \<Page/> has its clip-path on its background.
+
+```css
+.dietro{
+  background-color: lightcoral;
+  left: 0px;
+}
+
+.taglio1,
+.taglio2{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.taglio1{
+  background-color: brown;
+  clip-path: polygon(20% 0, 70% 0, 50% 100%, 0% 100%);
+}
+
+.taglio2{
+  background-color: yellow;
+  clip-path: polygon(70% 0, 100% 0, 80% 100%, 50% 100%);
+}
+
+.numero {
+  margin-top: 10vh;
+  margin-left: 20vw;
+  font-size: 300px;
+  color: #545864;
+}
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/Horizontalparallax.gif" alt="" width="188"><figcaption><p>horizontal Parallax with sticky top layer</p></figcaption></figure>
+
+1
+
+1
+
+1
+
 1
 
 1
