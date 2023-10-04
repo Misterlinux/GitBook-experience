@@ -541,7 +541,114 @@ Each \<Page/> has its clip-path on its background.
 
 <figure><img src="../.gitbook/assets/Horizontalparallax.gif" alt="" width="188"><figcaption><p>horizontal Parallax with sticky top layer</p></figcaption></figure>
 
-1
+We **import SVG** icons in the _ParallaxLayer_, as image **src** or as a **component**, and modify their _svg properties._
+
+<pre class="language-jsx"><code class="lang-jsx">//To edit the fill we need to remove the default fill from the svg file
+//SVG proportions are independent of height/width, they can be backgroundImage.
+
+import planet from "../images/planet.svg"
+import { ReactComponent as Mac } from "../images/car.svg"
+
+&#x3C;ParallaxLayer offset={0.5} className='d-flex justify-<a data-footnote-ref href="#user-content-fn-1">c.</a>-center align-items-center'>
+  &#x3C;img src={planet} style={{ width: "50%" }} />
+&#x3C;/ParallaxLayer>
+
+&#x3C;ParallaxLayer offset={1.55} >
+  &#x3C;Mac style={{ fill:"blue", marginLeft: "32%", width: "20%", height: "10%" }}/>
+&#x3C;/ParallaxLayer>
+</code></pre>
+
+The _parallaxLayer's_ order is <mark style="background-color:blue;">backgroundColor > SVG icons > SVG backgroundImage.</mark>                         We **scrollTo**() an entire **Page** by including specific _offset ranges_ in a **\<div>** container.
+
+More **images** in the **same ParallaxLayer** _won't overlay_ and will _sum their height_, **z-index** works between layers and _can override the overflow:hidden_.
+
+<details>
+
+<summary>Multiple SVG icons on ParallaxLayer and onScroll entire pages</summary>
+
+Multiple SVG backgroundImage can be added at the end of the offset.
+
+```jsx
+
+import planet from "../images/planet.svg";
+import light from "../images/light.svg";
+import { ReactComponent as Mac } from "../images/car.svg";
+import road from "../images/road.svg";
+import starts from "../images/starts.svg";
+import { ReactComponent as Sate } from "../images/satellite.svg";
+
+let refe = useRef(null)
+
+<Parallax pages={2} ref={refe}>
+
+  <div onClick= {()=> refe.current.scrollTo(1)}>
+  <ParallaxLayer offset={0} 
+    style={{ background: "linear-gradient(purple, orange)" }} >
+  </ParallaxLayer>
+
+  <ParallaxLayer offset={0.5} 
+    className='d-flex justify-content-center align-items-center'>
+    <img src={planet} style={{ width: "50%" }} />
+  </ParallaxLayer>
+
+  <ParallaxLayer offset={0.4} speed={0.5}>
+    <Sate style={{ 
+      width: "20%", height: "20%", marginLeft: "30%", fill: "orange" 
+    }} />
+  </ParallaxLayer>
+
+  <ParallaxLayer offset={0} speed={0.3} style={{
+    backgroundSize: "10% 30%",
+    backgroundRepeat: "repeat-y",
+    backgroundPosition: "10% 0%",
+    backgroundImage: `url(${starts})`,
+    opacity: 0.5
+  }}
+  >
+  </ParallaxLayer>
+
+  <ParallaxLayer offset={0} speed={0.3} style={{
+    backgroundSize: "10% 15%",
+    backgroundRepeat: "repeat-x",
+    backgroundPosition: "0% 25%",
+    backgroundImage: `url(${starts})`,
+    opacity: 0.5
+  }}
+  >
+  </ParallaxLayer>
+  </div>
+
+  <div onClick={()=> refe.current.scrollTo(0)}>
+  <ParallaxLayer offset={1} style={{ backgroundColor: "orange" }} >
+  </ParallaxLayer>
+
+  <ParallaxLayer offset={1.15} speed={0.3} className='text-center'>
+    <h2>Don't drive when during storms </h2>
+  </ParallaxLayer>
+
+  <ParallaxLayer offset={1.55} speed={0.5} style={{ zIndex: 1 }}>
+    <Mac style={{fill:"blue",marginLeft: "32%",width: "20%",height: "10%"}}/>
+    <Mac style={{fill:"light",marginLeft:"50%",width: "20%",height: "10%"}}/>
+  </ParallaxLayer>
+
+  <ParallaxLayer offset={1.2}>
+    <img src={road} style={{ width: "100%", height: "100%" }} />
+  </ParallaxLayer>
+
+  <ParallaxLayer offset={1} style={{
+    backgroundPosition: "0% 35%",
+    backgroundRepeat: "repeat-x",
+    backgroundSize: "20% 10%",
+    backgroundImage:  `url(${light})`,
+  }}
+  > 
+  </ParallaxLayer>
+  </div>
+
+</Parallax>
+```
+
+</details>
 
 1
 
@@ -556,3 +663,9 @@ Each \<Page/> has its clip-path on its background.
 1
 
 1
+
+1
+
+1
+
+[^1]: 
