@@ -417,7 +417,7 @@ list.length == 2
 
 We can check its built-in _methods_ and _properties_ in **its \[\[prototype]] property,** like **concat()** or **.length:**
 
-![](../.gitbook/assets/ArrayObj.PNG)
+![](<../.gitbook/assets/ArrayObj (1).PNG>)
 
 **Methods** on the other hand are **actions** on objects, and they need () because they are function:
 

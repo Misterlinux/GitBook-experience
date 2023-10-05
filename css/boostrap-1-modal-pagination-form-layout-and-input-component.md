@@ -249,7 +249,7 @@ $('#show_paginator').bootpag({
 {% endtab %}
 
 {% tab title="Second Pag" %}
-![](../.gitbook/assets/bottpag1.PNG)
+![](<../.gitbook/assets/bottpag1 (1).PNG>)
 {% endtab %}
 {% endtabs %}
 

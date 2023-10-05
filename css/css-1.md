@@ -662,7 +662,7 @@ We move the pixel images as background, on a 1-frame width window:
 
 </details>
 
-<figure><img src="../.gitbook/assets/animationsteps.gif" alt=""><figcaption><p>Example of it in action with pixel art</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/animationsteps (1).gif" alt=""><figcaption><p>Example of it in action with pixel art</p></figcaption></figure>
 
 in the next example we will use **transform-origin**:&#x20;
 
@@ -722,7 +722,7 @@ The steps(**start/end**) sets the starting frame, while the **forwards/backwards
 {% tab title="Animation" %}
 **Steps(start)** will "skip" the first frame, while completely ending, while **steps(end**) will start from the very first frame but end 1 frame before
 
-<figure><img src="../.gitbook/assets/pendolato4.gif" alt=""><figcaption><p>steps(start) and steps(end)</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/pendolato4 (1).gif" alt=""><figcaption><p>steps(start) and steps(end)</p></figcaption></figure>
 {% endtab %}
 
 {% tab title="animation-fill-mode" %}

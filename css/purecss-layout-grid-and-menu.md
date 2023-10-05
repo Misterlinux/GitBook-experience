@@ -66,7 +66,7 @@ The **responsive grid** is implemented with **pure-g** and **pure-u** classes_**
 
 ```
 
-![Some grid](<../.gitbook/assets/Cattura (3).PNG>)
+![Some grid](<../.gitbook/assets/Cattura (4).PNG>)
 
 For **responsive images** we need **pure-img,** use **box-sizing** to give each element **padding** without breaking the layout:
 

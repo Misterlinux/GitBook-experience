@@ -517,7 +517,7 @@ formato.addEventListener("submit", (event) => {
 
 </details>
 
-<figure><img src="../.gitbook/assets/Untitled.png" alt=""><figcaption><p>Checkbox/radio buttons form submit </p></figcaption></figure>
+<figure><img src="../.gitbook/assets/Untitled (1).png" alt=""><figcaption><p>Checkbox/radio buttons form submit </p></figcaption></figure>
 
 We use **select** to create a dropdown list.
 

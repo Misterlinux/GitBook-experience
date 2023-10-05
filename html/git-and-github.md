@@ -1,4 +1,4 @@
-# Github
+# Git and Github
 
 **Git** is an open-source **version control tool**, created in 2005.
 
@@ -20,7 +20,7 @@ Any code of file will be added to the **staging environment,** we can check with
 
 {% tabs %}
 {% tab title="Utracked changes" %}
-<figure><img src="../.gitbook/assets/gitStatus1 (1).PNG" alt=""><figcaption><p>Not yet in the staging</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/gitStatus1 (3).PNG" alt=""><figcaption><p>Not yet in the staging</p></figcaption></figure>
 {% endtab %}
 
 {% tab title="Git add. changes" %}
