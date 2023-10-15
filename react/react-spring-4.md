@@ -5,51 +5,135 @@
 * 1
 * 1
 
-**useSpring**() animations **run** even without rendering, and _api.start() can't change keyframes_ during a loop. To change style props, we create a new useSpring() hook.
+**useSpring**() animations **run** even without rendering, and _api.start() can't change keyframes_ during a loop. We create a new useSpring() hook to change the style keyframe.
 
 <details>
 
 <summary>Changing useSpring() on the same loop element</summary>
 
-1
+The new useSpring() _won't start_ **from:{}** but from its already running **keyframe**.
 
-1
+```jsx
+//It will render depending on the number of keyframes and duration
+//It renders on teh DOM so we useState()
 
-1
+let [spin, api] = useSpring(()=>({
+  from: {x: 0, y: 0, background: "lightblue"},
+  to: [
+    {x: 100, background: "lightblue"},
+    {y: 80, background: "blue"},
+    {x: 0, background: "lightgreen"},
+    {y: 0, background: "green"},
+  ],
+  loop: true,
+  config: config.wobbly
+}))
 
-1
+let [spin1, api1] = useSpring(()=>({
+  from: {x: 0, y: 0, background: "pink"},
+  to: [
+    {x: 100, background: "pink"},
+    {y: 80, background: "orange"},
+    {x: 0, background: "red"},
+    {y: 0, background: "orange"},
+  ],
+  loop: true,
+  config:{ duration: 1000 }
+}))
 
-11
+let [stile, setStile] = useState(spin)
+let trigger2 = useRef(false)
 
-1
+function cambio1(){
+
+  trigger2.current ? setStile(spin) : setStile(spin1)
+  trigger2.current = !trigger2.current
+}
+
+<div className="d-block">
+
+  <animated.div className="boxo" style={stile}>
+  </animated.div>
+
+  <div className="text-center">
+    <button className="btn btn-primary" onClick={cambio1}>Change</button>
+  </div>
+
+</div>
+```
 
 </details>
 
-We can keep the pause(9 resume() of the useSpring()
+We can pause() and resume() to **keep** the useSpring() **keyframe** when changed.
 
 <details>
 
-<summary>pause() resume()</summary>
+<summary>Changing useSpring() while pause() resume() keyframes</summary>
 
-1
+We **useEffect**() to keep the second useSpring() paused before resuming and rendering it.&#x20;
 
-1
+```jsx
 
-1
+let [spin2, api2] = useSpring(()=>({
+  from: {x: 0, y: 0, background: "lightblue"},
+  to: [
+    {x: 100, background: "lightblue"},
+    {y: 80, background: "blue"},
+    {x: 0, background: "lightgreen"},
+    {y: 0, background: "green"},
+  ],
+  loop: true,
+  config: config.wobbly
+}))
 
-1
+let [spin3, api3] = useSpring(()=>({
+  from: {x: 0, y: 0, background: "pink"},
+  to: [
+    {x: 100, background: "pink"},
+    {y: 80, background: "orange"},
+    {x: 0, background: "red"},
+    {y: 0, background: "orange"},
+  ],
+  loop: true,
+  config:{ duration: 1000 }
+}))
 
-1
+let [stile1, setStile1] = useState(spin2)
+let trigger3 = useRef(false)
 
-1
+let fermo1 = true
 
-1
+useEffect(()=>{
+  api3.pause()
+}, [fermo1])
 
-1
+function cambio2(){
 
-1
+  if(trigger3.current){
+    setStile1(spin2)
+    api2.resume()
+    api3.pause()      
+  }else{
+    setStile1(spin3)
+    api3.resume()
+    api2.pause()
+  }
 
-1
+  trigger3.current = !trigger3.current
+}
+
+
+<div className="d-block">
+
+  <animated.div className="boxo" style={stile1}>
+  </animated.div>
+
+  <button className="btn btn-primary" onClick={cambio2}>
+    Resume
+  </button>
+
+</div>
+```
 
 </details>
 
