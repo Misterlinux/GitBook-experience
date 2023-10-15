@@ -650,19 +650,7 @@ let refe = useRef(null)
 
 </details>
 
-1
-
-1
-
-1
-
-1
-
-1
-
-1
-
-1
+<figure><img src="../.gitbook/assets/Parallax2.gif" alt="" width="188"><figcaption></figcaption></figure>
 
 1
 
