@@ -167,25 +167,83 @@ async function primo(){
 
 <details>
 
-<summary>Multiple sequential new SpringValue()</summary>
+<summary>Sequential SpringValue objects on re-set loop</summary>
 
-1
+We sequentially animate the SpringValue(), re**set** it to its **starting value**, and re-start its function.
 
-1
+```jsx
 
-1
+const mossa1 = {
+  x: new SpringValue("0%", {config: {duration: 500}, loop: true }),
+  y: new SpringValue( 0, {config: {duration: 500}} ),
+  background: new SpringValue("yellow", {config: {duration: 1000}})
+}
 
-1
+const mossa2 = {
+  x: new SpringValue("0%", {config: {duration: 500} }),
+  y: new SpringValue( 0, {config: {duration: 500}} ),
+  background: new SpringValue("lightcoral", {config: {duration: 1000}})
+}
 
-1
+async function primo(){
+  mossa1.background.start("orange")
+  await mossa1.x.start("33%")
+  await mossa1.y.start(-50)
 
-1
+  await mossa1.x.start("66%")
+  mossa1.background.start("lightcoral")
+  await mossa1.y.start(0)
+  await mossa1.x.start("100%")
 
-1
+  mossa1.x.set("0%")
+  mossa1.y.set(0)
+  mossa1.background.set("blue")
 
-1
+  primo()
+}
 
-1
+async function secondo(){
+  mossa2.background.start("red")
+  await mossa2.x.start("33%")
+
+  await mossa2.y.start(50)
+  await mossa2.x.start("66%")
+  mossa2.background.start("brown")
+
+  await mossa2.y.start(0)
+  await mossa2.x.start("100%")
+
+  mossa2.x.set("0%")
+  mossa2.y.set(0)
+  mossa2.background.set("lightcoral")
+  secondo()
+}
+
+async function accel(){
+  await primo()
+  secondo()
+} 
+
+<div className="row">
+  
+  <div className="col-6 justify-content-start d-flex">
+    <animated.div style={{ marginLeft: mossa1.x, ...mossa1 }}>
+    </animated.div>
+  </div>
+
+  <div className="col-6 justify-content-start d-flex">
+    <animated.div style={{ marginLeft: mossa2.x, ...mossa2 }}>
+    </animated.div>
+  </div>
+
+  <div className="d-block">
+    <button className="btn btn-info" onClick={accel}>
+      start
+    </button>
+  </div>
+
+</div>
+```
 
 </details>
 
