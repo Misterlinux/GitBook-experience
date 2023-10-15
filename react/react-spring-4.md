@@ -137,6 +137,62 @@ function cambio2(){
 
 </details>
 
+### Sequential New SpringValue() properties
+
+We **new SpringValue** _<mark style="color:blue;">single</mark>_ style properties, to **sequentially** animate them as keyframes we **async/await**.
+
+```jsx
+//We can keep multiple in an object and it's similar to useSpringValue()
+import { SpringValue } from '@react-spring/web'
+
+const mossa1 = {
+  x: new SpringValue("0%", {config: {duration: 500} }),
+  y: new SpringValue( 0, {config: {duration: 500}} ),
+}
+
+async function primo(){
+  await mossa1.x.start("50%")
+  await mossa1.y.start(100)
+
+  mossa1.x.set("0%")
+  mossa1.y.set(0)
+  primo()
+}
+
+<div>
+  <animated.div className="boxo" style={{ marginLeft: mossa1.x, y: mossa1.y }} >
+  </animated.div>
+</div>
+```
+
+<details>
+
+<summary>Multiple sequential new SpringValue()</summary>
+
+1
+
+1
+
+1
+
+1
+
+1
+
+1
+
+1
+
+1
+
+1
+
+</details>
+
+<figure><img src="../.gitbook/assets/newspringValue.gif" alt="" width="375"><figcaption><p>new SpringValue()</p></figcaption></figure>
+
+1
+
 1
 
 1
