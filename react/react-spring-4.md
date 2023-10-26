@@ -339,6 +339,39 @@ function starto(){
 
 <figure><img src="../.gitbook/assets/controllerBounce1.gif" alt="" width="100"><figcaption><p>Bounce and horizontal animation</p></figcaption></figure>
 
+### useSpring() scrips on conditional keyframes
+
+We _chain_ useSpring() **keyframes** with an **array** of _spring objects_, but we _can't change_ the keyframe array **during the animation** (unless we change the rendered useSpring()). We create a **script**.
+
+An **async** function that **await** the **next** (function that returns a **Promise** on the **spring state**) once completed.
+
+```jsx
+//onStart() triggers on each keyframe and you don't need commas on next({})
+let [circle, circleapi] = useSpring(()=>({
+  from: {x: 0, y: 0, backgroundColor: "green"},
+  to: [
+    {x: 100, y: 0, backgroundColor: "yellow"},
+    {x: 50, y: 100, backgroundColor: "red"}
+  ]
+}))
+
+let [ruota, ruotaapi] = useSpring(()=>({
+  from: {x: 0, y: 0, backgroundColor: "green"},
+  to: async (next, cancel) => {
+    await next({x: 100, y: 0, backgroundColor: "yellow"})
+    await next({x: 50, y: 100, backgroundColor: "red" })
+  }
+}))
+```
+
+1
+
+1
+
+1
+
+1
+
 1
 
 1
