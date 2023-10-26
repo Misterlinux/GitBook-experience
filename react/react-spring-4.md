@@ -364,7 +364,63 @@ let [ruota, ruotaapi] = useSpring(()=>({
 }))
 ```
 
-1
+<details>
+
+<summary>Conditional keyframes and re-started loop animations</summary>
+
+We **useRef()** to trigger a <mark style="color:blue;">different set of keyframes</mark> in the **script**.&#x20;
+
+We re**set** the **next** keyframe with the _ternary operator_, making it _transparent_ and _positioning_ it at the beginning (**from**) using a **different config()** while restarting the loop with different keyframes.
+
+```jsx
+//We don't repeat unchanging properties to avoid extra animations on reset
+//Choose between set() or start if you want an immediate or gradual reset
+//The ternary operator is reversed on the other keyframe array
+
+let invi = useRef(true)
+
+let [ruota, ruotaapi] = useSpring(()=>({
+  from: {x: -100, y: 0, background: "green"},
+  to: async (next, cancel) => {
+    if( invi.current ){
+      await next({y: -150, background: "yellow"})
+      invi.current ? await next({x: 100, background: "red" }) : await ripass(next)
+      invi.current ? await next({y: 0, background: "brown" }) : await ripass(next)
+      invi.current ? await next({x: -100, background: "green" }) : await ripass(next)
+    
+    }else{
+      await next({x: -50, y: -150, background: "pink"})
+      invi.current ? await ripass(next) : await next({x: 100, y: -150, background: "purple" }) 
+      invi.current ? await ripass(next) : await next({x: 100, y: 0, background: "orange" }) 
+      invi.current ? await ripass(next) : await next({x: -50, y: 0, background: "blue" }) 
+    }
+  },
+  loop: true,
+  config: {duration: 1000},
+}))
+
+async function ripass(next){
+  //await next({background: "transparent", config:{duration: 100} }) 
+  ruotaapi.set({ background: "transparent" })
+
+  await next({x: -100, y: 0, config:{duration: 500} }) 
+}
+
+function restart(){
+  invi.current = !invi.current
+}
+
+<div>
+  <animated.div className="boxo" style={ruota}>
+  </animated.div>
+
+  <button className="btn btn-primary mt-2" onClick={restart}>
+    Restart
+  </button>
+</div>
+```
+
+</details>
 
 1
 
