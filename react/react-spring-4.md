@@ -526,6 +526,59 @@ let [quad, api3] = useSpring(() => ({
 
 1
 
+### useIsomorphicLayoutEffect() and useReducedMotion()
+
+The React hooks _useEffect_() and _useLayout_() affect the **server** and the **client** respectively.            We properly render _useSpring()_ effects with **useIsomorphicLayoutEffect().**
+
+```jsx
+//We can't insert a loop:true in a start() or a single value useSpring()
+//we can use a useState() dependency to animate the useSpring() 
+
+let [dove, setDove] = useState({x: 0, y: -100})
+
+let [primo, apiPrimo] = useSpring(() =>({
+  x: 0, y: 0
+}))
+
+useIsomorphicLayoutEffect(()=>{
+  apiPrimo.start({
+    x: dove.x, y: dove.y
+  })
+}, [dove])
+
+let [secondo, apiSecondo] = useSpring(() =>({
+  from: {x: 0, y: 0},
+  to: {x: 0, y: -100},
+}))
+
+function mossa(){
+  apiSecondo.start({ x: 0, y: 100 })
+
+  setDove({x: 0, y: 100})
+}
+
+<div> 
+  <animated.div className="boxo" style={primo} />
+  <animated.div className="boxo" style={secondo} />
+
+  <button className="btn btn-primary" onClick={mossa}> Starto </button>
+</div>
+```
+
+The **useReducedMotion()** hook will trigger if the user lowers animations in its device.
+
+```
+//We use the boolean returned value
+const reducedMotion = useReducedMotion()
+
+<div>
+  <h1>Hello World</h1>
+  {reducedMotion ? <p>You're using reduced motion!</p> : null}
+</div>
+```
+
+1
+
 1
 
 1
