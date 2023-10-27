@@ -579,6 +579,71 @@ const reducedMotion = useReducedMotion()
 
 1
 
+### Animation useSpring() values onScroll()
+
+The **useScroll()** is a _utility abstraction_ used to create scroll-linked animations.
+
+It returns the **scrollY** springValue, the pixel **scroll distance**, and **scrollYProgress**, a **0-1** value **relative** to the entire **useRef() container**. Both are built-in so we have to **rename** them with **:** if we have _multiple useScroll()_.
+
+We can **animate** an useSpring() on the useScroll() **onChange()** or **interpolate** it with a ternary operator.
+
+```jsx
+//Without container the onScroll() covers the entire window
+//onScroll() interpolate is less animated than onChange()
+//On the overflow-y container we animate absolute bars to 50% of the width
+
+let [{blu, giallo, rosso}, api] = useSpring(()=> ({
+  blu: "0%", giallo: "0%", rosso: "0%"
+}))
+
+const refe = useRef(null)
+
+const { scrollY: pixel, scrollYProgress: percent } = useScroll({
+  container: refe,
+  onChange: ({ value: { scrollYProgress, scrollY } }) => {
+
+    if(scrollYProgress > 0.5){
+      api.start({ blu: (scrollYProgress * 50) + "%" })
+    }else{
+      api.start({ blu: "0%" })
+    }
+  },
+  default: {immediate: true}
+})
+
+<div className='mx-auto finestra' ref={refe}>
+
+  <animated.h2 className='position-absolute ' style={{
+    marginTop: "8%", backgroundColor: "red",
+    width: percent.to(val => (
+      (val * 50) + "%"
+    )),
+  }}>
+    Red
+  </animated.h2>
+
+  <animated.h2 className='position-absolute ms-5 p-2' style={{
+    marginTop: "14%", backgroundColor: "yellow",
+    width: percent.to(val => (
+      ( val > 0.3 ) ? (val * 50) + "%" : "0%" 
+    )),
+  }}>
+    Yellow
+  </animated.h2>
+
+  <animated.h2 className='position-absolute ms-5 p-2' style={{
+    marginTop: "20%", backgroundColor: "blue",
+    width: blu
+  }}>
+    Blue
+  </animated.h2>
+  
+  <div style={{ height: "100vw", height: "120vh" }} />
+  </div>
+
+</div>
+```
+
 1
 
 1
