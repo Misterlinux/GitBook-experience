@@ -424,7 +424,105 @@ function restart(){
 
 1
 
-1
+<details>
+
+<summary>Circle useSpring() animation on changing keyframes duration</summary>
+
+We **interpolate** the useSpring() **radians** degree, we **return** the circular _translate(x, y)_ style object to decostruct in the DOM.
+
+```jsx
+//We use the Math.cos()/sin() of the radians degree and a fixed radius
+
+let veloce = useRef(false)
+
+let [{radiante}, api] = useSpring(() =>({
+  from: {radiante: 0.25},
+  to: async(next, cancel) => {
+    veloce.current ? await next({ radiante: 0.50, config:{duration: 400} }) : await next({ radiante: 0.50 })
+    veloce.current ? await next({ radiante: 0.75, config:{duration: 400} }) : await next({ radiante: 0.75 })
+    veloce.current ? await next({ radiante: 1.00, config:{duration: 400} }) : await next({ radiante: 1.00 })
+    veloce.current ? await next({ radiante: 1.25, config:{duration: 400} }) : await next({ radiante: 1.25 })
+  },
+  config: {duration: 700},
+  loop: true,
+}))
+
+function freccia(val){
+  const angle = val * 2 * Math.PI;
+  const radius = 140;
+
+  const x = radius * Math.cos(angle);
+  const y = radius * Math.sin(angle);
+
+  return `translate(${x}px, ${y}px)`;
+}
+
+let mosse = [
+  {transform: radiante.to( val => freccia(val) )} ,
+  quad,
+  triangle,
+]
+
+<div className="d-block" style={{ marginTop: "25vh" }}> 
+
+  <animated.div className={forme[ora]} style={{
+    ...mosse[ora]
+  }}>
+  </animated.div>
+  
+  <button className="btn btn-primary" onClick={tri}>
+    Next
+  </button>
+  
+  <button className="btn btn-warning " onClick={velo}>
+    Slower/Faster
+  </button>
+</div>
+```
+
+We **useState**() switch between _different useSpring()_ and classes, and we **useRef**() the keyframe script _conditional_ for faster/slower config.
+
+```jsx
+//useSpring() have similar durations to keep keyframes positions on switch
+
+let [ora, setOra] = useState(0)
+
+function tri(){
+  setOra((ora) => (ora+ 1) % 3 )
+}
+
+let forme = ["round mx-auto", "boxo mx-auto", "triago mx-auto"]
+
+function velo(){
+  veloce.current = !veloce.current
+}
+
+
+let [triangle, api2] = useSpring(()=>({
+  from: {x: -140, y: 0},
+  to: async(next, cancel) => {
+    veloce.current ? await next({x: 0, y: -242, config:{ duration: 530 } }) : await next({x: 0, y: -242 })
+    veloce.current ? await next({x: 140, y: 0, config:{ duration: 530 } }) : await next({x: 140, y: 0 })
+    veloce.current ? await next({ x: -140, y: 0, config:{ duration: 530 } }) : await next({x: -140, y: 0 })
+  },
+  config: {duration: 800},
+  loop: true
+}))
+
+let [quad, api3] = useSpring(() => ({
+  from: {x: -140, y: 0},
+  to: async(next, cancel) => {
+    veloce.current ? await next({x: -140, y: -260, config:{ duration: 400 } }) : await next({x: -140, y: -260 })
+    veloce.current ? await next({x: 140, y: -260, config:{ duration: 400 } }) : await next({x: 140, y: -260 })
+    veloce.current ? await next({ x: 140, y: 0, config:{ duration: 400 } }) : await next({ x: 140, y: 0 })
+    veloce.current ? await next({ x: -140, y: 0, config:{ duration: 400 } }) : await next({ x: -140, y: 0 })
+  },
+  config: {duration: 800},
+  loop: true
+}))
+```
+
+</details>
 
 1
 
