@@ -422,7 +422,7 @@ function restart(){
 
 </details>
 
-1
+<figure><img src="../.gitbook/assets/resetLoop1.gif" alt="" width="284"><figcaption><p>The 2 useSpring() scrips being restarted and on loop.</p></figcaption></figure>
 
 <details>
 
