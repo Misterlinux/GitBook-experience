@@ -646,7 +646,136 @@ const { scrollY: pixel, scrollYProgress: percent } = useScroll({
 
 1
 
-1
+<details>
+
+<summary>Animated Math.cos() wave onScroll()</summary>
+
+We loop a **new Array().fill()** to _render_ multiple _100% viewpoint_ DOM elements, for the onScroll() to take place.
+
+```jsx
+//The created array of empty values is used only for the index
+const PAGE_COUNT = 5
+
+<div>
+  {new Array(PAGE_COUNT).fill(null).map((_, index) => (
+    <div style={{ width: "100vw", height: "100vh" }} key={index} />
+  ))}
+</div>
+```
+
+We **interpolate** the circle **clipPath**() area and onScroll() **onChange()** to animate the **translateY**(0-> 100%) text.
+
+```jsx
+//Adding the container prop when scrolling the viewpoint might force a scroll
+//The clipPath() starts immediately, the translateY() after 70% scroll
+const [textStyles, textApi] = useSpring(() => ({
+  y: '100%',
+  config: {
+    duration: 1000
+  }
+}))
+
+const { scrollYProgress } = useScroll({
+  onChange: ({ value: { scrollYProgress } }) => {      
+    (scrollYProgress > 0.7 ) ? textApi.start({ y: '0%' }) 
+    : 
+    textApi.start({ y: '100%' })
+  },
+  default: { immediate: true, },
+})
+
+<animated.div
+  className="d-flex justify-content-start pt-3 align-items-start"
+  style={{
+    background: "orange",
+    clipPath: scrollYProgress.to(val => `circle(${val * 100}%)`),
+  }}>
+
+  <h1 className="title d-flex">
+    <div>
+      <animated.div style={textStyles}>Aha!</animated.div>
+    </div>
+    <div>
+      <animated.div style={textStyles}>You found me!</animated.div>
+    </div>
+  </h1>
+</animated.div>
+```
+
+We **Array.from()** render _fixed_ bands on both sides of the window, and we onScroll() **scrollYProgress** interpolate their **width** style prop.
+
+Each bar will have a fixed **scrollP** (their <mark style="color:blue;">current scroll position</mark>) and fixed **percentileP** (their singular _index dependant_ **percentage current position** on the total height, 0.025 for the first and 1 for the last).
+
+```jsx
+//Array.from({length: x}) is no different from new Array(x).fill
+//we add 1 to the 0 index array.from().map array
+//The last bar will have percentileP 1 (by itself) and scrollP 0->1 (shared)
+
+const X_LINES = 40
+
+<div className="animated__layers">
+  <animated.div className="bar__container">
+    {Array.from({ length: X_LINES }).map((_, i) => (
+      <animated.div key={i} className="bar"
+        style={{
+          width: scrollYProgress.to(scrollP => {
+            const percentileP = (i + 1) / X_LINES
+
+            return inter(percentileP, scrollP)
+          }),
+        }}
+      />
+    ))}
+  </animated.div>
+  
+  <animated.div className="bar__container__inverted">
+  </animated.div>
+</div>
+```
+
+We use **Math.cos()** to start the wave at percentileP 0.025.                                                     We **multiply the parameters' difference** (onScroll() responsive) inside Math.cos() to increase the difference between bars and then the result by 40 (max-width)
+
+```jsx
+//We Math.pi() to use radians, the width is set at 5 if it is too small
+//To not get double waves we check the internal multiplier with bar number
+//The parameters' difference is always -Math.pi()< x < Math.pi()
+function inter(percentileP scrollP){
+  let y = (Math.cos( (percentileP - scrollP) * Math.PI * 1.5 ) * 40)
+  let y1 = (y < 5) ? y = 5 : null
+
+  return y
+}
+```
+
+The **flex-column** sidebar **container** is **fixed**, we changed the **align-items** for the left **reverse** bars.
+
+```css
+.animated__layers > * {
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  inset: 0;
+}
+
+.bar__container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  z-index: 2;
+  justify-content: space-between;
+}
+
+.bar__container__inverted{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  z-index: 2;
+}
+```
+
+</details>
 
 1
 
