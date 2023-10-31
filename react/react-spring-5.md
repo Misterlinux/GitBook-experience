@@ -55,7 +55,58 @@ let springs = useSpring({
 
 1
 
-1
+<details>
+
+<summary>Multi directional section with useInView()</summary>
+
+When having **multiple** useInView() elements keep the **threshold below 0.5**, to _not overlay_ and _repeat_ the _useSpring()._
+
+```jsx
+//We can add a delay to the useInView
+//Instead of absolute/width animation we used margin/opacity
+let [primo, visto1] = useInView({
+  delay: 500,
+  threshold: 0.2
+})
+let seePrimo = useSpring({
+  opacity: visto1 ? 1 : 0,
+  marginLeft: visto1 ? 0 : 500,
+})
+
+let [secon, visto2] = useInView({
+  delay: 500,
+  threshold: 0.2
+})
+let seeSeco = useSpring({
+  opacity: visto2 ? 1 : 0,
+  marginRight: visto2 ? 0 : 500,
+})
+
+let [tri, visto3] = useInView({
+  delay: 500
+})
+let seeTri = useSpring({
+  opacity: visto3 ? 1 : 0,
+  marginTop: visto3 ? 0 : 200,
+})
+
+<div>
+  <animated.div ref={primo} className="bg-warning" 
+    style={{ height: "100vh", ...seePrimo }}>
+  </animated.div>
+
+  <animated.div ref={secon} className="bg-primary" 
+    style={{height: "100vh" , ...seeSeco }}>
+  </animated.div>
+
+  <animated.div ref={tri} className="bg-danger" 
+    style={{width: "100%", ...seeTri}}>
+    <div style={{height: "100vh"}}></div>
+  </animated.div>
+</div>
+```
+
+</details>
 
 1
 
