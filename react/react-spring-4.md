@@ -524,7 +524,7 @@ let [quad, api3] = useSpring(() => ({
 
 </details>
 
-1
+<figure><img src="../.gitbook/assets/keyframeCircle.gif" alt="" width="246"><figcaption><p>Switching multiple useSpring() on the same element</p></figcaption></figure>
 
 ### useIsomorphicLayoutEffect() and useReducedMotion()
 
@@ -576,8 +576,6 @@ const reducedMotion = useReducedMotion()
   {reducedMotion ? <p>You're using reduced motion!</p> : null}
 </div>
 ```
-
-1
 
 ### Animation useSpring() values onScroll()
 
@@ -644,7 +642,7 @@ const { scrollY: pixel, scrollYProgress: percent } = useScroll({
 </div>
 ```
 
-1
+<figure><img src="../.gitbook/assets/onScrollsprings.gif" alt="" width="317"><figcaption><p>useSpring() with interpolate or onChange() onScroll() animation</p></figcaption></figure>
 
 <details>
 
