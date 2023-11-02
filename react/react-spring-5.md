@@ -275,7 +275,136 @@ We add a **custom** circle **cursor** to the absolute cards, and set the backgro
 
 1
 
-1
+<details>
+
+<summary>from/to functions on useSprings() indexed elements</summary>
+
+We use the **from/to functions** to render useSprings() props, the _starting point_ (deck) **from** is shared between the springs while the _endpoint_ **to** depends on the **index** position.
+
+The _useState()_ **reverse** resets the cards to their _starting point_.
+
+```jsx
+//We reset x each 4th card to for the rows, on y we increase Y each 4
+//we also randomize the ending rotation for each card
+let carta = "https://i.pinimg.com/1dc1f9add0ea9e1580c8cee22b6ef39f.jpg";
+
+let carte1 = [
+  "https://static.tcgcollector.com/...jpg",
+  "https://static.tcgcollector.com/...jpg",
+  "https://static.tcgcollector.com/...jpg",
+  "https://static.tcgcollector.com/...jpg",
+  "https://static.tcgcollector.com/...jpg",
+  "https://static.tcgcollector.com/...jpg",
+]
+
+let from = (i) => ({
+  x: 30 + "vw",
+  y: -50 + "vh",
+  rot: 0,
+  scale: 1.2,
+  back: `url(${carta})`,
+})
+
+let to = (i) => ({
+  x: (i % 4) * 20 + "vw",
+  y: Math.floor(i / 4) * 30 + "vh",
+  scale: 1,
+  rot: -20 + Math.random() * 40,
+  back: `url(${carta})`,
+})
+
+const trans = (r, s) => `rotateZ(${r}deg) scale(${s})`
+
+let [reve, setReve] = useState(false)
+
+const [mazzo, mazzoapi] = useSprings(carte1.length, i => ({
+  from: from(i),
+  to: to(i),
+  config: {duration: 2000},
+  delay: i * 1100,
+  reverse: reve
+}), [reve])
+
+function cambio(){ setReve( (x)=> !x ) }
+
+<button className="btn btn-primary p-2" onClick={cambio}>
+  Re-Draw PKM cards
+</button>
+```
+
+On **click**, we **reverse** animate the card's **rot**ate prop and **set()** its new _index_ **background** (set() quickly loads the new image instead of waiting for the duration)
+
+We create the draw-from-top effect by **interpolating** the **z-index** prop at the very start of their animation.
+
+```jsx
+//We pass the useSprings() index to only animate the clicked card
+//We can only use the ternary operator conditional inside the set() start()
+//We also set() because its not possible to animate between 2 url() images.
+function gira(i){
+  mazzoapi.set(n => (
+    n == i ?
+      {
+        back: (mazzo[i].back.animation.to == `url(${carta})`) ? 
+        `url(${carte1[i]})` : `url(${carta})`
+      }
+    :
+    null
+  ))
+
+  mazzoapi.start(n => (
+    n == i ?
+      {
+        rot: mazzo[i].rot.animation.to * -1,
+        config: {duration: 500}
+      }
+    : 
+    null
+  ))
+}
+
+<div className="d-flex justify-content-center align-items-center ">
+  <div style={{marginTop: "60vh",width: "80%", height: "70vh" }}>
+
+    {mazzo.map(({ x, y, rot, scale, back }, i) => (
+      <>
+      <animated.div
+        onClick= {()=> gira(i)}
+        className="deck2"
+        style={{
+          x, y,
+          transform: interpolate([rot, scale], trans),
+          backgroundImage: back,
+          touchAction: 'pan-x',
+          axis: 'x',
+          zIndex: scale.to(val => val < 1.2 ? 1 : 0 )
+        }}
+      >
+      </animated.div>
+      </>
+    ))}
+
+  </div>
+</div>
+```
+
+We translate(**vw**, **vh**) the cards but their width/height is fixed.
+
+```css
+//We set their background-image props
+.deck2{
+  position: absolute;
+  width: 170px;
+  height: 240px;
+  display: flex;
+
+  background-color: white;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+```
+
+</details>
 
 1
 
