@@ -1,3 +1,17 @@
+---
+layout:
+  title:
+    visible: true
+  description:
+    visible: true
+  tableOfContents:
+    visible: true
+  outline:
+    visible: true
+  pagination:
+    visible: true
+---
+
 # REACT 4, useMemo(), useReducer(), ReactJs scaling and useRef() Dom manipulation.
 
 * 1
@@ -112,7 +126,7 @@ export function filterTodos(todos, tab) {
 
 The **useReducer(reducer, state)** adds a reducer function to change the state object.
 
-```
+```jsx
 //The reducer function uses (initial) state and (dispatch) action as arguments. 
 //some cases return update the state, other replace it with action properties
 
@@ -140,7 +154,7 @@ const [state, dispatch] = useReducer(reducer, initialState);
 
 The **useReducer()** returns the current **state** and the **dispatch** update function to **re-render** the state.
 
-```
+```jsx
 //dispatch() objects needs a type for its reducer() 
 const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -175,7 +189,7 @@ function handleInputChange(e) {
 
 The **reducer()** function doesn't update _single properties_, it **returns new state objects**.
 
-```
+```jsx
 //we can decostrcut the state and change some props
 //or we can use methods to return or delete specific props from the object
 
@@ -210,25 +224,13 @@ function tasksReducer(tasks, action) {
 
 1
 
-1
-
-1
-
-1
-
-1
-
-1
-
-1
-
 </details>
 
 An **initial state** object returned from a **function**, even if called once, will be re-called each re-render.
 
 We add an **initializer function** to the **useReducer()** hook.
 
-```
+```jsx
 //Any argument in the initializer function will be the second useReducer() argument
 const [state, dispatch] = useReducer(reducer, createInitialState(username));
 const [state, dispatch] = useReducer(reducer, username, createInitialState);
@@ -242,7 +244,7 @@ const [state, dispatch] = useReducer(reducer, none, createInitialState);
 
 A parent component includes its **{children}** components as a **prop.**
 
-```
+```jsx
 //we can style ANY children component in the Parent
 const Text = () => <p>This is favorable</p>
 
@@ -271,7 +273,7 @@ We **createContext()** Provider values for the **\[state, dispatch]** of **useRe
 
 Any imported nested **component** will have access to both the state and event handler functions.
 
-```
+```jsx
 //while rendering any {children} component 
 import { useReducer, useContext, createContext} from 'react';
 
@@ -314,7 +316,7 @@ export default function Task({children}) {
 
 The **useContext()** needs to be in the same page as the provider to work.                           We need to **export** it as a **custom Hook**.
 
-```
+```jsx
 //It won't work on an imported component
 import Task from "./components/External1"
 let instate = useContext(Task)
@@ -336,7 +338,7 @@ let dispatch = useStatodis()
 
 We **import** the _component_ and the _custom hooks_:
 
-```
+```jsx
 import Task, { useStato, useStatodis } from "./components/External1"
 
 <div className='row me-0 '>
@@ -354,7 +356,7 @@ import Task, { useStato, useStatodis } from "./components/External1"
 
 Now any **children** component has access to the **dispatch()** event handler.
 
-```
+```jsx
 //and will share the useReducer() state
 function Increase(){
 
@@ -397,7 +399,7 @@ function Increase(){
 
 The **useRef()** lets us reference a value that’s not needed for rendering
 
-```
+```jsx
 //It returns an object with a single property .current
 
 const valref = useRef(0);
@@ -412,7 +414,7 @@ Contrary to **useState()**, **useRef()** changes _won't re-render_ the page and 
 
 In this example, we show the useRef() value using a handler function.
 
-```
+```jsx
 let ref = useRef(0);
 const [ refe, setRefe ] = useState(0) 
 
@@ -449,7 +451,7 @@ function altroClick(){
 
 **useRef()** is used to communicate with external API, timeID variables, and DOM manipulation, if rendered It won't update its value.
 
-```
+```jsx
 //Don't relay too much logic on useRef() and remember to use its .current property 
 
 timeoutID.current = setTimeout(() => {
@@ -461,7 +463,7 @@ clearTimeout(timeoutID.current);
 
 On inputs, you can render the **useState()** input AND a **useRef()**.current value.
 
-```
+```jsx
 //In case we need an instant input value for javascript functions
 
 value={e.target.value}
@@ -473,7 +475,7 @@ onChange={(e) => {
 
 Don't **useRef()** on a **javascript expression**, its value won't update.
 
-```
+```jsx
 /This won't work, useSatte() instead
 const isOnRef = useRef(false);
 
@@ -490,7 +492,7 @@ The same **useRef()** created inside **repeated components** won't interfere wit
 
 An useRef() can't be initialized inside a normal function, only on a component.
 
-```
+```jsx
 //And if we initialize it outside it will return only the last trigger
 let mia = useRef(null)
 
@@ -512,7 +514,7 @@ function chiama(alerta){
 
 _Multiple components_ can **useRef()** independently from each other.
 
-```
+```jsx
 //multiple buttons for multiple different timeout() alerts
 
 function DebouncedButton({ chiama, children }) {
@@ -548,7 +550,7 @@ We clearTimeout() onClick() to **debounce** the button, to start its timeout() o
 
 We **useRef()** to access the React Node **JSX** elements.
 
-```
+```jsx
 //To access the ref data we use event handlers, we can also use Browser API methods
 let pink = useRef()
 
@@ -572,7 +574,7 @@ function handle(){
 
 The **ref attribute** can contain a **callback function**, it uses the DOM as an _argument_, and it triggers on _render_.
 
-<pre><code>//On re-render it uses null on its argument and then re-calls its callback function.
+<pre class="language-jsx"><code class="lang-jsx">//On re-render it uses null on its argument and then re-calls its callback function.
 //Other ref changes won't have any effects
 
 let doll= useRef(0)
@@ -598,7 +600,7 @@ function cliccato(){
 
 The **ref attribute** can't be assigned to Node elements on loops or javascript expressions.
 
-```
+```jsx
 //Any React hook has to be on a component
 
 {items.map((item) => {
@@ -615,7 +617,7 @@ We create a Map object of Node elements using ref callback function.
 
 We create an array of 20 image objects and a getMap() function for the **ref.**
 
-```
+```jsx
 const catList = [];
 
 for (let i = 0; i < 10; i++) {
@@ -637,7 +639,7 @@ function getMap() {
 
 We use Node IDs from the **ref map object** and the map.get() for the **scrollIntoView()** method.
 
-```
+```jsx
 function scrollToId(itemId) {
   const map = getMap();
   
@@ -664,7 +666,7 @@ function scrollToId(itemId) {
 
 We use a new **ref callback function** to loop through each rendered **\<li>** element, and we set the ref map object with key/value pairs of Images **ID** and **Node element**.
 
-```
+```jsx
 //We render with map() but set the ref separately and push node elements
 
 <div>
@@ -697,7 +699,7 @@ We use a new **ref callback function** to loop through each rendered **\<li>** e
 
 We can't pass a **children ref** from its parent component.
 
-```
+```jsx
 //Will return the error "function components cannot be given refs"
 
 function MyInput(props) {
@@ -709,7 +711,7 @@ function MyInput(props) {
 
 The **forwardRef() API** opts for receiving the rep prop as the second argument into the child component.
 
-```
+```jsx
 //We import forwardRef from "react", now we can call the child ref.current
 
 const MyInput = forwardRef((props, ref) => {
@@ -918,7 +920,7 @@ The moment a new Node element gets the **ref attribute** it will be **scrollInto
 
 The Node element **ref** can receive a **DOM method** while in a **different component,** using **forwardRef().**
 
-```
+```jsx
 //DOM methods triggered on separate components will still trigger the current ref
 const inputRef = useRef(null);
 
