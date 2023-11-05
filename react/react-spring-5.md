@@ -53,8 +53,6 @@ let springs = useSpring({
 
 ```
 
-1
-
 <details>
 
 <summary>Multi directional section with useInView()</summary>
@@ -108,7 +106,7 @@ let seeTri = useSpring({
 
 </details>
 
-1
+<figure><img src="../.gitbook/assets/sectionScroll.gif" alt="" width="188"><figcaption><p>useInView() margin/opacity animated</p></figcaption></figure>
 
 ### Rendering useSprings() with index-based style properties
 
@@ -273,7 +271,7 @@ We add a **custom** circle **cursor** to the absolute cards, and set the backgro
 
 </details>
 
-1
+{% embed url="https://codesandbox.io/s/usedrag-usesprings-tarot-qm5zzs?file=/src/App.js" %}
 
 <details>
 
@@ -406,12 +404,5 @@ We translate(**vw**, **vh**) the cards but their width/height is fixed.
 
 </details>
 
-1
+<figure><img src="../.gitbook/assets/useSpringsReverse1.gif" alt="" width="375"><figcaption><p>useSprings() reverse set() and start()</p></figcaption></figure>
 
-1
-
-1
-
-1
-
-1
