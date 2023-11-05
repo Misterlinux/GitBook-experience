@@ -775,8 +775,4 @@ The **flex-column** sidebar **container** is **fixed**, we changed the **align-i
 
 </details>
 
-1
-
-1
-
-1
+<figure><img src="../.gitbook/assets/scrollWave.gif" alt="" width="375"><figcaption><p>Double inverted waves with useScroll() animation</p></figcaption></figure>
