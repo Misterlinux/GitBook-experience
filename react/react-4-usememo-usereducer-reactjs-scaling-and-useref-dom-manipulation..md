@@ -317,7 +317,7 @@ export default function Task({children}) {
 The **useContext()** needs to be in the same page as the provider to work.                           We need to **export** it as a **custom Hook**.
 
 ```jsx
-//It won't work on an imported component
+//We can't useContext() on an imported component 
 import Task from "./components/External1"
 let instate = useContext(Task)
 
@@ -329,6 +329,7 @@ export function useStatodis() {
   return useContext(Statodis);
 }
 
+//We then import both the useReducer() component and useContext()
 import Task, { useStato, useStatodis } from "./components/External1"
 
 let stato = useStato()
@@ -342,11 +343,6 @@ We **import** the _component_ and the _custom hooks_:
 import Task, { useStato, useStatodis } from "./components/External1"
 
 <div className='row me-0 '>
-  <Florida>
-    <p>Children components</p>
-    <Text />
-  </Florida>
-
   <Task>
     <Increase />
   </Task>
@@ -388,7 +384,6 @@ function Increase(){
     </div>
   )
 }
-
 ```
 
 </details>
