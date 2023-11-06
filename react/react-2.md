@@ -31,6 +31,7 @@ We render **Router>Routes>Route** in the return, the **element component** is li
 We use /\* for the **nested Routes** that will inherit the **parent URL**
 
 ```jsx
+//put the <Router/> in a separate file from the imported rendered elements
 return(
   <div>
     <Router>
@@ -43,7 +44,6 @@ return(
     </Router>
   </div>
 )
-
 ```
 
 The **/** Route is the "**Home**" URL, we use **\<Link>** to **navigate** to the URL PATH,&#x20;
@@ -60,7 +60,6 @@ The **/** Route is the "**Home**" URL, we use **\<Link>** to **navigate** to the
     &#x3C;/div>
   )
 }
-
 </code></pre>
 
 <figure><img src="../.gitbook/assets/URL.PNG" alt=""><figcaption><p>Home / route</p></figcaption></figure>
@@ -128,25 +127,22 @@ return(
 {% tab title="Outlet Route" %}
 Nested \<Route/> elements can use \<Outlet/> to keep rendering their parent route element.
 
-```jsx
-<Router>
-  <Routes>
-    <Route path="/" element={<Home />}> 
-      <Route path="primo" element={<Primo/>}></Route>
-    </Route>
+<pre class="language-jsx"><code class="lang-jsx"><strong>&#x3C;Router>
+</strong>  &#x3C;Routes>
+    &#x3C;Route path="/" element={&#x3C;Home />}> 
+      &#x3C;Route path="primo" element={&#x3C;Primo/>}>&#x3C;/Route>
+    &#x3C;/Route>
 
-    <Route path="secondo" element={ <Secondo/> }></Route>
-  </Routes>
-</Router>
-```
+    &#x3C;Route path="secondo" element={ &#x3C;Secondo/> }>&#x3C;/Route>
+  &#x3C;/Routes>
+&#x3C;/Router>
+</code></pre>
 {% endtab %}
 
 {% tab title="Outlet component" %}
-\<Outlet/> will only render the nested Route Home element, while Second will replace it.
+**\<Outlet/>** renders the **\<Route> nested** element while keeping the current one.
 
-```
-//
-
+```jsx
 function Home(){
 
   return(
@@ -164,10 +160,10 @@ function Home(){
 }
 ```
 
-1
+Any **link path** outside the nested will be rendered alone.
 
-```
-//
+```jsx
+//Primo will render with Home while Second by itself
 
 function Primo(){
 
