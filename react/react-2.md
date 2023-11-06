@@ -194,6 +194,112 @@ function Secondo(){
 
 <summary>Render Route element components with useParams() variables</summary>
 
+We create a homepage and a link for the ul links
+
+```jsx
+<Router>
+  <Routes>
+    <Route path="/" element={<House />} />
+    <Route path=":variable/*" element={<Topic />} />
+  </Routes>
+</Router>
+```
+
+We render the Onject properties as paths, we also add an extra route separated from the homepage so to render it together with the previous path element.
+
+```jsx
+//The rendered homepage
+//for some reason we put it in the homepage to render teh last component
+
+import { getSites } from "../Content";
+import Final from "./Final";
+
+let topico = getSites();
+
+<div>
+  <ul>
+    {topico.map(({ id, name }) => (
+      <li key={id}>
+        <Link to={id}> {name} </Link>
+      </li>
+    ))}
+  </ul>
+
+  <Routes>
+    <Route path=":articolo" element={<Final />} />
+  </Routes>
+</div>
+
+
+```
+
+In teh topic we render the Object routes arument inside the object array with custom routes path.
+
+```jsx
+
+import Primo from "./Primo";
+import Secondo from "./Secondo";
+import Terzo from "./Terzo";
+
+function Topic() {
+  const { variable } = useParams();
+
+  const modules = {
+    Primo,
+    Secondo,
+    Terzo
+  };
+
+  const Module = modules[variable];
+
+  return (
+    <div className="d-flex justify-content-center">
+      <div className="d-block">
+        <h1 className="text-center"> {variable} </h1>
+
+        <Module fonte={variable} />
+      </div>
+    </div>
+  );
+}
+```
+
+Then we render one of the array of components avaiable and get to the final component.we render the components including their next text array elements
+
+```
+// Some code
+import { getSites } from '../Content';
+import Terzo from './Terzo';
+
+      <div>
+        <ul>
+          {risorsa.resources.map((id) => (
+            <li key={id.id}>
+              <Link to={id.id}>{id.name}</Link>
+            </li>
+          ))}
+        </ul>
+
+        <Routes>
+          <Route path=":articolo" element={<Final />} />
+        </Routes>
+      </div>
+
+
+```
+
+1
+
+1
+
+1
+
+1
+
+1
+
+1
+
 We render **3 imported components** on a **single** Router>Routes>**Route Element**.
 
 ```jsx
