@@ -9,12 +9,11 @@ We use **Client-side routing** to render **\<Routes> components** without reques
 
 Routing is not included in react, we need to in import Components from **react-router-dom**.
 
-```
-npm i react-router-dom
+<pre class="language-jsx"><code class="lang-jsx">npm i react-router-dom
 
 //We change the name of Browser
-import {
-  BrowserRouter as Router,
+<strong>import {
+</strong>  BrowserRouter as Router,
   Link,
   Route,
   useParams,
@@ -23,7 +22,7 @@ import {
   useRouteError
 } from "react-router-dom";
 
-```
+</code></pre>
 
 {% tabs %}
 {% tab title="Home route" %}
@@ -31,7 +30,7 @@ We render **Router>Routes>Route** in the return, the **element component** is li
 
 We use /\* for the **nested Routes** that will inherit the **parent URL**
 
-```
+```jsx
 return(
   <div>
     <Router>
@@ -49,21 +48,20 @@ return(
 
 The **/** Route is the "**Home**" URL, we use **\<Link>** to **navigate** to the URL PATH,&#x20;
 
-```
-//we only need the /(path name) for the TO link.
+<pre class="language-jsx"><code class="lang-jsx">//we only need the /(path name) for the TO link.
 
-const Binge = () =>{
-  return(
-    <div>
-      <ul>
-        <li> <Link to="/">Home</Link> </li>
-        <li> <Link to="/venere">Bergamo</Link> </li>
-      </ul>
-    </div>
+<strong>const Binge = () =>{
+</strong>  return(
+    &#x3C;div>
+      &#x3C;ul>
+        &#x3C;li> &#x3C;Link to="/">Home&#x3C;/Link> &#x3C;/li>
+        &#x3C;li> &#x3C;Link to="/venere">Bergamo&#x3C;/Link> &#x3C;/li>
+      &#x3C;/ul>
+    &#x3C;/div>
   )
 }
 
-```
+</code></pre>
 
 <figure><img src="../.gitbook/assets/URL.PNG" alt=""><figcaption><p>Home / route</p></figcaption></figure>
 {% endtab %}
@@ -73,7 +71,7 @@ On the route element component, we use a **variable route path**.
 
 The URL PATH **depends on the \<Link>** and inherits the parent URL.
 
-```
+```jsx
 //The path will change depending on the Link, and we can link 2 to one route
 
 return(
@@ -101,7 +99,7 @@ return(
 {% tab title="Variable route" %}
 We cut the /\* from the path, any extra Route won't inherit the PATH URL.
 
-```
+```jsx
 //this is done for the ending routes
 
 return(
@@ -130,7 +128,7 @@ return(
 {% tab title="Outlet Route" %}
 Nested \<Route/> elements can use \<Outlet/> to keep rendering their parent route element.
 
-```
+```jsx
 <Router>
   <Routes>
     <Route path="/" element={<Home />}> 
