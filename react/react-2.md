@@ -224,16 +224,12 @@ let topico = getSites();
       </li>
     ))}
   </ul>
-
-  <Routes>
-    <Route path=":articolo" element={<Final />} />
-  </Routes>
+  
 </div>
-
 
 ```
 
-In teh topic we render the Object routes arument inside the object array with custom routes path.
+We extract the current route path with useParams() and ender its corresonding imported component using an object, we also pass the string name to it to extract the articles.
 
 ```jsx
 
@@ -264,31 +260,95 @@ function Topic() {
 }
 ```
 
-Then we render one of the array of components avaiable and get to the final component.we render the components including their next text array elements
+Then we render one of the array of components avaiable and get to the final component.we render the components including their next text array elements.
 
+This is what is rendered in teh second route, we use the prop to&#x20;
+
+```jsx
+//
+
+import { getResor } from "../Content";
+import Final from "./Final";
+
+function Primo(prop) {
+  let risorsa = getResor(prop.fonte);
+
+  return(
+    <div>
+      <ul>
+        {risorsa.resources.map((id) => (
+          <li key={id.id}>
+            <Link to={id.id}>{id.name}</Link>
+          </li>
+        ))}
+      </ul>
+
+      <Routes>
+        <Route path=":articolo" element={<Final />} />
+      </Routes>
+    </div>
+  )
+}
 ```
+
+The final component renders the internal content of the array inside the object property.
+
+using both the url paths both to extract the array content
+
+```jsx
 // Some code
-import { getSites } from '../Content';
-import Terzo from './Terzo';
+import { getDesc } from "../Content";
 
-      <div>
-        <ul>
-          {risorsa.resources.map((id) => (
-            <li key={id.id}>
-              <Link to={id.id}>{id.name}</Link>
-            </li>
-          ))}
-        </ul>
+function Final() {
+  const { variable, articolo } = useParams();
+  let { name, description } = getDesc({ variable, articolo });
 
-        <Routes>
-          <Route path=":articolo" element={<Final />} />
-        </Routes>
-      </div>
-
+  return (
+    <div>
+      <h4> {name} </h4>
+      <p> {description} </p>
+    </div>
+  );
+}
 
 ```
 
-1
+We extracy the routes content from teh imported object.
+
+```jsx
+// Some code
+
+const topico = [
+  {
+    name: "This is the Primo window",
+    id: "Primo",
+    resources: [
+      {
+        name: "Why React Hooks?",
+        id: "why-react-hooks",
+        description: `In this post you'll ...`
+      },
+      ...
+    ]
+  },
+  ...
+]
+
+export function getSites() {
+  return topico;
+}
+
+export function getResor(fonte) {
+  return topico.find(({ id }) => id == fonte);
+}
+
+export function getDesc({ variable, articolo }) {
+  return topico
+    .find(({ id }) => id == variable)
+    .resources.find(({ id }) => id == articolo);
+}
+
+```
 
 1
 
