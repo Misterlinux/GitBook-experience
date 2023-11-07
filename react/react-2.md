@@ -194,7 +194,7 @@ function Secondo(){
 
 <summary>Render Route element components with useParams() variables</summary>
 
-We create a homepage and a link for the ul links
+We create a **router** with the homepage and the **variable route** for the link **pat**hs.
 
 ```jsx
 <Router>
@@ -205,12 +205,10 @@ We create a homepage and a link for the ul links
 </Router>
 ```
 
-We render the Onject properties as paths, we also add an extra route separated from the homepage so to render it together with the previous path element.
+On the homepage, we _loop_ and _render_ the **object properties** as **paths.**&#x20;
 
 ```jsx
-//The rendered homepage
-//for some reason we put it in the homepage to render teh last component
-
+//The imported getSites() returns the array of objects to loop
 import { getSites } from "../Content";
 import Final from "./Final";
 
@@ -229,10 +227,10 @@ let topico = getSites();
 
 ```
 
-We extract the current route path with useParams() and ender its corresonding imported component using an object, we also pass the string name to it to extract the articles.
+On the variable path, we extract the **current route** with **useParams()** and _render_ its corresponding _component_.
 
 ```jsx
-
+//while also passing the :variable path as a prop.
 import Primo from "./Primo";
 import Secondo from "./Secondo";
 import Terzo from "./Terzo";
@@ -260,13 +258,12 @@ function Topic() {
 }
 ```
 
-Then we render one of the array of components avaiable and get to the final component.we render the components including their next text array elements.
+On each of the variable route **components**, we _loop_ and _render_ their **resources** property.
 
-This is what is rendered in teh second route, we use the prop to&#x20;
+We set the **Final** _Route element_ in the variable path to render it with the previous elements.
 
 ```jsx
-//
-
+//The Final component will render the resource id/name as :articolo path
 import { getResor } from "../Content";
 import Final from "./Final";
 
@@ -291,12 +288,10 @@ function Primo(prop) {
 }
 ```
 
-The final component renders the internal content of the array inside the object property.
-
-using both the url paths both to extract the array content
+The Final component renders the name and id props of the resource array elements.
 
 ```jsx
-// Some code
+//We need both the path variables to use the imported getDesc()
 import { getDesc } from "../Content";
 
 function Final() {
@@ -313,10 +308,10 @@ function Final() {
 
 ```
 
-We extracy the routes content from teh imported object.
+We **export** the **array** of objects and the **function** to filter its properties.
 
 ```jsx
-// Some code
+//We render and loop the id/name for the route paths
 
 const topico = [
   {
@@ -350,222 +345,11 @@ export function getDesc({ variable, articolo }) {
 
 ```
 
-1
-
-1
-
-1
-
-1
-
-1
-
-We render **3 imported components** on a **single** Router>Routes>**Route Element**.
-
-```jsx
-import { getSites } from './Content';
-import Primo from './components/Primo';
-import Secondo from './components/Secondo';
-import Terzo from './components/Terzo';
-
-function App() {
-
-  return (
-    <div>
-      <div className="header bg-primary w-100">
-      </div>
-
-      <Router>
-
-        <Routes>
-          <Route path='/' element={ <House/> }/>
-          <Route path=':variable/*' element={ <Topic /> }/>
-        </Routes>
-      </Router>
-
-    </div>
-  );
-}
-```
-
-We **loop** the **JSON array** and set the **\<Link>** to the **id** of each array element (with the same name as the component).
-
-```jsx
-//The map() method needs the {params} coz they are object properties
-
-function House(){
-  let topico = getSites()
-
-  return(
-    <div>
-
-      <ul>
-        {topico.map(({id, name})=>(
-          <li key={id}>
-            <Link to={id} > {name} </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
-}
-```
-
-The content.js **JSON array** is:
-
-```javascript
-//its ID name is the variable we use for the imported components
-
-const topico = [
-    {
-        name: "This is the Primo window",
-        id: "Primo",
-        resources: [
-        ]
-    },
-    {
-        name: "This is the Secondo window",
-        id: "Secondo",
-        resources: [
-        ]
-    },
-    {
-        name: "This is the Terzo window",
-        id: "Terzo",
-        resources: [
-        ]
-    }
-]
-
-export function getSites(){
-    return topico
-}
-```
-
-We **useParams()** the **Route url** **:variable** to render the imported **components**.
-
-```jsx
-//The route element content depends on the Link id+
-//we create an "object" of components to filter with the params
- 
-function Topic(){
-  const { variable } = useParams();
-
-  const modules = {
-    Primo,
-    Secondo,
-    Terzo,
-  };
-
-  const Module = modules[ variable ];
-
-  return(
-    <div>
-      <h1> {variable} </h1>
-
-      <Module fonte={variable} />
-    </div>
-  )
-}
-```
-
-On the imported **component**, using the **params prop**, we **render** the JSON element **properties**.
-
-```jsx
-//With the same Route path variable == Link id, 
-function Primo(prop){
-
-  let risorsa = getResor(prop.fonte)
-
-  return(
-    <div>
-
-      <ul>
-        {risorsa.resources.map((id)=> (
-          <li key={id.id}>
-            <Link to={id.id} >{id.name}</Link>
-          </li>
-        ))}
-      </ul>
-
-      <Routes>
-        <Route path=":articolo" element={<Final/>} />
-      </Routes>
-    </div>
-  )
-}
-
-//we need the ({}) to compare an object property to the params
-export function getResor(fonte){
-    return topico.find(({id})=> ( id == fonte ))
-}
-```
-
-The single _resource_ object **property** is.
-
-```jsx
-const topico = [
-    {
-        name: "This is the Primo window",
-        id: "Primo",
-        resources: [
-            {
-              name: "Why React Hooks?",
-              id: "why-react-hooks",
-              description:
-                `In this post you'll ...`
-            },
-            {
-              name: "Introduction to props in React",
-              id: "react-props",
-              description:
-                `In this post you'll ...`
-            },
-            {
-              name: "Understanding React's useRef Hook",
-              id: "useref",
-              description:
-                `In this post you'll ...`
-            }
-        ]
-    },
-    ...
-]
-```
-
-To filter the description property we need 2 **Route path variables.**
-
-```jsx
-//We need the exact Route path variables
-export function getDesc({variable, articolo}){
-    
-    return topico
-        .find( ({id}) => ( id == variable ) )
-        .resources.find( ({id}) => ( id == articolo ) )
-}
-```
-
-Then we render it on the Route element component.
-
-```jsx
-function Final(){
-
-  const {variable, articolo} = useParams()
-
-  let {name, description} = getDesc({variable, articolo})
-
-  return(
-    <div>
-      <h4> {name} </h4>
-      <p> {description} </p>
-    </div>
-  )
-}
-```
-
 </details>
 
-<figure><img src="../.gitbook/assets/JSONrouter.png" alt=""><figcaption><p>React-Dom-Router</p></figcaption></figure>
+{% embed url="https://codesandbox.io/s/react-dom-router-with-object-routes-qf2366?file=/src/Content.js:0-507" %}
+Router variable Routes with variable components
+{% endembed %}
 
 ### React Input Props and onChange() event handler
 
