@@ -6,7 +6,7 @@
 
 Even if we include only some **modules** of bootstrap we use the entire package:
 
-```
+```jsx
 //On the <head> or inside the body
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
@@ -47,7 +47,7 @@ d-none d-sm-block d-md-none    //visible only in md (none in default and AFTER m
 
 For modals we have _buttons_ opening **extra windows** with content, through **data-bs-toggle="modal"** and **data-bs-target**:&#x20;
 
-```
+```jsx
 //the button will have the -toggle for the modal and the target for the modal content
 <button class="pure-button" data-bs-toggle="modal" data-bs-target="#uno">Stati</button>
 
@@ -103,7 +103,7 @@ We can **bs-dismiss** the current **modal** and **bs-toggle** a new one.
 
 **modal-fullscreen-sm-down** will expand the modal to **fullscreen** if screen **below sm** media query.
 
-```
+```jsx
 <button class="pure-button" data-bs-toggle="modal" data-bs-target="#tutto"> 
     Mixing 
 </button>
@@ -182,7 +182,7 @@ We can **bs-dismiss** the current **modal** and **bs-toggle** a new one.
 
 On **pagination** we create a list of links:
 
-```
+```jsx
 //pagination-sm/md/lg sets the size of the list 
 
 <ul class="pagination pagination-lg justify-content-center my-5">
@@ -216,11 +216,11 @@ To have a _**dynamic pagination**_ bar we can use a Jquery Plugin [**Bootpag**](
 
 With the **plug-in** we only need an **id** for the **pagination and content**:
 
-```
+```jsx
 <div style="text-align: center">
-	<div id="dynamic_content">Pagination goes here</div>
+  <div id="dynamic_content">Pagination goes here</div>
 	
-	<div id="show_paginator"></div>
+  <div id="show_paginator"></div>
 </div>
 
 ```
@@ -303,7 +303,7 @@ The **data-bs-toggle="collapse"** uses **href/data-bs-target** to animate the he
 {% tab title="Vertical collapse" %}
 When using a non-button we use **href="#"** to target the collapse Id content,&#x20;
 
-```
+```jsx
 //The trigger container and the collapse can be located anywhere
 
 <div className="row justify-content-center me-0">
@@ -334,7 +334,7 @@ To **data-bs-target/href** multiple collapse we use _classes_.
 {% tab title="Horizontal collpse" %}
 We add **collapse-horizontal** to the collapse content.
 
-```
+```jsx
 //By adding role="button" we can use data-bs-target
 
 <div className="row">
@@ -362,7 +362,6 @@ We add **collapse-horizontal** to the collapse content.
   </div>
 
 </div>
-
 ```
 
 <figure><img src="../.gitbook/assets/HorizontalColl.png" alt="" width="375"><figcaption><p>Vertical collapse content</p></figcaption></figure>
@@ -377,7 +376,7 @@ We design Boostrap forms using **form-label/form-input** pairs, linked by **html
 {% tab title="Form design" %}
 Each input occupies 100% of the width unless a row>col is set.
 
-```
+```jsx
 //We can add read-only and form-control-plaintext to an input
 
 <div className="row justify-content-center">
@@ -409,7 +408,7 @@ Each input occupies 100% of the width unless a row>col is set.
 {% tab title="Switch checkbox" %}
 The **switch** is a styled checkbox input, so we need a **form-switch** container.
 
-```
+```jsx
 <div className="mb-3">
 
   <div className="form-check form-switch">
@@ -426,7 +425,7 @@ The **switch** is a styled checkbox input, so we need a **form-switch** containe
 {% tab title="Inline form" %}
 An inline form can be added with a **row** container and col label/input.
 
-```
+```jsx
 //we use g(utters) to space the col, col-form-label is for the align
 
 <div className="row g-3 mb-3">
@@ -455,7 +454,7 @@ We can add **multiple input**s to a single form **row,** like **floating-form, D
 {% tab title="Multiple forms" %}
 We add a row container to the form to create **col** inputs.
 
-```
+```jsx
 //Textarea can increase its height with rows=""
 
 <div className="row justify-content-center">
@@ -498,7 +497,7 @@ We add a row container to the form to create **col** inputs.
 
 **Form-text** puts text **below** the input, we can use aria-describedby/for to link it and input.
 
-```
+```jsx
 //we also need form-floating as a container
 
 <div className="col-6">
@@ -517,7 +516,7 @@ We add a row container to the form to create **col** inputs.
 
 We can use **\<select>** with **form-floating**.
 
-```
+```jsx
 //select goes on top of lab
 
 <form>
@@ -538,11 +537,11 @@ We can use **\<select>** with **form-floating**.
 {% endtab %}
 
 {% tab title="Datalist" %}
-**Datalist** allows us to include a series of options for the input type text.
+**Datalist** allows us to include a series of options for the input-type text.
 
 We need to add **list** to the \<input> and link it to the **datalist** using **ID.**
 
-```
+```jsx
 //We can add extra text in <option>, but only value will appear in the input
 
 <div className="col-8 mb-2">
@@ -564,20 +563,12 @@ We need to add **list** to the \<input> and link it to the **datalist** using **
 ```
 
 <figure><img src="../.gitbook/assets/datasetForm.png" alt=""><figcaption><p>Datalost options on input text</p></figcaption></figure>
-
-1
-
-1
-
-1
-
-1
 {% endtab %}
 
 {% tab title="select/options" %}
 **Form-select** creates a select scrollbar with \<option>, the **selected** one appears first.
 
-```
+```jsx
 //form-select-lg was still smaller so we had to add style
 
 <div className="col-4 mb-2">
@@ -599,7 +590,7 @@ We need to add **list** to the \<input> and link it to the **datalist** using **
 
 We use **form-check** (or **form-check reverse**) to add radio **form-check-input** buttons and **form-check-label,** in order to display them **inline** we used **col** containers for each**.**
 
-```
+```jsx
 //Radio buttons need to share the Input Name
 //Reverse swaps places between input and label
 
@@ -735,7 +726,7 @@ We use the **form-range** bootstrap for the **range input type.**
 
 We can set its **min-max** value (by default 0-100) and **steps** for the value of each range snap.
 
-```
+```jsx
 //It can be disabled and has a line background and a thumb
 
 <div>
