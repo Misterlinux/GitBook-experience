@@ -357,7 +357,7 @@ ReactJs **input props** allow us to have **controlled inputs**, in which we set 
 
 We re-**set** the value of the **useState()** based on the input current **e.target.value** (target being a property of the event interface, referencing the input).
 
-```
+```jsx
 const [costo, setCosto] = useState(0)
 
 <div>
@@ -377,7 +377,7 @@ const [costo, setCosto] = useState(0)
 
 When **updating** an **integer useState()** outside the input we need to convert it with **Number()**, to maintain the single useState().
 
-```
+```jsx
 //while on the input onChange() is teh same as before
 
 <input type="number" className="form-input" value={numba}
@@ -395,7 +395,7 @@ When **updating** an **integer useState()** outside the input we need to convert
 
 **Text** and **radio/checkbox** inputs use **defaultValue/checked** for the default value prop, if the checkbox doesn't have a value prop on submit its value will be  "on".
 
-```
+```jsx
 //We use an useState() to set a defaultChecked(works for value too)
 const [lenguage, setLenguage] = useState( "Hindi" );
 
@@ -416,7 +416,7 @@ const [lenguage, setLenguage] = useState( "Hindi" );
 
 We use the **useId()** **React hook** to avoid conflicts when re-rendering multiple **labels/inputs**.
 
-```
+```jsx
 //We can add strings to the useId() to avoid callin it multiple times
 
 const testo= useId()
@@ -446,7 +446,7 @@ const testo= useId()
 
 We use the **max/min** input prop to set its _submit conditions_, the event handler **onInvalid()** is triggered when the submit fails.
 
-```
+```jsx
 //For text input we use min/manLenght
 
 <form>
@@ -469,7 +469,7 @@ We use the **max/min** input prop to set its _submit conditions_, the event hand
 
 A **type="submit" button** will trigger the **form onSubmit()** event handler.
 
-```
+```jsx
 //You can use type="reset" to reset the form or type="button" to not form submit
 
 <form onSubmit={invia}>
@@ -486,21 +486,20 @@ We then use **new FormData(form, submitter)** **interface** to render the _e.tar
 
 We finally use the **Object.fromEntries(iterable)** static method to convert the _FormData_ into an _Object._
 
-```
-//The keys/names are gonna be in alphabetical order
+<pre class="language-jsx"><code class="lang-jsx">//The keys/names are gonna be in alphabetical order
 
 const [mino, setMino] = useState("")
 
 function manda(e){
   e.preventDefault()
 
-  let forma= e.target
-  let formdata = new FormData(forma)
+<strong>  let forma= e.target
+</strong>  let formdata = new FormData(forma)
   let dati = Object.fromEntries(formdata.entries())
 
   console.log(dati)
 }
-```
+</code></pre>
 
 <figure><img src="../.gitbook/assets/formData.png" alt=""><figcaption><p>form onSubmit() and formData object</p></figcaption></figure>
 
@@ -508,7 +507,7 @@ We use **FormData methods** to edit the form object.
 
 We can use **append(key, value)** and **set(key, value)** to add a new key/value pair, **delete(key)** to remove one, **get(key)** to return the first _value_ associated with the key, and **has(key)** which returns _true/false_ depending if the key is present.
 
-```
+```jsx
 //Values will be converted in strings (like "true" and "96")
 
 let form= e.target
@@ -524,7 +523,7 @@ console.log( formdata.has("nuovo") )   //"false"
 
 We can use the **entries(), keys()**, and **values()** methods to return a key/values, keys, and values **iterable**.
 
-```
+```jsx
 //In order to get the values we need to loop the iterable
 
 for (const pair of formdata.entries()) {
@@ -539,7 +538,7 @@ formdata.keys()                 //on, messo
 
 On **type="file" \<input>** we use the **accept** property which sets the **MIME file types** we can submit. We can use accept= "audio/\*_" and "image/\*_" and "video/\*" in case we want to accept any file type.
 
-```
+```jsx
 //With multiple accept properties we use (,), we use the formdata for image src
 
 <div className="col-3">
@@ -571,7 +570,7 @@ Its returned formdata will be an object of image properties, the **lastModified*
 
 The **accept** property isn't enough to filter the input files so we use a **server-side** function.
 
-```
+```jsx
 //We post the image only if its file type is Included in out array
 
 const fileTypes = [
@@ -595,7 +594,7 @@ function tipo(poster){
 
 The **Byte** is the basic unit of file storage, based on the **binary** system the **Kilobyte** will be 1024 bytes (2^10) while the **Megabyte** is 1024^2.
 
-```
+```jsx
 //we convert the image file size 
 
 function grande(size){
@@ -612,7 +611,7 @@ function grande(size){
 
 To render the image src we need to **URL.createObjectURL()** the entire **image object**.
 
-```
+```jsx
 //We useState() to render the src in the DOM
 
 function immagine(e){

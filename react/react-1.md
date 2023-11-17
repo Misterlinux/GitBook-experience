@@ -676,7 +676,7 @@ To **deploy** a **Reactjs** app GitHub repository on [_**Netlify**_ ](https://ap
 
 We render **input controlled-components** using useState() and callback functions.
 
-```
+```jsx
 //onChange() will trigger for each type in the input
 const [reminder, setReminder] = useState("");
 
@@ -704,7 +704,7 @@ function handleChange1(e) {
 
 On the DOM, we add the **onSubmit()** attribute to the **\<form>** component.
 
-```
+```jsx
 //We use the same callback function for all inputs
 //the onSubmit() will trigger for any button pressed within <form>
 
@@ -741,7 +741,7 @@ We use **target.name** to select which useState() gets which **target.value** to
 
 While **onSubmit()** we print the current **useStates()**.
 
-```
+```jsx
 const [reminder, setReminder] = useState("");
 const [email, setEmail] = useState("")
 const [password, setPassword] = useState("")
@@ -771,7 +771,7 @@ function mandasotto(event){
 
 We can also render **uncontrolled input components**, using the **useRef hook,** we set the callback function and the useState **outside** of the **input** component
 
-```
+```jsx
 //We set the ref={} on the input and then use it in useEffect
 
 const [name, setName] = useState('Ravi');
