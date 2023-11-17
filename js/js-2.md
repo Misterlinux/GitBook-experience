@@ -342,7 +342,7 @@ console.log(yull)                  //['ipsum', index: 6, input: 'Lorem ipsum ...
 
 Then we have the **.search()** and **.match() :**
 
-```
+```javascript
 //.search() will return the index of the match if present
 let visit = "Plant a tree!";
 let n = visit.search(/plants/i);
@@ -356,7 +356,7 @@ console.log( "best is best".match(/best/g) )    //[best, best]
 
 About variables used as **new regex patterns**:
 
-```
+```javascript
 //We can get a value from the input to then create a new RegExp
 let oltre = document.getElementById("cosa").value 
 
@@ -366,7 +366,7 @@ const kok = html.innerHTML.split( regex );
 
 About **stricter** filters:
 
-```
+```javascript
 //We can use renex on a split() method (for white spaces for example)
 let spaced = html.innerHTML.split( /(\s)/ )
 
@@ -382,22 +382,22 @@ We use **forms** to collect user **input**:
 {% tab title="<Form>" %}
 **\<Form>** is a container for **inputs/labels** and the **action** attribute allows us to **redirect** the form after submission:
 
-```
+```javascript
 <form id="formula" method="post" action="https://www.ilpost.it/">
-	<label for="unon">First</label>
-	<input type="text" id="uno" name="unon"> <br>
+  <label for="unon">First</label>
+  <input type="text" id="uno" name="unon"> <br>
 
-	<input type="radio" id="html" name="fav_language" value="HTML">
-	<label for="html">HTML</label><br>
-	<input type="radio" id="css" name="fav_language" value="CSS">
-	<label for="css">CSS</label><br>
+  <input type="radio" id="html" name="fav_language" value="HTML">
+  <label for="html">HTML</label><br>
+  <input type="radio" id="css" name="fav_language" value="CSS">
+  <label for="css">CSS</label><br>
 
-	<input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
-	<label for="vehicle1"> I have a bike</label><br>
-	<input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
-	<label for="vehicle2"> I have a car</label><br>
+  <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+  <label for="vehicle1"> I have a bike</label><br>
+  <input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
+  <label for="vehicle2"> I have a car</label><br>
 
-	<input type="submit" value="submit">
+  <input type="submit" value="submit">
 </form>
 ```
 {% endtab %}
@@ -405,7 +405,7 @@ We use **forms** to collect user **input**:
 {% tab title="<input>" %}
 The input function depends on its type:
 
-```
+```jsx
 //It can be a radio button, a checkbox, or a text input
 <input type="text" id="uno" name="unon">
 <input type="radio" id="html" name="fav_language" value="HTML">
@@ -423,7 +423,7 @@ let primo = document.querySelector("#vehicle1").value
 {% tab title="<label>" %}
 **Label** identifies the input, they are assigned using "for" = "id" = "name"
 
-```
+```jsx
 //The checkbox will be triggered even if click on the label
 <input type="radio" id="javascript" name="fav_language" value="JavaScript">
 <label for="javascript">JavaScript</label>:
@@ -433,7 +433,7 @@ let primo = document.querySelector("#vehicle1").value
 {% tab title="input submit" %}
 We use the **\<form> id** and the **"submit" event** on the **"submit" type input**.
 
-```
+```jsx
 //We need event.preventDefault() to not refresh the page on every submit
 
 <form action="" id="btn">
@@ -462,7 +462,7 @@ For the **check status** and **value** of **radio/checkbox buttons,** we use the
 
 In a form we can put **label** and **input** in a different order:
 
-```
+```jsx
 //we can separate or embed the tags
 <form id="formula" method="post">
     <input type="radio" id="html" name="fav_language" value="HTML">
@@ -527,7 +527,7 @@ We use **select** to create a dropdown list.
 
 The **\<select>** in the HTML will be:
 
-```
+```jsx
 <label for="weather">Select the weather type today: </label>
 <select id="weather">
     <option value="">--Make a choice--</option>
@@ -540,7 +540,7 @@ The **\<select>** in the HTML will be:
 
 When the **select** gets used it triggers the **"change" event,** we also use a js function to update the **CSS style**.&#x20;
 
-```
+```jsx
 //we use the value of the <select> list
 const select = document.querySelector('#weather');
 const para = document.querySelector('#well');
@@ -578,7 +578,7 @@ To push JS content into HTML DOM we can use **AppendChild()** or **innerHTML.**
 
 &#x20;AppendChild() will **record** and **update** its content while innerHTML will **reset** it.
 
-```
+```jsx
 <input type="text" name="name" id="txt_name" > 
 <button onclick="kek()">
     ADD
@@ -607,7 +607,7 @@ function kek(){
 
 We can **replace()** an **innerHTML** element using **regex**.
 
-```
+```jsx
 let ipsum = document.getElementById("lorem")
 let gulp =  ipsum.innerHTML.replace(/MagNi/gi, "Picoolo") 
 ipsum.innerHTML = `<span >` +  gulp + `</span>` 
@@ -627,7 +627,7 @@ The **setInterval() method** calls a function at specified millisecond **interva
 
 We **setInterval()** using the new Date() object (that updates itself) to create a clock:
 
-```
+```jsx
 let attuale = document.getElementById("attuale")
 let att;
 
@@ -638,7 +638,7 @@ function current(){
 }
 
 function real(){
-    
+
     att= setInterval(() => {
         current()
     }, 1000);
@@ -732,7 +732,7 @@ The **setTimeout() method** calls a function **once** after a number of millisec
 {% tab title="new Date() timeout" %}
 To **repeat** a setTimeout() function :
 
-```
+```jsx
 <h2 id="stime" class="text-center"></h2>
 
 //we need to put the setTimeout() in its own function
@@ -754,7 +754,7 @@ blue()
 {% tab title="setTimeout() parameters" %}
 We include **parameters** for the setTimeout function:
 
-```
+```jsx
 <button class="btn btn-secondary" onclick="saluto()">arriva</button>
 
 function greeting(x1, x2){
