@@ -329,7 +329,7 @@ export function useStatodis() {
   return useContext(Statodis);
 }
 
-//We then import both the useReducer() component and useContext()
+//We THEN import both the useReducer() component and useContext()
 import Task, { useStato, useStatodis } from "./components/External1"
 
 let stato = useStato()

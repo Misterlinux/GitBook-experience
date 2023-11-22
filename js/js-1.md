@@ -12,16 +12,16 @@
 
 {% tabs %}
 {% tab title="var, let" %}
-```
+**let** was introduced in 2015 and declares a **block-scoped**, **local variable**.
+
+```jsx
+//The assign operator = stores the value, we repeat the assign to edit it
 let uno = 'coming'
 uno = 'The javascript is ' + uno
 
-//we use = as an assign operator for the keyword uno and store the string "coming"
-//we modify the var,let by repeating the assign
-
 console.log(uno)        //"The javascript is coming"
 
-//for multiple let we
+//multiple assigns
 let primo= 1, secondo= 2, terzo= 3;
 
 //ALSO, we can only use _ or - on let names
@@ -29,28 +29,27 @@ let primo= 1, secondo= 2, terzo= 3;
 
 We can create **multi-line** **strings** using **' '** and **/n.**
 
-```
+```jsx
 let poetry = `
 Nel mezzo del cammin di nostra vita \n
 mi ritrovai per una selva oscura, \n `
 
 console.log( poetry )        //Nel mezzo del cammin di nostra vita
                              //mi ritrovai per una selva oscura,
-
 ```
 {% endtab %}
 
 {% tab title="Const" %}
 Data stored in **const** cannot be re-assigned with =;
 
-```
+**const** declares a block-scoped, _read-only_ named constant.
+
+```jsx
+//it can't be re-assigned with =,will result in "constant value error"
 const UNO = 20
 
-//const UNO = UNO +3 will result in "constant value error"
-//but you can still change it momentarily
-
-console.log(UNO + 3)
-//will return 23
+console.log(UNO + 3)    //23
+//can change for single instances
 ```
 {% endtab %}
 {% endtabs %}
@@ -61,12 +60,12 @@ console.log(UNO + 3)
 {% tab title="function()" %}
 you can use the **function** keyword and a **reference** name to create a function:
 
-```
+```jsx
 function sum(){
-    return console.log(12 + 15)
+  return console.log(12 + 15)
 }
 
-//A functions executes only when calling its reference with ()
+//A function executes only when calling its reference with ()
 sum()        //27
 ```
 
@@ -76,7 +75,7 @@ sum()        //27
 {% tab title="Arrow function" %}
 Instead, we can use the **const** keyword (for the _identifier_) and the fat arrow:
 
-```
+```jsx
 const tut = () =>{
   var wel = 12;
   var tre = 10;

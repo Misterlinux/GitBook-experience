@@ -4,7 +4,7 @@
 
 **HTML Geolocation API** allows the _browser_ to make an API **call** on the user position:
 
-```
+```jsx
 //we can deconstruct the position argument to get the COORDinateS
 
 navigator.geolocation.getCurrentPosition( async ( {coords: {latitude, longitude}}) =>{
@@ -42,8 +42,8 @@ We can use [Weatherbit API](https://www.weatherbit.io/api/weather-current) to fe
 
 {% tabs %}
 {% tab title="await syntax" %}
-```
-//In order to use the API we need an base URL and a key 
+```jsx
+//In order to use the API we need a base URL and a key 
 
 let bit= "https://api.weatherbit.io/v2.0/current?lat=35.7796&lon=-78.6382&key=API_KEY&include=minutely"
 let bitkey= "6669a6fd01c14380aac859c88b82b495"
@@ -80,7 +80,7 @@ fetch( weatherbit )
 
 We can also _modify the fetch URL_ based on the data we have available:
 
-```
+```jsx
 const APIKEY = "1313cd4c0f364f82aa120509835e4786";
 let URL = `https://api.weatherbit.io/v2.0/current?key=${APIKEY}`;
 
@@ -114,7 +114,7 @@ return [lon, lat];
 
 We can also use [openweathermap ](https://openweathermap.org/api)API to fetch **cities with similar names**:
 
-```
+```jsx
 //when using this API for coordinates it ended up being less precise
 //also this URL is specific for cities with similar names
 
