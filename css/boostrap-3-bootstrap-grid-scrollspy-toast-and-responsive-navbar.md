@@ -42,10 +42,10 @@ We can **align** and **justify col** elements in the container:
 
 For **align** we need extra classes and CSS height:
 
-```
+```jsx
 .altezza{
-    height: 7em;
-    background-color: lightcoral;
+  height: 7em;
+  background-color: lightcoral;
 }
 
 //we need flex on container to align on row to work, also on content inside
@@ -72,7 +72,7 @@ For **align** we need extra classes and CSS height:
 
 While **justify** doesn't need extra CSS.
 
-```
+```jsx
 //it uses between/around to justify space them
 <div class="container ">
   <div class="row justify-content-end">
@@ -94,7 +94,20 @@ While **justify** doesn't need extra CSS.
 
 </details>
 
-<figure><img src="../.gitbook/assets/alignjustify.PNG" alt=""><figcaption><p>align-items and justify-content</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/alignjustify.PNG" alt="" width="415"><figcaption><p>align-items and justify-content</p></figcaption></figure>
+
+The d-flex **justify** goes before the row/**col** class.
+
+```jsx
+//First we set the justify ad then the row/col
+<div className="d-flex justify-content-center mt-5">
+  <div className="row mx-0 col-8 bg-primary" style={{ height: "20vh" }}>
+
+  </div>
+</div>
+```
+
+<figure><img src="../.gitbook/assets/centeredColumn.png" alt="" width="238"><figcaption><p>Centered d-flex col-8 element</p></figcaption></figure>
 
 We create a **break-line** between columns using a div with **w-100**:
 
