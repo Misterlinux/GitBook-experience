@@ -346,7 +346,7 @@ const grade = 95;
 
 Most Math operations work the same in Javascript **+, -, \*,** and **/** following the **Pendas** priority system, we use **==** for comparisons (while = is to assign variables values).
 
-```
+```jsx
 //We can also define pow with:
 3 ** 2 == 9 == true
 Math.pow(3,2) == 9
@@ -361,7 +361,7 @@ Math.pow(3,2) == 9
 
 We can also perform **Math.()** operations, Math.() is a **Global Built-In** Object for Mathematics, like **Math.round()**:
 
-```
+```jsx
 Math.round(12.3) == 12 
 Math.floor(12.3) == 12 
 Math.ceil(12.3) == 13 
