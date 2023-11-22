@@ -422,7 +422,7 @@ We can check its built-in _methods_ and _properties_ in **its \[\[prototype]] pr
 
 <details>
 
-<summary>Array push(), pop(), shift(), unshift() and splice() methods guide</summary>
+<summary>Array push(), pop(), shift(), unshift(),fill() and splice() methods guide</summary>
 
 We can use methods on **strings,** and we can **chain** them:
 
@@ -433,7 +433,7 @@ We can use methods on **strings,** and we can **chain** them:
 
 For arrays, we can use **push(), pop(), shift()** and **unshift():**
 
-```
+```jsx
 let row = [12]
 //push adds at the end of the array, and returns array.length
 row.push(13) //row== [12,13] // console.log(row.push(13))== 2
@@ -448,9 +448,17 @@ row.shift() // row== [13] // console.log(row.shift())== 12
 row.unshift(10, 11) //row== [10,11,12,13] //console.(row.unshift(10, 11))== 4
 ```
 
+Similar to splice() the **fill()** method uses array indexes to overwrite the array.
+
+```jsx
+[1, 2, 3, 4].fill(0, 2, 4)  //[1, 2, 0, 0]
+[1, 2, 3, 4].fill(5, 1) //[1, 5, 5, 5]
+[1, 2, 3, 4].fill(6) //[6, 6, 6, 6]
+```
+
 We use **.splice( \[starting array index ], cut elements number, elements added )** to substitute **multiple** array elements, remember that the **starting index is included** in the splice.
 
-```
+```jsx
 let longi = [1,2,3,4,5]
 longi.splice(3, 1, "indeed") // longi== [1,2,3,"indeed",5]
 //console.log(longi.splice(3, 1, "indeed"))== [4] //the cut elements
@@ -474,7 +482,7 @@ oltre[0].toUpperCase() + oltre.splice(1) == Minimal
 
 Other methods like **.includes()** and **.startsWith()** will return _true/false_:
 
-```
+```jsx
 //We can't use Regex expressions here (/guess/i)
 longi.includes(1) == true
 "siamo".startsWith("S") == False
@@ -502,7 +510,7 @@ deck ==   [2, 3, 4, 5, 6, 10, 1, 7, 8, 9]
 
 On arrays, we can **.sort()** and **.reverse()** the array elements order, and also use **.from()** to make **strings into arrays:**
 
-<pre><code>//for strings the order is alphabetical
+<pre class="language-jsx"><code class="lang-jsx">//for strings the order is alphabetical
 let ginn = ["ar","ac", "kr", "qu", "ab", "ri"]
 ginn.sort()            //['ab', 'ac', 'ar', 'kr', 'qu', 'ri']
 ginn.reverse()         //['ri', 'qu', 'kr', 'ar', 'ac', 'ab']
@@ -533,7 +541,7 @@ const numbersDoubled = numbers.map(function (number) {
 
 **Booleans** are a type of data and we obtain it after **logical operators**:
 
-```
+```jsx
 true && true == true //logical AND returns true if BOTH
 true || !true == true //logical OR, returns true if one of is true
 2 !== 3 //is 2 NOT equal to 3? True
