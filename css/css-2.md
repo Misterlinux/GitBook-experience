@@ -458,98 +458,142 @@ We use the **\<img>** tag for _**images**_, it creates a space to link the image
 
 <figure><img src="../.gitbook/assets/images.PNG" alt=""><figcaption><p>&#x3C;img> with flex order</p></figcaption></figure>
 
-**We can't use flex** for single images or absolute layers, we use **width**, then **we use flex centering** for the **img container** and the **img tag**:
+We can use both the \<img> and background-Image to set a low-opacity image background to some centered text.
 
+{% tabs %}
+{% tab title="backround-image" %}
+Using background-image the entire height will be set by it, the text will just be centered.
+
+on position absolute index 2 text
+
+{% code fullWidth="false" %}
+```jsx
+//The first justify is for the centered row column, the second for the image
+//text-center/aling-items centers the text
+
+<div className="position-relative d-flex justify-content-center align-items-center">
+  <div className="row col-8 mx-0 text-center align-items-center d-flex justify-content-center">
+    <div className="img-fluid fondo"></div>
+
+    <h2 className="position-absolute" style={{ zIndex: 2 }}>
+      Index text
+    </h2>
+  </div>
+</div>
 ```
-<div class="testo">
-    <div class="immaggine">
-        <img src="https://live.staticflickr.com/65535/49197710168_014f46e3a2_w.jpg" alt="">
-    </div>
-    <h1>We paint</h1>
+{% endcode %}
+
+the image style being:
+
+```css
+//
+
+.fondo{
+  height: 30vh;
+  background-image: url("https:...jpg");
+  background-position: center;
+  background-size: cover;
+  opacity: 0.6;
+}
+```
+
+1
+
+<figure><img src="../.gitbook/assets/backgroundcent.png" alt="" width="258"><figcaption><p>centered index text on background-image</p></figcaption></figure>
+{% endtab %}
+
+{% tab title="centered <img> " %}
+We again use absolute on the text in a centered row-column and image, we also need the index
+
+```jsx
+//The height is set by the image width tho
+
+<div className="d-flex justify-content-center position-relative">
+  <div className="row mx-0 col-8 text-center d-flex justify-content-center align-items-center">
+    <img className="img-fluid" style={{ opacity: "0.6" }} src="https:...jpg" alt=""/>
+
+    <h2 className="position-absolute" style={{ zIndex: 2 }}> 
+      We paint seconds 
+    </h2>
+  </div>
 </div>
 
-//we center the text+image container container
-.testo{
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-//then we set flex and width of the image container for the <img> tag
-.testo .immaggine {
-    width: 45%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-//THEN we set image width % 
-.testo .immaggine img{
-    width: 50%;
-}
-
 ```
 
-The **\<img> height** will be proportional to its width, we can't use % and the image container won't reduce it.
+1
 
-<figure><img src="../.gitbook/assets/Immagine 2023-03-13 124055.png" alt=""><figcaption><p>flex centered img container + width% image</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/imgcentered.png" alt="" width="250"><figcaption><p>Centered &#x3C;img> and absolute text</p></figcaption></figure>
 
-Remember that **opacity is affected by the HTML tag order**:
+1
+{% endtab %}
 
-```
-//if we put the <h1> first it would be affected by the opacity
-<div class="immaggine">
-    ...
-</div>
-<h1>We paint</h1>
+{% tab title="Untitled" %}
+1
 
-.testo .immaggine img{
-    ...
-    opacity: 0.5;
-}
+```jsx
+// Some code
+<div style={{ height: "50vh" }}>
+  <div className="back position-absolute"></div>
 
-```
-
-We can also use the **background** CSS property to style the entire element it's used in, we need a **height/width** for the background.
-
-```
-<div class="secondo">
-    <div></div>
-    <h1>We paint more</h1>
+  <div className="position-relative d-flex flex-column justify-content-center 
+       align-items-center h-100">
+    <h1> Two heights </h1>
+    <p> For the container and absolute image </p>
+  </div>
 </div>
 
-.secondo{
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+```
 
-.secondo div{
-    width: 80%;
-    height: 10em;
-    background-image: url("https://live.staticflickr.com/65535/49197710168_014f46e3a2_w.jpg");
-    background-position: center;
-    background-size: cover;
+1
 
-    opacity: 0.6;
+```css
+//
+
+.back{
+  background-image: url("https:...jpg");
+  background-size: cover;
+  background-position: center 5%;
+  width: 100%;
+  height: 70vh;
+  opacity: 0.6;
 }
 
 ```
 
-<figure><img src="../.gitbook/assets/Immagine 2023-03-13 135148.png" alt=""><figcaption><p>div tag with url ackround and absolute text</p></figcaption></figure>
+1
+{% endtab %}
+{% endtabs %}
+
+11
+
+1
+
+1
+
+1
+
+1
+
+**1**
+
+1
+
+1
+
+1
+
+**1**
 
 **Background-position** and **background-size** work similarly to how they worked with gradients, on CSS 1.
 
-```
+```jsx
 //position accepts X/Y values
 background-position: top/left/bottom/right/%/px
 
 //its default value is the native size of the image, auto/contain
 background-size: X/Y/%
 background-size: cover    //it stretches the image to occupy all the space, can crop
-
+ 
 ```
 
 By default, a **background-image** that is smaller than the element it's in will **repeat** itself to **fill** it.
