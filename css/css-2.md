@@ -561,6 +561,8 @@ We again use absolute on the text in a centered row-column and image, we also ne
 ```
 
 1
+
+<figure><img src="../.gitbook/assets/RelativeCentered.png" alt="" width="241"><figcaption><p>centered relative component on absolute image</p></figcaption></figure>
 {% endtab %}
 {% endtabs %}
 
