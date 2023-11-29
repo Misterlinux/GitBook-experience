@@ -594,7 +594,7 @@ const rein = () => setLista1(shuffle)
 
 We npm install lodash (javascript library) and import the shuffle method.
 
-```
+```jsx
 import shuffle from 'lodash.shuffle'
 shuffle([1,2,3,4,5])	//[3, 5, 4, 2, 1]
 ```
@@ -795,7 +795,7 @@ function checkin(){
 
 The **matchMedia()** method returns _true_ if the document **matches** (or is higher) than its _media-query string_.
 
-```
+```jsx
 //If width > 1000 then matchMedia("(min-width:1000px)").matches == true
 //We add/remove an eventListener ("resize") to update the useState() match value
 
@@ -822,7 +822,7 @@ function useMedia(queries, values, defaultValue) {
 
 We **useMeasure()** to dynamically **set** the column's **width** on **media queries**.
 
-```
+```jsx
 //On resize the number and width of the columns will vary
 
 const [ref, { width }] = useMeasure()
@@ -839,7 +839,7 @@ let wide = width / colonne
 
 We **import** an **array** of images objects as an **useState**(), to use in the useTransition().
 
-```
+```jsx
 export default [
   { css: 'https://images.pexels.com/.../pexels-photo-416430.jpeg', height: 150 },
   ...
@@ -853,7 +853,7 @@ const [items, set] = useState(Data)
 {% tab title="Render and shuffle images" %}
 We import the **lodash.shuffle** method to use on useEffect().
 
-```
+```jsx
 //npm install lodash is a javascript utility library
 //or npm install lodash.shuffle if it doesn't work
 import shuffle from 'lodash.shuffle'
@@ -866,7 +866,7 @@ useEffect(() => {
 
 We store the (container) **height** and the spring-style **images array** on a **useMemo**(), it will change on dependency shuffle (items order change).
 
-```
+```jsx
 //Height values are set during y
 
 const [heights, gridItems] = useMemo(() => {
@@ -887,7 +887,7 @@ const [heights, gridItems] = useMemo(() => {
 
 On shuffle the images **translate-X/Y**, change **column** array **position**, and the (max) height container is updated.
 
-```
+```jsx
 //trail is the delay of images overlapping during the transition
 
 const transitions = useTransition(gridItems, {
