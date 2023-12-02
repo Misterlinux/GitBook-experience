@@ -462,9 +462,7 @@ We can use both the \<img> and background-Image to set a low-opacity image backg
 
 {% tabs %}
 {% tab title="backround-image" %}
-Using background-image the entire height will be set by it, the text will just be centered.
-
-on position absolute index 2 text
+The text zIndex and position-absolute avoids the backgroundImage opacity.
 
 {% code fullWidth="false" %}
 ```jsx
@@ -483,11 +481,9 @@ on position absolute index 2 text
 ```
 {% endcode %}
 
-the image style being:
+The background sets the container's height
 
 ```css
-//
-
 .fondo{
   height: 30vh;
   background-image: url("https:...jpg");
@@ -497,13 +493,11 @@ the image style being:
 }
 ```
 
-1
-
 <figure><img src="../.gitbook/assets/backgroundcent.png" alt="" width="258"><figcaption><p>centered index text on background-image</p></figcaption></figure>
 {% endtab %}
 
 {% tab title="centered <img> " %}
-We again use absolute on the text in a centered row-column and image, we also need the index
+The container's height is set by the image width, the text needs zIndex and position-absolute.
 
 ```jsx
 //The height is set by the image width tho
@@ -520,18 +514,14 @@ We again use absolute on the text in a centered row-column and image, we also ne
 
 ```
 
-1
-
 <figure><img src="../.gitbook/assets/imgcentered.png" alt="" width="250"><figcaption><p>Centered &#x3C;img> and absolute text</p></figcaption></figure>
-
-1
 {% endtab %}
 
-{% tab title="Untitled" %}
-1
+{% tab title="separated img/text" %}
+The height is set by the container, the position-absolute background is separated from the d-flex centered text.
 
 ```jsx
-// Some code
+//We don't need zIndex
 <div style={{ height: "50vh" }}>
   <div className="back position-absolute"></div>
 
@@ -544,49 +534,25 @@ We again use absolute on the text in a centered row-column and image, we also ne
 
 ```
 
-1
+The backround 100% occupies the container.
 
 ```css
-//
 
 .back{
   background-image: url("https:...jpg");
   background-size: cover;
   background-position: center 5%;
   width: 100%;
-  height: 70vh;
+  height: 100%;
   opacity: 0.6;
 }
-
 ```
 
-1
-
-<figure><img src="../.gitbook/assets/RelativeCentered.png" alt="" width="241"><figcaption><p>centered relative component on absolute image</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/RelativeCentered.png" alt="" width="241"><figcaption><p>separated background and d-flex text</p></figcaption></figure>
 {% endtab %}
 {% endtabs %}
 
-11
-
-1
-
-1
-
-1
-
-1
-
-**1**
-
-1
-
-1
-
-1
-
-**1**
-
-**Background-position** and **background-size** work similarly to how they worked with gradients, on CSS 1.
+**Background-position** and **background-size** work similarly to how they worked with gradients, on CSS1.
 
 ```jsx
 //position accepts X/Y values
