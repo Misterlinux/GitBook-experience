@@ -7,7 +7,7 @@
 
 **React-spring** is a **library** to create **animated** UI components.
 
-```
+```jsx
 npm i react-spring
 
 App.js
@@ -102,7 +102,7 @@ We can use the **useSpringRef()** hook to **reference** the imperative **API** o
 
 Any **difference** between the useSpring() and the api.method **from:{}** will be **skipped**, to be animated style properties need to be both on <mark style="background-color:blue;">from</mark> and <mark style="background-color:blue;">to</mark>.
 
-```
+```jsx
 import { animated, useSpring, useSpringRef } from '@react-spring/web'
 let refe = useSpringRef()
 
@@ -131,7 +131,7 @@ function mosso(){
 
 We can _useSpringRef()_ to **pause**/**resume** and **stop** animations.
 
-```
+```jsx
 //after stop() it won't resume()
 init.pause()
 init.resume()
@@ -142,7 +142,7 @@ init.stop()
 
 The useSpring() **config property** contains **mass, tension, friction, easing**, and **duration** (used for its "timing function")
 
-```
+```jsx
 const basic = useSpring({
   from: {background: 'brown'},
   config:{
@@ -168,7 +168,7 @@ const handleClick = () => {
 
 We can use **both** a **preset** and a **custom** config property.
 
-```
+```jsx
 const basic = useSpring({
   from: {background: 'brown'},
   config: config.wobbly,
@@ -180,7 +180,7 @@ const basic = useSpring({
 
 There are the presets configs.
 
-```
+```jsx
 default – { tension: 170, friction: 26 }
 gentle – { tension: 120, friction: 14 }
 wobbly – { tension: 180, friction: 12 }
@@ -193,7 +193,7 @@ molasses – { tension: 280, friction: 120 }
 
 Using the <mark style="background-color:blue;">**to**</mark> _method_, we **interpolate** the **springValue** data on a different **style** property (we can animate both).
 
-```
+```jsx
 // 0/360 used for rotate and translateX if the useSpring is included
 
 import { animated, useSpring , config, to } from '@react-spring/web'
@@ -211,7 +211,7 @@ style={{
 
 We use the **springValue** as a **breakpoint** to animate a style property.
 
-```
+```jsx
 const auto = useSpring({
   from: { x: 0 },
   to: { x: 1 },
@@ -227,7 +227,7 @@ style= {{
 
 We use a **conditional springValue** and the <mark style="background-color:blue;">**to**</mark> method to **animate** the **style** properties.                             **Range** are the animated _springValues_ breakpoints, **output** are the style property **values** on each **breakpoint,** and both only accept **integers** in their **array**.
 
-```
+```jsx
 //We need {} on the springValue to access the to method
 //The useSpring() breakpoint needs to share the name with springValue
 //We don't need the from{} property
@@ -254,7 +254,7 @@ const {dice} = useSpring({
 
 We use an **array** of <mark style="background-color:blue;">**to**</mark> style **objects** for multiple animations, the array has to **include** the <mark style="background-color:blue;">**from**</mark> object **(**any object before it will be ignored**)**.
 
-```
+```jsx
 //A loop: true would skip to the starter point, we need to add reverse.
 //This will trigger the animation on mount
 let auto = useSpring({
@@ -317,7 +317,7 @@ On the CSS we use [**inset** ](#user-content-fn-1)[^1]to **cover** the **X/Y** *
 
 We can directly **destruct** a **useSpring()** object and re-assign **property** names.
 
-```
+```jsx
 //The destructured property then the assigned name
 let {opacity, transform: tran} = useSpring({
   opacity: 0.5,
@@ -796,13 +796,9 @@ function checkin(){
 The **matchMedia()** method returns _true_ if the document **matches** (or is higher) than its _media-query string_.
 
 ```jsx
+//The matching media query index on the value array returns the column's integer
 //If width > 1000 then matchMedia("(min-width:1000px)").matches == true
 //We add/remove an eventListener ("resize") to update the useState() match value
-
-const colonne = useMedia(
-  ['(min-width: 1100px)', '(min-width: 900px)', '(min-width: 600px)'], [5, 4, 3], 2)
-
-//value being the array integer sharing the media-query index
 function useMedia(queries, values, defaultValue) {
 
   function match(){      
@@ -818,15 +814,18 @@ function useMedia(queries, values, defaultValue) {
 
   return value
 }
+
+const colonne = useMedia(
+  ['(min-width: 1100px)', '(min-width: 900px)', '(min-width: 600px)'], [5, 4, 3], 2)
+
+console.log(colone)  //3
 ```
 
 We **useMeasure()** to dynamically **set** the column's **width** on **media queries**.
 
 ```jsx
-//On resize the number and width of the columns will vary
-
+//On resize we can get the current width and useMedia() columns
 const [ref, { width }] = useMeasure()
-const [items, set] = useState(Data)
 
 let wide = width / colonne
 
@@ -837,7 +836,7 @@ let wide = width / colonne
 
 <figure><img src="../.gitbook/assets/columnsWidth.png" alt="" width="428"><figcaption><p>columns and with on resize</p></figcaption></figure>
 
-We **import** an **array** of images objects as an **useState**(), to use in the useTransition().
+We **import** an **array** of images objects as a **useState**(), to use in the useTransition().
 
 ```jsx
 export default [
@@ -851,23 +850,25 @@ const [items, set] = useState(Data)
 
 {% tabs %}
 {% tab title="Render and shuffle images" %}
-We import the **lodash.shuffle** method to use on useEffect().
+We import the **lodash.shuffle** method to useEffect() **shuffle** the _useState(Data)_.
 
 ```jsx
 //npm install lodash is a javascript utility library
 //or npm install lodash.shuffle if it doesn't work
 import shuffle from 'lodash.shuffle'
+console.log( shuffle([1,2,3,4] )   //[3,2,4,1]
 
 useEffect(() => {
-  const t = setInterval(() => set(shuffle), 50000)
+  const t = setInterval(() => set(shuffle), 5000)
   return () => clearInterval(t)
 }, [])
 ```
 
-We store the (container) **height** and the spring-style **images array** on a **useMemo**(), it will change on dependency shuffle (items order change).
+We set the (container) **height** and the useTransition() **images objects array** on a **useMemo**().
 
 ```jsx
-//Height values are set during y
+//its useMedia() dependencies change on resize
+//The heights array length and values get updated on items.map()
 
 const [heights, gridItems] = useMemo(() => {
   let heights = new Array(columns).fill(0) 
@@ -889,7 +890,7 @@ On shuffle the images **translate-X/Y**, change **column** array **position**, a
 
 ```jsx
 //trail is the delay of images overlapping during the transition
-
+//we deconstruct the useTransition() animated argument properties 
 const transitions = useTransition(gridItems, {
   key: item => item.css,
   from: ({ x, y, width, height }) => ({ x, y, width, height, opacity: 0 }),
@@ -914,66 +915,80 @@ const transitions = useTransition(gridItems, {
 <figure><img src="../.gitbook/assets/shuffleColumn.png" alt=""><figcaption><p>shuffle useTransition() images array</p></figcaption></figure>
 {% endtab %}
 
-{% tab title="Add column images onClick()" %}
-We _useState()_ the "columns **height**" array and the **current** rendered **images**.
+{% tab title="Add images onClick()" %}
+We **useState()** the current images **objects** and **indexes**.
 
-```
-let [hel, setHel] = useState( new Array(colonne).fill(0) )
+```jsx
 let [images, setImages] = useState([ ])
+let [adesso, setAdesso] = useState(0)
 ```
 
-We **useState()** to **update** the current **index** image from the imported array.
+On click, we add the Data(index) object to the useState(), useMemo() remains the same. &#x20;
 
-```
-let [indice, setIndice] = useState(0)
+```jsx
+//useState() delays by one, but it works as an index coz we use < and not <=
+
 function add(){
-  setIndice((x)=> x+ 1 )
-}
+  setAdesso((x)=> x + 1)
 
-//we set the column's height (on min index), the x, y, and height style props
-useEffect(()=>{
-
-  let imma = items[indice]
-  let column = hel.indexOf(Math.min(...hel)) 
-  let newhel = [...hel]
-
-  let x = (width / colonne) * column;
-  let y = ( newhel[column] += imma.height ) - imma.height
-  setHel( newhel )
-
-  let cred = [...images]
-  cred.push( {  ...imma ,x, y, height: imma.height } )
-  setImages( cred )
-
-}, [indice])
-
-```
-
-We **render** the **useTransition**() image array on the **max**-height-**column** styled container&#x20;
-
-```
-//we need the auto=compresses to load the images faster
-
-const transitions = useTransition(images, {
-  key: item => item.css,
-  from: ({ x, y, width, height }) => ({ x, y, width: 0, height, opacity: 0}),
-  enter:({ x, y, width, height }) => ({ x, y, width: wide, height, opacity: 1})
-  update: ({ x, y, width, height }) => ({ x, y, width: wide, height }),
-})
-
-<div ref={ref} className="text-center list" style={{ height:Math.max(...hel)}}>
-  {transitions((style, item) => (
-    <animated.div style={style}>
-      <div style={
-        {backgroundImage: `url(${item.css}?auto=compress&dpr=2&h=500&w=500)`}
-       }/>
-    </animated.div>
-  ))}
-</div>
-
+  if( adesso < Data.length ){
+    setImages((x)=> ( [...x, Data[adesso] ] ))
+  }else{
+    console.log("all images added")
+  }
+} 
+      
+<button className="btn btn-secondary" onClick={()=> add()}>
+  Add
+</button>
 ```
 
 <figure><img src="../.gitbook/assets/addedColonne.png" alt="" width="563"><figcaption><p>added useTransition() images and higher container</p></figcaption></figure>
+{% endtab %}
+
+{% tab title="setInterval() load images" %}
+We update the useState() with **useRef()**.
+
+```jsx
+//works with useEffect(), doesn't work with onClick() 
+let [images, setImages] = useState([ ])
+
+let vol = useRef(0)
+let volta = vol.current
+
+function add(){
+  volta += 1
+
+  if( volta < Data.length ){
+    setImages((x)=> ( [...x, Data[volta] ] ))
+  }else{
+    console.log("all images added")
+  }
+}
+```
+
+On load, we **useEffect()** _setInterval()_ the add() function until all image objects are added.
+
+<pre class="language-jsx"><code class="lang-jsx">//The starting add() will render only once on load
+//We need to use clearInterval() twice
+<strong>let inter;
+</strong>
+useEffect(()=>{
+  add()
+  
+  inter = setInterval(()=>{
+    add()
+
+    volta == Data.length &#x26;&#x26; clearInterval(inter)
+  }, 1000)
+
+  return () =>{
+    clearInterval(inter)
+  }
+}, [volta])
+</code></pre>
+
+The useMemo() remains the same.
 {% endtab %}
 
 {% tab title="CSS images" %}
