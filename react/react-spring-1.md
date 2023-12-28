@@ -911,6 +911,8 @@ const transitions = useTransition(gridItems, {
   ))}
 </div>
 ```
+
+<figure><img src="../.gitbook/assets/shuffleColumn.png" alt="" width="563"><figcaption><p>useTransition() image grid</p></figcaption></figure>
 {% endtab %}
 
 {% tab title="Add images onClick()" %}
