@@ -911,8 +911,6 @@ const transitions = useTransition(gridItems, {
   ))}
 </div>
 ```
-
-<figure><img src="../.gitbook/assets/shuffleColumn.png" alt=""><figcaption><p>shuffle useTransition() images array</p></figcaption></figure>
 {% endtab %}
 
 {% tab title="Add images onClick()" %}
@@ -942,8 +940,6 @@ function add(){
   Add
 </button>
 ```
-
-<figure><img src="../.gitbook/assets/addedColonne.png" alt="" width="563"><figcaption><p>added useTransition() images and higher container</p></figcaption></figure>
 {% endtab %}
 
 {% tab title="setInterval() load images" %}
@@ -1016,9 +1012,9 @@ In both examples, the images need position absolute to share the same line.
 {% endtab %}
 {% endtabs %}
 
-1
-
-1
+{% embed url="https://codesandbox.io/p/github/Misterlinux/useTransition-image-grid/main?workspaceId=010fde04-8e9a-4164-9de5-448b0152b2f1" %}
+useTransition() images grid
+{% endembed %}
 
 [^1]: Negative internal margins,
 
