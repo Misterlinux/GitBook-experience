@@ -1014,8 +1014,8 @@ In both examples, the images need position absolute to share the same line.
 {% endtab %}
 {% endtabs %}
 
-{% embed url="https://codesandbox.io/p/github/Misterlinux/useTransition-image-grid/main?workspaceId=010fde04-8e9a-4164-9de5-448b0152b2f1" %}
-useTransition() images grid
+{% embed url="https://codesandbox.io/p/github/Misterlinux/useTransition-image-grid/main?file=/src/components/Second.js&workspaceId=010fde04-8e9a-4164-9de5-448b0152b2f1" %}
+codeSandbox of the github example
 {% endembed %}
 
 [^1]: Negative internal margins,
