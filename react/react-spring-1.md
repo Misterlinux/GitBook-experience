@@ -111,6 +111,7 @@ let init = useSpring({
   ref: refe
 })
 
+//from() isn't needed and to can be an array of [{props}]
 function mosso(){
   refe.start({
     from: {x: 50, transform: "rotate(30deg)"},
@@ -143,6 +144,7 @@ init.stop()
 The useSpring() **config property** contains **mass, tension, friction, easing**, and **duration** (used for its "timing function")
 
 ```jsx
+//duration stops working when using any timing function prop
 const basic = useSpring({
   from: {background: 'brown'},
   config:{
@@ -191,10 +193,9 @@ molasses – { tension: 280, friction: 120 }
 
 </details>
 
-Using the <mark style="background-color:blue;">**to**</mark> _method_, we **interpolate** the **springValue** data on a different **style** property (we can animate both).
+Using the <mark style="background-color:blue;">**to**</mark> _method_, we **interpolate** the **springValue** data on a different **style** property (we can animate both), and access its pure value (without the spring Object).
 
-```jsx
-// 0/360 used for rotate and translateX if the useSpring is included
+<pre class="language-jsx"><code class="lang-jsx">// 0/360 used for rotate and translateX if the useSpring is included
 
 import { animated, useSpring , config, to } from '@react-spring/web'
 const props = useSpring({
@@ -202,12 +203,15 @@ const props = useSpring({
   to: { x: 360 },
   config: {duration: 2500}
 })
-
-style={{ 
-  transform: smal.x.to(value => `rotateZ(${value}deg)`),
+<strong>
+</strong><strong>//we use x springValue both as rotate/x transform
+</strong>&#x3C;animated.h2 style={{ 
+  transform: props.x.to(value => `rotateX(${value}deg)`),
   ...props
-}}
-```
+}}>
+  { props.x.to(value => value) }  //0-360
+&#x3C;/animated.h2>
+</code></pre>
 
 We use the **springValue** as a **breakpoint** to animate a style property.
 
