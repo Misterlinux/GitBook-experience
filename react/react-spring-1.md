@@ -423,25 +423,29 @@ The **useTransition(**array, config**)** hook **sequentially** _animates_ datase
 //enter{} is the current style, from/leave are before/after the transition
 //exitbefore will repeat the transition to remove the current element before the next
 
-const transitions1 = useTransition(indice, {
+const transitions1 = useTransition([content], {
   from: { opacity: 0 },
   enter: { opacity: 1 },
   leave: { opacity: 0 },
   exitbefore: true,
   config: { duration: 5000 },
 })
+
+//useTransition() can start() with useSpringRef().
 ```
+
+useTransition() triggers automatically, we useEffect() to bind it to events.
 
 {% tabs %}
 {% tab title="onRest() auto transitions" %}
-its array **argument** can also be an **index** while its config is different from useSpring()
+We create a useState() **index** and an **array** of components to render with the useTransition()&#x20;
 
 ```jsx
-//We create an array of animated components to use the index in
 import { useTransition, animated, useSpringRef } from '@react-spring/web'
 const [indice, setIndice] = useState(0)
-const refe = useSpringRef()
 
+//Each component will have the useTransition style prop as an argument.
+//useful for when cycling different types of components
 const pages = [
   ({ style }) => (
     <animated.div style={{ ...style, background: "pink"}}>A</animated.div>
@@ -452,15 +456,15 @@ const pages = [
 
 The useTransition() **onRest method** triggers each time an animated **transition** is **completed**.
 
-<pre class="language-jsx"><code class="lang-jsx">//Its arguments: animationResult(enter style object, cancelled/finished props)
-//the spring controller and the useTransition index
+The useTransition() renders one element at a time and the **onRest() method** updates its index to re-trigger the transition.
 
+<pre class="language-jsx"><code class="lang-jsx">//useTransition() triggers each time its array changes.
+//onRest(animationResult-object, spring controller,current index)
 <strong>const transitions1 = useTransition(indice, {
-</strong>  from: { opacity: 0, transform: 'translate3d(0,50%,0)' },
-  enter: { opacity: 1, transform: 'translate3d(0%,0,0)' },
-  leave: { opacity: 0, transform: 'translate3d(0,-50%,0)' },
+</strong>  from: { opacity: 0, y: "50%"},
+  enter: { opacity: 1, y: "0%"},
+  leave: { opacity: 0, y: "0%"},
   config: { duration: 2000 },
-  ref: refe,
   onRest: (string, crtl, item)=> {
     if (indice === item) {
       setIndice(x => (x+ 1) % 3 )
@@ -469,21 +473,12 @@ The useTransition() **onRest method** triggers each time an animated **transitio
 })
 </code></pre>
 
-The updated useState() **index** triggers the **useEffect**() which re-starts the **transition**.
+The useTransition() hook returns the style object and its array content (an useState() index)
 
 ```jsx
-useEffect(() => {
-  refe.start()
-}, [indice])
-```
-
-The useTransition() hook returns the style objects and the index for the animated component to render.
-
-```jsx
-//We also need position: absolute for the effect to work
 <div>
-  {transitions1((style, i) => {
-    const Page = pages[i]
+  {transitions1((style, content) => {
+    const Page = pages[content]
     return <Page style={style} />
   })}
 </div>
@@ -493,7 +488,7 @@ The useTransition() hook returns the style objects and the index for the animate
 {% endtab %}
 
 {% tab title="onClick() index transition" %}
-We use an event listener to edit the useTransition() index and render the array of images.
+We **useEffect()** the useTransition() **index** as a \[dependency] to have the _initial animation_ and start() it onClick().
 
 ```jsx
 //to keep the index from 0 to 2 (images indexes) we use % 3
@@ -543,14 +538,19 @@ const transitions = useTransition(activeIndex, {
 {% endtab %}
 {% endtabs %}
 
+{% embed url="https://codesandbox.io/p/devbox/usetransition-onrest-components-l3k3z8?file=/src/App.css:18,1" %}
+useTransition() index useState() to render different components
+{% endembed %}
+
 To render **multiple \<animated>** elements we put an **array** as a **useTransition**() argument.
 
 ```jsx
 //The elements will overlay if position: absolute
 let lista = [{ numba: 1,chiave: "unn"}, ... ]
 
+//The map() is not needed, it is to contrast with the next example
 let multipli = useTransition(
-  lista1.map((x)=> ({...x})),
+  lista.map((x)=> ({...x})),
   {
     key: (item)=> (item.chiave),
     from: {opacity: 0},
@@ -559,9 +559,10 @@ let multipli = useTransition(
   }
 )
 
+//we can use the array properties with item.chiave
 <div>
   {multipli( (style, item, t, index)=>(
-    <animated.div className="boxo text-center" style={{...style}}>
+    <animated.div className="boxo text-center position-absolute" style={{...style}}>
       <p className='text-white'>Index {index}</p>
     </animated.div>
     ))
@@ -571,13 +572,15 @@ let multipli = useTransition(
 
 <figure><img src="../.gitbook/assets/firstoTrans.png" alt="" width="299"><figcaption><p>useTransition() multiple elements</p></figcaption></figure>
 
-We can **dynamically** create **style** properties during the array methods, which we extract and use in the <mark style="background-color:blue;">**enter**</mark> object.
+Changing the order of its useState() array _doesn't trigger_ the useTransition() **animation** by itself.
+
+We need to **dynamically create** style properties, from _external variables_, during the array methods, which we extract in the <mark style="background-color:blue;">enter</mark> object.
 
 The **update()** property **animates** its extracted style **properties** each time the array **argument changes**, it also requires the property value to be set using an **external counter.**
 
 ```jsx
-//The elements don't change, only their properties
-//Each ypdate will translate3D() the previous x properties values.
+//Update reacts on property changes, contrary to add/remove, shuffle doesnt trigger
+//Each update will translate3D() the previous x properties values.
 let y= 0;
 
 let colore = useTransition( 
@@ -633,7 +636,6 @@ We update the **counter** on the **array**.**method** argument and to set the **
 
 ```jsx
 //We update the counter and set spring objects with the imported object
-
 let spazio = 0
 
 const transitions = useTransition(
@@ -664,7 +666,7 @@ We use the **counter** to style the **container**, the **spring** object to styl
 
 The components share the same space (width) with position: absolute.
 
-```
+```css
 .card1 {
   position: absolute;
   height: inherit;
@@ -709,7 +711,7 @@ function sopra({ clientX, clientY }){
 
 We access the from/to useSpring() properties with:
 
-```
+```jsx
 props.width.animation.to             //the to:{} width value
 props.width.to(x => x.toFixed(0))    //Dom rendering inside an <animated />
 ```
@@ -722,7 +724,7 @@ We **animate** a react-use-measure **width** with a **useState() trigger**, usin
 
 The relative>absolute **child** component is **animated** using its **parent** measured **width**.
 
-```
+```jsx
 //we need the animated component to access the useSpring() prop
 
 const [open, toggle] = useState(false)
