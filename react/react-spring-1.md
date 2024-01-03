@@ -193,6 +193,8 @@ molasses – { tension: 280, friction: 120 }
 
 </details>
 
+### To() interpolate render and useState() conditional useSpering() prop.
+
 Using the <mark style="background-color:blue;">**to**</mark> _method_, we **interpolate** the **springValue** data on a different **style** property (we can animate both), and access its pure value (without the spring Object).
 
 <pre class="language-jsx"><code class="lang-jsx">// 0/360 used for rotate and translateX if the useSpring is included
@@ -229,11 +231,12 @@ style= {{
 }}
 ```
 
-We use a **conditional springValue** and the <mark style="background-color:blue;">**to**</mark> method to **animate** the **style** properties.                             **Range** are the animated _springValues_ breakpoints, **output** are the style property **values** on each **breakpoint,** and both only accept **integers** in their **array**.
+&#x20;We **useState()** a **conditional springValue** and the <mark style="background-color:blue;">**to(**</mark><mark style="background-color:blue;">)</mark> method to animate style props.
+
+**Range** are the animated _springValues_ breakpoints, **output** are the style property **values** on each **breakpoint,** and both only accept **integers** in their **array**.
 
 ```jsx
-//We need {} on the springValue to access the to method
-//The useSpring() breakpoint needs to share the name with springValue
+//We need {} on the springValue to access the to() method
 //We don't need the from{} property
 
 const [vedo, setVedo] = useState(false)
@@ -242,6 +245,7 @@ const {dice} = useSpring({
   config: {duration: 5000},
 })
 
+//only color strings will work, and they will be only rendered as rgb()
 <animated.div 
   onClick={ ()=> setVedo(!vedo) }
   className="boxo" 
@@ -276,28 +280,27 @@ let auto = useSpring({
 </animated.div>
 ```
 
-We animate a **useSpring()** **background image** by only using output (will work on its first 2 values).
+We animate a **useSpring()** **background image** using only output (will work on its first 2 values).
 
-```jsx
-const {value} = useSpring({
-  from: {value: 0}, to: {value: 1},
+<pre class="language-jsx"><code class="lang-jsx"><strong>//It can't even be set/triggered onClick()
+</strong><strong>const {value} = useSpring({
+</strong>  from: {value: 0}, to: {value: 1},
   loop: {reverse: true},
   config: {duration: 6000}
 })
 
 let x2= value.to({ output: ['0%', '20%'] })
 
-<div className="conta">
-  <animated.div className="suono" style= {{ x: x2 }} >
-  </animated.div>
-</div>
-```
+&#x3C;div className="conta">
+  &#x3C;animated.div className="suono" style= {{ x: x2 }} >
+  &#x3C;/animated.div>
+&#x3C;/div>
+</code></pre>
 
-On the CSS we use [**inset** ](#user-content-fn-1)[^1]to **cover** the **X/Y** **margins** left by the useSpring() **animation**.
+When animating a CSS background image, we use [**inset** ](#user-content-fn-1)[^1]to **cover** the X/Y empty margins.
 
 ```css
 //A bigger background avoids empty border spaces during the animation
-
 .conta{
   position: relative;
   width: 85vw;
@@ -306,7 +309,7 @@ On the CSS we use [**inset** ](#user-content-fn-1)[^1]to **cover** the **X/Y** *
   background-color: burlywood;
 }
 
-//use inset: -200%; width: 400%; height: 400%; for bigger animations
+/*use inset: -200%; width: 400%; height: 400%; for bigger animations*/
 .treno{
   inset: 0% -25%;
   width: 125%; height: 100%;
@@ -449,12 +452,11 @@ const pages = [
 
 The useTransition() **onRest method** triggers each time an animated **transition** is **completed**.
 
-```jsx
-//Its arguments: animationResult(enter style object, cancelled/finished props)
+<pre class="language-jsx"><code class="lang-jsx">//Its arguments: animationResult(enter style object, cancelled/finished props)
 //the spring controller and the useTransition index
 
-const transitions1 = useTransition(indice, {
-  from: { opacity: 0, transform: 'translate3d(0,50%,0)' },
+<strong>const transitions1 = useTransition(indice, {
+</strong>  from: { opacity: 0, transform: 'translate3d(0,50%,0)' },
   enter: { opacity: 1, transform: 'translate3d(0%,0,0)' },
   leave: { opacity: 0, transform: 'translate3d(0,-50%,0)' },
   config: { duration: 2000 },
@@ -465,7 +467,7 @@ const transitions1 = useTransition(indice, {
     }
   }
 })
-```
+</code></pre>
 
 The updated useState() **index** triggers the **useEffect**() which re-starts the **transition**.
 
