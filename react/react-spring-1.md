@@ -1,8 +1,8 @@
 # React-Spring-1 useSpring(), config, To() interpolate render, useTransition(), React-use-measure.
 
-* [To() interpolate render useSpring()](react-spring-1-usespring-config-to-interpolate-render-usetransition-react-use-measure..md#to-interpolate-render-and-usestate-conditional-usespering-prop.)
-* [The useTransition() animation styles and methods](react-spring-1-usespring-config-to-interpolate-render-usetransition-react-use-measure..md#the-usetransition-animation-styles-and-methods)
-* [React-use-measure on events and react-spring animations](react-spring-1-usespring-config-to-interpolate-render-usetransition-react-use-measure..md#react-use-measure-on-events-and-react-spring-animations)
+* [To() interpolate render useSpring()](react-spring-1.md#to-interpolate-render-and-usestate-conditional-usespering-prop.)
+* [The useTransition() animation styles and methods](react-spring-1.md#the-usetransition-animation-styles-and-methods)
+* [React-use-measure on events and react-spring animations](react-spring-1.md#react-use-measure-on-events-and-react-spring-animations)
 
 **React-spring** is a **library** to create **animated** UI components.
 

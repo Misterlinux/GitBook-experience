@@ -662,14 +662,16 @@ import { faStopwatch } from '@fortawesome/free-solid-svg-icons'
 
 To **deploy** a **Reactjs** app GitHub repository on [_**Netlify**_ ](https://app.netlify.com/sites/wondrous-bubblegum-23cd24/overview)we edit the **package.json**:
 
-```
+```json
 //so it can be deployed even if it has warnings
 "scripts": {
   "start": "react-scripts start",
-  "build": "react-scripts build",
-  "test": "CI=true react-scripts test"
+  "build": "CI=false react-scripts build",
+  "test": "react-scripts test"
 }
 
+//Change also the Netlify deploy config, with spaces
+CI=false npm run build
 ```
 
 ### ReactJs forms, inputs, and submit
