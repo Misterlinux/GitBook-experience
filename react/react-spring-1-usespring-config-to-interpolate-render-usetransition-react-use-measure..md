@@ -1,9 +1,8 @@
-# React-Spring 1
+# React-Spring-1 useSpring(), config, To() interpolate render, useTransition(), React-use-measure.
 
-* 1
-* 1
-* 1
-* 1
+* [To() interpolate render useSpring()](react-spring-1-usespring-config-to-interpolate-render-usetransition-react-use-measure..md#to-interpolate-render-and-usestate-conditional-usespering-prop.)
+* [The useTransition() animation styles and methods](react-spring-1-usespring-config-to-interpolate-render-usetransition-react-use-measure..md#the-usetransition-animation-styles-and-methods)
+* [React-use-measure on events and react-spring animations](react-spring-1-usespring-config-to-interpolate-render-usetransition-react-use-measure..md#react-use-measure-on-events-and-react-spring-animations)
 
 **React-spring** is a **library** to create **animated** UI components.
 
@@ -693,6 +692,7 @@ npm i react-use-measure
 import useMeasure from 'react-use-measure'
 const [ref, bounds] = useMeasure()
 
+
 function sopra({ clientX, clientY }){
   setXY([clientX, clientY])
 }
@@ -844,7 +844,7 @@ let wide = width / colonne
 
 <figure><img src="../.gitbook/assets/columnsWidth.png" alt="" width="428"><figcaption><p>columns and with on resize</p></figcaption></figure>
 
-We **import** an **array** of images objects as a **useState**(), to use in the useTransition().
+We **import** an **array** of image objects as a **useState**(), to use in the useTransition().
 
 ```jsx
 export default [
@@ -962,11 +962,13 @@ let [images, setImages] = useState([ ])
 let vol = useRef(0)
 let volta = vol.current
 
+//don't useRef() inside a useState() setter function
 function add(){
   volta += 1
 
   if( volta < Data.length ){
-    setImages((x)=> ( [...x, Data[volta] ] ))
+    let nuovo = Data[volta]
+    setImages((x)=> ( [...x, nuovo ] ))
   }else{
     console.log("all images added")
   }
