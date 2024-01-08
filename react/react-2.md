@@ -87,12 +87,6 @@ return(
 ```
 
 <figure><img src="../.gitbook/assets/nested.png" alt=""><figcaption><p>URL path on variables </p></figcaption></figure>
-
-1
-
-1
-
-1
 {% endtab %}
 
 {% tab title="Variable route" %}
@@ -125,70 +119,80 @@ return(
 
 {% tabs %}
 {% tab title="Outlet Route" %}
-Nested \<Route/> elements can use \<Outlet/> to keep rendering their parent route element.
+Nested \<Route/> elements need \<Outlet/> to be rendered with their parent's element.
 
-<pre class="language-jsx"><code class="lang-jsx"><strong>&#x3C;Router>
+<pre class="language-jsx"><code class="lang-jsx"><strong>//Without &#x3C;Outlet/> nested &#x3C;Route/> elements don't even render.
+</strong><strong>&#x3C;Router>
 </strong>  &#x3C;Routes>
-    &#x3C;Route path="/" element={&#x3C;Home />}> 
-      &#x3C;Route path="primo" element={&#x3C;Primo/>}>&#x3C;/Route>
+    &#x3C;Route path="/" element={&#x3C;Home />} /> 
+    
+    &#x3C;Route path="/primo" element={&#x3C;Primo/>}>
+      &#x3C;Route path="/primo/secondo" element={&#x3C;Secondo/>} />
     &#x3C;/Route>
-
-    &#x3C;Route path="secondo" element={ &#x3C;Secondo/> }>&#x3C;/Route>
+  
+    &#x3C;Route path="terzo" element={&#x3C;Third/>} />
   &#x3C;/Routes>
 &#x3C;/Router>
 </code></pre>
 {% endtab %}
 
-{% tab title="Outlet component" %}
-**\<Outlet/>** renders the **\<Route> nested** element while keeping the current one.
+{% tab title="Primo/secondo <Outlet/>" %}
+**Outlet** allows the parent \<Primo/> element will **render with** its **nested** \<Secondo/> element.&#x20;
 
 ```jsx
-function Home(){
+function Primo(){
 
   return(
-    <div>
-      <h3>Homepage</h3>
-
-      <div className="remove">
-        <li> <Link to="primo"> Outlet element</Link> </li>
-        <li> <Link to="secondo"> Replaced route element </Link> </li>
-      </div>
-
-      <Outlet />
+    <div className="text-center">
+      <h1>Homepage</h1>
+      
+      <Link to="secondo">  
+        <p>Outlet component</p>
+      </Link>
+      
+      <Outlet/>
     </div>
   )
 }
-```
 
-Any **link path** outside the nested will be rendered alone.
-
-```jsx
-//Primo will render with Home while Second by itself
-
-function Primo(){
-
+function Secondo(){
+  
   return(
     <div className="text-center">
       <p>Outlet component</p>
     </div>
   )
 }
+```
 
+Any **link path** outside the nested \<Route/> will be rendered alone.
+{% endtab %}
+
+{% tab title="Third <Route/>" %}
+This is an out-of-nested \<Route>, but we can render the _nested element_ with \<Link>
+
+```jsx
+//To do so we need the absolute <Link/> path 
 function Secondo(){
 
   return(
     <div className="text-center">
       <p>Replaced Route component</p>
+        
+       <Link to="/primo/secondo">
+         <h3>To the nested</h3>
+       </Link>
     </div>
   )
 }
+
 ```
 {% endtab %}
 {% endtabs %}
 
 <figure><img src="../.gitbook/assets/OutletRouter.png" alt="" width="473"><figcaption><p>Outlet nested component and not</p></figcaption></figure>
 
-
+1
 
 <details>
 
@@ -350,6 +354,8 @@ export function getDesc({ variable, articolo }) {
 {% embed url="https://codesandbox.io/s/react-dom-router-with-object-routes-qf2366?file=/src/Content.js:0-507" %}
 Router variable Routes with variable components
 {% endembed %}
+
+1
 
 ### React Input Props and onChange() event handler
 

@@ -73,21 +73,23 @@ function rotate(){
 
 <figure><img src="../.gitbook/assets/rotateClassname.png" alt="" width="507"><figcaption><p>DOM element animated with a classname object</p></figcaption></figure>
 
-1
+### React-Bootstrap Navbar and Carousel
 
-1
+We need to use **flexGrow:0** for the nav elements justify and a custom-fill **SVG** for the React-bootstrap collapse icon.
 
-1
+{% embed url="https://codesandbox.io/p/devbox/react-bootstrap-navbar-collapse-637pfp?file=/src/App.js:14,22" %}
+Navbar and Navbar collapse
+{% endembed %}
 
-1
+<figure><img src="../.gitbook/assets/navbarreactBoot.png" alt="" width="375"><figcaption></figcaption></figure>
 
-1
+The react-bootstrap **Carousel** component includes the **.carousel-indicators** and **.carousel-control-prev-icon** (SVG), we edit them to customize the carousel areas.
 
-1
+{% embed url="https://codesandbox.io/p/devbox/custom-react-bootstrap-cj7mgt?file=/src/App.js:24,1" %}
+React-Bootstrap Carousel with custom SVG arrows
+{% endembed %}
 
-1
-
-1
+<figure><img src="../.gitbook/assets/CarouselReactBoot.png" alt="" width="330"><figcaption></figcaption></figure>
 
 1
 

@@ -3,6 +3,19 @@
 * [Image overlay & Carousel](boostrap-2-cards-carousel-image-overlay-and-dropdown.md#image-overlay-and-carousel)
 * [Dropdown & Extra buttons](boostrap-2-cards-carousel-image-overlay-and-dropdown.md#dropdown-breadcrumbs-and-button-extra-effects)
 
+We use **text-break** to avoid strings overflowing their available width :
+
+```jsx
+//This will work only on single-long strings
+//It applies word-wrap: break-word/word-break: break-word.
+
+<div className="row col-4 mx-0 text-break">
+  <p> ReallyLongEmail@gmail.com </p>
+</div>
+```
+
+<figure><img src="../.gitbook/assets/textBreak.png" alt=""><figcaption><p>text-break on single string</p></figcaption></figure>
+
 ### Cards and color/text customization
 
 Cards are blocks of content easily customizable, with **card-header, card-body,** and **card-footer** :

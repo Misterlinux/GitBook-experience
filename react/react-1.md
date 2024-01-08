@@ -645,15 +645,17 @@ useEffect(() => {
 
 To implement **font-awesome** in **Reactjs** we:
 
-```
+```jsx
 //First we install its npm 
 npm i --save @fortawesome/fontawesome-svg-core
 npm install --save @fortawesome/free-solid-svg-icons
 npm install --save @fortawesome/react-fontawesome
+npm i @fortawesome/free-brands-svg-icons
 
 //then we import and use it
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStopwatch } from '@fortawesome/free-solid-svg-icons'
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
 
 <h1> Welcome to the store 
   <FontAwesomeIcon icon={faStopwatch} />
