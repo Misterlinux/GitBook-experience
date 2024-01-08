@@ -80,6 +80,8 @@ return(
 
     <Routes>
       <Route path=":nuovo/*" element={<Primo />} />
+    //<Route path=":venere/:nuovo/*" element={<Primo/>} /> 
+    //If we were to put it in the main <Routes>
     </Routes>
   </div>
 )
@@ -110,6 +112,10 @@ return(
 <figure><img src="../.gitbook/assets/URL3.PNG" alt=""><figcaption><p>variable URL Path</p></figcaption></figure>
 {% endtab %}
 {% endtabs %}
+
+1
+
+1
 
 ### Using \<Outlet /> with React Routes&#x20;
 
