@@ -113,9 +113,9 @@ return(
 {% endtab %}
 {% endtabs %}
 
-1
-
-1
+{% embed url="https://codesandbox.io/p/sandbox/react-dom-router-variables-9zhwzh?file=/src/App.js" %}
+Variable \<Route/> path with \<Outlet/> and absolute paths
+{% endembed %}
 
 ### Using \<Outlet /> with React Routes&#x20;
 
@@ -197,8 +197,6 @@ function Secondo(){
 {% endtabs %}
 
 <figure><img src="../.gitbook/assets/OutletRouter.png" alt="" width="473"><figcaption><p>Outlet nested component and not</p></figcaption></figure>
-
-1
 
 <details>
 
@@ -360,8 +358,6 @@ export function getDesc({ variable, articolo }) {
 {% embed url="https://codesandbox.io/s/react-dom-router-with-object-routes-qf2366?file=/src/Content.js:0-507" %}
 Router variable Routes with variable components
 {% endembed %}
-
-1
 
 ### React Input Props and onChange() event handler
 
