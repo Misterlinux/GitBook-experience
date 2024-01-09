@@ -1,10 +1,8 @@
 # Sass 1
 
-* 1
-* 1
-* 1
-* 1
-* 1
+* [SCSS mixin, include and extend](sass-1.md#scss-mixin-include-and-extend)
+* [Export Sass to javascript and CSS color-mix()](sass-1.md#export-sass-to-javascript-and-css-color-mix)
+* [Set bootstrap variables with Scss](sass-1.md#set-bootstrap-variables-with-scss)
 
 **Sass** (**S**yntactically **A**wesome **S**tyle**S**heet) is a _CSS_-compatible **pre-processor extension**, developed in 2006.
 
@@ -16,7 +14,7 @@ In React, we **npm install sass** to **transpile** a sass file _into CSS_, due t
 
 **Sass** variables are **imperative**, any **change** will **only** affect the **following** variables, while **CSS** variables are **declarative**, and any **change** in value will **affect** the **previous** uses **too**.
 
-```
+```jsx
 //Sass variables can store strings/numbers/booleans/colors/lists
 //Any variables will affect only the selectors below it
 $primo: red;
@@ -67,7 +65,7 @@ import './App.scss';
 
 Sass can **nest properties names** if they start with the same word.
 
-```
+```sass
 //for font-family, font-size and font-weight
 //remember the space before {}
 .nested{
@@ -97,34 +95,37 @@ App.scss
 }
 ```
 
-The **@mixin** and **@include** directives create blocks of sass properties to use on selectors.
+### SCSS mixin, include and extend
+
+The **@mixin** and **@include** directives **create** and **set** blocks of _sass properties_ to use on selectors.
 
 {% tabs %}
 {% tab title="Basic @mixin" %}
 Both **-** and **\_** are considered the **same digit** on mixin names.
 
 ```sass
+//@mixin are not selectors, they can be used only with @include
 @mixin bordi-y{
-    border-bottom: 2px solid blue;
-    border-top: 2px solid red;
+  border-bottom: 2px solid blue;
+  border-top: 2px solid red;
 }
 
 @mixin testo{
+  color: purple;
   font: {
-    size: 25px;
-    color: purple; 
+    size: 25px; 
   }
 }
 
 .paper{
-    @include bordi-y;
-    @include testo;
+  @include bordi-y;
+  @include testo;
 }
 ```
 
 We can also use it to **shorten vendor prefixes**.
 
-```
+```scss
 @mixin transform($property) {
   -webkit-transform: $property;
   -ms-transform: $property;
@@ -138,7 +139,7 @@ We can also use it to **shorten vendor prefixes**.
 {% endtab %}
 
 {% tab title="@mixin() params and include() arguments" %}
-Similar to functions, **@mixin parameters** receive their own values from the **@include() arguments.**
+Similar to functions, **@mixin parameters** receive their values from the **@include() arguments.**
 
 ```sass
 @mixin bordo($width, $color, $color1: orange ){
@@ -161,38 +162,39 @@ Similar to functions, **@mixin parameters** receive their own values from the **
 
 The **@extend** directive passes a set of properties between selectors.
 
-```
+```scss
 .primo{
-    border-top: 3px solid green;
-    border-bottom: 3px solid red;
+  border-top: 3px solid green;
+  border-bottom: 3px solid red;
 }
 
 //gets the .primo orders plus text
 .secondo{
-    @extend .primo;
-    color: lightseagreen;
-    font-size: 15px;
+  @extend .primo;
+  color: lightseagreen;
+  font-size: 15px;
 }
 ```
 
+### Export Sass to javascript and CSS color-mix()
+
 We **:export** **sass** variables to javascript:
 
-```
-app.scss
-$giallo: yellow;
+<pre class="language-scss"><code class="lang-scss"><strong>app.scss
+</strong>$giallo: yellow;
 :export{
-    greeno: $giallo
+  greeno: $giallo
 }
 
 //But we can't modify it on js
 App.js
 import extra from'./App.scss';
 console.log( extra.greeno )        //yellow
-```
+</code></pre>
 
 The **Sass** file doesn't exist during **runtime**, so we need **CSS :root** **var**iables to change the Sass variables dynamically.
 
-```
+```sass
 App.css
 :root{
   --verde: green;
@@ -220,7 +222,7 @@ r.style.setProperty('--verde', 'red');   //Or ternary theme ? "#262833" : "#fff"
 
 We **can't interpolate** var(--css) variables in **Sass**.
 
-```
+```scss
 //It will be rendered always as var(--rosso)px
 App.css
 :root{
@@ -236,7 +238,7 @@ $low: var(--rosso);
 
 We modify **sass variables** (passed from CSS) by editing the property **value** "**string**".
 
-```
+```sass
 App.css
 :root{
   --rosso: 20px;
@@ -265,7 +267,7 @@ The **color-mix(in colorspace, color1 %, color2 %)** is a **CSS functional notat
 {% tab title="srgb mix()" %}
 The default percentage values are 50% and **its return value can be passed as var().**
 
-```
+```scss
 App.css
 :root{
   --base: color-mix(in srgb, green 70%, red 20%);
@@ -286,7 +288,7 @@ $sopra: var(--sopra);
 {% tab title="hsl mix()" %}
 On the hsl **colorspace**, the shorter/longer **interpolation method** sets the color % on the **shorter/longer angle** of the **hsl circle**, the colors need to be in hsl() for it to work.
 
-```
+```scss
 //hue is just a keyword
 .hue{
   background-color: 
@@ -302,10 +304,14 @@ On the hsl **colorspace**, the shorter/longer **interpolation method** sets the 
 
 <figure><img src="../.gitbook/assets/color-mix().png" alt="" width="328"><figcaption><p>Opposite color-mix() and hsl 50% contrast colors</p></figcaption></figure>
 
+
+
+### Set bootstrap variables with Scss
+
 We use **Sass** to modify **npm install bootstrap** _variables_.
 
-```
-//The scss file has to o AFTER the bootstrap import
+```scss
+//The scss file has to go AFTER the bootstrap import
 App.js
 import 'bootstrap/dist/css/bootstrap.css';
 import "./Global.scss"
