@@ -349,9 +349,14 @@ $primo: brown;
 
 @import '~bootstrap/scss/bootstrap.scss';
 
-//Then in ReactJs we access and edit it.
-document.documentElement.style.getPropertyValue("--primo")
-document.documentElement.style.setProperty("--primo", "lightblue")
+//The scss --primo variable won't be immediately available, to use it we first: 
+document.documentElement.style.setProperty("--primo", "brown")
+
+//Then in ReactJs, we can edit it.
+
+document.documentElement.style.getPropertyValue("--primo") == "brown" ?
+document.documentElement.style.setProperty("--primo", "lightblue") :
+document.documentElement.style.setProperty("--primo", "brown")
 
 ```
 
