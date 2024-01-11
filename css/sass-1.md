@@ -328,6 +328,39 @@ $success: lightgreen;
 
 <figure><img src="../.gitbook/assets/customBootstrap.png" alt="" width="375"><figcaption><p>custom Bootstrap.css </p></figcaption></figure>
 
+We actually can use css like variable in sass selectors (it won't work for normal sass variables), so we first lower the bootstrap !important priority and create new coloring bootstrap classes.
+
+```sass
+//
+$enable-important-utilities: false;
+$primo: brown;
+
+#overboot .text-primary{
+  color: var(--primo, $primo);
+}
+
+#overboot .bg-primary{
+  background-color: var(--primo, $primo);
+}
+
+#overboot .border-primary{
+  border-color: var(--primo, $primo);
+}
+
+@import '~bootstrap/scss/bootstrap.scss';
+
+//Then in ReactJs we access and edit it.
+document.documentElement.style.getPropertyValue("--primo")
+document.documentElement.style.setProperty("--primo", "lightblue")
+
+```
+
+{% embed url="https://codesandbox.io/p/sandbox/scss-variables-js-edit-pqcw8n?file=/src/App.js:10,9" %}
+scss variables with js edit
+{% endembed %}
+
+1
+
 1
 
 1
