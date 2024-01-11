@@ -328,10 +328,12 @@ $success: lightgreen;
 
 <figure><img src="../.gitbook/assets/customBootstrap.png" alt="" width="375"><figcaption><p>custom Bootstrap.css </p></figcaption></figure>
 
-We actually can use css like variable in sass selectors (it won't work for normal sass variables), so we first lower the bootstrap !important priority and create new coloring bootstrap classes.
+_**Sass variables**_ are used as **fallback** values, and are converted to CSS during compilation, without the need for _CSS root{}_ properties.
+
+We can only edit **sass variables when used in a selector**, so we use them to overwrite **bootstrap** props (after **removing** the css bootstrap import from App.js).
 
 ```sass
-//
+//We remove !important from the bootstrap properties (works only on scss)
 $enable-important-utilities: false;
 $primo: brown;
 
