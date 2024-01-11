@@ -128,7 +128,7 @@ The **useReducer(reducer, state)** adds a reducer function to change the state o
 
 ```jsx
 //The reducer function uses (initial) state and (dispatch) action as arguments. 
-//some cases return update the state, other replace it with action properties
+//some cases return update the state, other replace it with _action_ properties
 
 function reducer(state, action) {
   switch (action.type) {
@@ -221,8 +221,6 @@ function tasksReducer(tasks, action) {
 }
 
 ```
-
-1
 
 </details>
 
@@ -332,12 +330,11 @@ export function useStatodis() {
 //We THEN import both the useReducer() component and useContext()
 import Task, { useStato, useStatodis } from "./components/External1"
 
-let stato = useStato()
-let dispatch = useStatodis()
-
+let stato = useStato()    //to access the useReducer() state
+let dispatch = useStatodis()  //to access the useReducert() dispatch
 ```
 
-We **import** the _component_ and the _custom hooks_:
+We **import** the _useContext()_ _component_ and the _custom hooks_:
 
 ```jsx
 import Task, { useStato, useStatodis } from "./components/External1"
