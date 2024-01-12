@@ -99,7 +99,7 @@ The <**animated**> **component** can be used directly on the **JSX** with a useS
 
 We can use the **useSpringRef()** hook to **reference** the imperative **API** on event handlers.                         &#x20;
 
-Any **difference** between the useSpring() and the api.method **from:{}** will be **skipped**, to be animated style properties need to be both on <mark style="background-color:blue;">from</mark> and <mark style="background-color:blue;">to</mark>.
+Any **difference** between the useSpring() and the api.method **from:{}** will be **skipped.**                                 The **loop: {reverse:true}** is necessary to re-trigger the useSpring() ref.
 
 ```jsx
 import { animated, useSpring, useSpringRef } from '@react-spring/web'
