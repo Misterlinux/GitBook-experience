@@ -24,7 +24,7 @@ link + tab //will result in
 
 CSS stands for **Cascading style sheets,** and can be implemented in:
 
-```sql
+```html
 -external
 <link rel="stylesheet" type="text/css" href="style.css">
 (rel stands for relationship)
@@ -44,9 +44,9 @@ To implement **Google Fonts** in our CSS file we:
 
 {% tabs %}
 {% tab title="@import fonts" %}
-```
+```css
 //we can use Google fonts
-@import url('https://fonts.googleapis.com/css2?family=Silkscreen&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Silkscreen&display=swap')
 font-family: 'Silkscreen', cursive;
 
 //or we can also import a .ttf file while using font-face import
@@ -60,7 +60,7 @@ font-family: myFirstFont;
 {% endtab %}
 
 {% tab title="Google fonts part 1" %}
-```
+```css
 @import url('https://fonts.googleapis.com/css2?family=Silkscreen&display=swap');
 /* https://fonts.google.com/specimen/Silkscreen */
 font-family: 'Silkscreen', cursive;
@@ -86,7 +86,7 @@ font-family: 'Permanent Marker', cursive;
 {% endtab %}
 
 {% tab title="Google fonts part 2" %}
-```
+```css
 @import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
 /*https://fonts.google.com/specimen/Righteous*/
 font-family: 'Righteous', cursive;
@@ -118,13 +118,13 @@ Here are some **Inline, Inline-block, and block:**
 
 {% tabs %}
 {% tab title="HTML inline-block" %}
-```
+```html
 //inline elements won't have height/width and will be placed on a single line
-//inline-block won't still start a new line, included in the tags span/img/a for example
+//inline-block won't start a new line, included in the tags span/img/a
 
 <span class="linea">
-    <div></div>
-    <div></div>
+  <div></div>
+  <div></div>
     <div></div>
 </span>
 
@@ -132,9 +132,9 @@ Here are some **Inline, Inline-block, and block:**
 {% endtab %}
 
 {% tab title="CSS inline-block" %}
-With inline-block we can use width/height and keep the boxes in a new line:
+With inline-block, we can use width/height and keep the boxes in a new line:
 
-```
+```css
 .linea div:first-child{
     width: 100px;
     height: 80px;
@@ -169,19 +169,19 @@ With inline-block we can use width/height and keep the boxes in a new line:
 
 {% tabs %}
 {% tab title="HTML block " %}
-display:block will occupy the entire line and accept width/height, with the tags div, h1, p, li:
+display: block will occupy the entire line and accept width/height, with the tags **div, h1, p, li:**
 
-```
+```html
 <span class="linea1">
-    <span></span>
-    <span></span>
-    <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
 </span>
 ```
 {% endtab %}
 
 {% tab title="CSS block" %}
-```
+```css
 .linea1 span:first-child{
     height: 100px;
     background-color: brown;
@@ -222,7 +222,7 @@ Interactive CSS selector exercise
 
 <summary>List of CSS selectors</summary>
 
-```
+```json
 //we can also use * to select any element inside
 
 plate > *                       //for every inside tag
@@ -240,7 +240,7 @@ tag + .class1                   //only first and if following class
 
 A **media query** consists of a **media type** that adapts elements to different screens:
 
-```
+```css
 @media only screen and (max-width: 400px) {
     .head > h1{
         font-size: 1.1em;
@@ -262,7 +262,7 @@ A **media query** consists of a **media type** that adapts elements to different
 
 Also, **more specific selectors will take priority**, including the media query ones:
 
-```
+```css
 //2 class selectors
 .sidenav .title{
     display: flex;
@@ -283,7 +283,7 @@ Also, **more specific selectors will take priority**, including the media query 
 
 The transform property allows us to **move, rotate, scale, and skew** HTML elements:
 
-```
+```css
 //We can use matrix() method to 
 //(scaleX(), skewY(), skewX(), scaleY(), translateX(), translateY())
 
@@ -316,7 +316,7 @@ The transform property allows us to **move, rotate, scale, and skew** HTML eleme
 
 The **translate()** method moves the element's **current position by X/Y:**
 
-```
+```css
 // -/+ X values being left and right, while -/x top and bottom on Y axis
 
 .cor{
@@ -330,12 +330,11 @@ The **translate()** method moves the element's **current position by X/Y:**
 
     transform: translate(-30px, 100px)
 }
-
 ```
 
 The **rotate()** method rotates the element clock/anti-clockwise in degrees:
 
-```
+```css
 //negative numbers for anti-clockwise
 
 .prin{
@@ -345,12 +344,11 @@ The **rotate()** method rotates the element clock/anti-clockwise in degrees:
     
     transform: rotate(90deg);
 }
-
 ```
 
 The **scale()** method increases or decreases the width/height of an element:
 
-```
+```css
 //scale() X/Y are multipliers, you can also scaleX() or scaleY()
 
 #avv{
@@ -365,7 +363,7 @@ The **scale()** method increases or decreases the width/height of an element:
 
 The **skew()** method skews elements on their X/Y axis by degrees:
 
-```
+```css
 //it can also modify its width/height
 
 .oll{
@@ -384,7 +382,7 @@ The **skew()** method skews elements on their X/Y axis by degrees:
 
 The transition **property** allows us to change CSS values over a duration.
 
-```
+```css
 transition: width 2s linear 1s;
 
 //Transition being a shorthand for 
@@ -393,7 +391,6 @@ transition-property= "width"
 transition-duration= 2s
 transition-timing-function: "linear"
 transition-delay= 1s
-
 ```
 
 <details>
@@ -402,7 +399,7 @@ transition-delay= 1s
 
 The transition property **covers any changes** the selectors receive, **after an event**:
 
-```
+```css
 //the event can be a CSS pseudo:class or a javascript event
 
 .gir{
@@ -423,7 +420,7 @@ The transition property **covers any changes** the selectors receive, **after an
 
 You will need a transition-property when **different durations** for properties:
 
-```
+```css
 #face{
     background-color: fuchsia;
     width: 200px;
@@ -443,7 +440,7 @@ face.addEventListener("click", ()=>{
 
 We can change the **timing function** at each stage of the transition:
 
-```
+```css
 //remember to always put the timing AFTER the normal transition 
 
 #book{
@@ -460,9 +457,9 @@ We can change the **timing function** at each stage of the transition:
 //ease-in/out ease-in-out, slower at start/end or both
 ```
 
-we can delay the **transition** in between the event and the property change:&#x20;
+We can delay the **transition** between the event and the property change:&#x20;
 
-```
+```css
 #face{
     background-color: fuchsia;
     width: 200px;
@@ -471,7 +468,6 @@ we can delay the **transition** in between the event and the property change:&#x
     transition: width 3s, background-color 3s;
     transition-delay: 2s;
 }
-
 ```
 
 </details>
@@ -480,7 +476,7 @@ we can delay the **transition** in between the event and the property change:&#x
 
 We can add the transition **effect** to a transformation **method**.
 
-```
+```css
 //we transition the width property AND also transform by degrees
 
 .prin{
@@ -495,23 +491,20 @@ We can add the transition **effect** to a transformation **method**.
     transform: rotate(90deg);
     width: 220px;
 }
-
 ```
 
 ### CSS animation property
 
 This property allows us to **control every step** of a CSS animation with **keyframe rule:**
 
-```
+```css
 //animation property includes
-
 animation-name: example;
 animation-duration: 5s;
 animation-timing-function: linear;
 animation-delay: 2s;
 animation-iteration-count: infinite;
 animation-direction: alternate;
-
 
 animation: example 5s linear 2s infinite alternate;
 
@@ -520,7 +513,6 @@ animation: example 5s linear 2s infinite alternate;
   0%   {background-color: red;}
   100% {background-color: green;}
 }
-
 ```
 
 <details>
@@ -529,7 +521,7 @@ animation: example 5s linear 2s infinite alternate;
 
 An **animation requires** the name of its **keyframe** rule and its **duration**.
 
-```
+```css
 //we can use from/to for 0%/100%
 
 .robe{
@@ -544,12 +536,11 @@ An **animation requires** the name of its **keyframe** rule and its **duration**
     from {background-color: red;}
     to {background-color: yellow;}
 }
-
 ```
 
 The **animation-delay** specifies a delay for it to start:
 
-```
+```css
 //the delay can be negative, it will skip forward to the animation
 
 .cose{
@@ -565,7 +556,7 @@ The **animation-delay** specifies a delay for it to start:
 
 The **animation-iteration-count** for how many **times** it should **run,** (can be **infinite**):
 
-```
+```css
 //each re-run will start back at its starting properties
 
 .magi{
@@ -582,7 +573,7 @@ The **animation-iteration-count** for how many **times** it should **run,** (can
 
 We use **animation-direction** to choose in which order the keyframe will run:
 
-```
+```css
 //normal(default), reverse for same animation reverse keyframes.
 //alternate will smoothly reverse once done
 //while alternate-reverse will reverse first to them default keyframes
@@ -601,16 +592,16 @@ We use **animation-direction** to choose in which order the keyframe will run:
 
 The **animation-timing-function** property is the same as transition, including **steps()**:
 
-```
+```css
 //the speed will influence the keyframe speed
 
-animation-timing-function: ease/ linear/ ease-in/ ease-out/ ease-in-out/ steps()
+animation-timing-function: ease/ linear/ ease-in/ease-out/ease-in-out/steps()
 
 ```
 
 The **animation-fill-mode** property sets the **properties** that are gonna be **retained at the end** of the animation:
 
-```
+```css
 //forwards will retain last frame properties, while backwards the default's
 
 .n26{
@@ -621,7 +612,6 @@ The **animation-fill-mode** property sets the **properties** that are gonna be *
     animation: uffa 10s;
     animation-fill-mode: backwards;
 }
-
 ```
 
 </details>
@@ -638,7 +628,7 @@ steps(<number_of_steps>, <direction>)
 
 We move the pixel images as background, on a 1-frame width window:
 
-```
+```css
 <img src="http://s.cdpn.io/79/sprite-steps.png" />
 <div class="hi"></div>
 
@@ -657,7 +647,6 @@ We move the pixel images as background, on a 1-frame width window:
   from { background-position: 50px; }
   to { background-position: -500px; }
 }
-
 ```
 
 </details>
@@ -670,7 +659,7 @@ in the next example we will use **transform-origin**:&#x20;
 {% tab title="css implent" %}
 Starting point from which the transform starts, Internal to the element, and center/50% 50% by default:
 
-```
+```css
 //keywords or X/Y percentages depending on the dimensions of the element
 
 transform: top/bottom/left/right/(X% Y%)
@@ -691,7 +680,7 @@ For a transform-origin: **25% 25%**, and a transform: rotate().
 
 For single-dimension elements we need only 1 Transform-origin keyword**:**
 
-```
+```css
 .pendolo{
     margin: 15em auto;
     position: relative;
