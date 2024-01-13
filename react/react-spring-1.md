@@ -284,8 +284,8 @@ let [giro, apigir] = useSpring(()=> ({
 ```
 
 {% embed url="https://codesandbox.io/p/sandbox/usespring-class-text-interpolate-z894fz?file=/src/App.js:35,46" %}
-
-1
+CSS animation on an useSpring() interpolated string
+{% endembed %}
 
 ### A useState() conditional useSpering() prop.
 
