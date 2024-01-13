@@ -102,13 +102,15 @@ We can use the **useSpringRef()** hook to **reference** the imperative **API** o
 Any **difference** between the useSpring() and the api.method **from:{}** will be **skipped.**&#x20;
 
 ```jsx
+//You can also use a reverse+dependency usaState() to trigger the useSpring()
 import { animated, useSpring, useSpringRef } from '@react-spring/web'
 let refe = useSpringRef()
 
 let init = useSpring({
   from: {x: 0, transform: "rotate(0deg)"},
-  ref: refe
-})
+  ref: refe,
+  //reverse: true/false
+}, [dependency])
 
 //from() isn't needed and to can be an array of [{props}]
 function mosso(){
@@ -192,7 +194,7 @@ molasses – { tension: 280, friction: 120 }
 
 </details>
 
-### To() interpolate render and useState() conditional useSpering() prop.
+### To() interpolate style and text render&#x20;
 
 Using the <mark style="background-color:blue;">**to**</mark> _method_, we **interpolate** the **springValue** data on a different **style** property (we can animate both), and access its pure value (without the spring Object).
 
@@ -258,6 +260,34 @@ const {dice} = useSpring({
 ```
 
 <figure><img src="../.gitbook/assets/rangeOutput.png" alt="" width="293"><figcaption><p>Animated style properties onClick() </p></figcaption></figure>
+
+We can trigger a CSS animation with useSpring() by **interpolating a class string**.                                       The **delay** is equal to the current CSS **animation duration**.
+
+```jsx
+//We need a [dependency] and the reverse prop to trigger it onClick()
+let [preso, setPreso] = useState(false) 
+
+let [giro, apigir] = useSpring(()=> ({
+  from: { text: "outside" },
+  to: [
+    { text: "outside animate", delay: 1000},
+    { text: "outside", delay: 2500 }
+  ],
+  reverse: preso
+}), [preso])
+
+//For some reason it doesn't work with className
+
+<animated.div class={giro.text.to(value => value)}>
+  <div className="inside"></div>
+</animated.div>
+```
+
+{% embed url="https://codesandbox.io/p/sandbox/usespring-class-text-interpolate-z894fz?file=/src/App.js:35,46" %}
+
+1
+
+### A useState() conditional useSpering() prop.
 
 We use an **array** of <mark style="background-color:blue;">**to**</mark> style **objects** for multiple animations, the array has to **include** the <mark style="background-color:blue;">**from**</mark> object **(**any object before it will be ignored**)**.
 
