@@ -334,6 +334,7 @@ We can only edit **sass variables when used in a selector**, so we use them to o
 
 ```sass
 //We remove !important from the bootstrap properties (works only on scss)
+//we also added a ID on the parent tag
 $enable-important-utilities: false;
 $primo: brown;
 
@@ -366,9 +367,60 @@ document.documentElement.style.setProperty("--primo", "brown")
 scss variables with js edit
 {% endembed %}
 
-1
+<details>
 
-1
+<summary>Js editing bootstrap selectors with sass variables</summary>
+
+We can var() and **calc()** sass variables on style properties.
+
+```sass
+//Like in color-mix() hsl/rgb values
+//app.scss
+
+$enable-important-utilities: false;
+
+$dodi: 50;
+
+#bootlock .text-secondary{
+  color: color-mix(in hsl shorter hue, 
+    hsla( var(--dodi, $dodi) , 100%, 45%, 1), 
+    hsla( calc(var(--dodi)/2) , 100%, 45%, 1) );
+}
+
+#bootlock .bg-secondary{
+  background-color: color-mix(in hsl longer hue, 
+    hsla( var(--dodi, $dodi) , 100%, 45%, 1), 
+    hsla( calc(var(--dodi)/2) , 100%, 45%, 1) );
+}
+
+@import '~bootstrap/scss/bootstrap.scss';
+```
+
+We need to **re-set** the sass property in the **js** for it to work.
+
+```jsx
+//A single value to keep contrast between text/background
+let base = document.documentElement.style;
+
+base.setProperty("--dodi", 50)
+
+function contra(){
+  base.setProperty("--dodi", 100);
+}
+
+<div>
+  <div className="boxo bg-secondary d-flex">
+    <h3 className="text-secondary">Texto</h3>
+  </div>
+  <button className="btn btn-warning my-2" onClick={()=> contra()}>
+    Contrast
+  </button>
+</div>
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/hueSass.png" alt=""><figcaption><p>hsl() single sass variable colors edited on js</p></figcaption></figure>
 
 1
 
