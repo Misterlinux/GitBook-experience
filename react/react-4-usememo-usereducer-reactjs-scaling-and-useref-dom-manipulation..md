@@ -559,7 +559,7 @@ function handle(){
     Access Dom ref
   </button>
 </div>
-
+//You need useEffect(()=>{}, []) To access it onLoad() if not you get current:null
 ```
 
 <figure><img src="../.gitbook/assets/useRefDom.png" alt="" width="411"><figcaption><p>Accessing a JSX Node element</p></figcaption></figure>
