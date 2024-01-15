@@ -406,3 +406,39 @@ We translate(**vw**, **vh**) the cards but their width/height is fixed.
 
 <figure><img src="../.gitbook/assets/useSpringsReverse1.gif" alt="" width="375"><figcaption><p>useSprings() reverse set() and start()</p></figcaption></figure>
 
+We can set **transition** on the style object and the transition style property on the looped map() elements, without using springs().
+
+```jsx
+const itemStyle = {
+  ...
+  transition: "top 2s, left 2s"
+};
+
+const [items, set] = useState(
+  [1, 2, 3, 4, 5, 6, 7].map((item, i) => ({ position: i, value: item }))
+);
+
+<>
+{items.map(({ position, value }) => (
+  <div style={{ ...itemStyle, 
+    top: `${Math.floor(position/5) * 100}px`, 
+    left: `${(position%5) * 100}px`}}>
+    {value}
+  </div>
+))}
+</>
+```
+
+{% embed url="https://codesandbox.io/p/sandbox/css-transition-useeffect-setinterval-pr79q2?file=/src/App.js:57,10" %}
+Transition CSS properties
+{% endembed %}
+
+1
+
+1
+
+1
+
+1
+
+1

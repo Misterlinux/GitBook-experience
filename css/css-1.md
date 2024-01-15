@@ -383,7 +383,7 @@ The **skew()** method skews elements on their X/Y axis by degrees:
 The transition **property** allows us to change CSS values over a duration.
 
 ```css
-transition: width 2s linear 1s;
+transition: width 2s, linear 1s;
 
 //Transition being a shorthand for 
 
