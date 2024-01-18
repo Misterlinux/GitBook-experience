@@ -81,7 +81,6 @@ We change the **order** of the **useTrasition()** elements with its _second prop
 
 ```jsx
 //The button is relative>absolute width animated background 
-
 <div className="d-block contenitore">
   <div className="fila">
     {muro((style, item) => (
@@ -101,7 +100,7 @@ We change the **order** of the **useTrasition()** elements with its _second prop
 
 We use **display:grid** on the useTransition() elements.
 
-```jsx
+```css
 //We used a right movement to offset the grid-gap movement 
 .contenitore{
   width: 60%;
@@ -132,7 +131,6 @@ We **import** an array of **gradient** objects for the **useTransition**().
 
 ```jsx
 import data from './Data'
-
 [
   {
     name: 'Rare Wind',
@@ -212,12 +210,11 @@ With the same **grid** style.
 
 The **useTrail()** hook generates a trail of sequential animations.
 
-We set the starting _useTrail()_ **properties** and **animate** them on **api methods** (<mark style="color:blue;">from/to would trigger the animation on start</mark>), each element's **duration adds up** to the previous ones.
+We set the starting _useTrail()_ **properties** and **animate** them on **api methods** (<mark style="color:yellow;">from/to would trigger the animation on start</mark>), each element's **duration adds up** to the previous ones.
 
-```
+```jsx
 //The integer sets the number of elements rendered
 //We need the ()=> ({}) syntax, the 4th element takes 8 seconds to complete
-
 const [ gira, setGira ] = useState( false )
 let lista = [0, 50, 100, 150]
 
@@ -233,10 +230,11 @@ function nuota(){
 }
 ```
 
-We need **position absolute** to avoid _margins being influenced_ by the container area.                       We **extract useTrail()** style props and **i**ndex to access the initial array.
+We need **position absolute** to avoid _margins being influenced_ by the container area.                               We **extract useTrail()** style props and **i**ndex to access the initial array.
 
-```
-//To string interpolate useTrail() values we need the to() method. 
+```jsx
+//To string interpolate useTrail() values we need the to() method.
+//the array integers being the hsl color we interpolate with mosso.prop 
 //marginLeft needed to not overlay the absolute elements
 
 <div className="d-block position-relative">
@@ -355,7 +353,7 @@ We use **backface-visibility** to hide the **rotated** useTrail() absolute eleme
 
 We **npm install @react-spring/parallax** and extract the **Parallax** and **ParallaxLayer**.
 
-A _Parallax_ container animates its _ParallaxLayer_ **children** on scroll position.                                                            It's composed of **pages**, each **100%** height/width of the viewpoint, and fires its scroll events from the _container_ not the window.
+A _Parallax_ container animates its _ParallaxLayer_ **children** onScroll() position.                                                            It's composed of **pages**, each **100%** height/width of the viewpoint, and fires its scroll events from the _container,_ not the window.
 
 ```css
 import { Parallax, ParallaxLayer } from '@react-spring/parallax'

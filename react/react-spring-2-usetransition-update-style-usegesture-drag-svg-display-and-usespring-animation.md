@@ -1,54 +1,40 @@
-# React-Spring 2
+# React-Spring-2 useTransition() update style, useGesture() drag, SVG display and useSpring() animation
 
-1
-
-* 1
-* 1
+* [React use-gesture and useSpring()](react-spring-2-usetransition-update-style-usegesture-drag-svg-display-and-usespring-animation.md#react-use-gesture-and-usespring)
+* [Waving transitions with animated SVG filters and useSpring()](react-spring-2-usetransition-update-style-usegesture-drag-svg-display-and-usespring-animation.md#waving-transitions-with-animated-svg-filters-and-usespring)
 
 The **useTrasition()** **style** props can be **rendered** only in an **animated.div** component.
 
-The **Enter** and **Leave** prop **animate** the useTransition() elements being **added/removed** to the DOM, _both will be rendered_ when the element is [<mark style="background-color:blue;">updated</mark>](#user-content-fn-1)[^1].
-
-When the animation is _re-triggered_ the **first** and **final frame** of [<mark style="background-color:blue;">**Enter**</mark> ](#user-content-fn-2)[^2]will be **animated**, to avoid rendering it (and "reset" the transition) _we add a starter frame_ with different property values.
+The **Enter** and **Leave** prop only **animates** the useTransition() elements being **added/removed** to the DOM, _both will be rendered_ when the element is [<mark style="background-color:blue;">updated</mark>](#user-content-fn-1)[^1].
 
 ```jsx
-//We update the useTransition() by changing the useState()
-//opacity is not on the last/first "frame" of Enter, it "reset" the style props
-//leave removes the old element while from/enter renders the new
+//useTransition() leaves-> enter on useState() change
+//exitBeforeEnter finishes the leave before the enter
 const [mio, setMio] = useState(["another"])
 
 const estilo = useTransition(mio, {
   from: {
-    centra: "40%",
     back: "transparent", long: "0%", lefto: "0%",
-    display: "block", color: "black", opacity: 0, width: "100%",
+    color: "black", opacity: 0, width: "20%"
   },
   enter: [
-    { opacity: 0.8 }, 
-    { back: "pink", color: "green", long: "90%", lefto: "10%", opacity: 1 },
+    { back: "pink", color: "green", long: "90%", lefto: "10%", width: "100%", opacity: 1 },
     { back: "orange", color: "blue", long: "50%", lefto: "50%" },
-    { back: "red", color: "red", long: "0%", lefto: "100%"}
+    { back: "red", color: "red", long: "0%", lefto: "100%" }
   ],
   leave: [
-    { centra: "0%", display: "none" }
+    { width: "20%" ,opacity: 0 }
   ],
-  update: { color: "purple" },
+  exitBeforeEnter: true,
   config:{ duration: 1000 }
 })
 
-let plus = useRef(0)
-
-function changed(){
-  plus.current += 1;
-  ( plus.current % 2 ) ? setMio( ["nuovo"] ) : setMio( ["another"] )
-}
-
-//We deconstruct the custom-style properties for the containers
-//and use the ...rest-operator for the child component
-<div className="d-flex justify-content-center mt-5 mb-2">
-  {estilo(( {centra, back, long, lefto, ...resto} , item) => (
+//We deconstruct and ...rest the custom style properties
+//We get the translate--centered-text effect animating width/text-center 
+<>
+  {estilo(( {back, long, lefto, ...resto} , item) => (
   
-    <animated.div className="centra" style={{ width: centra }} >
+    <animated.div className="centra d-flex align-items-center" >
       <animated.div 
         className="sfondo"
         style={{backgroundColor: back, width: long, left: lefto}}
@@ -60,42 +46,38 @@ function changed(){
       </animated.div>
     </animated.div>
   ))}
-</div>
+</>
 
 ```
 
-<figure><img src="../.gitbook/assets/RepAnimation3.gif" alt="" width="297"><figcaption><p>useTransition() on updated() element update</p></figcaption></figure>
+{% embed url="https://codesandbox.io/p/sandbox/usetransition-step-animation-3zxdq7?file=/src/App.js:3,43" %}
+useTransition() on a double absolute flex container
+{% endembed %}
 
-We _useTransition(_) 2 **absolute components** on the same level.
+The <mark style="background-color:blue;">**update**</mark> _useTransition()_ styles the elements not updated during the animation but doesn't trigger if the array remains the same.
 
-<pre class="language-css" data-overflow="wrap" data-full-width="false"><code class="lang-css"><strong>.centra{
-</strong>  position: relative;
-}
-
-.sfondo{
-  position: absolute;
-  left: 0%;
-  width: 100%;
-  height: 10vh;
-}
-
-.testo{
-  position: absolute;
-  text-align: center;
-  font-size: 2em;
-}
-</code></pre>
+```jsx
+//update() if added styles after the leave{} any remaining elements
+//Any new transitions need to be included in the from:{} even at default 0
+const transitions = useTransition(testi, {
+  from: { transform: 'perspective(600px) rotateX(0deg) rotateX(0deg)'},
+  enter: { transform: 'perspective(600px) rotateX(180deg) translateX(0px)' },
+  leave: { },
+  update: [
+    { color: 'pink' },
+    { transform: "perspective(600px) rotateX(0deg) translateX(150px)" }
+  ]  
+})
+```
 
 <details>
 
-<summary>Enter and Leave useTransition() on setTimeout() updated array elements</summary>
+<summary>useTransition() arrays changed on setTimeout() and <mark style="background-color:blue;"><strong>update</strong></mark> styling</summary>
 
-A useTransition() updated array **won't animate** its **unchanging** values.
-
-The **setTimeout()** array updates will resolve **sequentially**, based on their timeout (2000 + 2000 + 1000), _not their syntax order_.
+&#x20;The **setTimeout()** array updates will resolve **sequentially**, based on their timeout (2000 + 2000 + 1000), _not their syntax order_.
 
 ```jsx
-//We empty the array element to re-start the animation
+//The useEffect() triggers the animation onLoad()
 //Even if rotateX(0) is the default, we declare it to Eenter animate
 
 const [testi, setTesti] = useState([])
@@ -107,7 +89,7 @@ const transitions = useTransition(testi, {
     transform: 'perspective(600px) rotateX(0deg)',
   },
   enter: [
-    { opacity: 1, height: 80, innerHeight: 80 , color: "green" },
+    { opacity: 1, height: 80, innerHeight: 80, color: "green" },
     { transform: 'perspective(600px) rotateX(180deg)', color: 'yellow' },
     { transform: 'perspective(600px) rotateX(0deg)', color: "red" },
   ],
@@ -121,8 +103,8 @@ const transitions = useTransition(testi, {
 
 const reset = useCallback(() => {
   setTesti([])
-  setTimeout(() => setTesti(['Apples', 'Kiwis']) , 5000)
-  setTimeout(() => setTesti(['Apples', 'Bananas', 'Kiwis']) , 4000)
+  setTimeout(() => setTesti(['Apples', 'Kiwis']), 5000)
+  setTimeout(() => setTesti(['Apples', 'Bananas', 'Kiwis']), 4000)
   setTimeout(() => setTesti(['Apples', 'Oranges', 'Kiwis']), 2000)
 }, [])
 
@@ -143,7 +125,6 @@ useEffect(() => {
   ))}
   </div>
 </div>
-
 ```
 
 We use the CSS for the text.
@@ -181,7 +162,7 @@ let animato = useTransition(element, {
 
 The useTransition() **events** can be linked to a specific **styler property**.
 
-```
+```jsx
 //onStart() triggers at the start of each frame.
 //onChange() on each pixel of animation 
 //onRest(), onPause(), and onResume() for paused/resumed animations
@@ -198,8 +179,6 @@ let animato = useTransition(element, {
   onProps: () => {console.log("will cover each updated property")}
 }
 ```
-
-1
 
 ### React use-gesture and useSpring()
 
@@ -428,7 +407,7 @@ const bind3 = useDrag(({ down, offset: [x3, y3], velocity }) => {
 {% endtab %}
 {% endtabs %}
 
-The _arcTangent_ (**Math.atan2**) of the [**direction** ](#user-content-fn-3)[^3]coordinates returns the current **rotation** position.
+The _arcTangent_ (**Math.atan2**) of the [**direction** ](#user-content-fn-2)[^2]coordinates returns the current **rotation** position.
 
 ```jsx
 //We keep the position but no momentum
@@ -443,7 +422,7 @@ const bind4 = useDrag(({ down, offset: [x, y], velocity, direction }) => {
     x, y,
     transform: `rotate(${ Math.atan2(direction[0], -direction[1]) }rad)`,
     immediate: down,
-    config: { velocity , decay: false },
+    config: { velocity, decay: false },
   })
 })
 
@@ -454,15 +433,13 @@ const bind4 = useDrag(({ down, offset: [x, y], velocity, direction }) => {
 </div>
 ```
 
-1
-
 ### Waving transitions with animated SVG filters and useSpring()
 
 **SVG**, short for **S**calable **V**ector **G**raphics, uses the **viewBox** _attribute_ to define a visible window **area** _within_ the SVG element.
 
 The **viewBox** can **scale** or **pan** its element **proportionally** to the container **size** (while maintaining its aspect ratio).
 
-```
+```jsx
 //The zoom depends on the proportion between the container and the viewBox
 //50/100 = 0.5x scale on the SVG, while 50/25 = 2x scale. 
 
@@ -487,9 +464,9 @@ The **viewBox** can **scale** or **pan** its element **proportionally** to the c
 
 <figure><img src="../.gitbook/assets/vectorViewBox.png" alt="" width="431"><figcaption><p>circles rendered inside &#x3C;svg> tag using viewBox</p></figcaption></figure>
 
-The **\<filter>** tag contains the filter **primitive elements**, used to create _svg visual effects_.                     The **\<g>** tag can render **multiple** _svg_ elements, its **d**(ata) attribute defines the **path** and shape of the element.
+The **\<filter>** tag contains the filter **primitive elements**, used to create _svg visual effects_.                         The **\<g>** tag can render **multiple** _svg_ elements, its **d**(ata) attribute defines the **path** and shape of the element.
 
-We animate the <mark style="color:blue;">useSpring()</mark> **between** its **starting/ending state** with the useState() **reverse** property and **dependency**.                                                                                                                    We use the <mark style="color:blue;">React-spring</mark> **animated() function** to create **animatable** _filter primitive_ components.
+We animate the <mark style="color:blue;">useSpring()</mark> **between** its **starting/ending state** with the useState() **reverse** property and **dependency**.                                                                                                                                                         We use the <mark style="color:blue;">React-spring</mark> **animated() function** to create **animatable** _filter primitive_ components.
 
 To animate the **SVG wave** effect, we use the **baseFrequency** attribute for its _frequency_ and _direction_ (X/Y values) and the **scale** (factor) for the **strength** of the _displacement effect_.
 
@@ -539,7 +516,7 @@ const [{ freq, factor, scale, opacity }] = useSpring(() => ({
 
 We repeat the wave effect including **all** the fiter primitive **attributes**.
 
-```
+```css
 <feTurbulence/>
 filter: output result of the filter
 numOctaves: turbulence detail value 
@@ -558,7 +535,7 @@ result: name of the filter result
 
 In the ReactJs:
 
-```
+```jsx
 <div onClick={() => toggle(!open)}>
   <animated.svg className="svg" style={{ scale, opacity }} 
     viewBox="0 0 1276 400">
@@ -588,10 +565,6 @@ In the ReactJs:
 
 </details>
 
-1
-
 [^1]: when the useTransition() element is changed.
 
-[^2]: useTransition() enter{} prop
-
-[^3]: useDrag() state attribute      &#x20;
+[^2]: useDrag() state attribute      &#x20;
