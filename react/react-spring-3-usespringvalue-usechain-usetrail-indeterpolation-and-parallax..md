@@ -1,9 +1,8 @@
-# React-Spring 3
+# React-Spring 3 useSpringValue(), useChain(), useTrail() indeterpolation and Parallax.
 
-* 1
-* 1
-* 1
-* 1
+* [Animation sequences with useChain()](react-spring-3-usespringvalue-usechain-usetrail-indeterpolation-and-parallax..md#animation-sequences-with-usechain)
+* [Staggering animations with useTrail()](react-spring-3-usespringvalue-usechain-usetrail-indeterpolation-and-parallax..md#staggering-animations-with-usetrail)
+* [Scroll sections with Parallax and ParallaxLayers.](react-spring-3-usespringvalue-usechain-usetrail-indeterpolation-and-parallax..md#scroll-sections-with-parallax-and-parallaxlayers)
 
 The **useSpringValue**() hook sets **singular** style properties, it accesses useSpring() **methods** imperatively.
 
@@ -648,10 +647,6 @@ let refe = useRef(null)
 
 </details>
 
-<figure><img src="../.gitbook/assets/Parallax2.gif" alt="" width="188"><figcaption></figcaption></figure>
-
-1
-
-1
+<figure><img src="../.gitbook/assets/Parallax2.gif" alt="" width="188"><figcaption><p>Parallax and ParallaxLayers scroll animation</p></figcaption></figure>
 
 [^1]: 

@@ -5,17 +5,19 @@
 * 1
 * 1
 
-**useSpring**() animations **run** even without rendering, and _api.start() can't change keyframes_ during a loop. We create a new useSpring() hook to change the style keyframe.
+The **useSpring**() animations **run** even without rendering, and _api.start() can't change keyframes_ during a loop. We create a new useSpring() hook to change the style keyframe.
 
 <details>
 
 <summary>Changing useSpring() on the same loop element</summary>
 
+We **useState()** style the useSprings(), alternating them with useRef().
+
 The new useSpring() _won't start_ **from:{}** but from its already running **keyframe**.
 
 ```jsx
 //It will render depending on the number of keyframes and duration
-//It renders on teh DOM so we useState()
+//It renders on the DOM so we useState()
 
 let [spin, api] = useSpring(()=>({
   from: {x: 0, y: 0, background: "lightblue"},
@@ -73,7 +75,7 @@ We can pause() and resume() to **keep** the useSpring() **keyframe** when change
 We **useEffect**() to keep the second useSpring() paused before resuming and rendering it.&#x20;
 
 ```jsx
-
+//useEffect() works once onLoad(), then we pause() resume() the useSpring()
 let [spin2, api2] = useSpring(()=>({
   from: {x: 0, y: 0, background: "lightblue"},
   to: [
@@ -121,7 +123,6 @@ function cambio2(){
 
   trigger3.current = !trigger3.current
 }
-
 
 <div className="d-block">
 
@@ -172,7 +173,7 @@ async function primo(){
 We sequentially animate the SpringValue(), re**set** it to its **starting value**, and re-start its function.
 
 ```jsx
-
+//like the [keyframes] of a useSpring()
 const mossa1 = {
   x: new SpringValue("0%", {config: {duration: 500}, loop: true }),
   y: new SpringValue( 0, {config: {duration: 500}} ),
@@ -254,7 +255,8 @@ async function accel(){
 The **new Controller** class constructor sets an _api_ imperative to springValues.
 
 ```jsx
-//Controller can use springValues() methods 
+//Controller can use springValues() methods, controller..springs for style values
+//It works the same as a useSpring() api
 import {Controller} from '@react-spring/web'
 
 let mover = new Controller({
@@ -268,7 +270,7 @@ let mover = new Controller({
 })
 
 <div>
-  <animated.div className="round" style={rimba.springs}>
+  <animated.div className="round" style={mover.springs}>
   </animated.div>
 </div>
 ```
@@ -341,7 +343,7 @@ function starto(){
 
 ### useSpring() scrips on conditional keyframes
 
-We _chain_ useSpring() **keyframes** with an **array** of _spring objects_, but we _can't change_ the keyframe array **during the animation** (unless we change the rendered useSpring()). We create a **script**.
+We _chain_ useSpring() **keyframes** with an **array** of _spring objects_, but we _can't change_ the keyframe array **during the animation** (unless we change the rendered useSpring()). So we create a **script**.
 
 An **async** function that **await** the **next** (function that returns a **Promise** on the **spring state**) once completed.
 
@@ -528,11 +530,10 @@ let [quad, api3] = useSpring(() => ({
 
 ### useIsomorphicLayoutEffect() and useReducedMotion()
 
-The React hooks _useEffect_() and _useLayout_() affect the **server** and the **client** respectively.            We properly render _useSpring()_ effects with **useIsomorphicLayoutEffect().**
+The React hooks _useEffect_() and _useLayout_() affect the **server** and the **client** respectively.                  We properly render _useSpring()_ effects with **useIsomorphicLayoutEffect(),** using a **useState()** to dependency-animate **useSpring()** properties**.**
 
 ```jsx
 //We can't insert a loop:true in a start() or a single value useSpring()
-//we can use a useState() dependency to animate the useSpring() 
 
 let [dove, setDove] = useState({x: 0, y: -100})
 
@@ -567,7 +568,7 @@ function mossa(){
 
 The **useReducedMotion()** hook will trigger if the user lowers animations in its device.
 
-```
+```jsx
 //We use the boolean returned value
 const reducedMotion = useReducedMotion()
 
