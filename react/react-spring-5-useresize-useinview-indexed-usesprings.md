@@ -1,10 +1,9 @@
-# React-Spring 5
+# React Spring 5 useResize(), useInView(), indexed useSprings()
 
-* elements
-* element
-* elle
+* [Animated useSpring() with useInView() hook](react-spring-5-useresize-useinview-indexed-usesprings.md#animated-usespring-with-useinview-hook)
+* [Rendering useSprings() with index-based style properties](react-spring-5-useresize-useinview-indexed-usesprings.md#rendering-usesprings-with-index-based-style-properties)
 
-The **useResize()**, a useSpring() abstraction, returns the **useRef()** container width/height props.     Its onChange() will trigger on **window resize**.
+The **useResize()**, a useSpring() abstraction, returns the **useRef()** container width/height props.            Its onChange() will trigger on <mark style="background-color:blue;">**window resize**</mark>.
 
 ```jsx
 //width returned in px
@@ -23,11 +22,9 @@ const { width, height } = useResize({
 </div>
 ```
 
-
-
 ### Animated useSpring() with useInView() hook&#x20;
 
-The **useInView()** hook tracks an element's **visibility** relative to the **viewpoint**.                                      It will return the **useRef()** for the target element and the **boolean** result of the _Intersection Observer API_
+The **useInView()** hook tracks an element's **visibility** relative to the **viewpoint**.                                                It will return the **useRef()** for the target element and the **boolean** result of the _Intersection Observer API_
 
 ```jsx
 import { animated, useSpring, useInView} from '@react-spring/web'
@@ -35,7 +32,7 @@ import { animated, useSpring, useInView} from '@react-spring/web'
 let [ref, inview] = useInView({
   //Element's visibility percentage that will trigger the useInView() callback
   threshold: 0.5,         //independently of scroll direction
-  rootMargin: '-20% 0%',  //margins around the element
+  rootMargin: '0px 0px -20% 0%',  //margins around the element (adds to threshold)
   once: true,             //will trigger the API once
 })
 
