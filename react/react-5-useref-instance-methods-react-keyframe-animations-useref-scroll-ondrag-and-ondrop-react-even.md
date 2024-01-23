@@ -11,7 +11,7 @@
 
 **event.crtlKey** checks if the crtl button was being held during onClick().                                  Different React events will give access to different **event object properties**, like **event.key/event.code** on _onKeyDown() input_ events.                    &#x20;
 
-```
+```jsx
 function controlla(e){
   console.log( e )
 
@@ -37,7 +37,7 @@ function controlla(e){
 
 On DOM we:
 
-```
+```jsx
 <div className="text-end my-4">
   <button onClick={controlla} className="btn btn-success">Uno</button>
   <button onClick={controlla} className="btn btn-warning">Due</button>
@@ -51,7 +51,7 @@ On DOM we:
 
 We **e.target mouseEnter**, **mouseLeave**, **mouseOver**, **mouseOut**, and **mouseMove** React events, and render with _useState()_.
 
-```
+```jsx
 //mouseEnter /mouseLeave trigger once the mouse leaves the DOM element
 //mouseMove /mouseOver and mouseOut trigger for each pixel moved in their areas
 
@@ -81,7 +81,7 @@ function capta(e){
 
 We can **useRef()** to access DOM element attributes with **hasAttribute()** and **getAttribute()**.
 
-```
+```jsx
 //className won't work as an attribute
 <button ref={bot} className="btn btn-primary" onClick={check}>
   Check attr    
@@ -93,7 +93,7 @@ bot.current.getAttribute("class") 	//btn btn-primary
 
 We edit a useRef() attribute with **setAttribute(**attribute, value**)**:
 
-```
+```jsx
 //or we modify the className property of the ref
 
 bot.current.className = "btn btn-warning"
@@ -102,7 +102,7 @@ bot.current.setAttribute("class", "btn btn-warning")
 
 We **removeAttribute()** (instead of setting it as null) and **toggleAttribute()** (to toggle in/out attributes on React Events)
 
-```
+```jsx
 //toggle won't return the past attribute values 
 //it works best on attributes that don't need values, like disable.
 
@@ -116,9 +116,8 @@ We **useRef()** an input **current.value** to **append()** it in a JSX tag.
 {% tab title="useRef().current.value" %}
 We need 2 **useRef()**, for the input **ref** and the **append()** DOM target.
 
-```
+```jsx
 //We can't append() a JSX object so we need to document.createElement()
-
 const sce= useRef(null)
 const paper= useRef(null)
 
@@ -130,18 +129,17 @@ function entra(e){
   paper.current.append(plot)
   sce.current.value= ""
 }
-
 ```
 
 On the **DOM** the **ref** will store and update the input.value (we **append()** to render it):
 
-```
+```jsx
 <form className="row col-6 mb-3" onSubmit={entra}>
   <div className="col-auto">
-  	<input ref={sce} type="text" className="form-control"/>
+    <input ref={sce} type="text" className="form-control"/>
   </div>
   <div className="col-auto">
-  	<button className="btn btn-primary">submit</button>
+    <button className="btn btn-primary">submit</button>
   </div>
 </form>
 
@@ -156,7 +154,7 @@ On the **DOM** the **ref** will store and update the input.value (we **append()*
 {% tab title="useState().target.value" %}
 **useState() can {**render**}** the **input.target value** without a useRef(), but we need to _value/onChange()_ the input.
 
-```
+```jsx
 const [run, setRun] = useState("")
 let con= useRef( null )
 
@@ -172,7 +170,7 @@ function late(e){
 
 On the **DOM** we:
 
-```
+```jsx
 <form className="row col-6 mb-3" onSubmit={late}>
   <div className="col-auto">
       <input type="text" className="form-control"
@@ -196,9 +194,8 @@ On the **DOM** we:
 
 We use **scroll()**, **scrollBy()**, and **scrollIntoView()** on an **overflow:scroll** useRef() **DOM** element.              The **scroll()** method moves the element **to a** **set of coordinates** inside a container.
 
-```
+```jsx
 //We set the X/Y coordinates or a top/left/behavior object
-
 function preci(){
   roll5.current.scroll(200, 450)
 
@@ -216,7 +213,7 @@ function preci(){
 
 **scrolllBy()** **adds up** its **X/Y coordinates** to the **current** position.
 
-<pre><code><strong>//unlike scroll() that if repeated doesn't move.
+<pre class="language-jsx"><code class="lang-jsx"><strong>//unlike scroll() that if repeated doesn't move.
 </strong><strong>const riga = useRef(null)
 </strong>
 function back(){
@@ -231,7 +228,7 @@ function back(){
 
 **scrollIntoView()** scrolls the _container_ so the **element** which calls it gets into the **user** **browser viewpoint**.
 
-```
+```jsx
 //Its behavior object uses block/Y axis and inline/X axis 
 //it uses start/center/end/nearest for positioning
 
@@ -247,7 +244,7 @@ function goto(){
 
 In the DOM we useRef() the **scrollIntoView()** on the element, not the container.
 
-```
+```jsx
 <ul className="scorri flex-nowrap" ref={riga}>
   <div>
     <img src="https://placekitten.com/250/200?image=1" className="img-fluid"/>
@@ -268,12 +265,7 @@ In the DOM we useRef() the **scrollIntoView()** on the element, not the containe
     <img src="https://placekitten.com/250/200?image=6" className="img-fluid"/> 
   </div>
 </ul>
-
-
-
 ```
-
-1
 
 </details>
 
@@ -285,7 +277,7 @@ In the DOM we useRef() the **scrollIntoView()** on the element, not the containe
 {% tab title="animate()" %}
 The **keyframe** is an _array of objects_ to **iterate** and the **timing** object has the **animation properties**.
 
-```
+```jsx
 const roll = useRef(null)
 
 function mosso(){
@@ -353,7 +345,7 @@ The **animate()** method on useRef() DOM elements **won't trigger** the **onAnim
 {% tab title="CSS keyframes" %}
 **onAnimationIteration**() will trigger only when _iteration-count > 1_.
 
-```
+```jsx
 const [naso, setNaso] = useState("")
 function copia(){
   setNaso("muove")
@@ -395,7 +387,7 @@ The events go on the animated DOM element.
 {% tab title="animate() useRef()" %}
 The events won't trigger even if the animation is replicated.
 
-```
+```jsx
 let fly= useRef(null)
 function copia1(){
   let chiavi= [
@@ -429,7 +421,7 @@ function copia1(){
 
 We store the **onCopy() event** value with **document.getSelection()** and useRef().
 
-```
+```jsx
 //We then use a button to print it in another useRef() DOM element
 
 let tron= useRef(null)
@@ -461,7 +453,7 @@ function copiato(){
 
 The HTML **Drag and Drop API** implements **draggable** elements in the browser. DOM elements with the draggable **attribute** trigger **onDrag()** React events.                   &#x20;
 
-```
+```jsx
 //Drag and Drop events are inherited from the mouse events
 
 <p
@@ -476,7 +468,7 @@ The HTML **Drag and Drop API** implements **draggable** elements in the browser.
 
 The **onDrop() target** DOM element can trigger:
 
-```
+```jsx
 //it's better to use dragLeave than dragOver
 
 <div
@@ -493,7 +485,7 @@ We use the **dataTransfer** object during the _drag-and-drop_ events.           
 
 We set the **dropEffect** _onDragOver()/onDragStart()_ and check it **onDragEnd()** to **filter** drag operations.
 
-```
+```jsx
 //If the drop operation/effect is not allowed the dropEffect == "none"
 //Multiple setData() with the same data format will replace each other
 //For the onDrag to work we need onDragOver() e.preventDefault()
