@@ -6,6 +6,49 @@
 
 ### Intersection Observer API
 
+The Intersection Observer is a **web platform API**, included in JS and without running in the main thread.
+
+it _asynchronously <mark style="background-color:blue;">observe</mark> intersections_ between the **target** elements and the **user viewpoint root**:
+
+```jsx
+//viewpoint set in options and target set in observe()
+//IntersectionObs config can't be changed once set but can observe multiple
+
+let base = useRef()
+let target = useRef()
+  
+useEffect(()=>{
+
+  let options={
+    root: base.current, //Document/Element bounding-box used as viewpoint
+    rootmargin: "0px",  //offset margins applied to viewpoint intersections
+    //interception area percentages that trigger the callback.
+    threshold: [...Array(100).keys()].map(x => x / 100) 
+  }
+  
+  //The argument being the observe() target elements
+  //of which only some are entries[0].isIntersecting
+  function entered(entries){
+    console.log( entries[0] )
+  }
+
+  let interObs = new IntersectionObserver(entered, options)
+  interObs.observe(target.current)
+}, [])
+```
+
+1
+
+1
+
+1
+
+1
+
+1
+
+1
+
 Check this exercise:
 
 {% embed url="https://codepen.io/misterlinux/pen/zYWxgdX?editors=1010" %}
