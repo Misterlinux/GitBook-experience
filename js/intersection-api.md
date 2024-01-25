@@ -13,10 +13,10 @@ it _asynchronously <mark style="background-color:blue;">observe</mark> intersect
 ```jsx
 //viewpoint set in options and target set in observe()
 //IntersectionObs config can't be changed once set but can observe multiple
-
 let base = useRef()
 let target = useRef()
   
+let interObs;
 useEffect(()=>{
 
   let options={
@@ -32,100 +32,30 @@ useEffect(()=>{
     console.log( entries[0] )
   }
 
-  let interObs = new IntersectionObserver(entered, options)
+  interObs = new IntersectionObserver(entered, options)
   interObs.observe(target.current)
 }, [])
 ```
 
 1
 
-1
+We need the IntersectionObserver() object and the target to **unobserve**() :
 
-1
-
-1
-
-1
-
-1
-
-Check this exercise:
-
-{% embed url="https://codepen.io/misterlinux/pen/zYWxgdX?editors=1010" %}
-
-The Intersection Observer is a **web platform API**, already included in JS without running in the main thread.
-
-it _asynchronously observe intersections_ between the target elements and the **user viewpoint**:
-
-```
-//For the ScrollSPY we first need the paragraphs and the nav-items
-
-let sidecont = document.querySelectorAll(".colonna section")
-let sidenav = document.querySelectorAll(".flex-column li")
-
-//we create a callback function for the constructor for EACH of the paragraph when intersected
-
-function sided(sides){
-  sides.map((side)=>{
-  
-//side being an instance of IntersectionObserverEntry object with boundingClientRect position, dimensions of target and intersection roots
-  
-    if(side.isIntersecting){
-      //this will execute each time sidecont interfers
-      ...
-    }
-  })
+```jsx
+//remember to declare both outside useEffect()
+//If used twice it returns an error, and won't work in <strictMode/>
+function annulla(){
+  interObs.unobserve(target.current) 
 }
-
-//then we can create an optional configuration for the IntersectionObserver 
-//threshold is the portion to be intersected before calling the function, at 0 is always visible
-//while rootMargin adds margin (- will reduce it) to the viewpoint, usefull for fixed headers
-
-let come={
-  threshold: 1,
-  rootMargin: "-5px",
-}
-
-//the constructor with both callback function and optional
-let sideview = new IntersectionObserver(sided, come)
-
-sidecont.forEach((ciglia)=>{
-
-//after creating the contructor(sideview) we call the method .observe() onEACH single NODE element
-
-  sideview.observe(ciglia)
-})
-
 ```
 
-The code we execute after the Intersection will be:
+1
 
-```
-//we will use classList for the bootstrap highlighted effect "active"
+1
 
-function sided(sides){
-  sides.map((side)=>{
-    if(side.isIntersecting){
-    
-//each NodeList element will get the current active removed
-      sidenav.forEach(item=>item.classList.remove("active"))
-      
-//and, with the INTERSECTED element ID, we "active" the NAV element withthe same href=""
-      let attiva1= document.querySelector(`.flex-column li[href*=${side.target.id}`).classList.add("active")
-    }
-  })
-}
+1
 
-```
-
-we can **remove any observation** with;
-
-```
-//inside the callback function
-
-____.unobserve(entry.target); 
-
-```
+1
 
 ### Color randomizer & Smooth redirect
 
