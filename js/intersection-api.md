@@ -49,7 +49,7 @@ function annulla(){
 }
 ```
 
-1
+{% embed url="https://codesandbox.io/p/sandbox/intersectionobserver-examples-v5y5mt?file=/src/App.js:146,1" %}
 
 1
 
