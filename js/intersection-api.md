@@ -55,6 +55,87 @@ function annulla(){
 
 1
 
+We _observe() loop_ when there are **multiple** intersection **targets**.
+
+```jsx
+let sections = document.querySelectorAll(".sticky-container")
+
+sections.forEach((element)=> {
+  observer.observe(element)
+})
+```
+
+We can use **rootMargin** to create a 0px top intersect for the root.
+
+```jsx
+//used to intersect a sticky top element without scroll or height 
+let options={
+  root: contain.current,
+  rootMargin: '0px 0px -100% 0px'
+}
+```
+
+The _**entries**_ of the callback function will be the _current inView_ from the root, with true/false isIntersect based on the (options).
+
+The **toggle()** method **force** argument only adds/removes on true/false.                                                      We can add a scroll() event with the callback function, but it won't return any target data.
+
+```jsx
+//We forEach() the entries to toggle() first
+function passed(entries){
+  root.current.addEventListener('scroll', inside)
+
+  entries.forEach((element)=>{
+    element.target.classList.toggle('active', element.isIntersecting)
+  })
+}
+
+//To add a scroll-like intersection trigger we use an array of small thresholds
+options:{
+  threshold: [...Array(100).keys()].map((x)=> x/100)
+}
+```
+
+<details>
+
+<summary>IntersectionRatio, boundingClientRect and intersectionRect</summary>
+
+1
+
+1
+
+1
+
+1
+
+**Understanding `intersectionRect` in Relation to `isIntersecting`**
+
+The `isIntersecting` property tells you if the target element is currently visible in the viewport based on the defined threshold. However, `isIntersecting` is simply a boolean that flags visibility, without providing details about the intersection area.
+
+To get more insight into how the target element is intersecting with the viewport, `IntersectionObserver` provides another property called `intersectionRect`. This property is an object that represents the rectangle area where the target element and the root (usually the viewport) overlap.
+
+The `intersectionRect` gives you the following properties:
+
+* `x` and `y`: The coordinates of the intersection rectangle's top-left corner relative to the viewport.
+* `width` and `height`: The dimensions of the intersection rectangle.
+* `top`, `right`, `bottom`, `left`: Distances from the edges of the root element to the respective edges of the intersection rectangle.
+
+Using `intersectionRect`, you can understand exactly how much of the target element is visible, which can be critical for fine-tuning animations or triggering events when a specific part of an element comes into view.
+
+1
+
+```
+```
+
+1
+
+1
+
+</details>
+
+1
+
+1
+
 1
 
 ### Color randomizer & Smooth redirect
@@ -71,7 +152,7 @@ function colora(){
     risulta+= (Math.random()*255).toFixed() + ","
   }
 
-//we slice the starter 0 and teh last (,)
+//we slice the starter 0 and the last (,)
   return `rgb(${risulta.slice(1,-1)})`
 }
 
