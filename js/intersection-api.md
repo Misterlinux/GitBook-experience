@@ -99,38 +99,41 @@ options:{
 
 <summary>IntersectionRatio, boundingClientRect and intersectionRect</summary>
 
-1
+The **intersectionRatio** entry prop is the target intersection percentage to the root.
 
-1
+The **boundingRect** prop is the target position relative to the entire root, its top becomes negative once it's scrolled over, with the formula bottom - top = height.
 
-1
+The **intercectRect** is the rectangle area where the target and **root viewpoint** overlay, it's 0 when no intersect, its bottom-top returns the **current intersect height** of the target, and the **top** prop stops updating once it has been intersected and no longer visible (unlike boundingRect)
 
-1
+```jsx
+//ratio< 1 is equal to entry.isIntersecting, where we add/remove the scroll()
+//On the X axis, boundingRect right-left = width
+//We compare intersectRect to detect the target's position
 
-**Understanding `intersectionRect` in Relation to `isIntersecting`**
+let ratio = entry[0].intersectionRatio
+const boundingRect = entry[0].boundingClientRect;
+const intersectionRect = entry[0].intersectionRect;
 
-The `isIntersecting` property tells you if the target element is currently visible in the viewport based on the defined threshold. However, `isIntersecting` is simply a boolean that flags visibility, without providing details about the intersection area.
-
-To get more insight into how the target element is intersecting with the viewport, `IntersectionObserver` provides another property called `intersectionRect`. This property is an object that represents the rectangle area where the target element and the root (usually the viewport) overlap.
-
-The `intersectionRect` gives you the following properties:
-
-* `x` and `y`: The coordinates of the intersection rectangle's top-left corner relative to the viewport.
-* `width` and `height`: The dimensions of the intersection rectangle.
-* `top`, `right`, `bottom`, `left`: Distances from the edges of the root element to the respective edges of the intersection rectangle.
-
-Using `intersectionRect`, you can understand exactly how much of the target element is visible, which can be critical for fine-tuning animations or triggering events when a specific part of an element comes into view.
-
-1
-
+if( ratio=== 0 ){
+  contain.current.removeEventListener('scroll', vediamo);
+}else if( ratio < 1 ){
+  boundingRect.top < intersectionRect.top ? "on top":"on bottom" 
+}else{
+  stato.current.innerText = "inside"
+}
 ```
-```
-
-1
-
-1
 
 </details>
+
+We can modify both the root and target without needing to change the intersectObserver().
+
+{% embed url="https://codesandbox.io/p/sandbox/intersectionobserver-event-bounding-intersect-rect-qdg6s6" %}
+
+1
+
+1
+
+1
 
 1
 
