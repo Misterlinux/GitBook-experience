@@ -127,6 +127,8 @@ if( ratio=== 0 ){
 
 We can modify both the root and target without needing to change the intersectObserver().
 
+<figure><img src="../.gitbook/assets/Immagine 2024-02-03 150457.png" alt="" width="280"><figcaption></figcaption></figure>
+
 {% embed url="https://codesandbox.io/p/sandbox/intersectionobserver-event-bounding-intersect-rect-qdg6s6" %}
 
 1
