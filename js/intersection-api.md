@@ -133,9 +133,9 @@ We can modify both the root and target without needing to change the intersectOb
 
 1
 
-lets test some codesandboxes.
+The navbar intersect animated.
 
-1
+<figure><img src="../.gitbook/assets/Navbar-Intersect.png" alt="" width="375"><figcaption><p>Nav-items animated with intersectOberver()</p></figcaption></figure>
 
 1
 
