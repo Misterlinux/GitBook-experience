@@ -133,72 +133,96 @@ We can modify both the root and target without needing to change the intersectOb
 
 1
 
-The navbar intersect animated.
+This is how we animate intersectionObserver() **nav-items**.
+
+{% tabs %}
+{% tab title="Nav-items html" %}
+**Nav-items** need to share a class/id with the **section** elements in the root.
+
+```jsx
+//The alternative nav-item has no <a>
+
+<nav className="d-flex">
+  <div className="nav-item uno1">
+    <a href="#uno1" className="nav-link">Uno </a>
+  </div>
+  <div className="due2 nav-item" onClick={(e)=> mosso(e)}>
+    Secon
+  </div>
+  ..
+</nav>
+
+<section className="singolo" id="uno1">
+  {Texto()}
+</section>
+```
+{% endtab %}
+
+{% tab title="js Intersect" %}
+We use the **entry.isIntersecting** target to querySelect() the **nav-item**, and add() our CSS class.
+
+```jsx
+//We store a queryselector() value by setting it outside useEffect()
+//we removeAll/add the current intersect element
+//we can target the href document.querySelector(`.nav-item a[href*=${side.target.id}`)
+
+let naviga;
+useEffect(()=>{
+  naviga = document.querySelectorAll("nav.d-flex .nav-item")
+  
+  ...
+  if( entry.isIntersecting ){
+    naviga.forEach(item=>item.classList.remove("active"))
+    
+    document.querySelector(`.nav-item.${entry.target.id }`).classList.add("active")
+  }
+}, [])
+
+```
+{% endtab %}
+{% endtabs %}
+
+Instead of the href/id scroll, we can manually scrollInView the section elements using **offsetTop**.
+
+```tsx
+//This won't move the window page scroll in any way
+//The offsetTop requires position-absolute on the scroll to be precise 
+
+function mosso(event){
+  event.preventDefault()
+
+  let container = event.target
+
+  let adesso = document.querySelector(`section#${container.classList[0]}`);
+
+  let moment = adesso.offsetTop + 10
+  adesso.parentNode.scrollTop = moment
+}
+```
+
+The **absolute** scroll area won't return any height to its **relative** parent container, so we use document.offsetHeight for design's sake.
+
+```jsx
+//Use margins on the relative to not modify the absolute offsetHeight
+let sopra = useRef()
+let sotto = useRef()
+
+sopra.current.style.height = sotto.current.offsetHeight + "px"
+
+<div ref={sopra} className="position-relative d-flex justify-content-center">
+
+  <div ref={sotto} className="position-absolute row mx-0 col-8">
+  </div>
+</div>
+```
 
 <figure><img src="../.gitbook/assets/Navbar-Intersect.png" alt="" width="375"><figcaption><p>Nav-items animated with intersectOberver()</p></figcaption></figure>
 
-1
+{% embed url="https://codesandbox.io/p/sandbox/intersectionobserver-animated-navbar-h9vw3n?file=/src/App.js:149,17" %}
 
 1
 
 1
-
-1
-
-1
-
-### Color randomizer & Smooth redirect
-
-For the color we simply:
-
-```
-//We return a random string of 3 RGB 255 numbers
-
-function colora(){
-  let risulta = 0;
-  
-  for(let i= 0; i< 3; i++){
-    risulta+= (Math.random()*255).toFixed() + ","
-  }
-
-//we slice the starter 0 and the last (,)
-  return `rgb(${risulta.slice(1,-1)})`
-}
-
-//then we color a node
-boxe.forEach((x)=>{
-  x.style.backgroundColor = colora();
-})
-
-```
-
-For the Redirect smooth we get:
-
-```
-//For each nav link, 
-
-document.querySelectorAll('.nav-items').forEach(link => {
-  link.addEventListener('click', function(e) {
-    e.preventDefault();
-
-//first we get the attribute and cut the # using .substrng(1), then we get the corresponsive ID
-    let href = this.getAttribute('href').substring(1);
-    const scrollTarget = document.getElementById(href);
-
-//we get the .getBoundingClientRect().top and we select the DOM element to scroll
-    const elementPosition = scrollTarget.getBoundingClientRect().top;
-    let colonna = document.querySelector(".colonna")
-
-//when scrolling the selected we move the TOP in a smooth behavior
-    colonna.scrollBy({
-      top: elementPosition - 150,      //we remove the margin 150px we added with CSS
-      behavior: 'smooth',
-    });
-
-  });
-});
-
-```
 
 ### Intersection CSS style animation
 
