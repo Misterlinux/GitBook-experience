@@ -37,8 +37,6 @@ useEffect(()=>{
 }, [])
 ```
 
-1
-
 We need the IntersectionObserver() object and the target to **unobserve**() :
 
 ```jsx
@@ -50,10 +48,6 @@ function annulla(){
 ```
 
 {% embed url="https://codesandbox.io/p/sandbox/intersectionobserver-examples-v5y5mt?file=/src/App.js:146,1" %}
-
-1
-
-1
 
 We _observe() loop_ when there are **multiple** intersection **targets**.
 
@@ -127,11 +121,9 @@ if( ratio=== 0 ){
 
 We can modify both the root and target without needing to change the intersectObserver().
 
-<figure><img src="../.gitbook/assets/Immagine 2024-02-03 150457.png" alt="" width="280"><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/Immagine 2024-02-03 150457.png" alt="" width="280"><figcaption><p>interceptionObserver() animated sections</p></figcaption></figure>
 
 {% embed url="https://codesandbox.io/p/sandbox/intersectionobserver-event-bounding-intersect-rect-qdg6s6" %}
-
-1
 
 This is how we animate intersectionObserver() **nav-items**.
 
@@ -220,71 +212,41 @@ sopra.current.style.height = sotto.current.offsetHeight + "px"
 
 {% embed url="https://codesandbox.io/p/sandbox/intersectionobserver-animated-navbar-h9vw3n?file=/src/App.js:149,17" %}
 
-1
-
-1
-
 ### Intersection CSS style animation
 
 Check this webpage:
 
 {% embed url="https://codepen.io/misterlinux/pen/yLKObpq" %}
 
-About the **translateX and scale() transformation animation** on Intersected images:
+{% embed url="https://codesandbox.io/p/sandbox/animated-intersectionobserver-sections-reactjs-vd6x8j?file=/src/App.js" %}
+React js version&#x20;
+{% endembed %}
 
-```
-//We select the image text sections, remember that all other elements 
-//not intersected are under the ELSE styling
+We animate the sections with toggle() **css keyframes**.
 
-let image = document.querySelectorAll(".imagi")
+```jsx
+//Unlike useSpring() it won't animate on removal.
+entry.target.classList.toggle("active", entry.isIntersecting)
 
-let inter = new IntersectionObserver((entrie)=>{
-    entrie.forEach((entry)=>{
-        if(entry.isIntersecting){
+.zone .row.active{
+  animation: example 0.5s;
+}
 
-//we get the fading effect with opacity from 0/1, while the scale() and translateX()
-//we also used .classList.value to get the classes as an array, and with specific classes
-//we get other effects on the ternary operator
-
-            entry.target.style.opacity = 1
-            entry.target.classList.value.includes("panini") ? entry.target.style.transform = "scale(1)" : entry.target.style.transform = "translateX(0rem)"
-            entry.target.style.backgroundColor = entry.target.getAttribute("data-color");;
-        }else{
-            entry.target.style.opacity = 0
-            entry.target.classList.value.includes("panini") ? entry.target.style.transform = "scale(0)" : entry.target.style.transform = "translateX(-15rem)"
-
-        }
-    })
-},
-{
-    threshold: 0.3
-})
-
+@keyframes example{
+  0% {transform: scale(0);}
+  100% {transform: scale(1);}
+}
 ```
 
-We can **access attributes** from querySelectors:
+We can access tag **attributes** or modify the **entry.target.style** directly.
 
-```
-//On the HTML we can have specific data attributes we can use in the script.js
-
-let image = document.querySelectorAll(".imagi")
+```jsx
 <div class="imagi pure-g" data-color="#f1bace">
-
 entry.target.style.backgroundColor = entry.target.getAttribute("data-color");;
 
-```
-
-We still need to **add transition** in the CSS:
-
-```
-//For the .querySelector selector, we will have a transition delay
-.imagi{
-    transition: 0.5s;
+//We check for a single className
+if(entry.isIntersecting){
+  entry.target.classList.value.includes("panini") ? 
+    entry.target.style.opacity = 1 : entry.target.style.opacity = 0
 }
-
-//we can have the extra background effect
-.capsule{
-    background-color: aliceblue; 
-}
-
 ```
