@@ -778,4 +778,6 @@ The **flex-column** sidebar **container** is **fixed**, we changed the **align-i
 
 </details>
 
-<figure><img src="../.gitbook/assets/scrollWave.gif" alt="" width="375"><figcaption><p>Double inverted waves with useScroll() animation</p></figcaption></figure>
+{% embed url="https://codesandbox.io/p/sandbox/usescroll-side-scroll-bars-ygsq3q?file=/src/index.js" %}
+Double inverted waves with useScroll() animation
+{% endembed %}
