@@ -14,7 +14,7 @@ description: Flex property and image background
 
 The **Flex**box layout justifies and aligns items within its container, while flex child elements expand their width to **fill it dynamically**.
 
-```
+```jsx
 //we still need to set height, and justify won't change how the space managed
 <div class="stripe">
     <div></div>
@@ -48,7 +48,7 @@ The **Flex**box layout justifies and aligns items within its container, while fl
 {% tab title="Sidebar-flex" %}
 To justify/align any element we need to use **display:flex each time**, also position will follow the HTML layout:&#x20;
 
-```
+```jsx
 //The height will be given by the content
 <div class="contiene">
     <div class="sidebar">
@@ -66,7 +66,7 @@ To justify/align any element we need to use **display:flex each time**, also pos
 
 In the CSS we use **Flex** to dynamically set the **width** of each div:
 
-```
+```css
 //Flex-direction is row by default
 .contiene{
     display: flex;
@@ -99,7 +99,7 @@ In the CSS we use **Flex** to dynamically set the **width** of each div:
 {% tab title="Navbar-flex" %}
 We use **flex-direction column** for the navbar to be on the top, and use **flex to change the list** direction:
 
-```
+```css
 //from default row to column direction
 .contiene{
     flex-direction: column;
@@ -118,13 +118,12 @@ We use **flex-direction column** for the navbar to be on the top, and use **flex
 {% tab title="Mobile-navbar flex" %}
 For smaller screens we just set the navbar as column **on column flex container**:
 
-```
+```css
 //we need to use display: flex for it to work
 .contiene .sidebar ul{
   display: flex;
   flex-direction: column;
 }
-
 ```
 
 <figure><img src="../.gitbook/assets/flexlittle.PNG" alt=""><figcaption><p>mobile pae layout</p></figcaption></figure>
@@ -150,7 +149,7 @@ We can use **inline-flex** to use flex only on a text element width:
 
 We use font-awesome icons \<i> that work as text:
 
-```
+```jsx
 <ul class="trino">
   <li>
     <i class="fas fa-laptop-code"></i>
@@ -170,7 +169,7 @@ We use font-awesome icons \<i> that work as text:
 
 We use **inline-flex** to have the border circle **only the text width** and **not the entire container,** and also to use all flex properties:
 
-```
+```css
 //we need justify and align for the :before:after layers
 .trino li i{
     color: #C80815;
@@ -202,7 +201,7 @@ We use **inline-flex** to have the border circle **only the text width** and **n
 
 To get a smaller border we reduced the container:
 
-```
+```css
 .trino li:nth-child(2){
     width: 80%;
     margin: 0 auto;
@@ -221,7 +220,7 @@ The **flex-wrap** property sets if flex element will **fit in one line (nowrap)*
 {% tab title="Flex-wrap and 33%" %}
 We don't need to create row containers, the **CSS can split** by itself.
 
-```
+```jsx
 //for each 3 elements we change a line
 <div class="griglia">
   <div>
@@ -239,7 +238,7 @@ We don't need to create row containers, the **CSS can split** by itself.
 
 We can also use **wrap-reverse** if we needed to change the order.
 
-```
+```css
 //3 for each line
 .griglia{
     display: flex;
@@ -268,7 +267,7 @@ We can also use **wrap-reverse** if we needed to change the order.
 {% tab title="Flex-wrap and 50%" %}
 We go from 1/3 to 1/2 of the page for the elements:
 
-```
+```css
 .griglia div{
     flex: 50%;
 }
@@ -281,7 +280,7 @@ We go from 1/3 to 1/2 of the page for the elements:
 {% tab title="Flex-wrap and 100%" %}
 A single element per line:
 
-```
+```css
 .griglia div{
     flex: 100%;
 }
@@ -300,19 +299,18 @@ When using a flex-container with **multiple items** we can space them using **al
 
 We have a flex-container that flex wraps,&#x20;
 
-```
+```jsx
 <div class="quatto">
   <div></div>
   <div></div>
   <div></div>
   <div></div>
 </div>
-
 ```
 
 We use **align-content** to space the vertical space of **multiple** flex items:
 
-```
+```css
 //each image wrapping at 40%
 .quatto div{
     flex: 40%;
@@ -332,7 +330,7 @@ We use **align-content** to space the vertical space of **multiple** flex items:
 
 If we want to define the **space between** the flex elements we use **gap**:
 
-```
+```css
 //it won't work with align-content
 .oltre .quatto{
     display: flex;
@@ -352,7 +350,7 @@ If we want to define the **space between** the flex elements we use **gap**:
 
 For a **flex navbar**, we need:
 
-```
+```jsx
 //we create a row with 2 columns
 <div class="naviga">
     <div class="col">
@@ -660,7 +658,7 @@ We can add **multiple backgrounds** to an image:
 
 We use a **fixed background-image** to have a fixed **scroll** image:
 
-```
+```jsx
 //The fixed navbar will remain visible, while the background will disappear on scroll
 <div class="barra">
 </div>
@@ -782,7 +780,7 @@ We use pseudo-elements to style the **scrollbar/scrollbar-track/scrollbar-thumb*
 
 We need to set the **scroll overflow** in the container first:
 
-```
+```jsx
 <div class="skrull">
     <div>
         <div>
@@ -804,7 +802,7 @@ We need to set the **scroll overflow** in the container first:
 
 The **bottom/right scrollbar** area is set by height/width:
 
-```
+```css
 //width sets the left one, while height the bottom one
 .skrull::-webkit-scrollbar{
     width: 12px;
@@ -815,7 +813,7 @@ The **bottom/right scrollbar** area is set by height/width:
 
 while **scrollbar-track** is the actual areas
 
-```
+```css
 .skrull::-webkit-scrollbar-track {
     background: orange;
 }
@@ -824,7 +822,7 @@ while **scrollbar-track** is the actual areas
 
 We use **scrollbar-thumb** for the css thumb:
 
-```
+```css
 //we can't reduce it, so we use border to color with the backround
 .skrull::-webkit-scrollbar-thumb{
     background-color: rebeccapurple;
@@ -837,6 +835,16 @@ We use **scrollbar-thumb** for the css thumb:
 </details>
 
 <figure><img src="../.gitbook/assets/scollint.PNG" alt=""><figcaption><p>CSS scrollbar</p></figcaption></figure>
+
+The ::-webkit-scrollbar pseudo selector _doesn't work_ in the **Firefox** browser, we use **scrollbar-width** and **scrollbar-color props**.
+
+```css
+/*Both on the container*/
+.wind{
+  scrollbar-width: none; //auto, thin 
+  scrollbar-color: orange lightyellow; //thumb scrollbar colors
+}
+```
 
 ### CSS form carousel&#x20;
 
