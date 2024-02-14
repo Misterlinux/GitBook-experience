@@ -250,3 +250,34 @@ if(entry.isIntersecting){
     entry.target.style.opacity = 1 : entry.target.style.opacity = 0
 }
 ```
+
+1
+
+We apply the Intersection Observer API on the **\<Parallax> root**, to limit the intersection to the scroll **window** of its layers, and not the entire page.
+
+```jsx
+//We can getElementById() it from a <ParallaxLayer> component.
+
+useEffect(()=>{
+  let window= document.getElementById("questo")
+
+  let options= {
+    root: window,
+    rootMargin: "0px 0px -100% 0px",
+    threshold: 0,
+  }
+}
+
+<Parallax pages={3.3} className="meno" ref={ultimo} id="questo">
+  <ParallaxLayer offset={0} style={{ backgroundColor: "lightskyblue" }}>
+    <Secondo/>
+  </ParallaxLayer>
+  ...
+</Parallax>
+```
+
+1
+
+1
+
+1

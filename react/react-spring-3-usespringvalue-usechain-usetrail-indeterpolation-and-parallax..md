@@ -352,7 +352,7 @@ We use **backface-visibility** to hide the **rotated** useTrail() absolute eleme
 
 We **npm install @react-spring/parallax** and extract the **Parallax** and **ParallaxLayer**.
 
-A _Parallax_ container animates its _ParallaxLayer_ **children** onScroll() position.                                                            It's composed of **pages**, each **100%** height/width of the viewpoint, and fires its scroll events from the _container,_ not the window.
+A _Parallax_ container animates its _ParallaxLayer_ **children** onScroll() position.                                                            It comprises **pages**, each **100%** height/width of the viewpoint, and fires its scroll events from the _container,_ not the window.
 
 ```css
 import { Parallax, ParallaxLayer } from '@react-spring/parallax'
@@ -391,11 +391,10 @@ The Parallax **page** has to _include_ all the different _offset positions_ and 
 </Parallax>
 ```
 
-The Parallax **ref.current** can trigger **scrollTo()** events using the **offset** position.                                    We **remove** the included scrollbar with a _pseudo:selector_ and set **left** to fill the gap.
+Using the offset position, the Parallax **ref.current** can trigger **scrollTo()** events.                                    We **remove** the included scrollbar with a _pseudo:selector_ and set **left** to fill the gap.
 
 ```jsx
 //ParallaxLayers have position-absolute and can overlay each other
-
 .meno{
   background: linear-gradient(lightblue, #9198e5);
   left: 0px;
@@ -538,6 +537,45 @@ Each \<Page/> has its clip-path on its background.
 
 <figure><img src="../.gitbook/assets/Horizontalparallax.gif" alt="" width="188"><figcaption><p>horizontal Parallax with sticky top layer</p></figcaption></figure>
 
+### Sticky ParallaxLayers, SVG images, and backgrounds
+
+Don't use **background** on the **sticky** layer component, it will inherit the "container" layer.&#x20;
+
+It needs **display: "inline-block"** and **height: 0**, to not conflict with the other layer elements, its height is set only by its content.&#x20;
+
+We use **vertical-align: "top"** to align the inline-block elements to the sticky layer linebox.
+
+```jsx
+//You can't put a layer inside another layer, embed them using their offset position
+//Sticky layers need only one container tag, its empty to not conflict with other
+//Inline-block sticky content use vertical-align: baseline, top, middle, bottom.
+//We justify sticky elements using width/margin for a 100% new line
+
+<ParallaxLayer offset={1.5} style={{ height: 0, display: "inline-block"}} 
+  sticky={{ start: 0.5, end: 1.5 }}>
+  <> 
+    <div className="d-inline-block" style={{ verticalAlign: "top", width: "30%"}}>
+      <div style={{ backgroundColor: "brown", height: "65vh" }} >
+        This is the bar
+      </div>
+    </div>
+
+    <div className="d-inline-block" style={{ marginLeft: "20%",width: "40%" }}>
+      <div className="d-flex justify-content-between">
+        <h3> This is the other content </h3>
+        <div className="bg-warning">
+          <p> This is the second context </p>
+        </div>
+      </div>
+    </div>
+  </>
+</ParallaxLayer>
+```
+
+Check the <mark style="background-color:purple;">Intersection API</mark> section to see how Intersection Observer API interacts with \<Parallax>
+
+{% embed url="https://codesandbox.io/p/sandbox/parallaxlayer-react-spring-sticky-test-wj47v9?file=/src/App.js:11,11" %}
+
 We **import SVG** icons in the _ParallaxLayer_, as image **src** or as a **component**, and modify their _svg properties._
 
 <pre class="language-jsx"><code class="lang-jsx">//To edit the fill we need to remove the default fill from the svg file
@@ -566,7 +604,6 @@ More **images** in the **same ParallaxLayer** _won't overlay_ and will _sum thei
 Multiple SVG backgroundImage can be added at the end of the offset.
 
 ```jsx
-
 import planet from "../images/planet.svg";
 import light from "../images/light.svg";
 import { ReactComponent as Mac } from "../images/car.svg";
