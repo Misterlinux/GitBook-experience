@@ -5,13 +5,15 @@
 * [Responsive and toggle Navbar](boostrap-3-bootstrap-grid-scrollspy-toast-and-responsive-navbar.md#responsive-bootstrap-navbar-and-toggle-button)
 * [Complete responsive page](boostrap-3-bootstrap-grid-scrollspy-toast-and-responsive-navbar.md#complete-responsive-page)
 
+> We can check frontEnd designs from [here ](https://preview.colorlib.com/#boxus)
+
 The **bootstrap grid** layout is based on flexbox, it uses **container**, **row**, and **col**(uns).
 
 The width is organized into **12 units**, **col**umns can be **auto** to adapt to their content.
 
 The bootstrap **col**umns implement media query **breakpoints** using **sm**,**md**, and **lg**.&#x20;
 
-```
+```jsx
 //we can use container-fluid to remove the container default margins
 //the breakpoints will take effect AFTER the md, from a 1-5-auto to 3-3-3 on smaller
 

@@ -5,13 +5,15 @@
 * [UseContext() and Provider components](react-3.md#usecontext-and-provider-components)
 * [useCallback() React hook with useMemo()](react-3.md#usecallback-react-hook-with-usememo)
 
+>
+
 The **fetch() API** provides us a javascript interface to access the protocol, by using the **global method fetch()** and an URL path it returns a promise that will resolve into a **response object**.
 
 The **protocol** is the set of rules used to define **data formats**, needed to allow data exchange between devices.
 
 The promise-based fetch method can implement HTTP concepts like **CORS (Cross-Origin Resource Sharing)**, an HTTP mechanic that allows a server to set the origin (domain, port, or scheme) from which the browser permits to load resources.
 
-```
+```jsx
 //We can add an init argument to the fetch(url, init) method
 
 let init= {
@@ -30,7 +32,7 @@ We use **try/catch** to handle network and Cors errors, but we also need to chec
 
 Request and Response bodies can only be used once, we use a **request constructor** to copy a fetch() request, and the copy must be done before the body is read
 
-```
+```jsx
 //The url detects the language the q string property is
 
 let url = 'https://libretranslate.de/detect';
@@ -53,7 +55,7 @@ try{
 
 To configure the **OpenAi translate API** in ReactJs
 
-```
+```jsx
 import { Configuration, OpenAIApi } from "openai";
 
 const configuration = new Configuration({
@@ -69,7 +71,7 @@ We can prompt single or multiple language translations.
 {% tab title="Single language" %}
 For a single-language translation, we modify the **prompt**.
 
-```
+```jsx
 //trim() removes the extra white spaces included in the translation
 //it works for longer strings too
 
@@ -186,7 +188,7 @@ Then we can render it.
 
 We loop through the useState() node elements and, using **regex**, we modify **useState()** to render the translation using **map()**.
 
-```
+```jsx
 const trova =  new RegExp( "("+ word + ")", 'ig');
 
 for(let x of canto){

@@ -208,9 +208,24 @@ sopra.current.style.height = sotto.current.offsetHeight + "px"
 </div>
 ```
 
-<figure><img src="../.gitbook/assets/Navbar-Intersect.png" alt="" width="375"><figcaption><p>Nav-items animated with intersectOberver()</p></figcaption></figure>
-
 {% embed url="https://codesandbox.io/p/sandbox/intersectionobserver-animated-navbar-h9vw3n?file=/src/App.js:149,17" %}
+
+We **cache** IntersectionObserver ID **querySelect()** outside the intersect function for easier manipulation and access.
+
+```jsx
+//The forEach observer target 
+let finalmente = document.querySelectorAll(".stratos")
+
+//The cache outside the intersectionObserver function
+let navElems = {}
+finalmente.forEach((navId) => {
+  navElems[navId.id] = document.querySelector(`.nav-item.${navId.id}`)
+})
+
+//So when it's time to edit the DOM element we 
+elements[entry.target.id].classList.add("active")
+//document.querySelector(`.nav-item.${entry.target.id }`).classList.add("active")
+```
 
 ### Intersection CSS style animation
 
@@ -275,9 +290,3 @@ useEffect(()=>{
   ...
 </Parallax>
 ```
-
-1
-
-1
-
-1

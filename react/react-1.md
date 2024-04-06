@@ -9,7 +9,7 @@
 
 To create a **React** application folder we run:
 
-```
+```jsx
 npx create-react-app (name of the app)
 
 //its /public folder contains the app root
@@ -26,7 +26,7 @@ We **render DOM** elements in the **React components** by **abstracting** HTML t
 
 With Javascript, we needed to createElement, content, a selector, and then **render**:
 
-```
+```jsx
 <script type="text/javascript">
   var divNode = document.createElement('div');
   divNode.innerText = 'Hello World';
@@ -39,7 +39,7 @@ With Javascript, we needed to createElement, content, a selector, and then **ren
 
 On **React** we can:
 
-```
+```jsx
 const element = React.createElement("div", {
   children: "Hello World",
 });
@@ -51,7 +51,7 @@ ReactDOM.render(element, rootElement);
 
 **JSX** is syntax sugar used to shortcut the createElement:
 
-```
+```jsx
 const element = <div>Hello World</div>;
 
 const rootElement = document.querySelector("#root");
@@ -60,7 +60,7 @@ ReactDOM.render(element, rootElement);
 
 Then we implement it on **components**:
 
-```
+```jsx
 import React from "react";
 import ReactDOM from "react-dom";
 
@@ -76,9 +76,24 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 </details>
 
+We can interdent style properties by using an **array** of strings.
+
+```jsx
+/*The element position depends on the index used*/
+<div className='position-relative'>
+  <h1 className='position-absolute' style={{ [["left", "right"][0]]: "0%" }}>
+    Left element
+  </h1>
+
+  <h1 className='position-absolute' style={{ [["left", "right"][1]]: "0%" }}>
+    Right element
+  </h1>
+</div>
+```
+
 A **component** needs to **import** React and can reference multiple components, called child components, but can export only one.
 
-```
+```jsx
 //components are shortened versions of <Primo> </Primo> to put code in-between
 //we can use Arrow functions for the components
 import React from 'react';
@@ -176,7 +191,7 @@ const Primo =() ={
 
 **Props** are **arguments** passed into React **components,** they are **read-only** and can't be **updated.**
 
-```
+```jsx
 //we use it when importing/exporting components
 //we declare props argument key and THEN we add properties
 
@@ -245,7 +260,7 @@ export default App;
 
 We can add **Event Handlers** to React components, like **onClick()**, **onChange()** or **onSubmit()**:
 
-```
+```jsx
 //We put the callback function in {} as an expression
 const Ano= () =>{
   let add= 0;
@@ -423,9 +438,8 @@ const Ray= () =>{
 
 We can **pass** the useState() and its **setter function** as **props**:
 
-```
+```jsx
 //and use the setter function to change the useState
-
 const [versus, setVersus] = useState(false)
 
 <GameStart 
@@ -443,7 +457,7 @@ const [versus, setVersus] = useState(false)
 
 We use the **useEffect(function, dependency)** **hook** to **synchronize** a component with an external **variable.**
 
-```
+```jsx
 //useEffect triggers on render, with the setState() change being a render 
 //the setTimeout continues, we use empty [] dependency to render it once
 
@@ -492,7 +506,7 @@ useEffect( () =>{
 
 We can implement **javascript expression** using **ternary-operators** for DOM content:
 
-```
+```jsx
 //we need to use {` ${``} `} for strings
 
 <button className={`btn btn-${ lancetta ? `danger`: `success` }`}
@@ -505,12 +519,11 @@ We can implement **javascript expression** using **ternary-operators** for DOM c
 const [texto, setTexto] = useState("start")
 
 <button>{lancetta ? texto : "no button" }</button>
-
 ```
 
 We can also use **&&** to **render** React components:
 
-```
+```jsx
 //Similar to a ternary-operator but without the else, won't render if no condition
 {record && 
   <h4>This is rendered only if condition</h4>
@@ -521,7 +534,7 @@ We can use a **useEffect()** hook to **start/pause a setInterval(),** to do so w
 
 One for the **onClick()** starter event and another for the **useState()** time-limit we want to use to stop it
 
-```
+```jsx
 //We need the return clearTimeout() to limit the setInterval() to once at the time
 //We use the lancetta to true/false the useEffect setInterval() 
 //and we use the other dependency useState() to stop it with clearInterval()
@@ -625,7 +638,7 @@ Including a **function** inside **useEffect()** dependencies will _<mark style="
 
 We use the React Hook **useCallback()** to call the function only when Its dependency changes.
 
-```
+```jsx
 //We call also include the entire function within useEffect() without useCallback()
 
 const [message, setMessage] = useState('');

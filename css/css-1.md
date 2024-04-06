@@ -378,6 +378,48 @@ The **skew()** method skews elements on their X/Y axis by degrees:
 
 </details>
 
+Both **translateX** and **left** move the element, but translateX doesn't change the _CSS layout_, it won't trigger a **reflow**(positioning) and **repaint**(element placing), for faster DOM render.
+
+<details>
+
+<summary>TranslateX and left useSpring() animation</summary>
+
+**Left** needs its **position** to be declared to work, both will move the same distance.&#x20;
+
+Position-_absolute_ **translateX** will move 20% of its **content**, while _relative_ 20% of its container.
+
+```jsx
+let [modo, setModo] = useState(false)
+
+let [mosso, apimosso] = useSpring(()=>({
+  x: modo ? "20%" : "0%"
+}), [modo])
+
+let [mosso1, apimosso1] = useSpring(()=>({
+  left: modo ? "20%": "0%"
+}), [modo])
+
+<div className='position-relative'>
+  <animated.div className="position-relative" style={mosso}>
+    TranslateX
+  </animated.div>        
+
+  <animated.div className="position-relative bg-warning" style={mosso1}>
+    left 
+  </animated.div>   
+
+  <animated.div className="position-absolute" style={mosso}>
+    TranslateX
+  </animated.div>
+
+  <animated.div className="position-absolute bg-warning" style={mosso1}>
+    left
+  </animated.div>
+</div>
+```
+
+</details>
+
 ### CSS transition&#x20;
 
 The transition **property** allows us to change CSS values over a duration.
@@ -721,7 +763,7 @@ The steps(**start/end**) sets the starting frame, while the **forwards/backwards
 {% endtab %}
 {% endtabs %}
 
-
+1
 
 <details>
 

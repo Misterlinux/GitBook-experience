@@ -97,7 +97,9 @@ function MyComponent() {
 
 The <**animated**> **component** can be used directly on the **JSX** with a useString() as a style prop.
 
-We can use the **useSpringRef()** hook to **reference** the imperative **API** on event handlers.                         &#x20;
+We can use the **useSpringRef()** hook to **reference** the imperative **API** on event handlers.
+
+We need to declare the **api** in the useSpring() and the **function** syntax, if we want the useState() **dependency** to work.&#x20;
 
 Any **difference** between the useSpring() and the api.method **from:{}** will be **skipped.**&#x20;
 
@@ -106,11 +108,11 @@ Any **difference** between the useSpring() and the api.method **from:{}** will b
 import { animated, useSpring, useSpringRef } from '@react-spring/web'
 let refe = useSpringRef()
 
-let init = useSpring({
+let [init, initApi] = useSpring(()=>({
   from: {x: 0, transform: "rotate(0deg)"},
   ref: refe,
   //reverse: true/false
-}, [dependency])
+}), [dependency])
 
 //from() isn't needed and to can be an array of [{props}]
 function mosso(){
