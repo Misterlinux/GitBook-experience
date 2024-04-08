@@ -722,6 +722,52 @@ The **valid/invalid-feedback** will appear depending on the is-valid/invalid inp
 
 <figure><img src="../.gitbook/assets/valInvalform.png" alt=""><figcaption><p>valid/invalid-feedback HTML and is-valid/invalid style</p></figcaption></figure>
 
+The bootstrap form button, on adaptive columns, needs a **set** width **input** and an **auto** width in **button**.
+
+<details>
+
+<summary>Adaptive input button and floating-form</summary>
+
+The input button needs both widths not overflow into the button.
+
+```jsx
+//Floating requires the px-0
+
+<div className="row vol-12 mx-0">
+  <div className="col-2">
+  </div>
+
+  <div className="col-8 row mx-0 px-0 bg-primary d-flex">
+    <form onSubmit={segna} className="row col-6 d-flex">
+      <div className="px-0" style={{ width: "50%" }}>
+        <input type="text" className="form-controll w-100" name="indi" 
+          value={testo} onChange={(e)=> setTesto(e.target.value)} />
+      </div>
+      <div className="px-0" style={{ width: "auto" }}>
+        <button className="btn btn-sm btn-success">
+          Sign-in 
+        </button>
+      </div>
+    </form>
+
+    <div className="row mx-0 px-0 col-6 d-flex">
+      <div className='form-floating px-0'>
+        <input name='name' id="nome" required type="text" 
+           className="form-control" placeholder='name'/>
+        <label htmlFor="#nome" className="form-label">Name</label>
+      </div>
+    </div>
+  </div>
+
+  <div className="col-2">
+  </div>
+</div>
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/adaptiveFooterForm.jpg" alt="" width="450"><figcaption><p>adaptive form input on bootstrap column </p></figcaption></figure>
+
 We use the **form-range** bootstrap for the **range input type.**
 
 We can set its **min-max** value (by default 0-100) and **steps** for the value of each range snap.
