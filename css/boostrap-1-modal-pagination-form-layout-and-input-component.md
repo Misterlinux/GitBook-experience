@@ -620,7 +620,6 @@ We use **form-check** (or **form-check reverse**) to add radio **form-check-inpu
   </div>
 
 </div>
-
 ```
 
 **Input-groups** can extend a **form-control** and include labels and buttons.
@@ -633,7 +632,7 @@ We use **required** to validate the input before the form **submit**s.
 
 **Input-groups** need a container class and an **input-group-text span.**
 
-```
+```jsx
 <div className="input-group mb-3 " >
   <span className="input-group-text"> Name </span>
   <input type="text" className="form-control" 
@@ -644,7 +643,7 @@ We use **required** to validate the input before the form **submit**s.
 
 We can chain **multiple span/input** in the same form row, and implement form-control functions like **datalist**.
 
-```
+```jsx
 //span space will depend only on their text, can't use col
 
 <div className="input-group mb-3">
@@ -662,7 +661,7 @@ We can chain **multiple span/input** in the same form row, and implement form-co
 
 It works with **textarea rows**, and the span text self-aligns.
 
-```
+```jsx
 <div className="input-group mb-3">
   <span className="input-group-text">Write a short description</span>
   <textarea type="text" className="form-control" rows="3"/>              
@@ -671,7 +670,7 @@ It works with **textarea rows**, and the span text self-aligns.
 
 It works for **\<select>** input and **button**s.
 
-```
+```jsx
 <div className="input-group">
   <select className="form-select">
     <option selected> Payment method </option>
