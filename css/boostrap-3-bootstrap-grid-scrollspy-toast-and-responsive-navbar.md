@@ -270,6 +270,52 @@ We need a **row** class on the container.
 
 <figure><img src="../.gitbook/assets/rownesting.PNG" alt=""><figcaption><p>row nesting with align/justify flex</p></figcaption></figure>
 
+We render the **angle border** square effect by nesting relative-absolute boxes in the same container.
+
+<details>
+
+<summary>Angle border square and vh responsive bottom bar</summary>
+
+For spacing, it's better to use top instead of margin, to avoid reflows of the layout.
+
+For the bottom part we vh calc() the vw width.
+
+```jsx
+//We use a container for the container image.
+<div className="cent-flex" 
+  style={{ height: "30vh", width: "30vh", margin: "12vh" }}>
+
+  <div className="position-relative bg-danger" 
+    style={{ height: "100%", width: "100%" }}>
+    <div className="position-absolute bg-primary" 
+    	style={{ width: "8vh", height: "8vh", margin: "-15px -15px", 
+        zIndex: -5 }}>
+    </div>
+
+    <div className="position-absolute bg-warning"
+      style={{width: "5vh", height: "5vh", left: "calc(100% - 5vh + 15px)", 
+      top: "-15px", zIndex: -5}}>
+    </div>
+    
+    {/* Bottom bar with content-based height and adaptive width */}
+    <div className="d-flex position-relative" 
+      style={{width: "36vw", top: "80%", left: "20%"}}>
+      <div className='bg-primary' style={{ height: "8vh", width: "8vh" }}>
+      </div>
+
+      <div className='bg-warning' 
+        style={{ height: "8vh", width: "calc(100% - 8vh)" }}>
+      </div>
+    </div>
+
+  </div>
+</div>
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/relativeBoxabs.jpg" alt="" width="118"><figcaption><p>Angle border effect</p></figcaption></figure>
+
 ### Scrollspy and getBoundingClientRect()
 
 The **getBoundingClientRect()** method returns an object, its properties provide the **position** relative to its **viewpoint** and the **size** of the viewpoint, with the position value updated on **scroll**.
