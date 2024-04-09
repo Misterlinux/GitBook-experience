@@ -1029,3 +1029,69 @@ For the **footer** to cover the entire width, we need an extra **row** with a si
 ```
 
 <figure><img src="../.gitbook/assets/footer.PNG" alt=""><figcaption><p>fixed-position footer </p></figcaption></figure>
+
+We use bootstrap **columns** to align **\<fontAwesomeIcons/>** and its _text_, for the rounded padding icons we use <mark style="background-color:blue;">**height**</mark> to **align** different **text** heights inside set columns.
+
+<details>
+
+<summary>FontAwesome align and justify text</summary>
+
+**Text-end** is needed if there is too much extra space to get the icon closer.
+
+The icon containers are needed only if there is text to align.
+
+```jsx
+
+<div className="row mx-0 d-flex bg-warning">
+
+  <div className="col-4">
+    <div className="py-2"> Contact Us </div>
+
+    <div className="row col-12 py-1 mx-0 d-flex align-items-center">
+      <div className="col-3 text-end pe-0">
+        <FontAwesomeIcon icon={faMapLocationDot} />
+      </div>
+      <div className="col-9 ps-1">
+        St. Lorem, ipsum
+      </div>
+    </div>
+
+    <div className="row col-12 py-1 mx-0 d-flex align-items-center">
+      <div className="col-3 pe-0">
+        <FontAwesomeIcon icon={faMapLocationDot} />
+      </div>
+      <div className="col-9 ps-1">
+        St. Lorem, ipsum
+      </div>
+    </div>
+  </div>
+
+  <div className='col-6 row mx-0 d-flex justify-content-around pt-2'>
+
+    <div className="cent-flex flex-column col-4">
+      <FontAwesomeIcon className="my-2 p-3 bg-warning rounded-circle" 
+      	icon={faMapLocationDot} />
+
+      <div className="cent-flex py-4" style={{ height: "2em" }}>
+        <p className='text-center'>Primo Amendola Meridio</p>
+      </div>
+    </div>
+    ...
+    <div className="cent-flex flex-column col-4">
+      <div className="cent-flex py-4" style={{ height: "2em" }}>
+        <p className='text-center'>Terzo argomento e credici</p>
+      </div>
+
+      <FontAwesomeIcon className="my-2 p-3 bg-warning rounded-circle" 
+        icon={faMapLocationDot} />
+    </div>
+  </div>
+
+</div>
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/FontFooter2.jpg" alt=""><figcaption><p>Aligned fontAwesome Icons</p></figcaption></figure>
+
+1
