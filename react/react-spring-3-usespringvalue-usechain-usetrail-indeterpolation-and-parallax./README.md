@@ -1,8 +1,8 @@
 # React-Spring 3 useSpringValue(), useChain(), useTrail() indeterpolation and Parallax.
 
-* [Animation sequences with useChain()](react-spring-3-usespringvalue-usechain-usetrail-indeterpolation-and-parallax..md#animation-sequences-with-usechain)
-* [Staggering animations with useTrail()](react-spring-3-usespringvalue-usechain-usetrail-indeterpolation-and-parallax..md#staggering-animations-with-usetrail)
-* [Scroll sections with Parallax and ParallaxLayers.](react-spring-3-usespringvalue-usechain-usetrail-indeterpolation-and-parallax..md#scroll-sections-with-parallax-and-parallaxlayers)
+* [Animation sequences with useChain()](./#animation-sequences-with-usechain)
+* [Staggering animations with useTrail()](./#staggering-animations-with-usetrail)
+* [Scroll sections with Parallax and ParallaxLayers.](./#scroll-sections-with-parallax-and-parallaxlayers)
 
 The **useSpringValue**() hook sets **singular** style properties, it accesses useSpring() **methods** imperatively.
 
@@ -32,7 +32,7 @@ function starto(){
 </div>
 ```
 
-<figure><img src="../.gitbook/assets/useSpringValue.png" alt="" width="375"><figcaption><p>useSpringValue() on animation-timing function</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/useSpringValue.png" alt="" width="375"><figcaption><p>useSpringValue() on animation-timing function</p></figcaption></figure>
 
 ### Animation sequences with useChain()
 
@@ -120,7 +120,7 @@ We use **display:grid** on the useTransition() elements.
 }
 ```
 
-<figure><img src="../.gitbook/assets/useChain.gif" alt="" width="257"><figcaption><p>useChain() on useTransition() and useSpring()</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/useChain.gif" alt="" width="257"><figcaption><p>useChain() on useTransition() and useSpring()</p></figcaption></figure>
 
 <details>
 
@@ -203,7 +203,7 @@ With the same **grid** style.
 
 </details>
 
-<figure><img src="../.gitbook/assets/useChainImport.png" alt="" width="375"><figcaption><p>useChain() grid effect</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/useChainImport.png" alt="" width="375"><figcaption><p>useChain() grid effect</p></figcaption></figure>
 
 ### Staggering animations with useTrail()
 
@@ -251,7 +251,7 @@ We need **position absolute** to avoid _margins being influenced_ by the contain
 </div>
 ```
 
-<figure><img src="../.gitbook/assets/useTrail().gif" alt="" width="349"><figcaption><p>useTrail() elements on animated style properties</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/useTrail().gif" alt="" width="349"><figcaption><p>useTrail() elements on animated style properties</p></figcaption></figure>
 
 <details>
 
@@ -346,7 +346,7 @@ We use **backface-visibility** to hide the **rotated** useTrail() absolute eleme
 
 </details>
 
-<figure><img src="../.gitbook/assets/rotate.png" alt="" width="375"><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/rotate.png" alt="" width="375"><figcaption></figcaption></figure>
 
 ### Scroll sections with Parallax and ParallaxLayers.
 
@@ -437,7 +437,7 @@ Using the offset position, the Parallax **ref.current** can trigger **scrollTo()
 </Parallax>
 ```
 
-<figure><img src="../.gitbook/assets/Parallax1.gif" alt="" width="188"><figcaption><p>Sticky Parallax scroll elements</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/Parallax1.gif" alt="" width="188"><figcaption><p>Sticky Parallax scroll elements</p></figcaption></figure>
 
 <details>
 
@@ -535,7 +535,7 @@ Each \<Page/> has its clip-path on its background.
 
 </details>
 
-<figure><img src="../.gitbook/assets/Horizontalparallax.gif" alt="" width="188"><figcaption><p>horizontal Parallax with sticky top layer</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/Horizontalparallax.gif" alt="" width="188"><figcaption><p>horizontal Parallax with sticky top layer</p></figcaption></figure>
 
 ### Sticky ParallaxLayers, SVG images, and backgrounds
 
@@ -684,6 +684,6 @@ let refe = useRef(null)
 
 </details>
 
-<figure><img src="../.gitbook/assets/Parallax2.gif" alt="" width="188"><figcaption><p>Parallax and ParallaxLayers scroll animation</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/Parallax2.gif" alt="" width="188"><figcaption><p>Parallax and ParallaxLayers scroll animation</p></figcaption></figure>
 
 [^1]: 

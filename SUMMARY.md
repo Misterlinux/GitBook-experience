@@ -43,7 +43,8 @@
 * [REACT 6](react/react-6.md)
 * [React-Spring-1 useSpring(), config, To() interpolate render, useTransition(), React-use-measure.](react/react-spring-1.md)
 * [React-Spring-2 useTransition() update style, useGesture() drag, SVG display and useSpring() animation](react/react-spring-2-usetransition-update-style-usegesture-drag-svg-display-and-usespring-animation.md)
-* [React-Spring 3 useSpringValue(), useChain(), useTrail() indeterpolation and Parallax.](react/react-spring-3-usespringvalue-usechain-usetrail-indeterpolation-and-parallax..md)
+* [React-Spring 3 useSpringValue(), useChain(), useTrail() indeterpolation and Parallax.](react/react-spring-3-usespringvalue-usechain-usetrail-indeterpolation-and-parallax./README.md)
+  * [Parallax](react/react-spring-3-usespringvalue-usechain-usetrail-indeterpolation-and-parallax./parallax.md)
 * [React-Spring 4 useSpring() methods, async/await springValue(), useSpring() \[scriptsKeys\], useLayout(), useSpring() onScroll()](react/react-spring-4-usespring-methods-async-await-springvalue-usespring-scriptskeys-uselayout-usespring-o.md)
 * [React Spring 5 useResize(), useInView(), indexed useSprings()](react/react-spring-5-useresize-useinview-indexed-usesprings.md)
 
