@@ -36,6 +36,12 @@ const parallaxRef = useRef();
 
 useEffect(()=> {
   window.addEventListener('wheel', handleWheelEvent);
+  
+  return () => {
+    if (parallaxRef.current) {
+      parallaxRef.current.removeEventListener('wheel', handleWheelEvent);
+    }
+  };
 }, [])
 
 const handleWheelEvent = (index) => {
@@ -65,7 +71,7 @@ const handleWheelEvent = (index) => {
 
 </details>
 
-1
+To know how to avoid using querySelector on ParallaxLayer elements check teh ref section
 
 1
 
