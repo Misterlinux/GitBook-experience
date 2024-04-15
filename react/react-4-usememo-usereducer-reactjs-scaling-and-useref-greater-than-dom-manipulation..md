@@ -12,7 +12,7 @@ layout:
     visible: true
 ---
 
-# REACT 4, useMemo(), useReducer(), ReactJs scaling and useRef() Dom manipulation.
+# REACT 4, useMemo(), useReducer(), ReactJs scaling and useRef(()=>{}) Dom manipulation.
 
 * 1
 * 1
@@ -538,7 +538,7 @@ We clearTimeout() onClick() to **debounce** the button, to start its timeout() o
 
 </details>
 
-### DOM manipulation with useRef()&#x20;
+### useRef() callback function and DOM manipulation
 
 We **useRef()** to access the React Node **JSX** elements.
 
@@ -568,7 +568,6 @@ The **ref attribute** can contain a **callback function**, it uses the DOM as an
 
 <pre class="language-jsx"><code class="lang-jsx">//On re-render it uses null on its argument and then re-calls its callback function.
 //Other ref changes won't have any effects
-
 let doll= useRef(0)
 const [malon, setMalon] = useState(0)
 
@@ -577,6 +576,7 @@ function cliccato(){
   console.log( "ref: " + doll.current )
 }
 
+//The callback function ref doesn't need to be useRef() set
 <a data-footnote-ref href="#user-content-fn-1">&#x3C;div ref={(node) => console.log(node)}></a>  
   &#x3C;p>We have it&#x3C;/p>
   &#x3C;button className='btn btn-primary' onClick={()=> cliccato()}>Reff&#x3C;/button>
@@ -589,6 +589,17 @@ function cliccato(){
 </code></pre>
 
 <figure><img src="../.gitbook/assets/refonRender.png" alt="" width="404"><figcaption><p>Callback function on useState() render</p></figcaption></figure>
+
+The callback function **ref argument** can fill an **useRef() array.**&#x20;
+
+```jsx
+//Instead of using querySelectorAll()
+let refArray = useRef([])
+
+<div ref={(ref) => (refArray.current[0] = ref)}> Zero </div>
+<div ref={(ref) => (refArray.current[1] = ref)}> Uno </div>
+<div ref={(ref) => (refArray.current[2] = ref)}> Due </div>
+```
 
 The **ref attribute** can't be assigned to Node elements on loops or javascript expressions.
 

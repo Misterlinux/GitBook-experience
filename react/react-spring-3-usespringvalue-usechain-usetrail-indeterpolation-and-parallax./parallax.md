@@ -28,10 +28,9 @@ A Parallax component won't respond to a scroll event, only to a **wheel**.
 
 <summary>Wheel event on Parallax</summary>
 
-On useRef() \<Parallax/>
+The wheel event is attached to the useRef() of the \<Parallax> container.
 
 ```jsx
-//We 100vh Parallax in case the Parallax doesn't adapt to the screen
 const parallaxRef = useRef(); 
 
 useEffect(()=> {
@@ -54,6 +53,44 @@ const handleWheelEvent = (index) => {
 <div className="App">
   <Parallax pages={2} ref={parallaxRef} style={{ height: "100vh" }}>
     <ParallaxLayer offset={0}>
+      <h1>This is the moment he became</h1>
+    </ParallaxLayer>
+    ...
+  </Parallax>
+</div>
+```
+
+</details>
+
+&#x20;We **useRef(\[])** \<ParallaxLayer/> child elements, check useRef() callback function in [React4](../../js/js-4-spread-and-rest-operators-error-constructor-and-object-try-catch-and-finally.md).
+
+```jsx
+//We 100vh Parallax in case the Parallax doesn't adapt to the screen
+const stratosRefs = useRef([]);
+
+//We loop the DOM reference objects using its id, className, and style properties
+useEffect(()=> {
+  console.log( stratosRefs )
+  //IntersectObserver callback function
+  ...
+  entries.forEach((entry)=> {
+    if(entry.isIntersecting){
+
+      stratosRefs.current.forEach((ref, index)=> {
+        if( ref.id == entry.target.id ){
+          console.log( ref.className.includes("bg-warning") )
+          ref.style.color = "pink"
+        }
+      })
+    }
+  })
+  ...
+}, [parallaxLayerMounted])
+
+<div className="App">
+  <Parallax pages={2} style={{ height: "100vh" }}>
+
+    <ParallaxLayer offset={0}>
       <div ref={(ref) => (stratosRefs.current[0] = ref)}>
         <h1>This is the moment he became</h1>
       </div>
@@ -66,12 +103,6 @@ const handleWheelEvent = (index) => {
 1
 
 1
-
-1
-
-</details>
-
-To know how to avoid using querySelector on ParallaxLayer elements check teh ref section
 
 1
 
