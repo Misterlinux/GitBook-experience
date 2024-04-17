@@ -12,16 +12,15 @@ Some methods are **Pure**, which means they return a new array without modifying
 
 **Includes()** return true/false for value existence in the array:
 
-```
+```jsx
 //we can apply it directly on arrays, like most Predicate
 
 [1,2,3,4,5].includes( 2 )        //true
-
 ```
 
 **Map() will return a new array** applying its callback function, it's **pure**:
 
-```
+```jsx
 let namesArray = ['elamin', 'antigoni', 'chris']
 namesArray.sort().map( (x) => x.toUpperCase() )  //['ANTIGONI', 'CHRIS', 'ELAMIN',]
 
@@ -34,7 +33,7 @@ namesArray.map(upper)
 
 **.forEach()** won't return an array, but a looped **list of returns**:
 
-```
+```jsx
 let anni = [1964, 2008, 1999, 2005, 1978, 1985, 1919]
 
 anni.forEach( (x) => {
@@ -44,7 +43,7 @@ anni.forEach( (x) => {
 
 You can use **forEach()** after a **map()/filter()** but not the opposite:
 
-```
+```jsx
 //map() and filter() return arrays, while forEach() returns a list 
 
 let numeronia = [4,6,8,2,4,1]              //the number is 6.../8/10
@@ -54,7 +53,7 @@ numeronia.filter((x)=>{return x>4 }).forEach((x)=> console.log("The number is " 
 
 **.filter()** will return an array with the elements that satisfy the callback function condition, is **pure**:
 
-```
+```jsx
 let anni = [1964, 2008, 1999, 2005, 1978, 1985, 1919]
 
 const unicovo = anni.filter( (x) =>
@@ -74,7 +73,7 @@ quantities(["noodles", "noodles", "noodles", 'sauce'])  //{noodles: 150, sauce: 
 
 To **filter(e) falsy values** and arrays remember always to put **e== true** as the first condition:
 
-```
+```jsx
 //falsy values ("", null, false, NaN, undefined) can crash the code if we don't
 //then we filter to return 2 values objects
 
@@ -88,7 +87,7 @@ var pairsByIndex =
 
 **.find()** will return the _first element matching_:
 
-```
+```jsx
 var product1 = {
   id: 1,
   name: "Toaster X56 Plus",
@@ -112,19 +111,18 @@ add(1)
 
 **findindex()** works as a find() but is focused on indexes:
 
-```
+```jsx
 //finding the first even number on an array OR its index
 
 let stack= [1,3,4,5,6]
 
 [...stack].find((x)=>x%2==0) )            //4 is the number
 [...stack].findIndex( (x)=> x%2==0 )      //2 is its index
-
 ```
 
 **Map()** and **Filter()** have different returns:
 
-```
+```jsx
 let quatt = {
     cosa: [2, 9 ,6, 2 ]
 }
@@ -135,7 +133,7 @@ quatt.cosa.map( (x)=> x<10 )       //[ true, true, true, true ]
 
 **Some()** run tests on _each element_ of an array, returning **true/false** if at **least one satisfies** the **callback function** :
 
-```
+```jsx
 let pairs = [1,4,0,12,7]
 
 function nullifing(ind){
@@ -149,17 +147,37 @@ console.log(pairs.map(nullifing))       //[false, true, false, false, false]
 
 **Every()** check if all values of the array satisfy the callback function:
 
-```
+```jsx
 //it returns true/false
 
 [2,4,5,6,7].every( (x)=>x>= 2 )    //true
 [2,4,5,6,7].every( (x)=>x> 2 )     //false   
-
 ```
 
-**Reduce()** needs an **accumulator** parameter to return a single value, sum of the array elements**:**
+**Reduce()** returns a single value, it calls its reducer function on an accumulated initialValue.                          Used in _Function Programming_, doesn't modify the array, it returns a new one.
 
+```jsx
+//initialValue is not a parameter, if absent first/second array values are used
+//reduce() is equivalent to the "for...in" loop
+const array1 = [1, 2, 3, 4];
+
+const initialValue = 10;
+const sumWithInitial= array1.reduce((accumulator,currentValue,currentIndex, array)=>{
+    return accumulator + currentValue
+  }, initialValue //The starting value in accumulation
+);//20
+
+//We can reduce() objects properties value, initialValue is needed
+const objects = [{ x: 1 }, { x: 2 }, { x: 3 }];
+const sum = objects.reduce(
+  (accumulator, currentValue) => accumulator + currentValue.x,
+  4,
+); //4 +1 +2 +3 = 10
 ```
+
+For a practical ReactJs example on Reduce() check [Parallax](../react/react-spring-3-usespringvalue-usechain-usetrail-indeterpolation-and-parallax./parallax.md).
+
+```jsx
 let arr = [1, 2, 3, 4];
 
 //It loops through the array and return a single value
@@ -170,7 +188,7 @@ arr.reduce((accumulator, start) => accumulator + start, 0)    //0+1,+2,+3,+4= 10
 
 **Flat()** creates a _new array_ with all sub-array elements concatenated a, it is pur the same level:
 
-```
+```jsx
 //We can ...spread the elements of a nested array 
 let deck= [1,2,3,4, 3]
 
@@ -188,7 +206,7 @@ deck.flat()      //[1, 2, 3, 3, 3, 4, 3, 3, 3]
 
 **FlatMap()** returns a new array by applying the callback function to each element and **flattens** it:
 
-```
+```jsx
 let schab= [1,2,3,4,5,3]
 
 schab.flatMap((card) => card === 3 ? [card, card, card] : [card])
@@ -197,7 +215,7 @@ schab.flatMap((card) => card === 3 ? [card, card, card] : [card])
 
 To loop through _arrays_ we use **for() and while().**
 
-```
+```jsx
 //for() is a more specific loop with a set counter and stop limit
 for(let tin= 0; tin < limes.length; tin++ ){
     console.log(tin)        //0,1,2,3,4,...(limes.length-1)
