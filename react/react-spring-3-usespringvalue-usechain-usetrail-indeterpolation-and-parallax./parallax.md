@@ -64,6 +64,45 @@ const handleWheelEvent = (index) => {
 
 &#x20;We **useRef(\[])** \<ParallaxLayer/> child elements, check useRef() callback function in [React4](../../js/js-4-spread-and-rest-operators-error-constructor-and-object-try-catch-and-finally.md).
 
+We **reduce()** loop the useRef(\[]) intersectionObserver **target.id**, and we assign them to **className** DOM element. We cache the object result before the intersect.
+
+<details>
+
+<summary>Returning Objects from reduce() and for/in loops</summary>
+
+In both methods, the _assign operation_ inside the loop implicitly creates a name:value pair in the object.
+
+```jsx
+//Any repeated array element increases the counter on the [""] property.
+
+const names = ["Alice", "Bob", "Tiff", "Bruce", "Alice"];
+const countedNames = Object.create(null);
+for (const name of names) {
+  const currCount = countedNames[name] ?? 0;  //will return 0 if undefined
+  countedNames[name] = currCount + 1; 	      //this creates the "Alice": 1
+}
+//{Alice: 2, Bob: 1, Tiff: 1, Bruce: 1}
+```
+
+On **reduce()** the <mark style="background-color:blue;">accumulator</mark> is the returned object with the set name:value pairs.
+
+```jsx
+//The looped array elements are the currentValues. 
+//And an empty object as initialValue, to be returned.
+
+const names1 = ["Alice", "Bob", "Tiff", "Bruce", "Alice"];
+const countedNames1 = names1.reduce((acc, name) => {
+  acc[name] = (acc[name] || 0) + 1;
+  return acc;
+}, Object.create(null));
+```
+
+</details>
+
+1
+
+1
+
 ```jsx
 //We 100vh Parallax in case the Parallax doesn't adapt to the screen
 const stratosRefs = useRef([]);
