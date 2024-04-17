@@ -99,6 +99,26 @@ const countedNames1 = names1.reduce((acc, name) => {
 
 </details>
 
+```jsx
+//The stratosRef target.id and the className DOM pair on the returned object
+//On an empty initialValue Object 
+let latoCol = useRef([])
+
+const colonne = stratosRefs.current.reduce((acc, strat) => {
+  const matchingCol = 
+    latoCol.current.find((col) => col.className.includes(strat.id));
+  if (matchingCol) {
+    acc[strat.id] = matchingCol;
+  }
+
+  return acc;
+}, {});
+```
+
+1
+
+1
+
 1
 
 1
