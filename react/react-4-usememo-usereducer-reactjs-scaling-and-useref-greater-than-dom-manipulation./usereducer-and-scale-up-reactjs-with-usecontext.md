@@ -156,9 +156,7 @@ Any imported nested **component** will have access to both the state and event h
 
 </details>
 
-1
-
-1
+<figure><img src="../../.gitbook/assets/scaledUpForm.webp" alt=""><figcaption><p>Scaled up useReducer() and useContext()</p></figcaption></figure>
 
 1
 
