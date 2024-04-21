@@ -20,7 +20,7 @@ layout:
 
 **useMemo(**function, dependencies**)** is a React Hook that **caches** the **return value** of a function _between re-renders_.
 
-```
+```jsx
 const memoized = useMemo(
   () => memoize(depend),
   [depend]
@@ -35,7 +35,7 @@ A useMemo() function will be **re-called** only if one of its **dependencies** c
 
 We import an array of objects as a prop with 2 useState().
 
-```
+```jsx
 import TodoList from './components/Externals';
 
 import { createTodos } from './components/External1';
@@ -66,7 +66,7 @@ const [isDark, setIsDark] = useState(false);
 
 We **useMemo()** a slow imported function using 2 props, any _theme_ useState() changes will **re-render** the parent component but **won't re-call** the useMemo() function.
 
-<pre><code>import { filterTodos } from './External1'
+<pre class="language-jsx"><code class="lang-jsx">import { filterTodos } from './External1'
 
 function Todolist({ todos, theme, tab }) {
 
@@ -91,12 +91,11 @@ function Todolist({ todos, theme, tab }) {
     &#x3C;/div>
   );
 }
-
 </code></pre>
 
 The useMemo() function is a delayed function that filters the array object to be rendered
 
-```
+```jsx
 export function filterTodos(todos, tab) {
 
   let startTime = performance.now();
@@ -115,12 +114,11 @@ export function filterTodos(todos, tab) {
     }
   });
 }
-
 ```
 
 </details>
 
-<figure><img src="../.gitbook/assets/useMemo().png" alt="" width="375"><figcaption><p>slow button useMemo() change and fast checkbox</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/useMemo().png" alt="" width="375"><figcaption><p>slow button useMemo() change and fast checkbox</p></figcaption></figure>
 
 ### The useReducer() React Hook
 
@@ -385,7 +383,7 @@ function Increase(){
 
 </details>
 
-<figure><img src="../.gitbook/assets/scaleUp.PNG" alt=""><figcaption><p>Scaled up useReducer() and useContext()</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/scaleUp.PNG" alt=""><figcaption><p>Scaled up useReducer() and useContext()</p></figcaption></figure>
 
 ### The useRef() React Hook
 
@@ -437,7 +435,7 @@ function altroClick(){
 
 </details>
 
-<figure><img src="../.gitbook/assets/useReff().png" alt="" width="276"><figcaption><p>Returned useRef() and useState() values</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/useReff().png" alt="" width="276"><figcaption><p>Returned useRef() and useState() values</p></figcaption></figure>
 
 **useRef()** is stored in React and won't need any setter function because it always _returns the same object._
 
@@ -562,7 +560,7 @@ function handle(){
 //You need useEffect(()=>{}, []) To access it onLoad() if not you get current:null
 ```
 
-<figure><img src="../.gitbook/assets/useRefDom.png" alt="" width="411"><figcaption><p>Accessing a JSX Node element</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/useRefDom.png" alt="" width="411"><figcaption><p>Accessing a JSX Node element</p></figcaption></figure>
 
 The **ref attribute** can contain a **callback function**, it uses the DOM as an _argument_, and it triggers on _render_.
 
@@ -588,7 +586,7 @@ function cliccato(){
 &#x3C;/div>
 </code></pre>
 
-<figure><img src="../.gitbook/assets/refonRender.png" alt="" width="404"><figcaption><p>Callback function on useState() render</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/refonRender.png" alt="" width="404"><figcaption><p>Callback function on useState() render</p></figcaption></figure>
 
 The callback function **ref argument** can fill an **useRef() array.**&#x20;
 
@@ -698,7 +696,7 @@ We use a new **ref callback function** to loop through each rendered **\<li>** e
 
 </details>
 
-<figure><img src="../.gitbook/assets/scrollView1.gif" alt="" width="148"><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/scrollView1.gif" alt="" width="148"><figcaption></figcaption></figure>
 
 We can't pass a **children ref** from its parent component.
 
@@ -737,7 +735,7 @@ Each **React update** includes a **render** (when it calls its function componen
 
 We use a **flushSynch()** call to wrap the **update DOM function**, so both can update synchronously.
 
-```
+```jsx
 //React DOM updates are queued, flushSynch() updates the ref before for the render
 import { flushSync } from 'react-dom';
 
@@ -761,7 +759,7 @@ listRef.current.lastChild.scrollIntoView({
 
 We set an array of objects, the **ref** for the **\<ul>** node, and the \<ul> and input useState().
 
-```
+```jsx
 //We trigger the loop once without functions()
 let nextId = 0;
 let initialTodos = [];
@@ -782,7 +780,7 @@ const [todos, setTodos] = useState(
 
 We render the array as **\<li>** elements, the **ref** is set on the **\<ul>** but we can access its children using ref property **.children** and **.childNode**.
 
-```
+```jsx
 <button onClick={handleAdd}>
   Ultimo
 </button>
@@ -802,7 +800,7 @@ On input, we create a new object to push to the \<ul> DOM.
 
 Without **flushSync()** the **ref** DOM method would have scrolled at #20, instead of the new element.
 
-```
+```jsx
 function handleAdd() {
   const newTodo = { id: nextId++, text: text };
   setText('');
@@ -820,11 +818,11 @@ function handleAdd() {
 
 </details>
 
-<figure><img src="../.gitbook/assets/fleshUpdate.png" alt="" width="375"><figcaption><p>Scroll onClick() without and then with Flushsynch()</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/fleshUpdate.png" alt="" width="375"><figcaption><p>Scroll onClick() without and then with Flushsynch()</p></figcaption></figure>
 
 **ref** shouldn't be used to edit the DOM, limit it to elements that aren't updated by React.
 
-```
+```jsx
 //If we delete a ref Node element its Dom element is deleted as well.
 <button
   onClick={() => {
@@ -838,7 +836,7 @@ function handleAdd() {
 
 We can trigger the **play()** and **pause()** DOM method on a \<video> Node ref.
 
-```
+```jsx
 let vedo= useRef(null)
 const [acceso, setAcceso] = useState(false)
 
@@ -859,7 +857,7 @@ function handleClick() {
 </video>
 ```
 
-<figure><img src="../.gitbook/assets/videoref1.gif" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/videoref1.gif" alt=""><figcaption></figcaption></figure>
 
 We can create **conditional ref attributes**, using **flushSync()** to keep the ref condition updated.
 
@@ -869,7 +867,7 @@ We can create **conditional ref attributes**, using **flushSync()** to keep the 
 
 We create an array of image objects, we set the **ref**, the useState(), and the **index** (condition) **flushSync()** function.
 
-```
+```jsx
 const [index, setIndex] = useState(0);
 let referal = useRef(null)
 
@@ -899,7 +897,7 @@ We render the image array and set the **conditional ref attribute** on the Node 
 
 The moment a new Node element gets the **ref attribute** it will be **scrollIntoView()**.
 
-```
+```jsx
 //For the no-matching images ref will be null
 <button onClick={ () => indexref() }>
   Next
@@ -919,7 +917,7 @@ The moment a new Node element gets the **ref attribute** it will be **scrollInto
 
 </details>
 
-<figure><img src="../.gitbook/assets/Catlist.png" alt="" width="563"><figcaption><p>Scrolling onClick() using ref attributes and DOM methods</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/Catlist.png" alt="" width="563"><figcaption><p>Scrolling onClick() using ref attributes and DOM methods</p></figcaption></figure>
 
 The Node element **ref** can receive a **DOM method** while in a **different component,** using **forwardRef().**
 
