@@ -445,15 +445,149 @@ function MyInput(props) {
 <MyInput ref={inputRef} />
 ```
 
-1
+The Js querySelector() works in ReactJs, but it's better to use the **useRef()** hook on <mark style="background-color:blue;">DOM elements.</mark>
 
-1
+Its mutable reference values persist and can be updated at any time without affecting component output or triggering **re-renders**.
 
-1
+{% tabs %}
+{% tab title="Parent.js" %}
+A **parent** component can pass a **useRef()** hook to a **children** component as a **prop**, allowing the parent to access the updated DOM value from the children.
 
-1
+```jsx
+//The ref is avaiable only onEffect() after the DOM renders
+let passed = useRef(null)  
 
-1
+useEffect(()=>{
+  console.log( passed.current )
+}, [])
+
+<div>
+  <Navbar passed={passed} />
+  <Home passed={passed} />
+</div>
+```
+{% endtab %}
+
+{% tab title="Navbar/Home.js" %}
+We can access and modify the DOM useRef() from both the parent and sibling components.
+
+```jsx
+//Navbar.js
+function Navbar({passed}){
+  const inputRef = passed;
+
+  return(
+    <div ref={inputRef} className="naviga">
+      ...
+    </div>
+  )
+}
+
+//Home.js
+function Home({passed}){
+	
+  useEffect(()=>{
+    console.log( passed.current )
+  })
+}
+```
+{% endtab %}
+{% endtabs %}
+
+We use <mark style="background-color:blue;">React.useImperativeHandle</mark> to _customize_ the **current** value of a **useRef()** object and expose methods to its parent component.&#x20;
+
+These **methods** can return other useRef() or useState() values, allowing us to create an interface for editing the useRef() object from the parent component.
+
+{% tabs %}
+{% tab title="Parent.js" %}
+If the useRef() value gets updated on the children components, an event is needed to access it.
+
+```jsx
+//conti.current won't trigger an useEffect() re-render
+//but the updated values are accessible on event.
+function App(){
+  let conti = useRef(null)
+
+  return (
+    <div>
+      <button onClick={()=> console.log( conti.current.refe() )}>
+        Access
+      </button>
+    
+      <Primo conti={conti}/>
+      <Secondo conti={conti} />
+    </div>
+  );
+}
+```
+
+If you need more data to be shared between components check [scale-up ReactJs](usereducer-and-scale-up-reactjs-with-usecontext.md).
+{% endtab %}
+
+{% tab title="Primo.js" %}
+Even if set in a useRef() object both useRef() and **useState()** follow their own render rules.
+
+```jsx
+//The useState() updated no matter the component where the method is called
+function Primo({conti}){
+  let [numba, setNumba] = useState(0)
+  let numbaref = useRef(0) 
+
+  let primate = useRef(null)
+
+  React.useImperativeHandle(conti, () => ({
+    current: primate.current,
+    changer: () => {
+      setNumba((x)=> ( x+1 ))
+      numbaref.current += 1
+    },
+    stato: () => {
+      return numba
+    },
+    refe: ()=>{
+      return numbaref.current
+    }
+
+  }));
+
+  return(
+    <div>
+      <p ref={primate}> passed DOM element </p>
+      <p> {numba} </p>
+    </div>
+  )
+}
+```
+{% endtab %}
+
+{% tab title="Secondo.js" %}
+Any **React.useImperativeHandle** useState(), passed as a prop from the sibling component, wil**l** have a delayed value. We need a local useState() updated with ref.current values.
+
+```jsx
+//The conti prop starts at null, so we conditionally render it on page mount
+
+function Secondo({conti}){
+  let [stato2, setStato2] = useState(0)
+
+  return(
+    <div>
+      <p>Altrimenti si arrabbiano dopppio </p>
+      <button onClick={() => { 
+          conti.current.changer(); 
+          console.log( conti.current.stato());
+          console.log( conti.current.refe() )
+          setStato2( conti.current.refe() )
+        }}>
+        Test the state { conti.current ? conti.current.stato() : 0}
+      </button>
+      <p>{ stato2 }</p>
+
+    </div>
+  )
+}
+```
+{% endtab %}
+{% endtabs %}
 
 The **forwardRef() API** opts for receiving the rep prop as the second argument into the child component.
 
