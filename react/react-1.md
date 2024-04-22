@@ -636,6 +636,27 @@ useEffect(() => {
 
 Including a **function** inside **useEffect()** dependencies will _<mark style="color:orange;">Error: This dependency changes on every render.</mark>_
 
+We clean-up event at the end of useEffect() to avoid memory leaks; events can still be running when the component unmounts, this avoid re-remders.
+
+```jsx
+//The intersectionObserver is not an action that needs to be clean up
+
+useEffect(() => {
+  const intervalId = setInterval(() => {
+    setCounter((prevCounter) => prevCounter + 1);
+  }, 1000);
+
+  const timeoutId = setTimeout(() => {
+    setCounter(0);
+  }, 5000);
+
+  return () => {
+    clearInterval(intervalId);
+    clearTimeout(timeoutId);
+  };
+}, []);
+```
+
 We use the React Hook **useCallback()** to call the function only when Its dependency changes.
 
 ```jsx
