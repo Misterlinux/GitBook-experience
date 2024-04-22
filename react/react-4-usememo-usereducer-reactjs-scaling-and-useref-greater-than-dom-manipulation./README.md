@@ -529,6 +529,7 @@ Even if set in a useRef() object both useRef() and **useState()** follow their o
 
 ```jsx
 //The useState() updated no matter the component where the method is called
+//The callback fucntion doesn't pass any value 
 function Primo({conti}){
   let [numba, setNumba] = useState(0)
   let numbaref = useRef(0) 
