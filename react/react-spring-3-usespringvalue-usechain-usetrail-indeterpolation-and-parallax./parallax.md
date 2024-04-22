@@ -22,6 +22,30 @@ useEffect(()=> {
 }, [parallaxLayerMounted])
 ```
 
+The <mark style="background-color:orange;">**navbar**</mark> has to be outside the \<Parallax> container, it will cover part of the first ParallaxPage and won't create additional scrollbars.
+
+```jsx
+//It needs a higher zIndex to be visible 
+//We modify the intersectionObserver() option object for Parallax elements
+let options = {
+  root: base,
+  rootMargin: "0px 0px -85% 0px",
+  threshold: 0,
+}
+
+<div>
+  <div className='position-fixed' style={{ height: "5em", top: 0, zIndex: 5}}>
+    Navbar
+  </div>
+
+  <Parallax pages={3.2} id='finestra' ref={parallaxRef} style={{ height: "100vh" }}>
+    ...
+  </Parallax>
+</div>
+```
+
+<figure><img src="../../.gitbook/assets/AbsoluteNavbar.jpg" alt="" width="328"><figcaption><p>Position-fixed navbar on &#x3C;Parallax/></p></figcaption></figure>
+
 A Parallax component won't respond to a scroll event, only to a **wheel**.
 
 <details>
