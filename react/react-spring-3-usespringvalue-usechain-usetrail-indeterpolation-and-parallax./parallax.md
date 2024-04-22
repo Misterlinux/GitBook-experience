@@ -139,6 +139,91 @@ const colonne = stratosRefs.current.reduce((acc, strat) => {
 }, {});
 ```
 
+We use the current **boundingClientRect.top** of the current **intersect \<ParallaxLayer/>** to edit the useRef().**style** of its paired column (from the **cached** reduce() object).
+
+{% tabs %}
+{% tab title="Style edit on threshold" %}
+We use an array **threshold** to simulate the scroll event, and remove the navbar height from the calc().
+
+```jsx
+//For each threshold intersect we edit the current paired column
+let coloptions = {
+  root: finestra.current.container.current, 
+  rootMargin: "0px",
+  threshold: [...Array(150).keys()].map(x => x / 150),
+}
+
+function scrolled(entries){
+
+  entries.forEach((entry)=>{
+
+    if(entry.isIntersecting && entry.boundingClientRect.top <= 75 ){
+      reffe = colonne[entry.target.id]  //from the cached object
+      requestAnimationFrame(() => {
+        reffe.style.height = 
+          `calc(100vh + ${entry.boundingClientRect.top - 75 + "px"} )`;
+      });
+    }
+
+  })
+} 
+
+let observer1 = new IntersectionObserver(scrolled, coloptions)
+
+stratosRefs.current.forEach((valo1)=>{
+  observer1.observe(valo1)
+})
+```
+{% endtab %}
+
+{% tab title="Column effect" %}
+We reduce the height of the **container** while keeping the **content** at **100vh**, this will avoid the content from shirking during the sticky effect.
+
+```jsx
+//The 100vh will keep the aspect ratio of the content
+<ParallaxLayer offset={0.30} style={{height: 0 ,display: "inline-block"}} 
+  sticky={{ start: 0.30, end: 1.55 }}>
+  <> 
+    <div className="d-inline-block TuneFuse" style={{ width: "25%" }}
+      ref={(ref)=> ( colRefs.current[0] = ref )}>
+
+      <div className="position-relative" style={{ height: "100vh" }} >
+      	...
+      </div>
+
+    </div>
+  </>
+</ParallaxLayer>
+```
+{% endtab %}
+
+{% tab title="Basic intersect effect" %}
+1
+
+1
+
+1
+
+1
+
+1
+
+1
+{% endtab %}
+{% endtabs %}
+
+<figure><img src="../../.gitbook/assets/columnParallax1.png" alt="" width="375"><figcaption><p>Threshold useRef().style columns on &#x3C;ParallaxLayer> intersect</p></figcaption></figure>
+
+1
+
+1
+
+1
+
+1
+
+1
+
 1
 
 1
