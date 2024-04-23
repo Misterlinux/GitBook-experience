@@ -270,6 +270,33 @@ We add a **custom** circle **cursor** to the absolute cards, and set the backgro
 
 {% embed url="https://codesandbox.io/s/usedrag-usesprings-tarot-qm5zzs?file=/src/App.js" %}
 
+We can mimic a useChain() **sequential animation** with useSprings(), we distance the <mark style="color:blue;">delay</mark> of each element by their index, the effect depends on the duration-delay ratio.
+
+<pre class="language-jsx"><code class="lang-jsx">//Each letter (and empty space) needs to be centered and have its own area
+//We use the map() index for the useSprings() index
+//3 letters will share their animation time 
+let star = "Kai Ashen"
+let [nome, setNome] = useState(star.split("")) 
+
+let [mosso, mossoApi] = useSprings(nome.length, (i)=>({
+  from: { top: 0 },
+  to: [ {top: 15}, {top: -15}, {top: 0} ],
+  delay: (i * 200),
+  config: { duration: 600 }
+}) )
+
+&#x3C;div className="bg-success" style={{ height: "30vh", width: "55vw" }}>
+  {nome.map((cont, index)=>(
+  &#x3C;animated.h1 className="<a data-footnote-ref href="#user-content-fn-1">d-flex</a> position-relative" 
+    key={index} style={{width: "0.7em", height: "1em", top: mosso[index].top }}>
+    {cont}
+  &#x3C;/animated.h1>)
+  )}
+&#x3C;/div>
+</code></pre>
+
+<figure><img src="../.gitbook/assets/useSprings()sequential.png" alt=""><figcaption><p>useSpring() index sequential animation.</p></figcaption></figure>
+
 <details>
 
 <summary>from/to functions on useSprings() indexed elements</summary>
@@ -439,3 +466,7 @@ Transition CSS properties
 1
 
 1
+
+[^1]: justify-content-center
+
+    align-items-center
