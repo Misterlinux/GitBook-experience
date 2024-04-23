@@ -198,17 +198,36 @@ We reduce the height of the **container** while keeping the **content** at **100
 {% endtab %}
 
 {% tab title="Basic intersect effect" %}
-1
+We use a normal threshold to **classList.add()** on single intersects.
 
-1
+```jsx
+//We first remove from the useRef() nav array.
+let options = {
+  root: finestra.current.container.current,
+  rootMargin: "0px 0px -85% 0px",
+  threshold: 0,
+}
 
-1
+function altro(entries){
 
-1
+  entries.forEach((entry)=>{
 
-1
+    if( entry.isIntersecting ){
+      navItems.forEach(item=>{
+        item.classList.remove("active")
+      })
+      navOb[entry.target.id].classList.add("active")
+    }
 
-1
+  })
+}
+
+let observer = new IntersectionObserver(altro, options)
+
+stratosRefs.current.forEach((valo)=>{
+  observer.observe(valo)
+})
+```
 {% endtab %}
 {% endtabs %}
 
@@ -231,42 +250,6 @@ We reduce the height of the **container** while keeping the **content** at **100
 1
 
 1
-
-```jsx
-//We 100vh Parallax in case the Parallax doesn't adapt to the screen
-const stratosRefs = useRef([]);
-
-//We loop the DOM reference objects using its id, className, and style properties
-useEffect(()=> {
-  console.log( stratosRefs )
-  //IntersectObserver callback function
-  ...
-  entries.forEach((entry)=> {
-    if(entry.isIntersecting){
-
-      stratosRefs.current.forEach((ref, index)=> {
-        if( ref.id == entry.target.id ){
-          console.log( ref.className.includes("bg-warning") )
-          ref.style.color = "pink"
-        }
-      })
-    }
-  })
-  ...
-}, [parallaxLayerMounted])
-
-<div className="App">
-  <Parallax pages={2} style={{ height: "100vh" }}>
-
-    <ParallaxLayer offset={0}>
-      <div ref={(ref) => (stratosRefs.current[0] = ref)}>
-        <h1>This is the moment he became</h1>
-      </div>
-    </ParallaxLayer>
-    ...
-  </Parallax>
-</div>
-```
 
 1
 
