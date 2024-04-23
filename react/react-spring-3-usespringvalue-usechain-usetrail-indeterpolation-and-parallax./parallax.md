@@ -239,6 +239,19 @@ stratosRefs.current.forEach((valo)=>{
 
 1
 
+We create an absolute \<parallaxLayer/> between the pages, that ignores the overflow.
+
+```jsx
+<ParallaxLayer offset={1.37} sticky={{start: 1.37, end: 1.37 }} 
+  style={{height: 0, display: "inline-block"}}>
+  <>
+    <div className="d-inline-block">
+    	...
+    </div>
+  </>
+</ParallaxLayer>
+```
+
 1
 
 1
