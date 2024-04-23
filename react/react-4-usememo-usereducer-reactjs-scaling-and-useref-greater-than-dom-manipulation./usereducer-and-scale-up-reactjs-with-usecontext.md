@@ -158,6 +158,24 @@ Any imported nested **component** will have access to both the state and event h
 
 <figure><img src="../../.gitbook/assets/scaledUpForm.webp" alt=""><figcaption><p>Scaled up useReducer() and useContext()</p></figcaption></figure>
 
+An useReducer() value used in <mark style="color:blue;">**inline style**</mark> will need to be parseInt() before, even if it's an integer.
+
+```jsx
+//We use a useContext() value to set up an hsl() color, 
+
+import { useStato, useStatoset } from "../data/Context";
+
+let stato = useStato()
+let dispatch = useStatoset()
+
+<ParallaxLayer offset={3.55} className="bg-main">
+  <Lamp className="position-relative fourthback" 
+    style={{ fill: `hsl(${parseInt(stato.base) + 180 }, 100%, 36%)` }}/>
+</ParallaxLayer>
+```
+
+1
+
 1
 
 1
