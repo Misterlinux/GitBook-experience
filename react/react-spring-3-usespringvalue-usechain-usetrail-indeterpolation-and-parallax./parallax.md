@@ -260,9 +260,31 @@ We create an absolute \<parallaxLayer/> between the pages, that ignores the over
 
 1
 
-1
+We can't relative import files from the public folder, so we create an src folder.
 
-1
+We can overlay parallaxLayer, their display depends on their order.                                                            When overlaying svg files we cut the svg extra borders we use[ https://svgcrop.com/](https://svgcrop.com/), which will keep the svg aspect ratio with less space.
+
+```jsx
+//Put the background color on the top overlay so it doesn't cover the other elements
+//We cannot import SVG files from the public folder, so we need an src folder 
+
+import { ReactComponent as Bulb } from "./source/bulb.svg"
+
+<Parallax pages={3.2} id='finestra' ref={parallaxRef} style={{ height: "100vh" }}>
+  <ParallaxLayer offset={0.1} className='bg-primary'>
+    <Bulb2 className='position-relative bg-danger'
+      style={{fill: "orange",height: "45vh",width: "12vw",left: "-15vw",top: "0%"}}/>
+  </ParallaxLayer>
+  ...
+  <ParallaxLayer offset={0.1}>
+    <div id='tunefuse' ref={(ref) => (stratosRefs.current[0] = ref)}>
+      <h1>First page</h1>
+    </div>
+  </ParallaxLayer>
+</Parallax>
+```
+
+<figure><img src="../../.gitbook/assets/svgComponent1.jpg" alt="" width="175"><figcaption><p>Cut vs uncut SVG files, with aspect ratio example</p></figcaption></figure>
 
 1
 
