@@ -118,7 +118,7 @@ Here are some **Inline, Inline-block, and block:**
 
 {% tabs %}
 {% tab title="HTML inline-block" %}
-```html
+```jsx
 //inline elements won't have height/width and will be placed on a single line
 //inline-block won't start a new line, included in the tags span/img/a
 
@@ -209,6 +209,22 @@ display: block will occupy the entire line and accept width/height, with the tag
 {% endtabs %}
 
 ![Even if used the span tag, we used block in the CSS](../.gitbook/assets/block.PNG)
+
+1
+
+1
+
+1
+
+1
+
+1
+
+1
+
+1
+
+1
 
 ## CSS Selectors and Media Query
 
