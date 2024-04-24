@@ -210,21 +210,52 @@ display: block will occupy the entire line and accept width/height, with the tag
 
 ![Even if used the span tag, we used block in the CSS](../.gitbook/assets/block.PNG)
 
-1
+**Inline** elements will share the same line between them and won't take the full width of their containers.
 
-1
+The <mark style="background-color:blue;">**vertical-align**</mark> property aligns **inline** and **inline-block** elements relative to their parent container's line-height/linebox.
 
-1
+<details>
 
-1
+<summary>Vertical-align css on Inline-block elements</summary>
 
-1
+By default, inline child elements align to the baseline, but we can use **line-height: normal** and **vertical-align** to change it.&#x20;
 
-1
+Inline-block elements are easier to align due to their fixed height and width.
 
-1
+```css
+//We are aligning the content edges to their container edges
 
-1
+div.gray{
+  line-height: 100px;
+  background: #dbdbdb;
+  margin: 10px;
+}
+
+div.gray span{
+  display: inline-block;
+  height: 30px;
+  line-height: 0px; /*normal*/
+  vertical-align: bottom /* top/middle/baseline */
+}
+
+div.gray span:first-child{
+  vertical-align: top;
+}
+
+div.gray span:last-child{
+  vertical-align: bottom;
+}
+
+<div className='gray mt-5'>
+  <span>Vertical one</span>
+  <span>Vertacal due</span>
+  <span>Vertacal due</span>
+</div>
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/verticalAlign2.jpg" alt=""><figcaption><p>vertical-align inline-block elements</p></figcaption></figure>
 
 ## CSS Selectors and Media Query
 
