@@ -196,6 +196,67 @@ molasses – { tension: 280, friction: 120 }
 
 </details>
 
+We adapt the CSS **@keyframe{} animation** with useSpring(), using the **{easings.steps()}** hook for the **animation-timing-function**.
+
+<details>
+
+<summary>Absolute window and single sprite animation.</summary>
+
+On a container we animate a **position-absolute window**, for the actual movement, and the **sprite** image, for the **steps()** animation.
+
+We can modify the background-image sprite, but we must keep its proportions in the container _(48/26 = 96/52)_.
+
+```jsx
+//The sprite needs to have a transparent background.
+//The steps() is the number of frames in the image
+//The first step is the width while the last is the steps(total)- 1 
+
+<div className='position-relative' style={{ width: 48, height: 26 }}>
+  <animated.div className="position-absolute" 
+    style={{ height: "100%", width: "100%", left: lefto }}>
+
+    <animated.div className="image1" style={{ 
+        height: "100%", width: "100%", backgroundSize: "cover",
+        backgroundImage: `url(${transCat})`,
+        backgroundPosition
+      }}>
+    </animated.div>
+
+  </animated.div>
+</div>
+
+//The useSpring({}) is the @keyframe{from{} to{}} body
+//easings.steps() is the animation-timing-function
+let [{lefto}, leftoApi] = useSpring(()=>({
+  from: { lefto: "0px"}, 
+  to:{ lefto: "200px" },
+  config: {
+    duration: 5000,
+    easing: easings.steps(20)
+  }
+}) )
+
+//This is the actual sprite movement 
+//The backgroundPosition moves the background in the absolute-window.
+let [{backgroundPosition}, posiApi] = useSpring(()=>({
+  from: {
+    backgroundPosition: "50px"
+  },
+  to:{
+    backgroundPosition: "-574px"
+  },
+  config: {
+    duration: 5000, 
+    easing: easings.steps(13),
+  },
+  loop: true
+}) )
+```
+
+</details>
+
+<figure><img src="../.gitbook/assets/useSpringAnimation.png" alt="" width="280"><figcaption><p>easing.steps() sprite animations</p></figcaption></figure>
+
 ### To() interpolate style and text render&#x20;
 
 Using the <mark style="background-color:blue;">**to**</mark> _method_, we **interpolate** the **springValue** data on a different **style** property (we can animate both), and access its pure value (without the spring Object).

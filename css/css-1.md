@@ -742,6 +742,8 @@ We move the pixel images as background, on a 1-frame width window:
 
 <figure><img src="../.gitbook/assets/animationsteps (1).gif" alt=""><figcaption><p>Example of it in action with pixel art</p></figcaption></figure>
 
+Check [React-spring-1](../react/react-spring-1.md) to see how to pixel easings: steps() animate with useSpring().
+
 in the next example we will use **transform-origin**:&#x20;
 
 {% tabs %}
