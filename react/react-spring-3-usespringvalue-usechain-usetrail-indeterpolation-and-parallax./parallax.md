@@ -260,9 +260,9 @@ We create an absolute \<parallaxLayer/> between the pages, that ignores the over
 
 1
 
-We can't relative import files from the public folder, so we create an src folder.
+We can't relative import files from the public folder, so we create a src folder.
 
-We can overlay parallaxLayer, their display depends on their order.                                                            When overlaying svg files we cut the svg extra borders we use[ https://svgcrop.com/](https://svgcrop.com/), which will keep the svg aspect ratio with less space.
+We can overlay \<parallaxLayer/> as absolute layers, their display depends on their order.                                                            When overlaying **svg** files we cut the svg extra borders we use[ https://svgcrop.com/](https://svgcrop.com/), which will keep the **svg** aspect ratio with less space.
 
 ```jsx
 //Put the background color on the top overlay so it doesn't cover the other elements

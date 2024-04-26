@@ -212,7 +212,7 @@ display: block will occupy the entire line and accept width/height, with the tag
 
 **Inline** elements will share the same line between them and won't take the full width of their containers.
 
-The <mark style="background-color:blue;">**vertical-align**</mark> property aligns **inline** and **inline-block** elements relative to their parent container's line-height/linebox.
+The <mark style="background-color:blue;">**vertical-align**</mark> property aligns **inline** and **inline-block** elements relative to their parent container's line-height/linebox, for a more examples check [Parallax](../react/react-spring-3-usespringvalue-usechain-usetrail-indeterpolation-and-parallax./parallax.md).
 
 <details>
 
