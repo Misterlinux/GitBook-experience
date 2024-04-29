@@ -16,7 +16,7 @@ it _asynchronously <mark style="background-color:blue;">observe</mark> intersect
 let base = useRef()
 let target = useRef()
   
-let interObs;
+let interObs = useRef();
 useEffect(()=>{
 
   let options={
@@ -32,8 +32,8 @@ useEffect(()=>{
     console.log( entries[0] )
   }
 
-  interObs = new IntersectionObserver(entered, options)
-  interObs.observe(target.current)
+  interObs.current = new IntersectionObserver(entered, options)
+  interObs.current.observe(target.current)
 }, [])
 ```
 
@@ -42,8 +42,9 @@ We need the IntersectionObserver() object and the target to **unobserve**() :
 ```jsx
 //remember to declare both outside useEffect()
 //If used twice it returns an error, and won't work in <strictMode/>
+//We use useRef() to keep the intersectionObserver() value after animations
 function annulla(){
-  interObs.unobserve(target.current) 
+  interObs.current.unobserve(target.current) 
 }
 ```
 
