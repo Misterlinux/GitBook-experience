@@ -4,7 +4,7 @@
 
 We can use **ES6** Syntax for **default parameter** in a function:
 
-```
+```jsx
 function defaultParameter(name = "sam") {
   return console.log( name);
 }
@@ -19,7 +19,7 @@ The **rest/spread operators** store and expand array/object elements.
 {% tab title="Array iterals" %}
 The Rest operator can store only at the end of its array.
 
-```
+```jsx
 //Rest collect the array values as a variable
 let [uno, ...due] = [1,2,2,3,4,5,6,8]
 console.log( due )                      //[2, 2, 3, 4, 5, 6, 8]
@@ -31,7 +31,7 @@ const oneToTen = [...oneToFive, 6, 7, 8];    //[1, 2, 3, 4, 5, 6, 7, 8]
 
 We can **spread** the **rest** variables in **any** array **index** position.
 
-```
+```jsx
 let deck1 = [1,500,1,2,3,55,6,5,4,6]
 
 const [uno, due, ...rest] = deck
@@ -43,7 +43,7 @@ console.log( [due, rest, uno] )    //[500, [1, 2, 3, 55, 6, 5, 4, 6] , 1]
 
 We can **rest** a **parameter** and use **empty commas** to skip array elements:
 
-```
+```jsx
 let deck = [ 100, 23, 45, 12, 34 ]
 
 function skip( [, , ...rest] ){
@@ -56,7 +56,7 @@ skip( deck )    //[45, 12, 34]
 {% tab title="Objects iterals" %}
 To **spread objects** you still need to use **{}:**
 
-```
+```jsx
 //If we concat() objects with the same property there is an overwrite
 const obj1 = { foo: 'bar', x: 42 };
 const obj2 = { foo: 'baz', y: 13 };
@@ -76,7 +76,7 @@ console.log( {..array} )    //{ 0: 11; 1: 21; 2: 3
 
 The **destructuring assignment** syntax extracts **properties** by **keep**ing their **names**:
 
-```
+```jsx
 let horse = {
   name: "uni", age: 10, breed: "winn"
 }
@@ -97,7 +97,7 @@ console.log( nuovo )             //"uni
 
 The _rest operator_ can **edit**, **add**, and keep object **properties**.
 
-```
+```jsx
 //We added and edited properties while keeping the rest with ...dog
 const dog = {
   name: "Lucas",
@@ -112,7 +112,7 @@ console.log( dogOwner )
 
 We **extract nested** objects with double **{}**:
 
-```
+```jsx
 let scato = {
   yuse: {
     mode: "wannabe",
@@ -130,7 +130,7 @@ console.log( scato.listato[0] + " " + scato.yuse.mode ) //123 wannabe
 
 We can also **Loop** through a **deconstructed object parameter**:
 
-```
+```jsx
 //We loop through an array of objects
 const people = [
   {
@@ -175,13 +175,13 @@ let maximus = Math.max( ...mat )              //100
 
 Which is also the better way to **clone**:
 
-```
+```jsx
 let newDeck = [...deck];
 ```
 
 We can **parse variables** on **function return**:
 
-```
+```jsx
 //We can take a function returns values
 const f = () => { [12, 13] }
 
@@ -191,7 +191,7 @@ console.log(a, b)    //12, 13
 
 And **deconstruct** functions' arrays/objects **returns**.&#x20;
 
-```
+```jsx
 function guiss(q,w){
     let tron = q+w
     let bron = q-w
@@ -206,7 +206,7 @@ console.log( gui, pui )            //6, 4
 
 **Error is a javascript object**, with **.message** and **.name** being its main **property,** and when **throw** it will stop the code.
 
-```
+```jsx
 //new Error being its constructor
 let errore= "Error number " + Math.random()
 const blokka= new Error(errore)    //the argument being the error.message
@@ -220,7 +220,7 @@ throw blokka                       //throw new Error(errore)
 
 There are **Built-in constructor errors** SyntaxError, ReferenceError, and TypeError:
 
-```
+```jsx
 //their object.name is included
 let error = new ReferenceError("this is the argument");
 
@@ -242,7 +242,7 @@ try{
 
 **TRY** can also catch standard code errors:
 
-```
+```jsx
 try {
   let jj= { element }      
   let user = JSON.parse(jj); 
@@ -257,7 +257,7 @@ try {
 
 We can put **TRY conditions** to trigger and catch a **new Error**():
 
-```
+```jsx
 let jia = '{ "age": 301 }'; 
 
 try {
@@ -274,7 +274,7 @@ try {
 
 We **filter** the **error**.name with **instanceof**  on **catch**{}
 
-```
+```jsx
 catch (err) {
   if (err instanceof ReferenceError) {
     console.log( "There is no name, use a backup" );
@@ -284,7 +284,7 @@ catch (err) {
 
 In this **Fibonacci** example we use outside variables and Date():
 
-```
+```jsx
 //we get an input alert with the NUMbers to have in the secuence
 
 let num = +prompt("Enter a positive integer number?", 35)
@@ -312,14 +312,14 @@ try {
 alert(result || "error occurred");
 alert(`execution took ${diff}ms` );
 //comparing the Date() we get the ms it took for the operation, 
-be it error or not
+//be it error or not
 ```
 
 </details>
 
 The **finally{}** code gets executed right **before** an error is **catch**:
 
-```
+```jsx
 //finally{} can trigger without a catch{}
 
 try {
