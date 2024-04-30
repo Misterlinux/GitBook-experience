@@ -104,7 +104,7 @@ In Javascript, all **functions are object methods**, be it from constructor or g
 
 **Parameters** are values that are passed to the function and can be used locally in the function:
 
-```
+```jsx
 //we can use multiple values for the function operations
 
 function lot(num1, num2){
@@ -123,7 +123,7 @@ lot(4, 8);
 
 **Arguments** are the actual **values** passed when _invoking_ the function:
 
-```
+```jsx
 //Invoking the lot(num1,num2) function 
 
 lot(5, 8);    //assigning the num1, num2 Parameters the 5,8 Arguments
@@ -131,9 +131,8 @@ lot(5, 8);    //assigning the num1, num2 Parameters the 5,8 Arguments
 
 We can also implement **function composition**, using the return as an argument:
 
-```
+```jsx
 //the function returns another function
-
 function translate2d(dx, dy) {
 
   return function (x, y){
@@ -154,7 +153,7 @@ We can use the "parent" function to store **parameters** and **return** values o
 
 We can use variables on the parent function to **store return values on multiple invoked functions.**
 
-```
+```jsx
 //we declare the variables but set their value later
 function memoize(f) {
   let preX, preY, preR
@@ -169,12 +168,11 @@ function memoize(f) {
     return preR = f(x, y)
   }
 }
-
 ```
 
 We pass a **function** (without () so it won't execute) argument as a **parameter**:
 
-```
+```jsx
 //The memo1 stores the f(x,y) which is [5,5]
 function addition(x,y){
   return [x,y]
@@ -186,7 +184,7 @@ memo1(5, 5)
 
 On repeated arguments we:
 
-```
+```jsx
 memo1(1, 5)        //[1,5]
 memo1(5, 5)        //[5,5]
 memo1(5, 5)        //[5,5] "already casted"
@@ -202,7 +200,7 @@ We can also implement the _**spread operator**_ for function returns and have _m
 
 We create **2 different parameter functions,** the f(x,y) array result will be **spread** and then used as a parameter again.
 
-```
+```jsx
 function uni(x,y){
   return [x+3, y+1]
 }
@@ -220,7 +218,7 @@ function composeTransform(f, g) {
 
 The **order** of the parameters **functions** changes the result:
 
-```
+```jsx
 let tent = composeTransform( uni, dui)  //[[2+3]*2 , [1+1]*3] 
 tent(2,1)                               //[10,6] 
 
@@ -232,7 +230,7 @@ tent1(2,1)                             //[7,4]
 
 We can implement **Variables** as functions when using **function combinations**:
 
-```
+```jsx
 //We create 2 predicate functions 
 function negative(x) {
     return x < 0;
@@ -324,7 +322,7 @@ con("lil")
 
 We can also **Interpolate** variables into HTML elements, also using _**Ternary Operators**_:
 
-```
+```jsx
 //we can use `` or the +
 let greetingStart = "Hallo "
 let name = "dude"
@@ -337,8 +335,19 @@ console.log(greeting) / console.log(ecco)     //Hallo , My name is dude
 //and for ternary logic we put the function between the ${}
 const grade = 95;
 `You have ${grade > 90 ? 'passed' : 'failed'} the exam.`;  //You have passed the exam
-
 ```
+
+<details>
+
+<summary>How to enable the backtick on the keyboard</summary>
+
+Depending on your language your keyboard might not have the backtick (\` \`).
+
+Download the [developer's keyboard](https://1drv.ms/u/s!ArqXUvKZFFNH70KlRzmg1fmF4e\_K?e=a3eWg9), and change the keyboard layout by pressing:                                **windowsIcon + spacebar**, use space to change the layout.
+
+It will become avaiable using **Alt Gr + '**
+
+</details>
 
 **The console** is where we run scripts and commands.
 
@@ -384,7 +393,7 @@ function radToDeg(rad) {
 
 And in the case of **NaN (not a number)** we also can have operations:
 
-```
+```jsx
 //we have the operator isNaN() in case, and NaN isn't === o !== to itself
 
 NaN === NaN;        // false
@@ -397,7 +406,6 @@ function valueIsNaN(v) { return v !== v; }
 valueIsNaN(1);          // false
 valueIsNaN(NaN);        // true
 valueIsNaN(Number.NaN); // true
-
 ```
 
 **Arrays** are objects variables that can hold more than one value and one _typeof()_ data:
