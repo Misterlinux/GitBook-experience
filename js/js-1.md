@@ -322,6 +322,8 @@ con("lil")
 
 We can also **Interpolate** variables into HTML elements, also using _**Ternary Operators**_:
 
+We use **template strings** (template iterals) to <mark style="background-color:blue;">**interpolate**</mark> variables and expressions into a string, including _**Ternary Operators**_
+
 ```jsx
 //we can use `` or the +
 let greetingStart = "Hallo "
@@ -331,6 +333,8 @@ const greeting = `${greetingStart}, my name is ${name}`;
 let ecco = greetingStart + ", My name is " + name
 
 console.log(greeting) / console.log(ecco)     //Hallo , My name is dude
+//The backslash \ to escape special syntaxis
+console.log(`${name} with the \{} and the \$`)  //"dude with the {} and the $"
 
 //and for ternary logic we put the function between the ${}
 const grade = 95;
