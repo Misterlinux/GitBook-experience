@@ -13,7 +13,24 @@ defaultParameter("oltre")    //"oltre"
 defaultParameter()           //"sam"
 ```
 
-The **rest/spread operators** store and expand array/object elements.
+The **rest/spread** operator is a **syntax** that creates a copy of an iterable object, it can unpack and edit existing objects.&#x20;
+
+Its syntax _doesn't mutate_ the iterable, it's not a function or a loop and we can't access the iteration process.
+
+```jsx
+//The longer the array is, the more complex the copy operation becomes
+//The push() method keeps its complexity indipendently of the length
+//The push() will print the new length of the mutated array.
+
+let base = [1, 2, 3, 4, 5]	
+let base1 = [...base, 12]	
+console.log( base1 )   //(6)[1, 2, 3, 4, 5, 12]
+console.log( base )    //(5)[1, 2, 3, 4, 5]
+
+let mosso = [1, 2, 3, 4, 5]
+console.log( mosso.push(13) )	//6
+console.log( mosso )		//(6)[1, 2, 3, 4, 5, 13]
+```
 
 {% tabs %}
 {% tab title="Array iterals" %}
