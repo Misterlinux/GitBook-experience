@@ -11,15 +11,15 @@ The **REST** (Representational State Transfer) **API** exchanges data between ap
 
 To start a **NodeJs server** we import/require **express methods,** each route will include an **endpoint** and its **handler function**:
 
-```
-- new Init         //We start up a package.json file
+```jsx
+- npm Init         //We start up a package.json file
 
 //The endpoint sets where the request and response is gonna take place
 const express = require('express');
 const app = express();
 
 app.get('/', (req, res) => {
-    res.send("Hello World!");
+  res.send("Hello World!");
 });
 
 //listen() sets the localhost: endpoint 
@@ -30,22 +30,21 @@ app.listen(3000, () => console.log("Server is up and running"))
 
 The **endpoint** is the part of the _URL_ that comes after **/**.
 
-Contrary to _React_, the server needs to re-start to update, to avoid that we **npm install nodemon**.
+Contrary to _React_, the server needs to re-start to update, to avoid that we **npm i nodemon**.
 
-```
+```jsx
 //In the package.json we create a custom script 
 
 "scripts": {
   "start": "nodemon server.js"      //now is npm start
 }
-
 ```
 
 **Postman** is a scalable testing tool, it can retrieve information sent by the **server routes**.
 
 **Queries** are the url part that comes after a **?...=**, it is used to _pass information_ from the endpoint to the **server routes**.
 
-```
+```jsx
 //We request them with req.query.___, and add them to the endpoint
 //we add a query with ?(name set in route)=(query value) in the URL
 
@@ -53,7 +52,6 @@ app.get('/', (req, res) => {
   let cava = req.query.v
   res.send("Hello World! , we have the " + cava );
 });
-
 ```
 
 <figure><img src="../.gitbook/assets/postmanQuery1.png" alt="" width="314"><figcaption><p>Postaman Get method for a URL with query</p></figcaption></figure>
@@ -70,7 +68,7 @@ http://localhost:3000/add?value1=12&value2=21
 
 **Queries values** are strings by default, we convert them for math functions.
 
-```
+```jsx
 //We first add the route endpoint and then the query values
 
 app.get("/add", function (req, res) {
@@ -78,15 +76,14 @@ app.get("/add", function (req, res) {
     let sum2 = Number( req.query.value2 )   
     res.send("The result is " + (sum1 + sum2 ));
 });
-
 ```
 
 </details>
 
 **Parameters** are _properties_ attached to the **URL**, prefixed with **(:)** on the **endpoint**, and requested with **req.params.\_\_\_**.
 
-```
-http://localhost:3000/add1/12/74
+```jsx
+//http://localhost:3000/add1/12/74
 
 //we pass its multiple values in the Endpoint
 app.get("/add1/:primo/:second", function (req, res) {
@@ -94,7 +91,6 @@ app.get("/add1/:primo/:second", function (req, res) {
     let sum2 = Number( req.params.second )
     res.send("The result is " + (sum1 + sum2 ));
 });
-
 ```
 
 <details>
@@ -103,7 +99,7 @@ app.get("/add1/:primo/:second", function (req, res) {
 
 **Middleware** are **functions** called during route calls, any of their request data is included in their route (like an authentification use check at each route).
 
-```
+```jsx
 //next() is used to advance in the middleware chain
 //depending of the Date() object it will res.send() or redirect() the route
 
@@ -116,7 +112,7 @@ function requestTime(req, res, next){
 
 We implement it with **use()** or call it in the middle of the route.
 
-```
+```jsx
 //If we use() it, it will be included in each route
 //or we can call it in specific routes
 
@@ -137,7 +133,7 @@ app.get("/monos", function(req, res){
 
 To _body-parse request body_ elements we **use()** the **express.json()** built-in _middleware_.                      We install file-system **(fs)** which will allow us to **update server files**.
 
-```
+```jsx
 //Unlike normal middleware, it doesn't need to be included in routes
 app.use(express.json())
 
@@ -147,7 +143,7 @@ const fs = require("fs")
 
 We **req**uest the **body** from _Postman_ Post and update the imported **JSON** array using **fs**.
 
-```
+```jsx
 //we set the new object ID to be the last of the JSON.
 const quotes = require("./quotes.json");  //[{}, {}, {}, ...]
 
@@ -172,7 +168,7 @@ Both **Post** and **Put** Postman **methods** can _update and create_ elements, 
 
 To **update** the JSON file with the Postman POST body, we **filter** both its **ID** and its **parameter** so it keeps the updated object ID.
 
-```
+```jsx
 //Splice() uses the index so we need to lower it
 
 app.put("/quotes/:id", function(req, res){
@@ -194,7 +190,7 @@ app.put("/quotes/:id", function(req, res){
 
 To **DELETE** a JSON element by its **ID** parameter, we **filter()** it and use the matching element index to **splice()**.
 
-```
+```jsx
 //album returns an array, we [0] to extract its index
 
 app.delete("/quotes/:id", function(req, res){
@@ -210,7 +206,6 @@ app.delete("/quotes/:id", function(req, res){
   fs.writeFileSync("./quotes.json", JSON.stringify(quotes));
   res.status(200).json({ succes: true });
 })
-
 ```
 
 </details>
@@ -227,11 +222,11 @@ HTTP is a _stateless protocol_, it won't record any request data, so to **authen
 
 <figure><img src="../.gitbook/assets/sessiontoken.png" alt=""><figcaption><p>Sessions cookies and session ID </p></figcaption></figure>
 
-The **JSONWebToken** (JWT) _registers_ the user directly **to the app** without any sessions.               **JSON** stands for _Javascript Object Notation_, a text-based data format transferable between all languages and standard syntax for APIs.
+The **JSONWebToken** (JWT) _registers_ the user directly **to the app** without any sessions.                       **JSON** stands for _Javascript Object Notation_, a text-based data format transferable between all languages and standard syntax for APIs.
 
 The **JWT** is made of **clains** (string sections) separated by a comma, clains are encoded in <mark style="background-color:blue;">code-64</mark>.
 
-The **first** _header_ clain contains the **hashing algorithm** and the token **type.**                                              The **second** contains the JSON object sent to the user, visible to anyone.                                       The **third** is a **secret hash**, kept by the **server** and it resets if the original request changes.
+The **first** _header_ clain contains the **hashing algorithm** and the token **type.**                                                   The **second** contains the JSON object sent to the user, visible to anyone.                                                      The **third** is a **secret hash**, kept by the **server** and it resets if the original request changes.
 
 <figure><img src="../.gitbook/assets/JWT.png" alt=""><figcaption><p>JWT token</p></figcaption></figure>
 
@@ -239,7 +234,7 @@ The **first** _header_ clain contains the **hashing algorithm** and the token **
 
 On the **server.js** we implement **npm install cors** by setting the allowed **Port** origin.
 
-```
+```jsx
 const express = require("express");
 const app = express();
 app.use(express.json());
@@ -249,33 +244,31 @@ const corsOptions = {
   origin: "http://localhost:3000"    
 };
 app.use(cors(corsOptions));        //We use() the CORS middleware
-
 ```
 
 We _import_ the **routes.js** as _middleware_ for all **/user** endpoint routes.
 
-```
+```jsx
 const user = require("./routes/user.js");
 app.use("/user", user);
 ```
 
 In the **routes/user.js** we **npm install bcrypt fs** to _hash the password_ and save it to the _JSON database_.
 
-```
+```jsx
 const express = require("express");
 const bcrypt = require("bcrypt");   
 const fs = require("fs"); 
 
 //The user router comes from the expressJs built-in method
 const router = express.Router();   
-
 ```
 
 We import both the JSON **database** to update and the JWT **generator**, then we deconstruct the **req**uest **body** for the **/user/sign-up** route (**router** is the middleware of /user endpoint).
 
-If the **Post** **email** is already being in the database we return an error **(400) response**.                    We **bcrypt** the **password** body property and add a random **salt() hash** to it.                                          The _response.send()_ **JWT** is created after the user is registered.
+If the **Post** **email** is already being in the database we return an error **(400) response**.                             We **bcrypt** the **password** body property and add a random **salt() hash** to it.                                              The _response.send()_ **JWT** is created after the user is registered.
 
-<pre><code><strong>const usersDb = require("../database/db.json");
+<pre class="language-jsx"><code class="lang-jsx"><strong>const usersDb = require("../database/db.json");
 </strong>const generateJWT = require("../utils/generateJWT");
 
 router.post("/sign-up", async (req, res) => {
@@ -311,9 +304,9 @@ router.post("/sign-up", async (req, res) => {
 module.exports = router;    //the router is then exported
 </code></pre>
 
-On the **utils/generateJWT.js** we **npm install jsonwebtoken dotenv**.                                                     We access the secret **env file** to generate JWT tokens, for the **payload** object we use public user data, the token is then **sign()** and given an **expiration** date.
+On the **utils/generateJWT.js** we **npm install jsonwebtoken dotenv**.                                                              We access the secret **env file** to generate JWT tokens, for the **payload** object we use public user data, the token is then **sign()** and given an **expiration** date.
 
-```
+```jsx
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
@@ -334,7 +327,7 @@ module.exports = generateJWT;    //the generate function is then exported
 
 The **env** and **database/db.json** files are:
 
-```
+```jsx
 //The external .env file value is used to set variables 
 //It's secret so keep it from git commits using .gitignore
 jwtSecret = "migracodeAuthJan2021"
@@ -349,7 +342,7 @@ jwtSecret = "migracodeAuthJan2021"
 
 In the **user/sign-in** endpoint, we **bcrypt.compare()** the JSON database password with the **req.post** password.
 
-```
+```jsx
 //To sign-in we check if any user has the req.post password
 //The JSON database passwords are encrypted, so to compare we de-crypt them.
 //It returns a JSW using the matched user ID.
@@ -384,16 +377,14 @@ router.post("/sign-in", async (req, res) => {
     res.status(500).send({error: error.message});
   }
 });
-
 ```
 
 </details>
 
 We implement the **authentification** _middleware_ in the **user/auth** endpoint.
 
-```
+```jsx
 //if authenticated it res.send() the success code 200
-
 const authenticate = require("../middleware/authentificate.js");
 
 router.post("/auth", authenticate, (req, res) => {
@@ -409,9 +400,8 @@ In the **auth** middleware we use the **env** file and the **JWT** token (receiv
 
 We **JWT.verify()** the bearer JWT with the _env.JSWsecret_ string, to find the user assigned to the token.
 
-```
+```jsx
 //we require the jwt and dotenv modules
-
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
