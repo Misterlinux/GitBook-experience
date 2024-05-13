@@ -1,9 +1,9 @@
 # REACT 2, React routes, Input props and onChange(), React form onSubmit() and formData, input multiple attribute and input file images rendering
 
-* [Using \<Outlet/> with React Routes](react-2.md#using-less-than-outlet-greater-than-with-react-routes)&#x20;
-* [React Input Props and onChange() event handler](react-2.md#react-input-props-and-onchange-event-handler)
-* [React Form onSubmit() event handler and FormData()](react-2.md#react-form-onsubmit-event-handler-and-formdata)
-* [Input file image render and multiple input attribute](react-2.md#input-file-image-render-and-multiple-input-attribute)
+* [Using \<Outlet/> with React Routes](./#using-less-than-outlet-greater-than-with-react-routes)&#x20;
+* [React Input Props and onChange() event handler](./#react-input-props-and-onchange-event-handler)
+* [React Form onSubmit() event handler and FormData()](./#react-form-onsubmit-event-handler-and-formdata)
+* [Input file image render and multiple input attribute](./#input-file-image-render-and-multiple-input-attribute)
 
 We use **Client-side routing** to render **\<Routes> components** without requesting **external documents**.
 
@@ -62,7 +62,7 @@ The **/** Route is the "**Home**" URL, we use **\<Link>** to **navigate** to the
 }
 </code></pre>
 
-<figure><img src="../.gitbook/assets/URL.PNG" alt=""><figcaption><p>Home / route</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/URL.PNG" alt=""><figcaption><p>Home / route</p></figcaption></figure>
 {% endtab %}
 
 {% tab title="Nested route" %}
@@ -88,7 +88,7 @@ return(
 
 ```
 
-<figure><img src="../.gitbook/assets/nested.png" alt=""><figcaption><p>URL path on variables </p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/nested.png" alt=""><figcaption><p>URL path on variables </p></figcaption></figure>
 {% endtab %}
 
 {% tab title="Variable route" %}
@@ -109,7 +109,7 @@ return(
 
 ```
 
-<figure><img src="../.gitbook/assets/URL3.PNG" alt=""><figcaption><p>variable URL Path</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/URL3.PNG" alt=""><figcaption><p>variable URL Path</p></figcaption></figure>
 {% endtab %}
 {% endtabs %}
 
@@ -196,7 +196,7 @@ function Secondo(){
 {% endtab %}
 {% endtabs %}
 
-<figure><img src="../.gitbook/assets/OutletRouter.png" alt="" width="473"><figcaption><p>Outlet nested component and not</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/OutletRouter.png" alt="" width="473"><figcaption><p>Outlet nested component and not</p></figcaption></figure>
 
 <details>
 
@@ -377,7 +377,7 @@ const [costo, setCosto] = useState(0)
 
 ```
 
-<figure><img src="../.gitbook/assets/eventInput.png" alt=""><figcaption><p>Changing input value gets rendered with useState()</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/eventInput.png" alt=""><figcaption><p>Changing input value gets rendered with useState()</p></figcaption></figure>
 
 <details>
 
@@ -399,7 +399,7 @@ When **updating** an **integer useState()** outside the input we need to convert
 
 </details>
 
-<figure><img src="../.gitbook/assets/inputNumber3.png" alt=""><figcaption><p>Input number with Onchange</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/inputNumber3.png" alt=""><figcaption><p>Input number with Onchange</p></figcaption></figure>
 
 **Text** and **radio/checkbox** inputs use **defaultValue/checked** for the default value prop, if the checkbox doesn't have a value prop on submit its value will be  "on".
 
@@ -420,7 +420,7 @@ const [lenguage, setLenguage] = useState( "Hindi" );
 
 ```
 
-<figure><img src="../.gitbook/assets/Defaulter.png" alt=""><figcaption><p>Defaultchecker() value set</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/Defaulter.png" alt=""><figcaption><p>Defaultchecker() value set</p></figcaption></figure>
 
 We use the **useId()** **React hook** to avoid conflicts when re-rendering multiple **labels/inputs**.
 
@@ -450,7 +450,7 @@ const testo= useId()
 
 ```
 
-<figure><img src="../.gitbook/assets/defaultInput.png" alt=""><figcaption><p>defaultValue text and checked checkbox</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/defaultInput.png" alt=""><figcaption><p>defaultValue text and checked checkbox</p></figcaption></figure>
 
 We use the **max/min** input prop to set its _submit conditions_, the event handler **onInvalid()** is triggered when the submit fails.
 
@@ -471,7 +471,7 @@ We use the **max/min** input prop to set its _submit conditions_, the event hand
 
 ```
 
-<figure><img src="../.gitbook/assets/minprop.png" alt=""><figcaption><p>The error messae on failed submit is included</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/minprop.png" alt=""><figcaption><p>The error messae on failed submit is included</p></figcaption></figure>
 
 ### React Form onSubmit() event handler and FormData()
 
@@ -509,7 +509,7 @@ function manda(e){
 }
 </code></pre>
 
-<figure><img src="../.gitbook/assets/formData.png" alt=""><figcaption><p>form onSubmit() and formData object</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/formData.png" alt=""><figcaption><p>form onSubmit() and formData object</p></figcaption></figure>
 
 We use **FormData methods** to edit the form object.
 
@@ -568,7 +568,7 @@ On **type="file" \<input>** we use the **accept** property which sets the **MIME
 
 ```
 
-<figure><img src="../.gitbook/assets/submitImage.png" alt="" width="513"><figcaption><p>form-control file input and image submit</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/submitImage.png" alt="" width="513"><figcaption><p>form-control file input and image submit</p></figcaption></figure>
 
 Its returned formdata will be an object of image properties, the **lastModified** (the UNIX epoc number) in milliseconds, its **size** in bytes, the file's **name**, and its MIME **type**.
 
@@ -640,7 +640,7 @@ function immagine(e){
 
 </details>
 
-<figure><img src="../.gitbook/assets/imagefileObject.png" alt="" width="197"><figcaption><p>Image formdata properties</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/imagefileObject.png" alt="" width="197"><figcaption><p>Image formdata properties</p></figcaption></figure>
 
 The **multiple input attribute** allows submitting of multiple values in a single input.
 
@@ -713,7 +713,7 @@ We will **render** the **javascript expressions** after the formdata is submitte
 
 </details>
 
-<figure><img src="../.gitbook/assets/multipleInputReact.png" alt="" width="375"><figcaption><p>multiple input submit and render</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/multipleInputReact.png" alt="" width="375"><figcaption><p>multiple input submit and render</p></figcaption></figure>
 
 <details>
 
@@ -776,4 +776,4 @@ function manda(e){
 
 </details>
 
-<figure><img src="../.gitbook/assets/MultipleinputFormdata.png" alt="" width="318"><figcaption><p>multiple input formdata object</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/MultipleinputFormdata.png" alt="" width="318"><figcaption><p>multiple input formdata object</p></figcaption></figure>
