@@ -190,6 +190,7 @@ function test(){
   via("../primo2");
 }
 
+//Remember that <Outlet/> goes on the parent Route to make the children visible
 <Routes>  
   <Route path="/primo" element={ <Primo/> } >
     <Route path="primo1" element={ <Secondo/> } />
