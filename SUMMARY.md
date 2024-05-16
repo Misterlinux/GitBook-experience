@@ -52,7 +52,7 @@
 
 ## NODEJS
 
-* [NodeJs, Server request/responses with Postman, CORS, and JWT authentification](nodejs/node-1.md)
+* [NodeJs2: Server request/responses with Postman, CORS, and JWT authentification](nodejs/node-1.md)
 * [NODE 2](nodejs/node-2.md)
 * [NODE 3](nodejs/node-3.md)
 

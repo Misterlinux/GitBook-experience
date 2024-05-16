@@ -1,4 +1,4 @@
-# NodeJs, Server request/responses with Postman, CORS, and JWT authentification
+# NodeJs2: Server request/responses with Postman, CORS, and JWT authentification
 
 * [Modify a local JSON file with Postman POST data](node-1.md#modify-a-json-file-with-postman-post-data)
 * [CORS and JWT autentification](node-1.md#cors-and-jwt-autentification)
@@ -131,10 +131,11 @@ app.get("/monos", function(req, res){
 
 ### Modify a JSON file with Postman POST data
 
-To _body-parse request body_ elements we **use()** the **express.json()** built-in _middleware_.                      We install file-system **(fs)** which will allow us to **update server files**.
+To _**body-parse** request body_ elements we **use()** the **express.json()** built-in _middleware_.                          We install file-system **(fs)** which will allow us to **update server files**.
 
 ```jsx
 //Unlike normal middleware, it doesn't need to be included in routes
+//This allows request.body to be available in route paths.
 app.use(express.json())
 
 npm i file-system
