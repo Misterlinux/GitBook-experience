@@ -171,11 +171,36 @@ On the ReactJs frontEnd we use the server Render deployed Url for the fetch requ
 let segnale = await fetch("https://serving.onrender.com/vedo", manda)
 ```
 
-1
+### Private data on .env files
 
-1
+The **.env** file contains _environmental variables_, used to store configuration data, they are specific to the environment the app is deployed from.
 
-1
+The npm install **dotenv** module allows us to access the .env data.
+
+```jsx
+//env
+DATABASE_PASSWORD= "__password__"
+
+//server.js
+require('dotenv').config();
+console.log( process.env.DATABASE_PASSWORD )
+```
+
+We include the .env file in the **.gitignore**, to avoid committing the data in Github.
+
+```jsx
+//.gitignore
+/node_modules
+.env
+```
+
+We use an environmental variable to allow Render to set up its own **Port**.
+
+```jsx
+//In local it uses the hardcoded value.
+const PORT = process.env.PORT || 3030;
+app.listen(PORT, () => console.log("Server is up and running"))
+```
 
 1
 
