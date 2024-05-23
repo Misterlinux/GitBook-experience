@@ -129,6 +129,50 @@ let json = response.json()
 json.length ? console.log(json) : console.log("Emptyness status")
 ```
 
+### Deploying a full-stack app on the web
+
+We deploy the NodeJs app on [Render](https://render.com/), we set up a <mark style="background-color:blue;">web service</mark> instance using the <mark style="background-color:blue;">build command</mark> and the <mark style="background-color:blue;">start command</mark>.
+
+```jsx
+//Usually the build command is contained in the package.json scripts
+//Or we can use it directly 
+npm install
+
+//Use the pure node commands for the start command, avoid imported modules like
+"scripts": {
+  "start": "nodemon server.js",  //use node server.js instead
+},
+```
+
+<figure><img src="../.gitbook/assets/Render.jpg" alt="" width="361"><figcaption><p>How we import a repository from github</p></figcaption></figure>
+
+We create a **postSQL** database in Render, we connect it to **DBeaver** using the Render properties, any **SQL script** will be stored in the database. We deconstruct the external URL to set the host, check [here](https://community.render.com/t/i-cant-establish-a-connection-to-postgresql-with-dbeaver/15413/2).
+
+<figure><img src="../.gitbook/assets/RenderDatabase.png" alt="" width="563"><figcaption><p>From Render to DBeaver</p></figcaption></figure>
+
+We connect the _server.js_ to the _database_ using the <mark style="background-color:blue;">pg</mark> module, both are stored in Render so we use the **internal URL**.
+
+```jsx
+//A link instead of a DBeaver object
+const { Pool } = require("pg");
+
+const connectionString = 
+  'postgres://dbeaver_user:__passwword__@dpg-cp6s87q0si5c73ajhufg-a/dbeaver';
+
+const pool = new Pool({
+  connectionString,
+});
+```
+
+On the ReactJs frontEnd we use the server Render deployed Url for the fetch requests.
+
+```jsx
+//The frontEnd can be stored in any other websites
+let segnale = await fetch("https://serving.onrender.com/vedo", manda)
+```
+
+1
+
 1
 
 1
