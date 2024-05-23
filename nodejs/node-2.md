@@ -148,6 +148,11 @@ npm install
 
 We create a **postSQL** database in Render, we connect it to **DBeaver** using the Render properties, any **SQL script** will be stored in the database. We deconstruct the external URL to set the host, check [here](https://community.render.com/t/i-cant-establish-a-connection-to-postgresql-with-dbeaver/15413/2).
 
+```jsx
+//We extract the DBeaver hostname from the external URL
+'postgresql://username:password@hostname:port/database_name';
+```
+
 <figure><img src="../.gitbook/assets/RenderDatabase.png" alt="" width="563"><figcaption><p>From Render to DBeaver</p></figcaption></figure>
 
 We connect the _server.js_ to the _database_ using the <mark style="background-color:blue;">pg</mark> module, both are stored in Render so we use the **internal URL**.
