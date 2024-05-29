@@ -1,7 +1,7 @@
-# NodeJs2: Server request/responses with Postman, CORS, and JWT authentification
+# NodeJs1: Server request/responses with Postman, CORS, and JWT authentification
 
-* [Modify a local JSON file with Postman POST data](node-1.md#modify-a-json-file-with-postman-post-data)
-* [CORS and JWT autentification](node-1.md#cors-and-jwt-autentification)
+* [Modify a local JSON file with Postman POST data](./#modify-a-json-file-with-postman-post-data)
+* [CORS and JWT autentification](./#cors-and-jwt-autentification)
 
 **NodeJs** is a server-side javascript environment for app development.
 
@@ -54,7 +54,7 @@ app.get('/', (req, res) => {
 });
 ```
 
-<figure><img src="../.gitbook/assets/postmanQuery1.png" alt="" width="314"><figcaption><p>Postaman Get method for a URL with query</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/postmanQuery1.png" alt="" width="314"><figcaption><p>Postaman Get method for a URL with query</p></figcaption></figure>
 
 <details>
 
@@ -93,41 +93,7 @@ app.get("/add1/:primo/:second", function (req, res) {
 });
 ```
 
-<details>
-
-<summary>Middleware use() and redirect() route</summary>
-
-**Middleware** are **functions** called during route calls, any of their request data is included in their route (like an authentification use check at each route).
-
-```jsx
-//next() is used to advance in the middleware chain
-//depending of the Date() object it will res.send() or redirect() the route
-
-function requestTime(req, res, next){
-  req.requestTime = Date.now() 
-
-  const caso = (req.requestTime % 2 == 0) ? next() : res.redirect("/monos")
-}
-```
-
-We implement it with **use()** or call it in the middle of the route.
-
-```jsx
-//If we use() it, it will be included in each route
-//or we can call it in specific routes
-
-app.use(requestTime)
-
-app.get("/tempo", requestTime, function (req, res) {
-  res.send("The time is " + req.requestTime )
-})
-
-app.get("/monos", function(req, res){
-  res.send("possiamo vederci altri?")
-})
-```
-
-</details>
+Check middleware in express section
 
 ### Modify a JSON file with Postman POST data
 
@@ -135,6 +101,7 @@ To _**body-parse** request body_ elements we **use()** the **express.json()** bu
 
 ```jsx
 //Unlike normal middleware, it doesn't need to be included in routes
+//
 //This allows request.body to be available in route paths.
 app.use(express.json())
 
@@ -159,7 +126,7 @@ app.post("/quotes", function(req, res){
 })
 ```
 
-<figure><img src="../.gitbook/assets/Postmanpostsync.png" alt="" width="317"><figcaption><p>Postman POST and updated JSON (with changed ID)</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/Postmanpostsync.png" alt="" width="317"><figcaption><p>Postman POST and updated JSON (with changed ID)</p></figcaption></figure>
 
 Both **Post** and **Put** Postman **methods** can _update and create_ elements, **Put** is _**idempotent**_, its results remain the same not matter how many times it's repeated.
 
@@ -221,7 +188,7 @@ HTTP is a _stateless protocol_, it won't record any request data, so to **authen
 
 **Sessions** need storage space and extra security when sent to the server, they make the app harder to scale, and it's hard to implement on apps that contain many back-end micro-services or _don't use the browser for their cookies_.
 
-<figure><img src="../.gitbook/assets/sessiontoken.png" alt=""><figcaption><p>Sessions cookies and session ID </p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/sessiontoken.png" alt=""><figcaption><p>Sessions cookies and session ID </p></figcaption></figure>
 
 The **JSONWebToken** (JWT) _registers_ the user directly **to the app** without any sessions.                       **JSON** stands for _Javascript Object Notation_, a text-based data format transferable between all languages and standard syntax for APIs.
 
@@ -229,7 +196,7 @@ The **JWT** is made of **clains** (string sections) separated by a comma, clains
 
 The **first** _header_ clain contains the **hashing algorithm** and the token **type.**                                                   The **second** contains the JSON object sent to the user, visible to anyone.                                                      The **third** is a **secret hash**, kept by the **server** and it resets if the original request changes.
 
-<figure><img src="../.gitbook/assets/JWT.png" alt=""><figcaption><p>JWT token</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/JWT.png" alt=""><figcaption><p>JWT token</p></figcaption></figure>
 
 ### Implementing JWT registration to the server
 
@@ -324,7 +291,7 @@ function generateJWT(user_id) {
 module.exports = generateJWT;    //the generate function is then exported
 ```
 
-<figure><img src="../.gitbook/assets/JWTserver.png" alt=""><figcaption><p>Created Post user in teh JSON database and JWT user response.send()</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/JWTserver.png" alt=""><figcaption><p>Created Post user in teh JSON database and JWT user response.send()</p></figcaption></figure>
 
 The **env** and **database/db.json** files are:
 
@@ -432,4 +399,4 @@ function authenticate (req, res, next) {
 module.exports = authenticate; 
 ```
 
-<figure><img src="../.gitbook/assets/authMiddleware.png" alt="" width="563"><figcaption><p>Sign-in JWT and JWTBearer on Postman with code 200 res.send()</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/authMiddleware.png" alt="" width="563"><figcaption><p>Sign-in JWT and JWTBearer on Postman with code 200 res.send()</p></figcaption></figure>
