@@ -93,7 +93,7 @@ app.get("/add1/:primo/:second", function (req, res) {
 });
 ```
 
-Check middleware in express section
+For more information about **Middlewares** check [here](express.js-routing-and-middleware.md).
 
 ### Modify a JSON file with Postman POST data
 
