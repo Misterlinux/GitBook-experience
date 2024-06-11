@@ -54,6 +54,7 @@
 
 * [NodeJs1: Server request/responses with Postman, CORS, and JWT authentification](nodejs/node-1/README.md)
   * [Express.js Routing and Middleware](nodejs/node-1/express.js-routing-and-middleware.md)
+  * [CORS implementation](nodejs/node-1/cors-implementation.md)
 * [NODE 2](nodejs/node-2.md)
 * [NODE 3](nodejs/node-3.md)
 
