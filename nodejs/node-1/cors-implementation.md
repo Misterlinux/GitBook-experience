@@ -277,6 +277,74 @@ const corsOptions = {
 };
 ```
 
+### Cors options and preflight requests
+
+The **maxAge** and **methods** properties are only triggered during the browser's **preflight OPTIONS request**.
+
+A **preflight** request returns the _headers_ and _methods_ allowed by the server, it triggers based on **fetch options** properties that may cause side-effects to the server, like PUT/DELETE methods and non-safelisted **allowHeaders** values.
+
+The **browser** initiates the preflight request and checks the response cors headers to allow the fetch request.
+
+```css
+//The preflight request includes additional headers compared to the fetch request:
+Access-Control-Request-Method: It contains the HTTP methodthat will be used 
+in the actual fetch request.
+Access-Control-Request-Headers: It contains a comma-separated list of the 
+non-simple headers that will be used in the actual fetch request.
+ 
+//The server will respond with the CORS headers: 
+Access-Control-Allow-Method/Request
+```
+
+<details>
+
+<summary>The preflight Fetch request and server response</summary>
+
+A preflight is a type of OPTIONS request, often used to query the capabilities of the server.
+
+```jsx
+//A POST wouldn't trigger the preflight
+//A single value can trigger the preflight 
+async function nonval(){
+
+  let oggetto= {
+    method: "PUT",
+    body: JSON.stringify({"primo": "parte", "predappio": "altrime" }),
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+      "token": "custom-data"
+    },
+    credentials: `include`
+  }
+
+  let resp = await fetch("http://localhost:3030/mandato", oggetto)    
+  let json = await resp.text()
+}
+```
+
+The cors properties sent in the response headers.
+
+```jsx
+const cors = require("cors");
+
+const corsOptions = {
+  origin: "http://localhost:3000", 
+  methods: ["PUT",`DELETE`],
+  allowedHeaders: ["token", "Content-Type"],
+  credentials: true,
+  maxAge: 20,
+};
+
+app.use(cors(corsOptions)); 
+```
+
+</details>
+
+<figure><img src="../../.gitbook/assets/PreflightRequest.png" alt="" width="490"><figcaption><p>The preflight OPTIONS request</p></figcaption></figure>
+
+1
+
 1
 
 1
