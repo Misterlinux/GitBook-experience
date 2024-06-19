@@ -1,8 +1,6 @@
 # CORS implementation
 
-* 1
-* 1
-* 1
+* [Cors options and preflight request](cors-implementation.md#cors-options-and-preflight-requests)
 
 **CORS** (Cross-Origin-Resource-Sharing) is security feature that specifies the **origins** from which client frontend apps can make cross-origin requests, implemented by the **server** and enforced by the **browser**. It is necessary to avoid **CSRF** (Cross-Site-Request-Forgery).
 
@@ -36,7 +34,7 @@ app.get("/aggiungi", (req, res)=> {
 
 <details>
 
-<summary>Browser request and Server response Headers</summary>
+<summary>Browser request cross-fetch headers </summary>
 
 The **Sec-Fetch-Mode** and **Sec-Fetch-Site** headers are part of the browser's Fetch Metadata Request Headers.
 
@@ -53,7 +51,7 @@ Referer: http://localhost:3000/
 Origin: http://localhost:3000
 Connection: keep-alive
 Sec-Fetch-Mode: cors
-Sec-Fetch-Site: same-site
+Sec-Fetch-Site: same-site    //A domain/subdomain request is cross-origin
 If-None-Match: W/"28-jqnw96poGUiTc4i1XKkVczvt1Z8"
 ```
 
@@ -372,9 +370,9 @@ const corsOptions = {
 
 Different responses return different **HTTP codes**, a preflight OPTIONS response has code **204**, success but no return content, a server response has code **200**, success and return content, and cached responses have code **304**, no modified resource.
 
-The **ETag** (Entity Tag) is a _response header_ that identifies a specific version of a resource. It prevents simultaneous updates of the same resource and ensures that clients don't retrieve outdated content. The ETag is included in all responses, regardless of whether the response is cacheable or not.
+The **ETag** (Entity Tag) is a _response header_ that identifies a specific _version_ of a resource. It prevents simultaneous updates of the same resource and ensures that clients don't retrieve outdated content. The ETag is **included** in all responses, regardless of whether the response is cacheable or not.
 
-The If-None-Match request header is used in conjunction with the ETag. It contains the cached ETag value from a previous response and is sent with subsequent requests to check if the resource has been updated. If they match then the cached response value is used.
+The **If-None-Match** request header is used in conjunction with the ETag. It contains the cached ETag value from a previous response and is sent with subsequent requests to check if the resource has been updated. If they match then the cached response value is used.
 
 The If-None-Match header is limited to GET and HEAD requests, which retrieve resources, and is not included in requests that edit or update data, such as POST, PUT, and DELETE, as they do not return a response resource.
 
