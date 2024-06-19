@@ -343,6 +343,43 @@ app.use(cors(corsOptions));
 
 <figure><img src="../../.gitbook/assets/PreflightRequest.png" alt="" width="490"><figcaption><p>The preflight OPTIONS request</p></figcaption></figure>
 
+The <mark style="background-color:blue;">methods</mark> property specifies the array of methods allowed to be sent in the request.
+
+```jsx
+//It will block only non-simple methods
+//To limit GET, POST and HEAD methods use headers 
+const cors = require("cors");
+
+const corsOptions = {
+  origin: "http://localhost:3000", 
+  methods: ["PUT",`DELETE`]
+};
+
+app.use(cors(corsOptions));
+```
+
+The <mark style="background-color:blue;">maxAge</mark> property sets the validity period cache of a preflight OPTIONS response cache, in seconds, any successive request from the same origin/method will skip its preflight request.
+
+The **browser** has a built-in cache period for OPTIONS responses and can store multiple OPTIONS cache, no cache will be shared even if from the same origin.
+
+```jsx
+//The Access-Control-Max-Age Server response header ONLY in the preflight response
+const corsOptions = {
+  origin: "http://localhost:3000", 
+  maxAge: 20,
+};
+```
+
+Different responses return different **HTTP codes**, a preflight OPTIONS response has code **204**, success but no return content, a server response has code **200**, success and return content, and cached responses have code **304**, no modified resource.
+
+The **ETag** (Entity Tag) is a _response header_ that identifies a specific version of a resource. It prevents simultaneous updates of the same resource and ensures that clients don't retrieve outdated content. The ETag is included in all responses, regardless of whether the response is cacheable or not.
+
+The If-None-Match request header is used in conjunction with the ETag. It contains the cached ETag value from a previous response and is sent with subsequent requests to check if the resource has been updated. If they match then the cached response value is used.
+
+The If-None-Match header is limited to GET and HEAD requests, which retrieve resources, and is not included in requests that edit or update data, such as POST, PUT, and DELETE, as they do not return a response resource.
+
+<figure><img src="../../.gitbook/assets/ETag1.png" alt="" width="504"><figcaption><p>The if-none-match and ETag headers in an GET request</p></figcaption></figure>
+
 1
 
 1
