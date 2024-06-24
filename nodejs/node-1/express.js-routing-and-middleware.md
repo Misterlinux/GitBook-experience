@@ -1,9 +1,6 @@
 # Express.js Routing and Middleware
 
-* 1
-* 1
-* 1
-* 1
+* [Hashing passwords with bycryptjs](express.js-routing-and-middleware.md#password-hashing-with-bycryptjs)
 
 A middleware is an **express function** called during route requests, it has access to the _request_ and _response_ **objects**, its **next()** function passes control to the next stack/route handler.
 
@@ -178,17 +175,74 @@ app.route('/users')
   });
 ```
 
-1
+### Password hashing with bycryptjs
 
-1
+The **bcrypt** module is a _wrapper library_ to interface with the C-based bcrypt **password algorithm**, it provides us a javascript API to hash passwords, but it's not longer mantained.
 
-1
+The **npm i bcryptjs** module is a _pure JavaScript_ implementation of the bcrypt algorithm, it runs on Nodejs without relying on external code.
 
-1
+Its **getSalt(**rounds**)** method generates a random string used for the **hash()** of the password.
 
-1
+```jsx
+//Being a drop-in replacement it inherits all the previous methods
+//A higher rounds value for a more complex but slower hash.
+const bcryptjs = require('bcryptjs');
 
-1
+const sale = await bcryptjs.genSalt(10)
+const cryptopass = await bcryptjs.hash(password, sale)
+```
+
+Bcryptjs provides **synchronous** versions of its _promise-based methods,_ which block the execution of the program until they complete and return a value.
+
+```jsx
+console.log( bcrypt.genSalt(10))          //Promise { <pending> }
+console.log( bcryptjs.genSaltSync(10))    //$2a$...
+console.log( await bcryptjs.genSalt(10))  //$2a$...
+```
+
+The **compare()** method compares a _plaintext_ and a _hashed password,_ using its salt, to return a boolean value.
+
+```jsx
+//Ther is also compareSync
+const newtrue = await bcryptjs.compare( password, hashpassword) //true/false
+
+//The salt value is visible in the hashed password
+$2b$10$q.KYbb.xmNQ0KEikk5EfWenciYtBMJBsfhmPqnf7HTWeTcHnDAI5q
+
+$2b$ is the bcrypt algorithm identifier.
+<cost> is the round count, represented as a base-10 integer.
+<salt> is the salt value, represented as a base-64 encoded string.
+<hash> is the hashed password, represented as a base-64 encoded string.
+```
+
+The **getRounds()** method extracts the number of rounds used in the salt process.
+
+```jsx
+//the same async and sync methods as for the compare.
+bcryptjs.getRounds("$2b$....")
+```
+
+We manage its error handling with a **try/catch** block:
+
+<pre class="language-jsx"><code class="lang-jsx">//An 401 error for compare() returning false
+//An 500 error for errors in the compare() methods (like invalid arg, etc)
+<strong>router.post("/sign-in", async (req, res) => {
+</strong>  try{
+    const isValidPassword = await bcrypt.compare( password, hashpassword );
+    
+    if (!isValidPassword) {
+      return res.status(401).json({
+        error: "Invalid Credential", 
+        isAuthenticated: false}
+      );
+    }
+    
+  }catch (error) {
+    console.error(error.message + " massa");
+    res.status(500).send({error: error.message});
+  }
+})
+</code></pre>
 
 [^1]: We can also:
 
