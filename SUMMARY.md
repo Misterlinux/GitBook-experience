@@ -56,7 +56,7 @@
   * [Express.js Routing and Middleware](nodejs/node-1/express.js-routing-and-middleware.md)
   * [CORS implementation](nodejs/node-1/cors-implementation.md)
   * [HTTP protocol, create-react-app configuration, and Cookies setting](nodejs/node-1/http-protocol-create-react-app-configuration-and-cookies-setting.md)
-  * [JWT](nodejs/node-1/jwt.md)
+  * [JWT signing and verification](nodejs/node-1/jwt-signing-and-verification.md)
 * [NODE 2](nodejs/node-2.md)
 * [NODE 3](nodejs/node-3.md)
 
