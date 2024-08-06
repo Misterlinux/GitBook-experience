@@ -54,6 +54,29 @@ console.log(UNO + 3)    //23
 {% endtab %}
 {% endtabs %}
 
+<details>
+
+<summary>Code Blocks and function/block scope in variables</summary>
+
+JavaScript **blocks** are code sections enclosed in curly brackets **{}**, and functions are a type of block that can be invoked.
+
+* The let variable is **block-scoped**, it's only accessible within the block it's declared in.&#x20;
+* The var variable is **function-scoped**, if declared in a block that's not a function, it becomes part of the global object, making it accessible anywhere.
+
+<pre class="language-jsx"><code class="lang-jsx"><strong>//Variables accessible outside blocks
+</strong>if (true) {
+  var x = 10;
+}
+console.log(x); //10
+
+if (true) {
+  let y = 20;
+}
+console.log(y); //ReferenceError: y is not defined
+</code></pre>
+
+</details>
+
 **Functions** are blocks of code used to _perform tasks when invoked:_
 
 {% tabs %}
@@ -106,19 +129,17 @@ In Javascript, all **functions are object methods**, be it from constructor or g
 
 ```jsx
 //we can use multiple values for the function operations
-
 function lot(num1, num2){
-    var oltre = num1+num2;
-    return console.log(oltre);
+  var oltre = num1+num2;
+  return console.log(oltre);
 }
 
-lot(5, 8);
-lot(1, 4);
-lot(4, 8);
-//results 13, 5, 12
+lot(5, 8);  //13
+lot(1, 4);  //5
+lot(4, 8);  //12
 
 //parameters will be assigned based on their position, so num1=5 and num2=8
-//parameters are LOCAL to the function, defined inside of it, including extra local variables-
+//parameters are LOCAL to the function, defined inside of it.
 ```
 
 **Arguments** are the actual **values** passed when _invoking_ the function:
@@ -140,7 +161,7 @@ function translate2d(dx, dy) {
   }
 }
 
-const move2x = translate2d(2, 0);    //move2x is the returned function 
+const move2x = translate2d(2, 0);    //move2x() is the returned function 
 const result = move2x(4, 8);         //result is the returned operation result
 console.log( result )                //[6, 8]
 ```
@@ -258,7 +279,7 @@ We can **nest** more **predicate functions.**
 
 We create **predicates** about string length, we include a **different parameter (y)** that won't be in the parameter function but in the _parameter of the variable that invokes the parameter functions_.
 
-```
+```jsx
 function islonger(x){
     return function(y){
         return y.length > x.length
@@ -320,7 +341,9 @@ con("lil")
 
 </details>
 
-We can also **Interpolate** variables into HTML elements, also using _**Ternary Operators**_:
+### --------------Intermission-----------------
+
+We **Interpolate** variables into HTML elements using _**Ternary Operators**_:
 
 We use **template strings** (template iterals) to <mark style="background-color:blue;">**interpolate**</mark> variables and expressions into a string, including _**Ternary Operators**_
 
@@ -372,19 +395,18 @@ Math.pow(3,2) == 9
 20 %= 3 (will be 2)
 ```
 
-We can also perform **Math.()** operations, Math.() is a **Global Built-In** Object for Mathematics, like **Math.round()**:
+We can also perform **Math.\_\_\_()** operations, Math is a **Global Built-In** Object for Mathematics:
 
 ```jsx
+//round() will round up the number based on the decimal
+//ceil() and floor() round up and down without checking the decimal
 Math.round(12.3) == 12 
 Math.floor(12.3) == 12 
 Math.ceil(12.3) == 13 
 
-//round() will round up the number based on the decimal
-//ceil() and floor() round up and down without checking the decimal
-
-//ornumbers like P greek
+//It can returns the P greek
 function degToRad(degrees) {
-    return degrees * (Math.PI / 180);
+  return degrees * (Math.PI / 180);
 };
 
 function radToDeg(rad) {
@@ -395,11 +417,10 @@ function radToDeg(rad) {
 //1000000 = 1_000_000
 ```
 
-And in the case of **NaN (not a number)** we also can have operations:
+The **NaN** (not a number) operations are as such:
 
 ```jsx
 //we have the operator isNaN() in case, and NaN isn't === o !== to itself
-
 NaN === NaN;        // false
 Number.NaN === NaN; // false
 isNaN(NaN);         // true
@@ -414,7 +435,7 @@ valueIsNaN(Number.NaN); // true
 
 **Arrays** are objects variables that can hold more than one value and one _typeof()_ data:
 
-```
+```jsx
 var list = [1, 2, 3]
 
 //elements can be edited by their index(starting from 0)
@@ -423,7 +444,6 @@ list.length == 2
 
 //strings are considered arrays of letters and so
 "welcomed"[3] == "c" / "welcomed".length == 8
-
 ```
 
 We can check its built-in _methods_ and _properties_ in **its \[\[prototype]] property,** like **concat()** or **.length:**
@@ -438,7 +458,7 @@ We can check its built-in _methods_ and _properties_ in **its \[\[prototype]] pr
 
 We can use methods on **strings,** and we can **chain** them:
 
-```
+```jsx
 //trim() removes start and end empty spaces
 "  its m i n us ".toUpperCase().trim()    //"ITS M I N US"
 ```
@@ -510,12 +530,12 @@ typeof longi == arrays
 
 **Pop()** and **Shift()** can both store values and return **methods:**
 
-```
+```jsx
 //we are gonna change its 6,7 with 1,10, while also removing them
 let deck= [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 deck.splice(deck.length/2, 0, deck.pop(), deck.shift());
-deck ==   [2, 3, 4, 5, 6, 10, 1, 7, 8, 9] 
+deck == [2, 3, 4, 5, 6, 10, 1, 7, 8, 9] 
 
 //we don't cut any elemennt with splice(),we use return .pop() and shift()
 ```
@@ -536,36 +556,33 @@ numeronia.sort( (x,y)=> y - x)        //[ 8, 6, 4, 4, 2, 1 ]
 Array.from("welcomed")    //['w', 'e', 'l','c','o','m','e','d']
 Array.from("welcomed".toUpperCase() ).map( (x)=> "this is the letter " + x )    
 //['this the letter W',...]
-
 </code></pre>
 
 Any function _passed as an argument,_ inside a method, it's a **callback function**:
 
-```
+```jsx
 //for example the anonymous functions inside .map()
 
 const numbers = [1, 2, 3];
 const numbersDoubled = numbers.map(function (number) {
-    return number * 2;
+  return number * 2;
 });
-
 ```
 
 **Booleans** are a type of data and we obtain it after **logical operators**:
 
 ```jsx
-true && true == true //logical AND returns true if BOTH
+true && true == true  //logical AND returns true if BOTH
 true || !true == true //logical OR, returns true if one of is true
-2 !== 3 //is 2 NOT equal to 3? True
-2 == "2" // True, we check equality on value
-2 === "2" //False, it check strict equality on both value and typeof
+2 !== 3    //is 2 NOT equal to 3? True
+2 == "2"   // True, we check equality on value
+2 === "2"  //False, it check strict equality on both value and typeof
 "a" == "A" //False, equality checks caps
  
- == being the equality operator
- // && will be executed first
+== being the equality operator
+// && will be executed first
  
 //and in functions
- 
 let studentCount = 12;
 let mentorCount = 10;
 var moreStudentsThanMentors = studentCount > mentorCount;
@@ -573,14 +590,13 @@ console.log("The awnser is", moreStudentsThanMentors);     //The awnser is true
  
 //we can set boolean values without =="True"
 if (htmlLevel > 5){
-    cssAndHtmlAbove5 = true;
+  cssAndHtmlAbove5 = true;
 }
-
 ```
 
 Booleans, Strings, and Numbers are the most known **primitives,** contrary to _objects_, which are aggregations of properties, **primitives are just values, they have no property:**
 
-```
+```jsx
 //new String is a constructor, that's why its result is an object
 
 typeof "abc";                 //"string"
@@ -592,7 +608,7 @@ typeof new String("abc");     //"object"
 
 We can use the built-in helpers **Boolean()**, **String() Number()** to check/convert to respective data types:
 
-```
+```jsx
 //Boolean will differentiate between truly/falsy values
 
 Boolean("0")        //True, a 1-digit string is truly
@@ -617,14 +633,15 @@ String(undefined)   //"undefined" string returned
 
 //String() on arrays will return a string of elements .join() by ,
 
-String(["siamo", null, undefined, "audd"])    //siamo,,,audd , the null and undefine will be empty
-String({name: "uno"})                         //[object, Object] will be returned
-
+String(["siamo", null, undefined, "audd"])    
+//siamo,,,audd , the null and undefine will be empty
+String({name: "uno"})                         
+//[object, Object] will be returned
 ```
 
 We can also have **data coercion** where values are converter automatically **:**
 
-```
+```jsx
 //For example during the if statement
 
 function errorMessage(input) {
@@ -638,10 +655,10 @@ function errorMessage(input) {
 
 To link our **external .js file** to the HTML page we use:
 
-```
+```jsx
 <body>
-    <script src="./script.js">  
-    </script>
+  <script src="./script.js">  
+  </script>
 </body>
 
 //we can trigger functions on events
@@ -653,16 +670,15 @@ To link our **external .js file** to the HTML page we use:
 function add(){
   alert("welcomed")
 }
-
 ```
 
 We use **createElement(), createTextNode()** and **appendChild()** to potray _JS content into HTML_ :
 
-```
+```jsx
 //we want to add additional <li> content on button click
 <ul id="myList">
-    <li>Coffee</li>
-    <li>Tea</li>
+  <li>Coffee</li>
+  <li>Tea</li>
 </ul>
 
 <button onclick="myFunction()">Append</button>
@@ -683,7 +699,7 @@ function myFunction() {
 
 How to use **variables** and **arrays** in the DOM:
 
-```
+```jsx
 <button onclick="myFunction()">Append</button>
 
 var popp = "new element n."
@@ -708,15 +724,14 @@ JS on DOM
 
 We use Math.floor() to get **random 2-integers numbers**:
 
-```
+```jsx
 //by multiplying the random (0 to 0.9) by 100 we get 2-digits numbers
 var oul = Math.floor( Math.random()*100 ) ;
-
 ```
 
 We use an external **array** to _store the random numbers_, while also resetting the **innerHTML**:
 
-```
+```jsx
 //we use .length as an index to always update the array with the latest element
 var filone = []
 
@@ -733,7 +748,7 @@ propt.innerHTML = ""
 
 We also wanted the **numbers** and the **sum** to happen separately:
 
-```
+```jsx
 //we sum the last random generated numbers, in case none we get NaN
 function summin(){
   var erm = filone[filone.length-1] + filona[filona.length-1];
@@ -741,13 +756,11 @@ function summin(){
   const terzo = document.createTextNode(erm);
   document.getElementById("terzi").appendChild(terzo);
 }
-
 ```
 
 To show the arrays with the **stored values** we:
 
-```
+```jsx
 var riga = document.createTextNode("[ " + filone + " ]");
 document.getElementById("colla1").appendChild(riga);
-
 ```
