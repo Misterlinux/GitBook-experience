@@ -1,8 +1,8 @@
 # JS 1: variables, functions, parameters, array methods, data types, Math operations  and HTML implementation
 
-* [Math Operations, Booleans and Arrays methods](js-1.md#math-operations-booleans-and-arrays.)
-* [Js in HTML implementation](js-1.md#js-in-html-implementation)
-* [Js in Dom with array and events](js-1.md#undefined)
+* [Math Operations, Booleans and Arrays methods](./#math-operations-booleans-and-arrays.)
+* [Js in HTML implementation](./#js-in-html-implementation)
+* [Js in Dom with array and events](./#undefined)
 
 ### Var, const, and functions.
 
@@ -149,6 +149,8 @@ lot(4, 8);  //12
 
 lot(5, 8);    //assigning the num1, num2 Parameters the 5,8 Arguments
 ```
+
+check function composition
 
 We can also implement **function composition**, using the return as an argument:
 
@@ -314,7 +316,7 @@ function oppure(p1, p2) {
 
 We store the **parameters functions** in a **variable** and then add a parameter to invoke the functions.
 
-```
+```jsx
 //we make the first element the result of islonger() and the second
 //the result of && between isshorter() and not(islonger())
 let con= oppure(
@@ -448,7 +450,7 @@ list.length == 2
 
 We can check its built-in _methods_ and _properties_ in **its \[\[prototype]] property,** like **concat()** or **.length:**
 
-![](<../.gitbook/assets/ArrayObj (1).PNG>)
+![](<../../.gitbook/assets/ArrayObj (1).PNG>)
 
 **Methods** on the other hand are **actions** on objects, and they need () because they are function:
 
