@@ -4,7 +4,64 @@
 * list
 * lsit
 
+We create a **higher-order** function that **returns a new function** while taking _two series_ of arguments, during its **first** and **second invocations.**
+
+```jsx
+//The arguments values are cached in the returned function
+function translate2d(dx, dy) {
+
+  return function (x, y){
+    return [dx + x, dy + y]  
+  }
+}
+
+const move2x = translate2d(2, 0);    //move2x() is the returned function 
+const result = move2x(4, 8);         //result is the returned operation result
+console.log( result )                //[6, 8]
+```
+
+This is called **function composition**, a process that combines functions to break down complex operations into smaller, more manageable pieces.&#x20;
+
+```jsx
+//Local variables can be set and used down the line
+//Passed functions can be used with later invoked arguments
+function memoize(f) {
+  let preX, preY, preR
+  
+  return function (x, y) {
+    if (preX === x && preY === y) {
+      console.log("already casted")
+      return preR
+    }
+    preX = x
+    preY = y
+    return preR = f(x, y)
+  }
+}
+```
+
+The resulting functions can be invoked with new arguments, allowing for higher-order functions to be more modular across different invocations.
+
 1
+
+```jsx
+//The memo1 stores the f(x,y) which is [5,5]
+function addition(x,y){
+  return [x,y]
+}
+
+const memo1 = memoize(adding );      
+memo1(5, 5)  
+```
+
+Values being stored on repeated
+
+```jsx
+// Some code
+memo1(1, 5)        //[1,5]
+memo1(5, 5)        //[5,5]
+memo1(5, 5)        //[5,5] "already casted"
+```
 
 1
 
