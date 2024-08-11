@@ -40,28 +40,22 @@ function memoize(f) {
 }
 ```
 
-The resulting functions can be invoked with new arguments, allowing for higher-order functions to be more modular across different invocations.
-
-1
+The returning functions can be invoked with new arguments, allowing for higher-order functions to be more modular across different invocations.
 
 ```jsx
-//The memo1 stores the f(x,y) which is [5,5]
+//We set the argument function being used in the composition
+//and its argument on the second invokation
 function addition(x,y){
   return [x,y]
 }
 
 const memo1 = memoize(adding );      
-memo1(5, 5)  
-```
-
-Values being stored on repeated
-
-```jsx
-// Some code
-memo1(1, 5)        //[1,5]
+memo1(1, 5)  //f(x) == [5, 5]
 memo1(5, 5)        //[5,5]
 memo1(5, 5)        //[5,5] "already casted"
 ```
+
+1
 
 1
 
