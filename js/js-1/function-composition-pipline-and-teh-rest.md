@@ -49,11 +49,50 @@ function addition(x,y){
   return [x,y]
 }
 
-const memo1 = memoize(adding );      
+const memo1 = memoize( adding );      
 memo1(1, 5)  //f(x) == [5, 5]
-memo1(5, 5)        //[5,5]
-memo1(5, 5)        //[5,5] "already casted"
+memo1(5, 5)  //[5,5]
+memo1(5, 5)  //[5,5] "already casted"
 ```
+
+<details>
+
+<summary>Spread operator arguments and function composition order</summary>
+
+We can use the **spread operator** on the array returned by a function, which allows us to use the **destructured** array elements as **arguments** of the composed function.
+
+Both functions accept the same type of arguments and can perform different operations when their order is changed.
+
+```jsx
+//The g(x, y) first needs to deconstruct the returned [x, y]
+function uni(x,y){
+  return [x+3, y+1]
+}
+
+function dui(x,y){
+  return [x*2, y*3]
+}
+
+function composeTransform(f, g) {
+  return function (x, y) {
+    return g(...f(x, y))
+  }
+}
+
+let tent = composeTransform( uni, dui)    //[[2+3]*2 , [1+1]*3] 
+tent(2,1)                                 //[10,6] 
+
+let tent1 = composeTransform( dui, uni )  //[[2*2]+3, [1*3]+1 ] 
+tent1(2, 1)                               //[7, 4]
+```
+
+</details>
+
+1
+
+1
+
+1
 
 1
 
