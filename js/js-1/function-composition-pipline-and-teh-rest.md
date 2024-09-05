@@ -94,11 +94,8 @@ The **argument** passed to the composed function is used by its _first function_
 
 <pre class="language-jsx"><code class="lang-jsx">//sumNumbers for last because it doesn't return an array like the others
 let filterOddNumbers = (arr) => arr.filter( x => x % 2 !== 0 )
-
 let squareNumbers = (arr) => arr.map( x => x * x )
-
 let addOneToEach = (arr) => arr.map( x => x + 1 )
-
 let sumNumbers = (arr) => arr.reduce((acc, x) => acc + x, 0)
 
 let duo = (f, g) => (array) => g( f(array))
@@ -111,19 +108,172 @@ const pipeline = duo(
 //No even numbers, square each, + 1 each ==> sum
 let data = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-const result = pipeline(data);
+const result = pipeline(data);  //[1, 3, 5, 7, 9], Math.pow(2), x+1, arr.reduce()
 console.log(result);    // Output: 170
 </code></pre>
 
-1
+### Functions execution order on reduce() function compositions.
 
-1
+The **reduce()** method accumulates values from an array, iterating between its elements.
 
-1
+```jsx
+//initial value (v) + the rest (f) from left/right
+console.log( [1, 2, 3].reduce((v, f) => v + f ) ) //6
+```
 
-1
+We can combine multiple functions into a single [variadic ](https://www.geeksforgeeks.org/variadic-functions-in-javascript/)**function composition**, by _**destructuring**_ their arguments as an _**array**_.                                                                                                                                              The provided **argument** serves as the initial input, and each function's output becomes the input for the next one in the array.
 
-1
+```jsx
+//x is extracted from each single function, x == v 
+let compose1 = (...fns) => x => fns.reduceRight((v, f) => f(v), x);
+
+//Each x is the returned f(x) of the previous array function ((x*2)+1)*x)
+let double = x => x * 2;
+let addOne = x => x + 1;
+let square = x => x * x;
+
+//We provide the x argument on the function composition invocation.
+let doubleThenAddOneThenSquare = compose1(square, addOne, double);
+console.log(doubleThenAddOneThenSquare(5)); // Output: 121 //52 if reverse order 
+```
+
+In this function **composition**, each _destructed_ function returns a new function rather than a value, returning a **new function composition**.                                                                                                                    The **order** of execution in the returned function composition will be inverted, from right-left (as in reduceRight) to top-bottom.                                                                                                                                     Each function has access to the function **input** from the **previous** function and the **arguments** passed when the composition is invoked.
+
+{% tabs %}
+{% tab title="Reference deconstruct" %}
+We compose **reference** functions, that will trigger once they start being reduced.
+
+```jsx
+//Deconstructs functions from right to left
+let compose = (...fns) => x => fns.reduceRight((v, f) => f(v), x);
+
+//single deconstructed function made by 2 functions
+let secondo = (fn) => (...args) => {
+  console.log("secondo?")
+  return fn(...args) + 1
+}
+
+let primo = (fn) => (...args) => {
+  console.log("primo?")
+  return fn(...args) + 1   
+}
+
+let final = (massa) => massa + 5
+
+//Composed reference function being returned primo(secondo((final)))
+let ricomposed = compose(
+  primo,
+  secondo
+)(final)
+
+let resulted = ricomposed(5)
+console.log( resulted )  //primo?, secondo?, 7
+```
+{% endtab %}
+
+{% tab title="invoked deconstruct" %}
+We can compose using **invoked** functions, that will trigger before the reduce starts.
+
+```jsx
+let composejj = (...fns) => x => fns.reduceRight((v, f) => f(v), x);
+
+//They require additional (arguments) and functions returns
+let primo = (con) => {
+  con()
+  return (fn) => (...args) => {
+    console.log("primo?")
+    return fn(...args)
+  } 
+}
+
+let secondo = () => (fn) => (...args) => {
+  console.log("secondo?")
+  return fn(...args) + 1
+}
+
+let final = (massa) => 
+
+function squal(massa){
+  return massa + 5
+}
+
+//The function passed won't execute, it will be passed
+let ritornello = composejj(
+  primo(()=> console.log("Beyond the deconstruct")),
+  secondo()
+)(squal)
+
+let charla = ritornello(5)
+console.log( charla )   //"Beyond the deconstruct", "primo?", "secondo?", 7
+```
+{% endtab %}
+{% endtabs %}
+
+<details>
+
+<summary>Returned function composition execution order</summary>
+
+The reduceRight() method **composes** functions from right to left, on an \[primo, secondo] array, but the function composition returns the primo() function first.
+
+The secondo function is triggered first, but it returns a function (...args), which is then called on the second function composition call.
+
+```jsx
+//We add a console.log() to the first invocation on reduceRight()
+function primo1(){
+  return function (fn){
+    console.log( "Actual Primo" )
+
+    return function (...args){
+      console.log( "Primo?" )
+      return fn(...args) + 1
+    }
+  }
+}
+
+function secondo2(){
+  return function (fn){
+    console.log( "Actual Secondo" )
+
+    return function (...args){
+      console.log( "Secondo?" )
+      return fn(...args) + 1
+    }
+  }
+}
+
+let final = (massa) => massa + 5
+
+let compose = (...fns) => x => fns.reduceRight((v, f) => f(v), x);
+
+let ricomposed = compose(
+  primo1(),
+  secondo2()
+)(final)
+//The reduceRight() is being respected
+//"Actual Primo", "Actual Secondo"
+//"Secondo?", "Primo?", 12
+```
+
+</details>
+
+The function **composition** being returned from the reduceRight() is.
+
+```jsx
+//primo(secondo(final))
+function ricomposed() {
+  return function() {
+    console.log("Primo?")
+    return function(massa) {
+      console.log("Secondo?");
+      return final(massa) + 1 + 1;
+    };
+  };
+}
+
+console.log( ricomposed()()(5) )  //"Primo?", "secondo?", 7
+```
+
+### Function composition on Error Handling
 
 1
 
