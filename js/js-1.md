@@ -150,7 +150,7 @@ lot(4, 8);  //12
 lot(5, 8);    //assigning the num1, num2 Parameters the 5,8 Arguments
 ```
 
-Functions too can be used as parameters, check [Function composition](js-1/function-composition-pipline-and-teh-rest.md) to know more.
+Functions too can be used as parameters, check [Function composition](js-1/function-composition-on-data-pipelines-and-error-handling..md) to know more.
 
 We **Interpolate** variables into HTML elements using _**Ternary Operators**_:
 

@@ -20,7 +20,7 @@
 ## JS
 
 * [JS 1: variables, functions, parameters, array methods, data types, Math operations  and HTML implementation](js/js-1.md)
-  * [Function composition, pipline and teh rest](js/js-1/function-composition-pipline-and-teh-rest.md)
+  * [Function composition on data pipelines and error handling.](js/js-1/function-composition-on-data-pipelines-and-error-handling..md)
 * [JS 2, String array methods, If and Switch statements, let and var properties, HTML forms and js validation and setInterval()/setTimeout()](js/js-2.md)
 * [JS 3 Array methods, Objects, Instances, prototypes, Object constructor and extends](js/js-3.md)
 * [JS 4, spread and rest operators, Error constructor and object, TRY, CATCH and FINALLY](js/js-4-spread-and-rest-operators-error-constructor-and-object-try-catch-and-finally.md)

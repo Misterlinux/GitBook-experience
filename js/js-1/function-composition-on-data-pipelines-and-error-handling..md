@@ -1,8 +1,7 @@
-# Function composition, pipline and teh rest
+# Function composition on data pipelines and error handling.
 
-* list
-* list
-* lsit
+* [Functions execution order on reduce() function compositions.](function-composition-on-data-pipelines-and-error-handling..md#functions-execution-order-on-reduce-function-compositions)
+* [Function composition on Error Handling.](function-composition-on-data-pipelines-and-error-handling..md#function-composition-on-error-handling)
 
 We create a **higher-order** function that **returns a new function** while taking _two series_ of arguments, during its **first** and **second invocations.**
 
@@ -259,7 +258,7 @@ let ricomposed = compose(
 The function **composition** being returned from the reduceRight() is.
 
 ```jsx
-//primo(secondo(final))
+//primo(secondo(final)) is equivalent to
 function ricomposed() {
   return function() {
     console.log("Primo?")
@@ -275,16 +274,125 @@ console.log( ricomposed()()(5) )  //"Primo?", "secondo?", 7
 
 ### Function composition on Error Handling
 
-1
+A function composition can include multiple _error-handling_ blocks, each deconstructed function **try/catch** a specific error instance, and returns a safe output from the argument function.
 
-1
+```jsx
+//Error instances
+class ValidationError extends Error {}
+class NotFound extends Error {}
 
-1
+let compose = (...fns) => x => fns.reduceRight((v, f) => f(v), x);
 
-1
+//Argument function 
+let viewHike = (message) => {
+  if (message === 'view hike mirror lake') {
+    return 'Details about <mirror lake>';
+  } else if (message === 'view hike lost lake') {
+    throw new NotFound();
+  } else {
+    throw new ValidationError();
+  }
+};
+//Error instance filter a
+let rescue = (error, type) => {
+  if (!(error instanceof type)) {
+    throw error;
+  }
+};
+//Decostructed try/catch function 
+let swallow = (type) => (fail) => (fn) => (...args) => {
+  try {
+    return fn(...args);
+  } catch (error) {
+    rescue(error, type);
+    return fail(error);
+  }
+}
+//Composed function with (argument) function
+let safeViewHike = compose(  
+  swallow(ValidationError)(() => 'Invalid format.'),
+  swallow(NotFound)(() => 'No such hike.'),
+)(viewHike);
 
-1
+let chatbot = safeViewHike;
 
-1
+chatbot('view hike mirror lake') )  // => 'Details about <mirror lake>'
+chatbot('view hike lost lake'));   // => Error 'No such hike.'
+chatbot('show hike blue ridge')); // => 'Invalid format.'
+```
 
-1
+The created **error instances** are used in the argument function, any thrown error will be handled by the **next** decostructed try/catch functions.
+
+{% code fullWidth="false" %}
+```jsx
+class ValidationError extends Error {}
+class NotFound extends Error {}
+
+let viewHike = (message) => {
+  if (message === 'view hike mirror lake') {
+    return 'Details about <mirror lake>';
+  } else if (message === 'view hike lost lake') {
+    throw new NotFound();
+  } else {
+    throw new ValidationError();
+  }
+};
+```
+{% endcode %}
+
+Each destructed function includes 2 arguments, the (type) **error instance** and the (fail) returned string. They then include the _argument function_ (fn) and the _composed function argument_ (...args).
+
+If an **error** is thrown by the argument function, it will be passed to the rescue(), and, if no further error is thrown, **no other try/catch function will be called**.
+
+```jsx
+//The return being triggered closes the function
+let safeViewHike = compose(  
+  swallow(ValidationError)(() => 'Invalid format.'),
+  swallow(NotFound)(() => 'No such hike.'),
+)(viewHike);
+
+let swallow = (type) => (fail) => (fn) => (...args) => {
+  try {
+    return fn(...args);
+  } catch (error) {
+    rescue(error, type);
+    return fail(error);
+  }
+}
+```
+
+The rescue function compares the returned error with the error instance from the destructed function, if the **type** doesn't match then it throws an error for the next try/catch function.
+
+```jsx
+let rescue = (error, type) => {
+  if (!(error instanceof type)) {
+    throw error;
+  }
+};
+```
+
+A try/catch function doesn't follow the standard top-bottom execution order. Instead, it skips to the first available function, and **propagates** any thrown **errors** to the outer try/catch blocks.
+
+<pre class="language-jsx"><code class="lang-jsx"><strong>//A decomposed example of the previous function
+</strong><strong>let complete = (...args) => {
+</strong>  try {
+    try {
+      return viewHike(...args);
+    } catch (error) {
+      if (error instanceof NotFound) {
+        return 'No such hike.';
+      } else {
+        throw error;
+      }
+    }
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      return 'Invalid format.';
+    } else {
+      throw error;
+    }
+  }
+}
+
+complete('view hike mirror lake') // => 'Details about &#x3C;mirror lake>'
+</code></pre>
