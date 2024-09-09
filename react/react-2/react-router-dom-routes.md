@@ -5,9 +5,368 @@
 * 1
 * 1
 
+We use **Client-side routing** to render **\<Routes> components** without requesting **external documents**.
+
+Routing is not included in react, we need to in import Components from **react-router-dom**.
+
+<pre class="language-jsx"><code class="lang-jsx">npm i react-router-dom
+
+//We change the name of Browser
+<strong>import {
+</strong>  BrowserRouter as Router,
+  Link,
+  Route,
+  useParams,
+  Routes,
+  Outlet,
+  useRouteError
+} from "react-router-dom";
+</code></pre>
+
+1
+
+{% tabs %}
+{% tab title="Home route" %}
+We render **Router>Routes>Route** in the return, the **element component** is linked to the **URL path**.
+
+We use /\* for the **nested Routes** that will inherit the **parent URL**
+
+```jsx
+//put the <Router/> in a separate file from the imported rendered elements
+return(
+  <div>
+    <Router>
+
+      <Routes>
+        <Route path="/" element={<Binge />} errorElement={<Sbaglia />} />
+        <Route path="/venere/*" element={<Venere />} />
+      </Routes>
+
+    </Router>
+  </div>
+)
+```
+
+The **/** Route is the "**Home**" URL, we use **\<Link>** to **navigate** to the URL PATH,&#x20;
+
+<pre class="language-jsx"><code class="lang-jsx">//we only need the /(path name) for the TO link.
+
+<strong>const Binge = () =>{
+</strong>  return(
+    &#x3C;div>
+      &#x3C;ul>
+        &#x3C;li> &#x3C;Link to="/">Home&#x3C;/Link> &#x3C;/li>
+        &#x3C;li> &#x3C;Link to="/venere">Bergamo&#x3C;/Link> &#x3C;/li>
+      &#x3C;/ul>
+    &#x3C;/div>
+  )
+}
+</code></pre>
+
+
+{% endtab %}
+
+{% tab title="Nested Route" %}
+On the route element component, we use a **variable route path**.
+
+The URL PATH **depends on the \<Link>** and inherits the parent URL.
+
+```jsx
+//The path will change depending on the Link, and we can link 2 to one route
+
+return(
+  <div>
+    <Link to="primem" >Click to nuovo or primo? </Link>
+    <Link to="secondum" >Click to nuovo or secondum? </Link>
+
+    <Routes>
+      <Route path=":nuovo/*" element={<Primo />} />
+    //<Route path=":venere/:nuovo/*" element={<Primo/>} /> 
+    //If we were to put it in the main <Routes>
+    </Routes>
+  </div>
+)
+```
+
 1
 
 1
+{% endtab %}
+
+{% tab title="Variable Route" %}
+We cut the /\* from the path, any extra Route won't inherit the PATH URL.
+
+```jsx
+//this is done for the ending routes
+
+return(
+  <div>
+    <Link to="secondo"> To secondo </Link>
+
+    <Routes>
+        <Route path=":meaning" element={<Secondo />} />
+    </Routes>
+  </div>
+)
+```
+{% endtab %}
+{% endtabs %}
+
+1
+
+{% embed url="https://codesandbox.io/p/sandbox/react-dom-router-variables-9zhwzh?file=/src/App.js&from-embed=" %}
+Variable \<Route/> path with \<Outlet/> and absolute paths
+{% endembed %}
+
+1
+
+### Using \<Outlet /> with React Routes&#x20;
+
+**Route elements** **replace** their _previous Route elements_ **unless** they are **fixed components outside Router** (like navbars and other UI components).
+
+**\<Outlet />** can **render** parent routes with their **children's routes** element by **nesting** their **\<Route>**
+
+1
+
+{% tabs %}
+{% tab title="Outlet route" %}
+Nested \<Route/> elements need \<Outlet/> to be rendered with their parent's element.
+
+<pre class="language-jsx"><code class="lang-jsx"><strong>//Without &#x3C;Outlet/> nested &#x3C;Route/> elements don't even render.
+</strong><strong>&#x3C;Router>
+</strong>  &#x3C;Routes>
+    &#x3C;Route path="/" element={&#x3C;Home />} /> 
+    
+    &#x3C;Route path="/primo" element={&#x3C;Primo/>}>
+      &#x3C;Route path="/primo/secondo" element={&#x3C;Secondo/>} />
+    &#x3C;/Route>
+  
+    &#x3C;Route path="terzo" element={&#x3C;Third/>} />
+  &#x3C;/Routes>
+&#x3C;/Router>
+</code></pre>
+{% endtab %}
+
+{% tab title="Primo/secondo <Outlet/>" %}
+**Outlet** allows the parent \<Primo/> element will **render with** its **nested** \<Secondo/> element.&#x20;
+
+```jsx
+function Primo(){
+
+  return(
+    <div className="text-center">
+      <h1>Homepage</h1>
+      
+      <Link to="secondo">  
+        <p>Outlet component</p>
+      </Link>
+      
+      <Outlet/>
+    </div>
+  )
+}
+
+function Secondo(){
+  
+  return(
+    <div className="text-center">
+      <p>Outlet component</p>
+    </div>
+  )
+}
+```
+
+Any **link path** outside the nested \<Route/> will be rendered alone.
+{% endtab %}
+
+{% tab title="Third <Route/>" %}
+This is an out-of-nested \<Route>, but we can render the _nested element_ with \<Link>
+
+```jsx
+//To do so we need the absolute <Link/> path 
+function Secondo(){
+
+  return(
+    <div className="text-center">
+      <p>Replaced Route component</p>
+        
+       <Link to="/primo/secondo">
+         <h3>To the nested</h3>
+       </Link>
+    </div>
+  )
+}
+```
+{% endtab %}
+{% endtabs %}
+
+1
+
+1
+
+<details>
+
+<summary>Render Route element components with useParams() variables</summary>
+
+We create a **router** with the homepage and the **variable route** for the link **pat**hs.
+
+```jsx
+<Router>
+  <Routes>
+    <Route path="/" element={<House />} />
+    <Route path=":variable/*" element={<Topic />} />
+  </Routes>
+</Router>
+```
+
+On the homepage, we _loop_ and _render_ the **object properties** as **paths.**&#x20;
+
+```jsx
+//The imported getSites() returns the array of objects to loop
+import { getSites } from "../Content";
+import Final from "./Final";
+
+let topico = getSites();
+
+<div>
+  <ul>
+    {topico.map(({ id, name }) => (
+      <li key={id}>
+        <Link to={id}> {name} </Link>
+      </li>
+    ))}
+  </ul>
+  
+</div>
+
+```
+
+On the variable path, we extract the **current route** with **useParams()** and _render_ its corresponding _component_.
+
+```jsx
+//while also passing the :variable path as a prop.
+import Primo from "./Primo";
+import Secondo from "./Secondo";
+import Terzo from "./Terzo";
+
+function Topic() {
+  const { variable } = useParams();
+
+  const modules = {
+    Primo,
+    Secondo,
+    Terzo
+  };
+
+  const Module = modules[variable];
+
+  return (
+    <div className="d-flex justify-content-center">
+      <div className="d-block">
+        <h1 className="text-center"> {variable} </h1>
+
+        <Module fonte={variable} />
+      </div>
+    </div>
+  );
+}
+```
+
+On each of the variable route **components**, we _loop_ and _render_ their **resources** property.
+
+We set the **Final** _Route element_ in the variable path to render it with the previous elements.
+
+```jsx
+//The Final component will render the resource id/name as :articolo path
+import { getResor } from "../Content";
+import Final from "./Final";
+
+function Primo(prop) {
+  let risorsa = getResor(prop.fonte);
+
+  return(
+    <div>
+      <ul>
+        {risorsa.resources.map((id) => (
+          <li key={id.id}>
+            <Link to={id.id}>{id.name}</Link>
+          </li>
+        ))}
+      </ul>
+
+      <Routes>
+        <Route path=":articolo" element={<Final />} />
+      </Routes>
+    </div>
+  )
+}
+```
+
+The Final component renders the name and id props of the resource array elements.
+
+```jsx
+//We need both the path variables to use the imported getDesc()
+import { getDesc } from "../Content";
+
+function Final() {
+  const { variable, articolo } = useParams();
+  let { name, description } = getDesc({ variable, articolo });
+
+  return (
+    <div>
+      <h4> {name} </h4>
+      <p> {description} </p>
+    </div>
+  );
+}
+
+```
+
+We **export** the **array** of objects and the **function** to filter its properties.
+
+```jsx
+//We render and loop the id/name for the route paths
+
+const topico = [
+  {
+    name: "This is the Primo window",
+    id: "Primo",
+    resources: [
+      {
+        name: "Why React Hooks?",
+        id: "why-react-hooks",
+        description: `In this post you'll ...`
+      },
+      ...
+    ]
+  },
+  ...
+]
+
+export function getSites() {
+  return topico;
+}
+
+export function getResor(fonte) {
+  return topico.find(({ id }) => id == fonte);
+}
+
+export function getDesc({ variable, articolo }) {
+  return topico
+    .find(({ id }) => id == variable)
+    .resources.find(({ id }) => id == articolo);
+}
+```
+
+</details>
+
+11
+
+
+
+{% embed url="https://codesandbox.io/p/sandbox/react-dom-router-with-object-routes-qf2366?from-embed=" %}
+Router variable Routes with variable components
+{% endembed %}
 
 1
 
