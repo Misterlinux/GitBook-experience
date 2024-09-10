@@ -5,11 +5,12 @@
 * 1
 * 1
 
-We use **Client-side routing** to render **\<Routes> components** without requesting **external documents**.
+We use the [React-Router](https://reactrouter.com/en/main/route/route) library to enable **client-side routing**, allowing the browser to manage page navigation without requesting new HTML documents from the server. &#x20;
 
-Routing is not included in react, we need to in import Components from **react-router-dom**.
+Unlike server-side routing, which involves full page reloads, React Router **updates** components and URLs on the **client-side** based on route configurations.&#x20;
 
-<pre class="language-jsx"><code class="lang-jsx">npm i react-router-dom
+<pre class="language-jsx"><code class="lang-jsx">//Not included in React we install its components
+npm i react-router-dom
 
 //We change the name of Browser
 <strong>import {
@@ -23,94 +24,108 @@ Routing is not included in react, we need to in import Components from **react-r
 } from "react-router-dom";
 </code></pre>
 
-1
+We configure the \<Route/> **URL path** and **element** component in **Router>Routes**, any component containing React-Router components has to be inside of \<Router/>.
 
 {% tabs %}
-{% tab title="Home route" %}
-We render **Router>Routes>Route** in the return, the **element component** is linked to the **URL path**.
-
-We use /\* for the **nested Routes** that will inherit the **parent URL**
+{% tab title="Router>Routes>Route" %}
+The component outside the \<Router> will remain during all route URL updates.
 
 ```jsx
-//put the <Router/> in a separate file from the imported rendered elements
-return(
+//The "/" component will be the initial render of the page
+import Primo from './components/Primo';
+import Secondo from './components/Secondo';
+import Home from './components/Home';
+
+return (
   <div>
+    <Title />
+
     <Router>
-
+      <Navi />
       <Routes>
-        <Route path="/" element={<Binge />} errorElement={<Sbaglia />} />
-        <Route path="/venere/*" element={<Venere />} />
+        <Route path="/" element={<Home />} />
+        <Route path=":primo" element={<Primo />} />
+        <Route path=':primo/fisso1' element={<Secondo />} />
+        <Route path=':primo/:secondo' element={<Secondo />} />
       </Routes>
-
     </Router>
   </div>
-)
+);
 ```
 
-The **/** Route is the "**Home**" URL, we use **\<Link>** to **navigate** to the URL PATH,&#x20;
+<figure><img src="../../.gitbook/assets/VariableRoutes.png" alt=""><figcaption><p>Fixed and Variable routes</p></figcaption></figure>
+{% endtab %}
 
-<pre class="language-jsx"><code class="lang-jsx">//we only need the /(path name) for the TO link.
+{% tab title="<Link> and components" %}
+The \<Link> component renders an **a**nchor tag, on click, it updates the URL and route based on the <mark style="background-color:blue;">**to**</mark> prop, handling the process **declaratively** (i.e., specifying what to do, not how to do it) and avoiding a full page reload.
 
-<strong>const Binge = () =>{
-</strong>  return(
-    &#x3C;div>
-      &#x3C;ul>
-        &#x3C;li> &#x3C;Link to="/">Home&#x3C;/Link> &#x3C;/li>
-        &#x3C;li> &#x3C;Link to="/venere">Bergamo&#x3C;/Link> &#x3C;/li>
-      &#x3C;/ul>
-    &#x3C;/div>
+The route path can be either **fixed** and explicit or **dynamic**, where certain parts of the URL are replaced with :variables that are later defined by the values provided in the \<Link> **to** prop.
+
+```jsx
+//The : is in the Route path, not the to prop
+function Title(){
+  return <h1>Fixed, No router component</h1>
+}
+
+function Navi(){
+  return(
+    <div>
+      <p> <Link to="/"> Home </Link> </p>
+      <p> <Link to="variabile"> variable </Link> </p>
+      <p> <Link to="variabile/fisso1"> variable+fixed </Link> </p>
+      <p> <Link to="vari1/vari2"> variable+variable </Link> </p>
+    </div>
   )
 }
-</code></pre>
-
-
-{% endtab %}
-
-{% tab title="Nested Route" %}
-On the route element component, we use a **variable route path**.
-
-The URL PATH **depends on the \<Link>** and inherits the parent URL.
-
-```jsx
-//The path will change depending on the Link, and we can link 2 to one route
-
-return(
-  <div>
-    <Link to="primem" >Click to nuovo or primo? </Link>
-    <Link to="secondum" >Click to nuovo or secondum? </Link>
-
-    <Routes>
-      <Route path=":nuovo/*" element={<Primo />} />
-    //<Route path=":venere/:nuovo/*" element={<Primo/>} /> 
-    //If we were to put it in the main <Routes>
-    </Routes>
-  </div>
-)
-```
-
-1
-
-1
-{% endtab %}
-
-{% tab title="Variable Route" %}
-We cut the /\* from the path, any extra Route won't inherit the PATH URL.
-
-```jsx
-//this is done for the ending routes
-
-return(
-  <div>
-    <Link to="secondo"> To secondo </Link>
-
-    <Routes>
-        <Route path=":meaning" element={<Secondo />} />
-    </Routes>
-  </div>
-)
 ```
 {% endtab %}
 {% endtabs %}
+
+1
+
+```jsx
+// Some code
+function Title(){
+  return <h1>Fixed, No router component</h1>
+}
+
+function Navi(){
+  return(
+    <div>
+      <p> <Link to="/"> Home </Link> </p>
+      <p> <Link to="variabile"> variable </Link> </p>
+      <p> <Link to="variabile/fisso1"> variable+fixed </Link> </p>
+      <p> <Link to="vari1/vari2"> variable+variable </Link> </p>
+    </div>
+  )
+}
+
+return (
+  <div>
+    <Title />
+
+    <Router>
+      <Navi />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path=":primo" element={<Primo />} />
+        <Route path=':primo/fisso1' element={<Secondo />} />
+        <Route path=':primo/:secondo' element={<Secondo />} />
+      </Routes>
+    </Router>
+  </div>
+);
+```
+
+1
+
+1
+
+1
+
+1
+
+1
 
 1
 
