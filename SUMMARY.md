@@ -37,7 +37,7 @@
 ## REACT
 
 * [REACT 1, React props, event handlers, basic useState(), useEffect(), React forms/inputs and Class components](react/react-1.md)
-* [REACT 2, React routes, Input props and onChange(), React form onSubmit() and formData, input multiple attribute and input file images rendering](react/react-2/README.md)
+* [REACT 2, Input props and onChange(), React form onSubmit() and formData, input multiple attribute an](react/react-2/README.md)
   * [React-Router-Dom Routes](react/react-2/react-router-dom-routes.md)
 * [REACT 3, Fetch() API, OpenAI API translation, useState() objects and conditional rendering, useContext() Providers and useCallback() ](react/react-3.md)
 * [REACT 4, useMemo(), useReducer(), ReactJs scaling and useRef(()=>{}) Dom manipulation.](react/react-4-usememo-usereducer-reactjs-scaling-and-useref-greater-than-dom-manipulation./README.md)

@@ -1,9 +1,9 @@
 # React-Router-Dom Routes
 
-* 1
-* 1
-* 1
-* 1
+* [Using \<Outlet> on nested and /\* paths in React Router](react-router-dom-routes.md#using-less-than-outlet-greater-than-on-nested-and-paths-in-react-router)
+* [The useParams() hook and nested \<Routes on object arrays.](react-router-dom-routes.md#the-useparams-hook-and-nested-less-than-routes-on-object-arrays)
+* [The useLocation() hook and properties](react-router-dom-routes.md#the-uselocation-hook-and-properties)
+* [The useNavigation() sibling and localStorage](react-router-dom-routes.md#the-usenavigation-sibling-less-than-route-greater-than-and-localstorage)
 
 We use the [React-Router](https://reactrouter.com/en/main/route/route) library to enable **client-side routing**, allowing the browser to manage page navigation without requesting new HTML documents from the server. &#x20;
 
@@ -81,267 +81,116 @@ function Navi(){
 {% endtab %}
 {% endtabs %}
 
-1
+### Using \<Outlet> on nested and /\* paths in React Router
+
+Let's check the properties of **nested \<Routes>** and the properties of the **/\*** catch-All parameter.
 
 ```jsx
-// Some code
-function Title(){
-  return <h1>Fixed, No router component</h1>
-}
-
-function Navi(){
-  return(
-    <div>
-      <p> <Link to="/"> Home </Link> </p>
-      <p> <Link to="variabile"> variable </Link> </p>
-      <p> <Link to="variabile/fisso1"> variable+fixed </Link> </p>
-      <p> <Link to="vari1/vari2"> variable+variable </Link> </p>
-    </div>
-  )
-}
-
-return (
-  <div>
-    <Title />
-
-    <Router>
-      <Navi />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path=":primo" element={<Primo />} />
-        <Route path=':primo/fisso1' element={<Secondo />} />
-        <Route path=':primo/:secondo' element={<Secondo />} />
-      </Routes>
-    </Router>
-  </div>
-);
+<Routes>
+  <Route path="/" element={<Primo />}>
+    <Route path=":variable/*" element={<Secondo />} />
+  </Route>
+  
+  <Route path=":variable/primo/*" element={<Primo />} />
+  <Route path=":variable/:altro" element={<Terzo />} />
+</Routes>
 ```
 
-1
+{% tabs %}
+{% tab title="<Primo> <Outlet> component" %}
+On reload Route components replace any previous element inside the \<Router>.                                                                 A parent Route component can r**ender its child Route using \<Outlet>**, but any new \<Route> that's not included in the nesting **won't render** any previous component.
 
-1
+```jsx
+//The child component will share the <Outlet/> position
+<div>
+  <Link to="edit"> Variable 1< </Link>
+  <Link to="edited"> Variable 2< </Link>
+  <Link to="etedi"> Variable 3< </Link>
+</div>
+<Outlet />
+```
+{% endtab %}
 
-1
+{% tab title="<Secondo> and path priority" %}
+When **multiple routes** match a given URL, the more specific route will take priority.
 
-1
+```jsx
+//A fixed primo path takes priority over primo as :variable
+<div>
+  <h1>Taken from the {variable} </h1>
 
-1
+  <Link to="number2">		//path=":variable/:altro/*"
+    <h5>Second Variable</h5>
+  </Link>
 
-1
+  <Link to="primo">			//path=":variable/primo"
+    <h5>Fixed route </h5>
+  </Link>    
+</div>
+```
+{% endtab %}
+
+{% tab title="<Terzo> and (/*) " %}
+A **catch-all** parameter (/\*) matches any path that shares the same _**previous**_ URL , capturing _**additional**_ parameters and acting as a fallback route when no other suitable path routes exist.
+
+```jsx
+//The path http://localhost:3000/edited/primo/edited has no explicit <Route
+//But with /* can be rendered with teh <Terzo/>
+const { variable, altro } = useParams();
+
+<div>
+  Double variable {variable}/ {altro}
+</div>
+```
+{% endtab %}
+{% endtabs %}
 
 {% embed url="https://codesandbox.io/p/sandbox/react-dom-router-variables-9zhwzh?file=/src/App.js&from-embed=" %}
 Variable \<Route/> path with \<Outlet/> and absolute paths
 {% endembed %}
 
-1
+### The useParams() hook and nested \<Routes on object arrays.
 
-### Using \<Outlet /> with React Routes&#x20;
+We access the current Route URL path with the **useParams()** hook, which returns a key-value object with the route **path name** and its **url parameter** respectively.
 
-**Route elements** **replace** their _previous Route elements_ **unless** they are **fixed components outside Router** (like navbars and other UI components).
+<pre class="language-jsx"><code class="lang-jsx">//We can directly destruct for the route values
+let variable = useParams()  //{variable: 'Primo', *: ''} 
+let { variable } = useParams();           //Primo
+<strong>let articoli = useParams()  //{variable: 'Primo', *: 'useref', articolo: 'useref'}
+</strong>let { variable, articolo } = useParams(); //Primo useref
 
-**\<Outlet />** can **render** parent routes with their **children's routes** element by **nesting** their **\<Route>**
-
-1
+&#x3C;Routes>
+  &#x3C;Route path=":variable/*" element={&#x3C;Topic />} />
+  &#x3C;Route path=":variable/:articolo" element={&#x3C;Final />} />
+&#x3C;/Routes>
+</code></pre>
 
 {% tabs %}
-{% tab title="Outlet route" %}
-Nested \<Route/> elements need \<Outlet/> to be rendered with their parent's element.
-
-<pre class="language-jsx"><code class="lang-jsx"><strong>//Without &#x3C;Outlet/> nested &#x3C;Route/> elements don't even render.
-</strong><strong>&#x3C;Router>
-</strong>  &#x3C;Routes>
-    &#x3C;Route path="/" element={&#x3C;Home />} /> 
-    
-    &#x3C;Route path="/primo" element={&#x3C;Primo/>}>
-      &#x3C;Route path="/primo/secondo" element={&#x3C;Secondo/>} />
-    &#x3C;/Route>
-  
-    &#x3C;Route path="terzo" element={&#x3C;Third/>} />
-  &#x3C;/Routes>
-&#x3C;/Router>
-</code></pre>
-{% endtab %}
-
-{% tab title="Primo/secondo <Outlet/>" %}
-**Outlet** allows the parent \<Primo/> element will **render with** its **nested** \<Secondo/> element.&#x20;
+{% tab title="Nested routes" %}
+Instead of using the **\<Outlet>** component we can nest routes by adding **\<Routes>** on a element component.
 
 ```jsx
-function Primo(){
-
-  return(
-    <div className="text-center">
-      <h1>Homepage</h1>
-      
-      <Link to="secondo">  
-        <p>Outlet component</p>
-      </Link>
-      
-      <Outlet/>
-    </div>
-  )
-}
-
-function Secondo(){
-  
-  return(
-    <div className="text-center">
-      <p>Outlet component</p>
-    </div>
-  )
-}
-```
-
-Any **link path** outside the nested \<Route/> will be rendered alone.
-{% endtab %}
-
-{% tab title="Third <Route/>" %}
-This is an out-of-nested \<Route>, but we can render the _nested element_ with \<Link>
-
-```jsx
-//To do so we need the absolute <Link/> path 
-function Secondo(){
-
-  return(
-    <div className="text-center">
-      <p>Replaced Route component</p>
-        
-       <Link to="/primo/secondo">
-         <h3>To the nested</h3>
-       </Link>
-    </div>
-  )
-}
-```
-{% endtab %}
-{% endtabs %}
-
-1
-
-1
-
-<details>
-
-<summary>Render Route element components with useParams() variables</summary>
-
-We create a **router** with the homepage and the **variable route** for the link **pat**hs.
-
-```jsx
+//Both need the /* and don't repeat <Router>
+//app.js
 <Router>
   <Routes>
-    <Route path="/" element={<House />} />
-    <Route path=":variable/*" element={<Topic />} />
+    <Route path="/*" element={<House />} />
   </Routes>
 </Router>
-```
 
-On the homepage, we _loop_ and _render_ the **object properties** as **paths.**&#x20;
+//House.js
+<Routes>
+  <Route path=":variable/*" element={<Topic />} />
+</Routes>
+```
+{% endtab %}
+
+{% tab title="Objects's array " %}
+We can use URL **path parameters** to filter imported arrays using imported functions.
 
 ```jsx
-//The imported getSites() returns the array of objects to loop
-import { getSites } from "../Content";
-import Final from "./Final";
-
-let topico = getSites();
-
-<div>
-  <ul>
-    {topico.map(({ id, name }) => (
-      <li key={id}>
-        <Link to={id}> {name} </Link>
-      </li>
-    ))}
-  </ul>
-  
-</div>
-
-```
-
-On the variable path, we extract the **current route** with **useParams()** and _render_ its corresponding _component_.
-
-```jsx
-//while also passing the :variable path as a prop.
-import Primo from "./Primo";
-import Secondo from "./Secondo";
-import Terzo from "./Terzo";
-
-function Topic() {
-  const { variable } = useParams();
-
-  const modules = {
-    Primo,
-    Secondo,
-    Terzo
-  };
-
-  const Module = modules[variable];
-
-  return (
-    <div className="d-flex justify-content-center">
-      <div className="d-block">
-        <h1 className="text-center"> {variable} </h1>
-
-        <Module fonte={variable} />
-      </div>
-    </div>
-  );
-}
-```
-
-On each of the variable route **components**, we _loop_ and _render_ their **resources** property.
-
-We set the **Final** _Route element_ in the variable path to render it with the previous elements.
-
-```jsx
-//The Final component will render the resource id/name as :articolo path
-import { getResor } from "../Content";
-import Final from "./Final";
-
-function Primo(prop) {
-  let risorsa = getResor(prop.fonte);
-
-  return(
-    <div>
-      <ul>
-        {risorsa.resources.map((id) => (
-          <li key={id.id}>
-            <Link to={id.id}>{id.name}</Link>
-          </li>
-        ))}
-      </ul>
-
-      <Routes>
-        <Route path=":articolo" element={<Final />} />
-      </Routes>
-    </div>
-  )
-}
-```
-
-The Final component renders the name and id props of the resource array elements.
-
-```jsx
-//We need both the path variables to use the imported getDesc()
-import { getDesc } from "../Content";
-
-function Final() {
-  const { variable, articolo } = useParams();
-  let { name, description } = getDesc({ variable, articolo });
-
-  return (
-    <div>
-      <h4> {name} </h4>
-      <p> {description} </p>
-    </div>
-  );
-}
-
-```
-
-We **export** the **array** of objects and the **function** to filter its properties.
-
-```jsx
-//We render and loop the id/name for the route paths
-
+//The first level renders the array object
+//The second level renders the array properties of the objects
 const topico = [
   {
     name: "This is the Primo window",
@@ -356,7 +205,7 @@ const topico = [
     ]
   },
   ...
-]
+];
 
 export function getSites() {
   return topico;
@@ -371,21 +220,98 @@ export function getDesc({ variable, articolo }) {
     .find(({ id }) => id == variable)
     .resources.find(({ id }) => id == articolo);
 }
+
+```
+{% endtab %}
+{% endtabs %}
+
+<details>
+
+<summary>[Component] array render and content filter on useParams() path parameter</summary>
+
+We render each object's name and set their **id** as **:variable** route path.
+
+```jsx
+//Home.js
+//We loop each array object
+import { getSites } from "../Content";
+
+<div className="d-block">
+  <ul>
+    {topico.map(({ id, name }) => (
+      <li key={id}>
+        <Link to={id}> {name} moree?</Link>
+      </li>
+    ))}
+  </ul>
+</div>
+```
+
+We can add an extra component as a fixed background and components for each avaiable route.
+
+```jsx
+//Topic.js
+//The component array and extra fixed component
+//aren't needed if there is no difference between the components
+const { variable } = useParams();
+
+const modules = {
+  Primo,
+  Secondo,
+  Terzo,
+};
+
+const Module = modules[variable];
+
+<div className="d-block">
+  <h1 className="text-center"> {variable} </h1>
+
+  <Module fonte={variable} />
+  //<Primo>	//also the props is optional
+</div>
+```
+
+Each singular component shares the same filter structure, we render each array id as a new \<Route> and include the next component as child component.
+
+```jsx
+//Primo.js
+//Both useParams() and props parameters work the same
+import { getResor } from "../Content";
+
+let risorsa = getResor(prop.fonte);
+const { variable } = useParams();
+
+<div>
+  <ul>
+    {risorsa.resources.map((id) => (
+      <li key={id.id}>
+        <Link to={id.id}>{id.name}</Link>
+      </li>
+    ))}
+  </ul>
+  <Routes>
+    <Route path=":articolo" element={<Final />} />
+  </Routes>
+</div>
+```
+
+The useParams() values from the :variable \<Route> filter and render the content.
+
+```jsx
+import { getDesc } from "../Content";
+const { variable, articolo } = useParams();
+let { name, description } = getDesc({ variable, articolo });
+
+<div>
+  <h4> {name}, {description} </h4>
+</div>
 ```
 
 </details>
 
-11
-
-
-
 {% embed url="https://codesandbox.io/p/sandbox/react-dom-router-with-object-routes-qf2366?from-embed=" %}
 Router variable Routes with variable components
 {% endembed %}
-
-1
-
-1
 
 ### The useLocation() hook and properties
 
@@ -597,13 +523,5 @@ useEffect(() => {
   
 localStorage.removeItem("stato");
 ```
-
-1
-
-1
-
-1
-
-1
 
 1

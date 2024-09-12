@@ -1,6 +1,5 @@
-# REACT 2, React routes, Input props and onChange(), React form onSubmit() and formData, input multiple attribute and input file images rendering
+# REACT 2, Input props and onChange(), React form onSubmit() and formData, input multiple attribute an
 
-* [Using \<Outlet/> with React Routes](./#using-less-than-outlet-greater-than-with-react-routes)&#x20;
 * [React Input Props and onChange() event handler](./#react-input-props-and-onchange-event-handler)
 * [React Form onSubmit() event handler and FormData()](./#react-form-onsubmit-event-handler-and-formdata)
 * [Input file image render and multiple input attribute](./#input-file-image-render-and-multiple-input-attribute)
