@@ -1,9 +1,9 @@
 # REACT 1, React props, event handlers, basic useState(), useEffect(), React forms/inputs and Class components
 
-* [React Props, event handlers and useState](react-1.md#react-props-event-handlers-and-usestate)
-* [React useEffect with setInterval()](react-1.md#react-useeffect-with-setinterval)
-* [ReactJs forms, inputs, and submit](react-1.md#reactjs-forms-inputs-and-submit)
-* [Class component, useState() and fetch()](react-1.md#class-component-usestate-and-fetch)
+* [React Props, event handlers and useState](./#react-props-event-handlers-and-usestate)
+* [React useEffect with setInterval()](./#react-useeffect-with-setinterval)
+* [ReactJs forms, inputs, and submit](./#reactjs-forms-inputs-and-submit)
+* [Class component, useState() and fetch()](./#class-component-usestate-and-fetch)
 
 **Node.js** is a _javascript environment_, we use **npm** (Node Package Manager) to install **modules** and use a **packages.json** file to track them.
 
@@ -122,19 +122,19 @@ const App =() =>{
 export default App;
 ```
 
-<figure><img src="../.gitbook/assets/components.PNG" alt=""><figcaption><p>rendered React component</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/components.PNG" alt=""><figcaption><p>rendered React component</p></figcaption></figure>
 
-We use **CamelCase** for **component names** to differentiate from default HTML tags.:
+We use **CamelCase** for **component names** to differentiate from default HTML tags.
 
 We use _javascript expressions_ and **{}** to render logic and variables on **JSX**.
 
 <details>
 
-<summary>React javascript expression guide</summary>
+<summary>Javascript expressions on React Components</summary>
 
-We put **javascript** before the **return** of the component.
+We set the **javascript operations** before the **return** of the component.
 
-```
+```jsx
 //we can work with arrays, methods and objects
 const Second =() =>{
   const linea= ["uno", "molti", "terzi"]
@@ -156,7 +156,7 @@ const Second =() =>{
 
 We can invoke **functions and render loops**:
 
-```
+```jsx
 const Primo =() ={
 
   function object(zona){
@@ -187,14 +187,13 @@ const Primo =() ={
 
 </details>
 
-### React Props, event handlers and useState
+### React Props, event handlers, and useState
 
 **Props** are **arguments** passed into React **components,** they are **read-only** and can't be **updated.**
 
 ```jsx
 //we use it when importing/exporting components
 //we declare props argument key and THEN we add properties
-
 const Basic= (props) =>{
   return(
     <div> We use the props here: {props.name} </div>
@@ -221,7 +220,7 @@ export default App;
 
 We can edit the **props** property using **javascript expressions**:
 
-```
+```jsx
 //we export the props component with expressions
 const Base= (props) =>{
   console.log(props)
@@ -239,7 +238,7 @@ export default Base
 
 to then assign the **props values** on the rendering components:
 
-```
+```jsx
 //and properties values can be expressions themselves
 import Base1 from './components/Basso'
 
@@ -287,7 +286,7 @@ We use the useEffect() hook to set-up a setInterval() based on isActive and isPa
 
 Then we **pass** useState() and the functions to the \<Tempo> **prop**
 
-```
+```jsx
 import Tempo from "./Timer.js"
 import Nub from "./Numeri.js"
 
@@ -407,7 +406,7 @@ We use the React Hook **useState** to track the **state** of a component and **u
 
 We use **destructuring** on the imported **useState object**, into a current state **variable,** and a set **function** to **update** it.
 
-```
+```jsx
 //We use .concat() instead of .push() to create a new state array that will 
 //get re-rendered on React (instead of just changing current with .push())
 
@@ -426,7 +425,9 @@ const Ray= () =>{
     <div>
       <div>Updated array on click {rar}</div>
       <div>Number state changes {uno}</div>
-      <button className='btn btn-outline-primary' onClick={innio}>More</button> 
+      <button className='btn btn-outline-primary' onClick={innio}>
+        More
+      </button> 
     </div>
   )
 }
@@ -434,7 +435,7 @@ const Ray= () =>{
 
 </details>
 
-<figure><img src="../.gitbook/assets/usestato.png" alt=""><figcaption><p>useState() after onClick() </p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/usestato.png" alt=""><figcaption><p>useState() after onClick() </p></figcaption></figure>
 
 We can **pass** the useState() and its **setter function** as **props**:
 
@@ -480,7 +481,7 @@ When a **dependency state** changes the **useEffect** renders:
 
 We need 2 **states**, one for the **dependency** change and the other for the **javascript expression.**
 
-```
+```jsx
 //When the count1 state changes onClick() the useEffect updates the 
 //calculation1 state and we render the javascript expressions
 
@@ -502,7 +503,7 @@ useEffect( () =>{
 
 </details>
 
-<figure><img src="../.gitbook/assets/useeffect.gif" alt=""><figcaption><p>useEffect function rendering after onClick state</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/useeffect.gif" alt=""><figcaption><p>useEffect function rendering after onClick state</p></figcaption></figure>
 
 We can implement **javascript expression** using **ternary-operators** for DOM content:
 
@@ -563,7 +564,7 @@ useEffect( ()=>{
 
 ```
 
-<figure><img src="../.gitbook/assets/intervaleffect2.png" alt=""><figcaption><p>useEffect dependency used with setInterval()</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/intervaleffect2.png" alt=""><figcaption><p>useEffect dependency used with setInterval()</p></figcaption></figure>
 
 We can also trigger **setInterval()** and **clearInterval()** using the same **dependency** in the **useEffect condition**:
 
@@ -573,7 +574,7 @@ We can also trigger **setInterval()** and **clearInterval()** using the same **d
 
 The **stop/pause button** will reset the current seconds but **not the setInterval()**, for that we use the **reset** button.
 
-```
+```jsx
 //We use the true/false switch and javascript expressions
 
 <div className="text-center fs-2 font-weight-bold">
@@ -597,9 +598,8 @@ We reset(seconds), and we **clearInterval()** but we **also re-start**, by using
 
 We stop seconds and active using **reset()**.
 
-```
+```jsx
 //We need to include both triggers and state counters in the dependencies
-
 const [seconds, setSeconds] = useState(0);
 const [gradi, setGradi] = useState(0)
 const [isActive, setIsActive] = useState(false);
@@ -632,7 +632,7 @@ useEffect(() => {
 
 </details>
 
-<figure><img src="../.gitbook/assets/resetinterval.gif" alt=""><figcaption><p>start/reset/re-start on single button</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/resetinterval.gif" alt=""><figcaption><p>start/reset/re-start on single button</p></figcaption></figure>
 
 Including a **function** inside **useEffect()** dependencies will _<mark style="color:orange;">Error: This dependency changes on every render.</mark>_
 
@@ -805,7 +805,7 @@ function mandasotto(event){
 
 </details>
 
-<figure><img src="../.gitbook/assets/inputReact.PNG" alt=""><figcaption><p>fotm, input and submit with rendered values</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/inputReact.PNG" alt=""><figcaption><p>fotm, input and submit with rendered values</p></figcaption></figure>
 
 We can also render **uncontrolled input components**, using the **useRef hook,** we set the callback function and the useState **outside** of the **input** component
 
@@ -838,7 +838,7 @@ Apart from **function components**, there are also **Class components**.
 
 We need the **component React hook** and the **render(){} method** for the DOM.
 
-```
+```jsx
 //Class components are the older type of React components
 //we implements functions like this.methods
 import React, {Component} from "react"
@@ -869,8 +869,8 @@ We can't use the useState() hook in a class component, we can initialize multipl
 
 We use a **this.method** with a callback function to **setState()**.
 
-```
-// Some code
+```jsx
+//
 const Message = () => <p>I'm shown when this.state.isShown is true âœ…</p>;
 
 class Num extends Component{
@@ -909,7 +909,7 @@ We can use **external functions** with a toggle operator.
 
 </details>
 
-<figure><img src="../.gitbook/assets/useStateClassComp.png" alt=""><figcaption><p>Class component useState()</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/useStateClassComp.png" alt=""><figcaption><p>Class component useState()</p></figcaption></figure>
 
 <details>
 
@@ -917,9 +917,8 @@ We can use **external functions** with a toggle operator.
 
 We use **componentDidMount()** to render after a **fetch()**.
 
-```
+```jsx
 //we then render a useState() on the img attribute
-
 class Num extends Component{
   state = {
     isLoading: true,
@@ -962,7 +961,7 @@ class Num extends Component{
 
 To catch a **fetch() error** we add an extra **then()** and useState().
 
-```
+```jsx
 class Num extends Component{
   state = {
     imgSrc: null,
@@ -1021,4 +1020,4 @@ class Num extends Component{
 
 </details>
 
-<figure><img src="../.gitbook/assets/classFetch.png" alt=""><figcaption><p>Class component error catch, fetch, and isloading</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/classFetch.png" alt=""><figcaption><p>Class component error catch, fetch, and isloading</p></figcaption></figure>

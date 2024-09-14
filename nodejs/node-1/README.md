@@ -221,6 +221,8 @@ const user = require("./routes/user.js");
 app.use("/user", user);
 ```
 
+#### Routes.js
+
 In the **routes/user.js** we **npm install bcrypt fs** to _hash the password_ and save it to the _JSON database_.
 
 ```jsx
@@ -271,6 +273,8 @@ router.post("/sign-up", async (req, res) => {
 
 module.exports = router;    //the router is then exported
 </code></pre>
+
+#### The GenerateJWT
 
 On the **utils/generateJWT.js** we **npm install jsonwebtoken dotenv**.                                                              We access the secret **env file** to generate JWT tokens, for the **payload** object we use public user data, the token is then **sign()** and given an **expiration** date.
 
@@ -364,6 +368,8 @@ router.post("/auth", authenticate, (req, res) => {
 });
 ```
 
+#### Auth.js
+
 In the **auth** middleware we use the **env** file and the **JWT** token (received during sign-up/sign-in), as an _authorization/bearer_ in the **req.header("authorization")**.&#x20;
 
 We **JWT.verify()** the bearer JWT with the _env.JSWsecret_ string, to find the user assigned to the token.
@@ -398,5 +404,15 @@ function authenticate (req, res, next) {
 
 module.exports = authenticate; 
 ```
+
+111
+
+1
+
+1
+
+1
+
+1
 
 <figure><img src="../../.gitbook/assets/authMiddleware.png" alt="" width="563"><figcaption><p>Sign-in JWT and JWTBearer on Postman with code 200 res.send()</p></figcaption></figure>
