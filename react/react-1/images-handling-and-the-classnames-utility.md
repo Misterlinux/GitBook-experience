@@ -1,4 +1,4 @@
-# REact 1 styling, Images handling and   the classNames utility
+# Images handling and the classNames utility
 
 * 1
 * 1
@@ -29,6 +29,8 @@ import amiibo from "../img/amiibo.png"
 //roles.includes('admin') or functions 'admin-role': isAdmin(),
 npm install classnames
 
+import classNames from "classnames";
+
 let [isActive, setIsActive] = useState(true)
 let [conta, setConta] = useState(0)
 
@@ -39,10 +41,24 @@ const classi = classNames('text-white', {
   "border-secondary": conta % 2 == 1
 });
 
-<div className= {`border border-5 ${classi}`} >
-  How lng can this go
+<div className={`border border-5 ${classi}`}>
+  Variable className
 </div>
 ```
+
+We can render the classNames value as an array.
+
+```jsx
+//Objects get destructed
+let arr = ['text-danger', { "bg-secondary": true, "bg-primary": false }];
+let arraiato = classNames('a', arr);
+```
+
+1
+
+1
+
+1
 
 1
 

@@ -200,6 +200,184 @@ The **first** _header_ clain contains the **hashing algorithm** and the token **
 
 ### Implementing JWT registration to the server
 
+The JWT user server will have this structure.
+
+```jsx
+/server
+server.js
+/utils
+  generateJWT.js
+  auth.js
+/routes
+  user.js
+```
+
+Check the [CORS section](cors-implementation.md) to know more about the configuration.
+
+```jsx
+//Implement the CORS middleware
+const express = require("express");
+const app = express();
+app.use(express.json());
+const cors = require("cors");
+
+const corsOptions = {
+  origin: "http://localhost:3000"    
+};
+app.use(cors(corsOptions));
+
+const user = require("./routes/user.js");
+app.use("/user", user);
+```
+
+The /user route will handle all user server calls, check the [Express routing](express.js-routing-and-middleware.md) section for more.
+
+<details>
+
+<summary>Server routing, bcrypt and File-System modules</summary>
+
+We request the **user** destructed **form data** to update/check the database, using bcrypt for the password and fs to edit the database js file.
+
+```jsx
+//We either filter or add depending on sign-in/sign-up
+const express = require("express");
+const bcrypt = require("bcrypt");   
+const fs = require("fs"); 
+const router = express.Router(); 
+
+const usersDb = require("../database/db.json");
+const generateJWT = require("../utils/generateJWT");
+
+const authenticate = require("../middleware/authentificate.js");
+
+router.post("/sign-up", async (req, res) => {
+  const { name, email, password } = req.body;
+
+  try {
+    const user = await usersDb.filter(user => user.email === email);
+    if (user.length > 0) {
+      return res.status(400).json({error: "User already exist!"});
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const bcryptPassword = await bcrypt.hash(password, salt);
+    let newUser = {
+      id: usersDb.length,
+      name: name,
+      email: email,
+      password: bcryptPassword
+    }
+
+    usersDb.push(newUser);
+    await fs.writeFileSync('./database/db.json', JSON.stringify(usersDb));
+     
+    const jwtToken = generateJWT(newUser.id);
+    return res.status(201).send({jwtToken: jwtToken, isAuthenticated: true});
+
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send({error: error.message});
+  }
+});
+
+module.exports = router;
+```
+
+</details>
+
+1
+
+1
+
+1
+
+1
+
+We generate a JWT with the user id, check the [JWT section ](jwt.md)for more.
+
+<details>
+
+<summary>JWT generator utility</summary>
+
+We store the JWT in a safe place, like an **env** file.
+
+```jsx
+//Exported and used as middleware in /user
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+
+function generateJWT(user_id) {
+  const payload = {
+    user: {
+      id: user_id
+    }
+  };
+
+  return jwt.sign(payload, process.env.jwtSecret, { expiresIn: "1h" });
+}
+
+module.exports = generateJWT;
+```
+
+</details>
+
+1
+
+1
+
+1
+
+1
+
+1
+
+We create a separate file for the JWT verification on request.header
+
+<details>
+
+<summary>The JWT autenticator.</summary>
+
+We access the JWT from the header property and check if it's expired.
+
+```jsx
+//We require the jwt and dotenv modules
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+
+function authenticate (req, res, next) {
+
+  let token = req.header("authorization");
+
+  if (!token) {
+    return res.status(403).send({ 
+      message: "Authorization denied", 
+      isAuthenticated: false }
+    );
+  }
+  token = token.split(" ")[1];
+
+  try {
+    const verify = jwt.verify(token, process.env.jwtSecret);
+    req.user = verify.user;
+
+    next();
+    
+  } catch (err) {
+    res.status(401).send({message: "Not valid", isAuthenticated: false});
+  }
+};
+
+module.exports = authenticate; 
+```
+
+</details>
+
+1
+
+1
+
+1
+
 On the **server.js** we implement **npm install cors** by setting the allowed **Port** origin.
 
 ```jsx

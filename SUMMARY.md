@@ -36,8 +36,8 @@
 
 ## REACT
 
-* [REACT 1, React props, event handlers, basic useState(), useEffect(), React forms/inputs and Class components](react/react-1/README.md)
-  * [REact 1 styling, Images handling and   the classNames utility](react/react-1/react-1-styling-images-handling-and-the-classnames-utility.md)
+* [REACT 1, React props, event handlers, basic useState(), useEffect(), React forms/inputs and Class components](react/react-1.md)
+  * [Images handling and the classNames utility](react/react-1/images-handling-and-the-classnames-utility.md)
 * [REACT 2, Input props and onChange(), React form onSubmit() and formData, input multiple attribute an](react/react-2/README.md)
   * [React-Router-Dom Routes](react/react-2/react-router-dom-routes.md)
 * [REACT 3, Fetch() API, OpenAI API translation, useState() objects and conditional rendering, useContext() Providers and useCallback() ](react/react-3.md)

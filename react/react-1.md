@@ -1,9 +1,9 @@
 # REACT 1, React props, event handlers, basic useState(), useEffect(), React forms/inputs and Class components
 
-* [React Props, event handlers and useState](./#react-props-event-handlers-and-usestate)
-* [React useEffect with setInterval()](./#react-useeffect-with-setinterval)
-* [ReactJs forms, inputs, and submit](./#reactjs-forms-inputs-and-submit)
-* [Class component, useState() and fetch()](./#class-component-usestate-and-fetch)
+* [React Props, event handlers and useState](react-1.md#react-props-event-handlers-and-usestate)
+* [React useEffect with setInterval()](react-1.md#react-useeffect-with-setinterval)
+* [ReactJs forms, inputs, and submit](react-1.md#reactjs-forms-inputs-and-submit)
+* [Class component, useState() and fetch()](react-1.md#class-component-usestate-and-fetch)
 
 **Node.js** is a _javascript environment_, we use **npm** (Node Package Manager) to install **modules** and use a **packages.json** file to track them.
 
@@ -122,7 +122,7 @@ const App =() =>{
 export default App;
 ```
 
-<figure><img src="../../.gitbook/assets/components.PNG" alt=""><figcaption><p>rendered React component</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/components.PNG" alt=""><figcaption><p>rendered React component</p></figcaption></figure>
 
 We use **CamelCase** for **component names** to differentiate from default HTML tags.
 
@@ -435,7 +435,7 @@ const Ray= () =>{
 
 </details>
 
-<figure><img src="../../.gitbook/assets/usestato.png" alt=""><figcaption><p>useState() after onClick() </p></figcaption></figure>
+<figure><img src="../.gitbook/assets/usestato.png" alt=""><figcaption><p>useState() after onClick() </p></figcaption></figure>
 
 We can **pass** the useState() and its **setter function** as **props**:
 
@@ -503,7 +503,7 @@ useEffect( () =>{
 
 </details>
 
-<figure><img src="../../.gitbook/assets/useeffect.gif" alt=""><figcaption><p>useEffect function rendering after onClick state</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/useeffect.gif" alt=""><figcaption><p>useEffect function rendering after onClick state</p></figcaption></figure>
 
 We can implement **javascript expression** using **ternary-operators** for DOM content:
 
@@ -564,7 +564,7 @@ useEffect( ()=>{
 
 ```
 
-<figure><img src="../../.gitbook/assets/intervaleffect2.png" alt=""><figcaption><p>useEffect dependency used with setInterval()</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/intervaleffect2.png" alt=""><figcaption><p>useEffect dependency used with setInterval()</p></figcaption></figure>
 
 We can also trigger **setInterval()** and **clearInterval()** using the same **dependency** in the **useEffect condition**:
 
@@ -632,7 +632,7 @@ useEffect(() => {
 
 </details>
 
-<figure><img src="../../.gitbook/assets/resetinterval.gif" alt=""><figcaption><p>start/reset/re-start on single button</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/resetinterval.gif" alt=""><figcaption><p>start/reset/re-start on single button</p></figcaption></figure>
 
 Including a **function** inside **useEffect()** dependencies will _<mark style="color:orange;">Error: This dependency changes on every render.</mark>_
 
@@ -805,7 +805,7 @@ function mandasotto(event){
 
 </details>
 
-<figure><img src="../../.gitbook/assets/inputReact.PNG" alt=""><figcaption><p>fotm, input and submit with rendered values</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/inputReact.PNG" alt=""><figcaption><p>fotm, input and submit with rendered values</p></figcaption></figure>
 
 We can also render **uncontrolled input components**, using the **useRef hook,** we set the callback function and the useState **outside** of the **input** component
 
@@ -909,7 +909,7 @@ We can use **external functions** with a toggle operator.
 
 </details>
 
-<figure><img src="../../.gitbook/assets/useStateClassComp.png" alt=""><figcaption><p>Class component useState()</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/useStateClassComp.png" alt=""><figcaption><p>Class component useState()</p></figcaption></figure>
 
 <details>
 
@@ -1020,4 +1020,4 @@ class Num extends Component{
 
 </details>
 
-<figure><img src="../../.gitbook/assets/classFetch.png" alt=""><figcaption><p>Class component error catch, fetch, and isloading</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/classFetch.png" alt=""><figcaption><p>Class component error catch, fetch, and isloading</p></figcaption></figure>
