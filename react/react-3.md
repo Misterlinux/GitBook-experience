@@ -94,7 +94,7 @@ console.log( response.data.choices[0].text.trim() );    //cebolla
 {% tab title="Multiple languages" %}
 To translate into **multiple languages** we **join()** an array into the **prompt**.
 
-```
+```jsx
 //On ReactJs a useState() won't work, so we use an array variable
 //The API will respond with a string with the language: translated
 

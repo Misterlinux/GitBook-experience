@@ -285,21 +285,13 @@ module.exports = router;
 
 </details>
 
-1
+<figure><img src="../../.gitbook/assets/JWTserver.png" alt=""><figcaption><p>Created Post user in teh JSON database and JWT user response.send()</p></figcaption></figure>
 
-1
+We set the utilities following the [JWT section](jwt.md)
 
-1
-
-1
-
-We generate a JWT with the user id, check the [JWT section ](jwt.md)for more.
-
-<details>
-
-<summary>JWT generator utility</summary>
-
-We store the JWT in a safe place, like an **env** file.
+{% tabs %}
+{% tab title="JWT generator utility" %}
+We store the JWT key in a safe place, like an **env** file.
 
 ```jsx
 //Exported and used as middleware in /user
@@ -318,26 +310,10 @@ function generateJWT(user_id) {
 
 module.exports = generateJWT;
 ```
+{% endtab %}
 
-</details>
-
-1
-
-1
-
-1
-
-1
-
-1
-
-We create a separate file for the JWT verification on request.header
-
-<details>
-
-<summary>The JWT autenticator.</summary>
-
-We access the JWT from the header property and check if it's expired.
+{% tab title="The JWT autenticator." %}
+We access the JWT from the **request.header** property and check if it's expired.
 
 ```jsx
 //We require the jwt and dotenv modules
@@ -369,228 +345,7 @@ function authenticate (req, res, next) {
 
 module.exports = authenticate; 
 ```
-
-</details>
-
-1
-
-1
-
-1
-
-On the **server.js** we implement **npm install cors** by setting the allowed **Port** origin.
-
-```jsx
-const express = require("express");
-const app = express();
-app.use(express.json());
-const cors = require("cors");
-
-const corsOptions = {
-  origin: "http://localhost:3000"    
-};
-app.use(cors(corsOptions));        //We use() the CORS middleware
-```
-
-We _import_ the **routes.js** as _middleware_ for all **/user** endpoint routes.
-
-```jsx
-const user = require("./routes/user.js");
-app.use("/user", user);
-```
-
-#### Routes.js
-
-In the **routes/user.js** we **npm install bcrypt fs** to _hash the password_ and save it to the _JSON database_.
-
-```jsx
-const express = require("express");
-const bcrypt = require("bcrypt");   
-const fs = require("fs"); 
-
-//The user router comes from the expressJs built-in method
-const router = express.Router();   
-```
-
-We import both the JSON **database** to update and the JWT **generator**, then we deconstruct the **req**uest **body** for the **/user/sign-up** route (**router** is the middleware of /user endpoint).
-
-If the **Post** **email** is already being in the database we return an error **(400) response**.                             We **bcrypt** the **password** body property and add a random **salt() hash** to it.                                              The _response.send()_ **JWT** is created after the user is registered.
-
-<pre class="language-jsx"><code class="lang-jsx"><strong>const usersDb = require("../database/db.json");
-</strong>const generateJWT = require("../utils/generateJWT");
-
-router.post("/sign-up", async (req, res) => {
-  const {  name, email, password } = req.body;
-
-  try {
-    const user = await usersDb.filter(user => user.email === email);
-    if (user.length > 0) {
-      return res.status(400).json({error: "User already exist!"});
-    }
-
-    const salt = await bcrypt.genSalt(10);
-    const bcryptPassword = await bcrypt.hash(password, salt);
-    let newUser = {
-      id: usersDb.length,
-      name: name,
-      email: email,
-      password: bcryptPassword
-    }
-
-    usersDb.push(newUser);
-    await fs.writeFileSync('./database/db.json', JSON.stringify(usersDb));
-     
-    const jwtToken = generateJWT(newUser.id);
-    return res.status(201).send({ jwtToken: jwtToken, isAuthenticated: true});
-
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send({error: error.message});
-  }
-});
-
-module.exports = router;    //the router is then exported
-</code></pre>
-
-#### The GenerateJWT
-
-On the **utils/generateJWT.js** we **npm install jsonwebtoken dotenv**.                                                              We access the secret **env file** to generate JWT tokens, for the **payload** object we use public user data, the token is then **sign()** and given an **expiration** date.
-
-```jsx
-const jwt = require("jsonwebtoken");
-require("dotenv").config();
-
-function generateJWT(user_id) {
-  const payload = {
-    user: {
-      id: user_id
-    }
-  };
-
-  return jwt.sign(payload, process.env.jwtSecret, { expiresIn: "1h" });
-}
-
-module.exports = generateJWT;    //the generate function is then exported
-```
-
-<figure><img src="../../.gitbook/assets/JWTserver.png" alt=""><figcaption><p>Created Post user in teh JSON database and JWT user response.send()</p></figcaption></figure>
-
-The **env** and **database/db.json** files are:
-
-```jsx
-//The external .env file value is used to set variables 
-//It's secret so keep it from git commits using .gitignore
-jwtSecret = "migracodeAuthJan2021"
-
-//The JSON database is an array for objects elements
-[]
-```
-
-<details>
-
-<summary>Sign-in endpoint with bcrypt.compare()</summary>
-
-In the **user/sign-in** endpoint, we **bcrypt.compare()** the JSON database password with the **req.post** password.
-
-```jsx
-//To sign-in we check if any user has the req.post password
-//The JSON database passwords are encrypted, so to compare we de-crypt them.
-//It returns a JSW using the matched user ID.
-
-router.post("/sign-in", async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    const user = await usersDb.filter(user => user.email === email);
-    if (user.length === 0) {
-      return res.status(401).json({
-        error: "Invalid Credential", 
-        isAuthenticated: false}
-      );
-    }
-
-    const isValidPassword = await bcrypt.compare(
-      password,
-      user[0].password
-    );
-    if (!isValidPassword) {
-      return res.status(401).json({
-        error: "Invalid Credential", 
-        isAuthenticated: false}
-      );
-    }
-
-    const jwtToken = generateJWT(user[0].id);
-    return res.status(200).send({ jwtToken, isAuthenticated: true });
-
-  } catch (error) {
-    res.status(500).send({error: error.message});
-  }
-});
-```
-
-</details>
-
-We implement the **authentification** _middleware_ in the **user/auth** endpoint.
-
-```jsx
-//if authenticated it res.send() the success code 200
-const authenticate = require("../middleware/authentificate.js");
-
-router.post("/auth", authenticate, (req, res) => {
-  try {
-    res.status(200).send({isAuthenticated: true});
-  } catch (error) {
-    res.status(500).send({error: error.message, isAuthenticated: false});
-  }
-});
-```
-
-#### Auth.js
-
-In the **auth** middleware we use the **env** file and the **JWT** token (received during sign-up/sign-in), as an _authorization/bearer_ in the **req.header("authorization")**.&#x20;
-
-We **JWT.verify()** the bearer JWT with the _env.JSWsecret_ string, to find the user assigned to the token.
-
-```jsx
-//we require the jwt and dotenv modules
-const jwt = require("jsonwebtoken");
-require("dotenv").config();
-
-function authenticate (req, res, next) {
-
-  let token = req.header("authorization");
-
-  if (!token) {
-    return res.status(403).send({ 
-      message: "Authorization denied", 
-      isAuthenticated: false }
-    );
-  }
-  token = token.split(" ")[1];
-
-  try {
-    const verify = jwt.verify(token, process.env.jwtSecret);
-    req.user = verify.user;
-
-    next();
-    
-  } catch (err) {
-    res.status(401).send({ message: "Token is not valid", isAuthenticated: false });
-  }
-};
-
-module.exports = authenticate; 
-```
-
-111
-
-1
-
-1
-
-1
-
-1
+{% endtab %}
+{% endtabs %}
 
 <figure><img src="../../.gitbook/assets/authMiddleware.png" alt="" width="563"><figcaption><p>Sign-in JWT and JWTBearer on Postman with code 200 res.send()</p></figcaption></figure>

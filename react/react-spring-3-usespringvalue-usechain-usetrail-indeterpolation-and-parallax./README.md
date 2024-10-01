@@ -543,7 +543,7 @@ Don't use **background** on the **sticky** layer component, it will inherit the 
 
 It needs **display: "inline-block"** and **height: 0**, to not conflict with the other layer elements, its height is set only by its content.&#x20;
 
-We use **vertical-align: "top"** to align the inline-block elements to the sticky layer linebox, check [CSS-1](../../css/css-1.md) for more _vertical-align_.
+We use **vertical-align: "top"** to align the inline-block elements to the sticky layer linebox, check [CSS-1](../../css/css-1/) for more _vertical-align_.
 
 ```jsx
 //You can't put a layer inside another layer, embed them using their offset position

@@ -4,13 +4,13 @@ description: Syntax and properties
 
 # CSS 1: Animation, gradients and buttons effects
 
-* [CSS selector and Media query](css-1.md#css-selectors-and-media-query)
-* [CSS transition and Animation](css-1.md#css-transition-and-animation)
-* [Clock CSS :before:after designs and JS-based animation](css-1.md#clock-css-designs-and-js-based-animation)
-* [CSS Gradients and effects](css-1.md#css-gradients-and-effects)
-* [Grany gradient, Clip-path(), smoke, and scrolling JS animation](css-1.md#grany-gradient-clip-path-smoke-and-scrolling-animation)
-* [CSS borders and border-box](css-1.md#css-borders-and-border-box)
-* [Custom popup, checklist, expandable and buttons effects](css-1.md#custom-popup-checklist-expandable-and-buttons-effects)
+* [CSS selector and Media query](./#css-selectors-and-media-query)
+* [CSS transition and Animation](./#css-transition-and-animation)
+* [Clock CSS :before:after designs and JS-based animation](./#clock-css-designs-and-js-based-animation)
+* [CSS Gradients and effects](./#css-gradients-and-effects)
+* [Grany gradient, Clip-path(), smoke, and scrolling JS animation](./#grany-gradient-clip-path-smoke-and-scrolling-animation)
+* [CSS borders and border-box](./#css-borders-and-border-box)
+* [Custom popup, checklist, expandable and buttons effects](./#custom-popup-checklist-expandable-and-buttons-effects)
 
 ### CSS Display and Google fonts
 
@@ -82,7 +82,7 @@ font-family: 'Indie Flower', cursive;
 font-family: 'Permanent Marker', cursive;
 ```
 
-<figure><img src="../.gitbook/assets/Cattura (1).PNG" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/Cattura (1).PNG" alt=""><figcaption></figcaption></figure>
 {% endtab %}
 
 {% tab title="Google fonts part 2" %}
@@ -108,7 +108,7 @@ font-family: 'Lobster', cursive;
 font-family: 'Racing Sans One', cursive;
 ```
 
-<figure><img src="../.gitbook/assets/Catt1ura.PNG" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/Catt1ura.PNG" alt=""><figcaption></figcaption></figure>
 {% endtab %}
 {% endtabs %}
 
@@ -165,7 +165,7 @@ With inline-block, we can use width/height and keep the boxes in a new line:
 {% endtab %}
 {% endtabs %}
 
-![Even if used a div tag, we overwrite it with CSS](../.gitbook/assets/inlineblocked.PNG)
+![Even if used a div tag, we overwrite it with CSS](../../.gitbook/assets/inlineblocked.PNG)
 
 {% tabs %}
 {% tab title="HTML block " %}
@@ -208,11 +208,15 @@ display: block will occupy the entire line and accept width/height, with the tag
 {% endtab %}
 {% endtabs %}
 
-![Even if used the span tag, we used block in the CSS](../.gitbook/assets/block.PNG)
+<div align="center">
+
+<img src="../../.gitbook/assets/block.PNG" alt="Even if used the span tag, we used block in the CSS" width="115">
+
+</div>
 
 **Inline** elements will share the same line between them and won't take the full width of their containers.
 
-The <mark style="background-color:blue;">**vertical-align**</mark> property aligns **inline** and **inline-block** elements relative to their parent container's line-height/linebox, for a more examples check [Parallax](../react/react-spring-3-usespringvalue-usechain-usetrail-indeterpolation-and-parallax./parallax.md).
+The <mark style="background-color:blue;">**vertical-align**</mark> property aligns **inline** and **inline-block** elements relative to their parent container's line-height/linebox, for a more examples check [Parallax](../../react/react-spring-3-usespringvalue-usechain-usetrail-indeterpolation-and-parallax./parallax.md).
 
 <details>
 
@@ -255,7 +259,7 @@ div.gray span:last-child{
 
 </details>
 
-<figure><img src="../.gitbook/assets/verticalAlign2.jpg" alt=""><figcaption><p>vertical-align inline-block elements</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/verticalAlign2.jpg" alt="" width="247"><figcaption><p>vertical-align inline-block elements</p></figcaption></figure>
 
 ## CSS Selectors and Media Query
 
@@ -355,7 +359,7 @@ The transform property allows us to **move, rotate, scale, and skew** HTML eleme
 
 ```
 
-<figure><img src="../.gitbook/assets/matrix.PNG" alt=""><figcaption><p>Width scale(1.2) and height 0.6, skew(30deg) and translate(100px, 200px)</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/matrix.PNG" alt="" width="497"><figcaption><p>Width scale(1.2) and height 0.6, skew(30deg) and translate(100px, 200px)</p></figcaption></figure>
 
 <details>
 
@@ -365,7 +369,6 @@ The **translate()** method moves the element's **current position by X/Y:**
 
 ```css
 // -/+ X values being left and right, while -/x top and bottom on Y axis
-
 .cor{
     background-color: lightsalmon;
     width: 250px;
@@ -383,7 +386,6 @@ The **rotate()** method rotates the element clock/anti-clockwise in degrees:
 
 ```css
 //negative numbers for anti-clockwise
-
 .prin{
     background-color: darkgoldenrod;
     width: 300px;
@@ -475,7 +477,6 @@ The transition **property** allows us to change CSS values over a duration.
 transition: width 2s, linear 1s;
 
 //Transition being a shorthand for 
-
 transition-property= "width"
 transition-duration= 2s
 transition-timing-function: "linear"
@@ -569,16 +570,16 @@ We can add the transition **effect** to a transformation **method**.
 //we transition the width property AND also transform by degrees
 
 .prin{
-    background-color: darkgoldenrod;
-    width: 300px;
-    height: 330px;
+  background-color: darkgoldenrod;
+  width: 300px;
+  height: 330px;
 
-    transition: transform 3s, width 3s;
+  transition: transform 3s, width 3s;
 }
 
 .prin:hover{
-    transform: rotate(90deg);
-    width: 220px;
+  transform: rotate(90deg);
+  width: 220px;
 }
 ```
 
@@ -707,7 +708,7 @@ The **animation-fill-mode** property sets the **properties** that are gonna be *
 
 We can use the **animation-timing-function** steps() to use image frames.
 
-```
+```css
 steps(<number_of_steps>, <direction>)
 ```
 
@@ -740,9 +741,9 @@ We move the pixel images as background, on a 1-frame width window:
 
 </details>
 
-<figure><img src="../.gitbook/assets/animationsteps (1).gif" alt=""><figcaption><p>Example of it in action with pixel art</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/animationsteps (1).gif" alt="" width="225"><figcaption><p>Example of it in action with pixel art</p></figcaption></figure>
 
-Check [React-spring-1](../react/react-spring-1.md) to see how to pixel easings: steps() animate with useSpring().
+Check [React-spring-1](../../react/react-spring-1.md) to see how to pixel easings: steps() animate with useSpring().
 
 in the next example we will use **transform-origin**:&#x20;
 
@@ -761,7 +762,7 @@ transform: top/bottom/left/right/(X% Y%)
 {% tab title="Example" %}
 For a transform-origin: **25% 25%**, and a transform: rotate().
 
-<figure><img src="../.gitbook/assets/transfrom-rotate.png" alt=""><figcaption><p>(0deg), (90deg), (180deg) and (270deg)</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/transfrom-rotate.png" alt=""><figcaption><p>(0deg), (90deg), (180deg) and (270deg)</p></figcaption></figure>
 {% endtab %}
 {% endtabs %}
 
@@ -802,17 +803,15 @@ The steps(**start/end**) sets the starting frame, while the **forwards/backwards
 {% tab title="Animation" %}
 **Steps(start)** will "skip" the first frame, while completely ending, while **steps(end**) will start from the very first frame but end 1 frame before
 
-<figure><img src="../.gitbook/assets/pendolato4 (1).gif" alt=""><figcaption><p>steps(start) and steps(end)</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/pendolato4 (1).gif" alt="" width="525"><figcaption><p>steps(start) and steps(end)</p></figcaption></figure>
 {% endtab %}
 
 {% tab title="animation-fill-mode" %}
 **Forwards** will keep the last frame at the end of the animation, while **backwards** will rollback to the first.
 
-<figure><img src="../.gitbook/assets/fill-mode.PNG" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/fill-mode.PNG" alt=""><figcaption></figcaption></figure>
 {% endtab %}
 {% endtabs %}
-
-1
 
 <details>
 
@@ -863,7 +862,7 @@ The animated part being:
 
 </details>
 
-<figure><img src="../.gitbook/assets/typewriter2.gif" alt=""><figcaption><p>typewriter effect gif (kinda)</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/typewriter2.gif" alt="" width="312"><figcaption><p>typewriter effect gif (kinda)</p></figcaption></figure>
 
 ## Clock CSS Designs and JS-based animation
 
@@ -1004,11 +1003,11 @@ In the animation we include **translateY()** for the center/hand **intersect**:
 
 </details>
 
-<figure><img src="../.gitbook/assets/clocking.gif" alt=""><figcaption><p>animated clock hands with center intersection</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/clocking.gif" alt="" width="335"><figcaption><p>animated clock hands with center intersection</p></figcaption></figure>
 
 For the next part, we need the [**insertAdjacentElement()**](https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentElement) method **;**
 
-```
+```html
 //To insert an element node in a position relative to another element
 element.insertAdjacentElement(<position>, <inserted element>)
 
@@ -1106,7 +1105,7 @@ We **insertAdjacentElement()** the created **\<style>** tag with the 30 CSS sele
 
 </details>
 
-<figure><img src="../.gitbook/assets/JSdesign.png" alt=""><figcaption><p>Js implemented design</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/JSdesign.png" alt="" width="340"><figcaption><p>Js implemented design</p></figcaption></figure>
 
 <details>
 
@@ -1226,510 +1225,24 @@ We can animate both with **same keyframes**:
 
 </details>
 
-<figure><img src="../.gitbook/assets/rotation.gif" alt=""><figcaption><p>animated pendolum CSS added</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/rotation.gif" alt="" width="332"><figcaption><p>animated pendolum CSS added</p></figcaption></figure>
 
 Here are more examples of how **linear-gradient degree rotation** works:
 
-```
+```css
 //Where does the 0deg/90deg/180deg and 270deg start?
 
 .nel div:nth-child(1){
-    width: 120px;
-    height: 120px;
-    background: linear-gradient(0deg/90deg/180deg/270deg, yellow, blue);
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(0deg/90deg/180deg/270deg, yellow, blue);
 }
 
 ```
 
-<figure><img src="../.gitbook/assets/rotation.PNG" alt=""><figcaption><p>bottom, left, top, and right </p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/rotation.PNG" alt="" width="471"><figcaption><p>bottom, left, top, and right </p></figcaption></figure>
 
-## CSS Gradients and effects
-
-The **Linear-gradient() function** creates a smooth color transition as a **background-image**, which can include a starting point, direction, and angle.
-
-```
-    background-image: linear-gradient( <Direction>, color1, color2, etc...);
-```
-
-<details>
-
-<summary>Guide to linear-gradients()</summary>
-
-We use Degrees as **starting point**:
-
-```
-.nel div:nth-child(1){
-    width: 120px;
-    height: 120px;
-    background: linear-gradient(0deg, yellow, blue);
-}
-
-```
-
-If we use keywords it's the **to ending point**:
-
-```
-.nel div:nth-child(2){
-    width: 120px;
-    height: 120px;
-    background: linear-gradient(to right bottom , yellow, blue, pink );
-}
-
-```
-
-We can also use **background-image** and **transparent** gradients;
-
-```
-//we got the blue on transparent gradient
-
-.nel div:nth-child(3){
-    width: 120px;
-    height: 120px;
-
-    background-image: 
-        linear-gradient(
-            to bottom right, 
-            yellow, 
-            transparent, 
-            pink 
-        );
-    background-color: blue;
-}
-
-```
-
-We can use **%** or **px** for **color-stops** on the gradient:
-
-```
-//we set where the color will change
-
-.nel div:nth-child(4){
-    width: 120px;
-    height: 120px;
-
-    background-image: 
-        linear-gradient(
-            110deg, 
-            yellow, 
-            transparent 15%,
-            pink 40%
-        );
-    background-color: blue;
-}
-
-```
-
-if we want rigid color transition we can:
-
-```
-.nel div:nth-child(5){
-    width: 120px;
-    height: 120px;
-
-    background-image: 
-        linear-gradient(
-            90deg,
-            orange 30px,
-            blue 30px,
-            blue 70px,
-            orange 70px
-        );
-}
-
-```
-
-</details>
-
-<figure><img src="../.gitbook/assets/radientlin.PNG" alt=""><figcaption><p>differet linear-gradient </p></figcaption></figure>
-
-A **radial-gradient()** function radiates **from** the **center**, on an ellipse(default) or circle shape:
-
-```
-    background-image: 
-        radial-gradient( <shape> <starting-point>, color1, color2, etc );
-```
-
-<details>
-
-<summary>Radial gradient guide</summary>
-
-We can change the gradient's ending areas with:
-
-```
-//closest-corner, closest-side, farthest-corner, farthest-side
-
-.alto div:nth-child(1){
-    width: 180px;
-    height: 120px;
-
-    background-color: yellow;
-    background-image: 
-        radial-gradient(
-            circle closest-corner,
-            transparent, 
-            red
-    );
-}
-
-//corner or side
-.alto div:nth-child(2){
-    width: 180px;
-    height: 120px;
-
-    background-color: yellow;
-    background-image: 
-        radial-gradient(
-            circle closest-side, 
-            transparent, 
-            red
-        );
-}
-```
-
-We set the **starting point** for the radial:
-
-```
-//we didn't set the shape and get an ellipse
-
-.alto div:nth-child(3){
-    width: 180px;
-    height: 120px;
-
-    background-color: yellow;
-    background-image: 
-        radial-gradient(
-            at top,
-            transparent 30%,
-            red 
-        );
-}
-```
-
-And use rigid gradients:
-
-```
-
-.alto div:nth-child(4){
-    width: 180px;
-    height: 120px;
-
-    background-color: yellow;
-    background-image: 
-        radial-gradient(
-            circle at top left ,
-            transparent 30%,
-            red 30%
-        );
-}
-```
-
-</details>
-
-<figure><img src="../.gitbook/assets/radialGRAdd.PNG" alt=""><figcaption><p>radial on different shapes, areas and positions</p></figcaption></figure>
-
-A **conic-gradient** is a circular gradient that **rotates on** a center point
-
-<details>
-
-<summary>Conic-gradient guide</summary>
-
-We can set **AT** its center (with both % and px):
-
-```
-.conico div:nth-child(1){
-    width: 150px;
-    height: 120px;
-
-    background-image: 
-        conic-gradient(
-            at 50% 70%,
-            yellow, 
-            red
-        );
-}
-
-```
-
-We can also set **FROM** which degree they start and color stops(only in **deg** and **%**)
-
-```
-.conico div:nth-child(2){
-    width: 150px;
-    height: 120px;
-
-    background-image: 
-        conic-gradient(
-            from 50deg,
-            yellow 10%,
-            red 10%
-        );
-}
-
-```
-
-</details>
-
-<figure><img src="../.gitbook/assets/conicradient.PNG" alt=""><figcaption><p>conic gradient position, degree and color stop</p></figcaption></figure>
-
-We can add **repeating-** for all of the gradients.
-
-<details>
-
-<summary>Repeating-gradients guide</summary>
-
-To have **repeating** gradients we need to set an **ending point** in %, deg, and px:
-
-```
-.conico div:nth-child(3){
-    width: 150px;
-    height: 120px;
-
-    background-image: 
-        repeating-linear-gradient(
-            45deg,
-            yellow,
-            yellow 10%,
-            red 10%,
-            red 20% 
-        );
-}
-```
-
-for **repeating-radial-gradient** we have:
-
-```
-.conico div:nth-child(4){
-    width: 150px;
-    height: 120px;
-    background-color: red;
-
-    background-image: 
-        repeating-radial-gradient(
-            circle at 90px -20px,
-            red 0,
-            red 45px,
-            yellow 80px
-        );
-}
-```
-
-for **repeating-conic-gradient** we:
-
-```
-// Some code
-
-.conico div:nth-child(5){
-    width: 150px;
-    height: 120px;
-
-    background-image: 
-        repeating-conic-gradient(
-            at 10% 50%,
-            yellow,
-            yellow 10deg,
-            red 10deg,
-            red 20deg,
-            orange 20deg,
-            orange 35deg
-        );
-}
-
-```
-
-</details>
-
-<figure><img src="../.gitbook/assets/repeating.PNG" alt=""><figcaption><p>repeating linear, radial, conic</p></figcaption></figure>
-
-We can use **background-size** (and background-position) to **multiply** the background effect:
-
-<details>
-
-<summary>Checkboard conic-gradient effect </summary>
-
-We use **color-stop** to set each color for **1/4 of the area**, then we set this gradient for 1/4 (**50%, 50%**) of the **size** available:
-
-```
-//background size 50% doubles the number of gradients
-
-.nel div:nth-child(4){
-    width: 120px;
-    height: 120px;
-
-    background-image: 
-        conic-gradient(
-            #fff 90deg, 
-            #000 90deg 180deg, 
-            #fff 180deg 270deg, 
-            270deg,
-            #000 300deg
-        );
-    background-size: 50% 50%;
-}
-```
-
-we use **background-position** to display it in a different **order**:&#x20;
-
-```
-.nel div:nth-child(5){
-    width: 120px;
-    height: 120px;
-
-    background-image: 
-        conic-gradient(
-            #000 0deg 45deg,
-            #fff 45deg 135deg, 
-            #000 135deg 225deg, 
-            #fff 225deg 315deg, 
-            315deg,
-            #000 360deg
-        );
-    background-position: top;
-    background-size: 25% 25%;
-}
-```
-
-</details>
-
-<figure><img src="../.gitbook/assets/coniceffect.PNG" alt=""><figcaption><p>different background-size and background position</p></figcaption></figure>
-
-The same works for **radial-gradients**:
-
-<details>
-
-<summary>Radial-radient circles effects</summary>
-
-**Background-size** defines **colors-stops** size:
-
-```
-//the purple gradient will cover 25% of 1/10 of the space
-.filone div:first-child{
-  height: 180px;
-  background: 
-    radial-gradient(
-      circle,
-      purple 10%,
-      pink 25%
-    );
-
-  background-size: 10% 10%;
-  background-position: left;
-}
-//ALSO position left moves the dots up/down
-
-```
-
-Only **even-numbered** gradients will e "cut" on the sides by **position**:
-
-```
-//position top moves the gradients on the sides
-.filone div:nth-child(2){
-  height: 180px;
-
-  background: 
-    radial-gradient(
-      circle,
-      purple 10%,
-      pink 15%
-    );
-
-  background-size: 25% 25%;
-  background-position: top;
-}
-
-```
-
-We can use percentages for position:
-
-```
-//we started the gradient in the top left using %
-.filone div:nth-child(3){
-  height: 180px;
-
-  background: 
-    radial-gradient(
-      circle,
-      purple 10%,
-      pink 20%
-    );
-
-  background-size: 20% 20%;
-  background-position: 50% 50%;
-}
-
-```
-
-</details>
-
-<figure><img src="../.gitbook/assets/repeatrad.PNG" alt=""><figcaption><p>10%, 25% and 20% sizes</p></figcaption></figure>
-
-We can find many more **gradient designs** [HERE](https://projects.verou.me/css3patterns/) and [Here](https://www.magicpattern.design/tools/css-backgrounds).
-
-<details>
-
-<summary>Conic Metal shiny effect with 6 HSL colors</summary>
-
-We use a **conic-gradient** as **background**, It works on any [HSL ](https://hslpicker.com/)color; _Hue, Saturation, and Lightess:_
-
-```
-//remember that the differences between lightness are what matters
-
-background: 
-conic-gradient(
-  hsla(353, 68%, 42%, 1), hsla(353, 68%, 27%, 1), hsla(353, 68%, 20%, 1), 
-  hsla(353, 68%, 54%, 1), hsla(353, 68%, 57%, 1),
-
-  hsla(353, 68%, 42%, 1),
-  hsla(353, 68%, 67%, 1), hsla(353, 68%, 54%, 1), hsla(353, 68%, 57%, 1),
-
-  hsla(353, 68%, 42%, 1), hsla(353, 68%, 27%, 1), hsla(353, 68%, 20%, 1), 
-  hsla(353, 68%, 54%, 1), hsla(353, 68%, 57%, 1),
-
-  hsla(353, 68%, 42%, 1),
-  hsla(353, 68%, 67%, 1), hsla(353, 68%, 54%, 1), hsla(353, 68%, 57%, 1),
-
-  hsla(353, 68%, 42%, 1)
-);
-
-//The color lightness rule being:
-x   / -15 / -7
-+34 / +3  / +10
-
-```
-
-In order to **add more internal colors** we don't use borders (harder to color) but :before/:after:
-
-```
-//we add children tags to get more layers
-
-.captain::before{
-    content: "";
-    width: 220px;
-    height: 220px;
-    border-radius: 50%;
-
-    background: 
-        conic-gradient(
-            hsla(0, 0%, 71%, 1), hsla(0, 0%, 54%, 1), hsla(0, 0%, 47%, 1),
-            hsla(0, 0%, 80%, 1), hsla(0, 0%, 83%, 1),
-
-            hsla(0, 0%, 71%, 1),
-            hsla(0, 0%, 93%, 1), hsla(0, 0%, 80%, 1), hsla(0, 0%, 83%, 1),
-
-            hsla(0, 0%, 71%, 1), hsla(0, 0%, 54%, 1), hsla(0, 0%, 47%, 1),
-            hsla(0, 0%, 80%, 1), hsla(0, 0%, 83%, 1),
-
-            hsla(0, 0%, 71%, 1),
-            hsla(0, 0%, 93%, 1), hsla(0, 0%, 80%, 1), hsla(0, 0%, 83%, 1),
-
-            hsla(0, 0%, 71%, 1)
-        );
-} 
-
-```
-
-</details>
-
-<figure><img src="../.gitbook/assets/shiny6colors1.PNG" alt=""><figcaption><p>multiple shiny layers</p></figcaption></figure>
+For an overview of how CSS gradients work, check [HE](gradients-and-mask-layers.md).
 
 ## Grany gradient, Clip-path(), smoke and scrolling animation
 
@@ -1802,7 +1315,7 @@ We overlay by putting the **gradient below** the color:&#x20;
 
 </details>
 
-<figure><img src="../.gitbook/assets/grany.PNG" alt=""><figcaption><p>raw gradient, filter and overlayed colors</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/grany.PNG" alt="" width="563"><figcaption><p>raw gradient, filter and overlayed colors</p></figcaption></figure>
 
 To use **grany radial gradients** as an overlay:
 
@@ -1878,7 +1391,7 @@ While the 2 _absolute_ layers:
 
 </details>
 
-<figure><img src="../.gitbook/assets/gradientecentro1.gif" alt=""><figcaption><p>Radial gradient on single layer</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/gradientecentro1.gif" alt="" width="312"><figcaption><p>Radial gradient on single layer</p></figcaption></figure>
 
 We can create a **3D shadow** with a double **radial-gradient():**
 
@@ -1987,7 +1500,7 @@ For the _sphere_ and its _internal shadow_ we:
 
 </details>
 
-<figure><img src="../.gitbook/assets/narancia1.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/narancia1.png" alt="" width="323"><figcaption></figcaption></figure>
 
 We can use **mix-blend-mode** and **filters** to create animated text gradient effect:
 
@@ -2063,7 +1576,7 @@ For the mix-blend background, we use **multiply/screen** to show the **dark/whit
 
 </details>
 
-<figure><img src="../.gitbook/assets/invisiblegrad2.gif" alt=""><figcaption><p>invisible gradient tet effect</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/invisiblegrad2.gif" alt="" width="362"><figcaption><p>invisible gradient tet effect</p></figcaption></figure>
 
 For multiple grany gradient backgrounds effect:
 
@@ -2127,144 +1640,7 @@ We use a **partial-transparency** for the blue center:
 
 </details>
 
-<figure><img src="../.gitbook/assets/captaingradient.PNG" alt=""><figcaption><p>double grany radial gradient CSS</p></figcaption></figure>
-
-### The clip-path() property
-
-Clip-path() is a CSS property to cut a geometrical region from a region:
-
-{% tabs %}
-{% tab title="circle()" %}
-We use **circle( radius, center )**:
-
-```
-//we can use % and px for the center, 50% takes the entire space
-.circolo{
-    background-color: red;
-    clip-path: circle(40% at 20% 75% );
-}
-
-```
-
-<figure><img src="../.gitbook/assets/circle.PNG" alt=""><figcaption><p>clip circle on different center</p></figcaption></figure>
-{% endtab %}
-
-{% tab title="ellipse()" %}
-We use **ellipse( Xaxis, Yaxis, center)**:
-
-```
-//you can also use %
-.ellipse{
-    background-color: blue;
-    clip-path: ellipse(70px 100px at 135px 40px);
-}
-
-```
-
-<figure><img src="../.gitbook/assets/ellipse.PNG" alt=""><figcaption><p>ellipse with different center</p></figcaption></figure>
-{% endtab %}
-
-{% tab title="inset()" %}
-We get a rectangle with **inset( Xinset, Yinset ):**
-
-```
-//we cut 10% on both X sides, while 355 on the other
-.siren{    
-    background-color: darkmagenta;
-    clip-path: inset( 10% 35% );
-}
-
-```
-
-<figure><img src="../.gitbook/assets/inset.PNG" alt=""><figcaption><p>clip inset rectangle</p></figcaption></figure>
-{% endtab %}
-{% endtabs %}
-
-We can have **border-radius** on inset clips:
-
-<details>
-
-<summary>Border radius examples</summary>
-
-Unlike **inset()** that can take **2 values max**, we can use up to 4 with border-radius:
-
-```
-.commo{
-    background-color: crimson;
-    clip-path: inset( 5% 15% round 50% 50% 0 0 );
-}
-
-.pizza{
-    background-color: goldenrod;
-    clip-path: inset( 15% 5% round 50% 50% );
-}
-
-.tower{
-    background-color: dodgerblue;
-    clip-path: inset( 10% round 50% 0 50% 0 );
-}
-
-.quarto{
-    background-color: rosybrown;
-    clip-path: inset( 15% round 0 50% 0 0 );
-}
-
-```
-
-</details>
-
-<figure><img src="../.gitbook/assets/insetradius.PNG" alt=""><figcaption><p>inset with border radius</p></figcaption></figure>
-
-We can clip entire **polygon()**, you can use this as a [guide](https://www.cssportal.com/css-clip-path-generator/):
-
-{% tabs %}
-{% tab title="Star polygon clip" %}
-We draw **(X,Y)** points for each point of the polygon:
-
-```
-//remember to NOT put a (,) for the last point
-.stalle{
-    background-color: white;
-    clip-path: polygon(
-        50% 0%, 
-        61% 35%, 
-        98% 35%, 
-        68% 57%, 
-        79% 91%, 
-        50% 70%, 
-        21% 91%, 
-        32% 57%, 
-        2% 35%, 
-        39% 35%
-    );
-}
-```
-
-<figure><img src="../.gitbook/assets/stalle.PNG" alt=""><figcaption><p>star polygon on gradient</p></figcaption></figure>
-{% endtab %}
-
-{% tab title="Slice polygon" %}
-We use the border-radius and clip for the slice:
-
-```
-.poligono{
-    border-radius: 50%;
-    clip-path: polygon(
-        0 0, 
-        0 100%, 
-        100% 100%, 
-        100% 0, 
-        65% 0, 
-        50% 50%, 
-        35% 0
-    );
-}
-
-```
-
-<figure><img src="../.gitbook/assets/pizzacut.PNG" alt=""><figcaption><p>the sliced circle clip</p></figcaption></figure>
-{% endtab %}
-{% endtabs %}
+<figure><img src="../../.gitbook/assets/captaingradient.PNG" alt="" width="344"><figcaption><p>double grany radial gradient CSS</p></figcaption></figure>
 
 ### Animated smoke CSS effect
 
@@ -2276,7 +1652,7 @@ We are gonna animate a list of layers in a different order:
 
 For the absolute layers, we need a relative container.
 
-```
+```css
 <div class="fumo">
   <li></li>
   <li></li>
@@ -2288,12 +1664,11 @@ For the absolute layers, we need a relative container.
 .fumo{
   position: relative;
 }
-
 ```
 
 We style each smokeball:
 
-```
+```css
 //they are gonna be overlayed and share the same space
 .fumo li{
   position: absolute;
@@ -2304,12 +1679,11 @@ We style each smokeball:
   border-radius: 50%;
   background-color: rgba(0, 140, 255, 0.6);
 }
-
 ```
 
 To create a **spread smoke** effect we use **2 animations**:
 
-```
+```css
 //one for the even smokeballs and another for the odd
 .fumo li:nth-child(even){
   animation: fuceven 1s linear infinite;
@@ -2323,7 +1697,7 @@ To create a **spread smoke** effect we use **2 animations**:
 
 And we also add a **different delay** to each smokeball:
 
-```
+```css
 //we keep the last smoke fixed for a better stream
 .fumo li:nth-child(1){
   animation-delay: 0.2s;
@@ -2341,12 +1715,11 @@ And we also add a **different delay** to each smokeball:
   animation: none;
   filter: blur(15px);
 }
-
 ```
 
 For the actual animated frames:
 
-```
+```css
 //from their actual position (0,0) to any (x,y)
 @keyframes fuceven {
   0%{
@@ -2373,18 +1746,17 @@ For the actual animated frames:
       filter: blur(10px);
   }
 }
-
 ```
 
 </details>
 
-<figure><img src="../.gitbook/assets/fumogeno1.gif" alt=""><figcaption><p>smoke effect</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/fumogeno1.gif" alt="" width="94"><figcaption><p>smoke effect</p></figcaption></figure>
 
 ### CSS and JS scrolling timer effect
 
 The HTML structure of the clock is gonna be:
 
-```
+```html
 //each time value is gonna be a container of 2 values
 <div class="hours1">
   <div class="first">
@@ -2497,347 +1869,7 @@ The CSS animations being:
 
 </details>
 
-<figure><img src="../.gitbook/assets/scrolling.gif" alt=""><figcaption><p>scrolling clock js animation</p></figcaption></figure>
-
-## CSS borders and border-box
-
-Using the border property we can specify **width, color and style** of a border
-
-<details>
-
-<summary>Borders guide</summary>
-
-About **border-style**:
-
-```
-.dot{
-    border: dotted 5px brown;
-}
-
-.dash{
-    border: dashed 5px brown;
-}
-
-.solid{
-    border: solid 5px brown;
-}
-
-//all get a complementary darker border-color 
-.groove{
-    border: groove 10px red;
-}
-
-.ridge{
-    border: ridge 10px red;
-}
-
-.inset{
-    border: inset  10px red;
-}
-
-.outset{
-    border: outset 10px red;
-}
-
-```
-
-We can style/width each side of the border
-
-```
-//order being top/right/bottom/left
-.chiuso{
-    border: outset red;
-    border-width: 8px 4px 2px 20px;
-}
-```
-
-</details>
-
-<figure><img src="../.gitbook/assets/bordertype.PNG" alt=""><figcaption><p>border examples</p></figcaption></figure>
-
-We can use border-style: **double** or the **outline** property for a double border:
-
-<details>
-
-<summary>Border: double and Outline guide </summary>
-
-The **width** of border-style: **double** is equally divided:
-
-```
-//between the external border, the offset, and the internal
-.dou{
-    border: double 10px red;    //3px red, 3px white, 3px red
-}
-```
-
-The **outline property** draws a line outside the border.
-
-It shared properties with border but **can't use** border-**radius**, it can **conflict with margin:**
-
-```
-//outline-style: dotted, dashed, solid, double, groove, ridge, inset, outset
-.groove{
-    background-color: darkorange;
-    border: 5px dotted brown;
-    outline: 5px dashed lightskyblue;
-    outline-offset: 5px;
-}
-
-```
-
-Outline-offset is _not in the shortcut_ and can be negative:
-
-```
-//calculate outline width when setting offset
-.dash{
-    background-color: darkorange;
-
-    border: 5px dashed lightskyblue;
-    outline: 5px dotted brown;
-    outline-offset: -15px;
-}
-
-```
-
-</details>
-
-<figure><img src="../.gitbook/assets/doubbleouts.PNG" alt=""><figcaption><p>border-style double and outlines</p></figcaption></figure>
-
-For an internal border, we can use **:before:after, box-shadow, or background-clip:**
-
-{% tabs %}
-{% tab title="Absolute position" %}
-We space each side:
-
-```
-//relative>absolute needed 
-.tasti{
-    position: relative;
-    border: 8px solid red;
-}
-
-.tasti::after{
-    content: " ";
-    position: absolute;
-
-    top: 5px;
-    left: 5px;
-    right: 5px;
-    bottom: 5px;
-    border: 3px solid green;
-}
-```
-
-<figure><img src="../.gitbook/assets/absoluteborder.PNG" alt=""><figcaption><p>after layer on the relative</p></figcaption></figure>
-{% endtab %}
-
-{% tab title="Display flex" %}
-We center the :after with the **flex** display :
-
-```
-//justify and align
-.flexo{
-    position: relative;
-    border: 8px solid red;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.flexo::after{
-    content: "";
-    position: absolute;
-
-    width: 80%;
-    height: 80%;
-    border: 3px solid green;
-}
-```
-
-<figure><img src="../.gitbook/assets/flexborder.PNG" alt=""><figcaption><p>flex display</p></figcaption></figure>
-{% endtab %}
-
-{% tab title="box-shadow" %}
-We draw a shadow-box with **blur** and **offset to 0**:
-
-```
-//they won't any space between, and the second needs to exceed the first
-.ombra{
-    height: 50px;
-    width: 120px;
-
-    background-color: pink;
-    box-shadow: 
-    0 0 0 5px blue,
-    0 0 0 10px orange;
-}
-
-```
-
-<figure><img src="../.gitbook/assets/doppioborda.PNG" alt=""><figcaption><p>double shadow </p></figcaption></figure>
-{% endtab %}
-
-{% tab title="background-clip" %}
-We use **background-clip: content-box** to stop the background before the padding, only on white:
-
-```
-.breaking{
-    background-color: pink;
-
-    border: 7px solid rgb(36, 85, 7);
-    padding: 5px;
-    background-clip: content-box;
-}
-
-```
-
-<figure><img src="../.gitbook/assets/whiteclip.PNG" alt=""><figcaption><p>padding on content-box</p></figcaption></figure>
-{% endtab %}
-{% endtabs %}
-
-The **border width** sets the _difference_ between **content-box** and **border-box**:
-
-```
-//box-sizing: content-box is set by default, it adds border and padding to the width
-//border-box sums border and padding to the set width
-.come{
-    background-color: pink;
-    box-sizing: content-box;
-    
-    padding: 20px;
-    border: 10px blue solid;
-}
-
-.cane{
-    background-color: pink;
-
-    border: 10px blue solid;
-    box-sizing: content-box;
-}
-```
-
-<figure><img src="../.gitbook/assets/boxing.PNG" alt=""><figcaption><p>border-box and content-box</p></figcaption></figure>
-
-We use **border-images** to use **gradients** or url images for our borders:
-
-<details>
-
-<summary>Border-image guide</summary>
-
-We can't use the shorthand for images/gradients:
-
-```
-.lineare{
-    border-style: solid;
-    border-width: 15px;
-    border-image: linear-gradient(90deg, rgb(0,143,104), rgb(250,224,66));
-    border-image-slice: 1;
-}
-
-.gradiale{
-    border-image: radial-gradient(rgb(0,143,104), rgb(250,224,66)) 1;
-}
-
-.conico{
-    border-image: conic-gradient(red, yellow, lime, aqua, blue, magenta, red) 1;
-}
-
-//border-image-slice is needed in border-image
-//it's X,Y and can use px/%, for how the image will be cut
-.test{
-  border-style: solid;
-  border-width: 15px;
-  border-image: url( https://live.staticflickr.com/65535/49927594376_d7c5d1d0e6_c.jpg );
-  border-image-slice: 60 30;
-}
-
-.grand{
-  border-style: solid;
-  border-width: 15px;
-  border-image: url(https://live.staticflickr.com/65535/49927594376_d7c5d1d0e6_c.jpg);
-  border-image-slice: 80 fill;
-}
-//fill will use the image as background+border
-```
-
-</details>
-
-<figure><img src="../.gitbook/assets/borderimage.PNG" alt=""><figcaption><p>background-images</p></figcaption></figure>
-
-We **can't use border-radius** not border-left/right/top/bottom for **border-image** but:
-
-<details>
-
-<summary>Border image radius guide</summary>
-
-We can use **padding-box** and **border-box** background:
-
-```
-//we need to use a gradient in the padding-box only to keep the border colored
-.granola{
-    padding: 15px;
-
-    border: 8px solid transparent;
-    border-radius: 15px;
-    background: 
-        linear-gradient(white 0 0) padding-box,
-        linear-gradient(to left, blue, pink) border-box;
-}
-```
-
-We could use **border-image-slice** to cut borders:
-
-```
-//we need % for that
-.meta{
-    border-style: solid;
-    border-width: 15px;
-
-    border-image: linear-gradient(to left, pink, blue);
-    border-image-slice: 100% 1;
-}
-```
-
-Or cut specific border-width:
-
-```
-.chris{
-    padding: 5px;
-
-    border-width: 10px 0 10px 0;
-    border-style: solid;
-    border-color: transparent;
-    
-    background: 
-        linear-gradient(white 0 0) padding-box,
-        linear-gradient(to right, blue, pink) border-box;
-}
-
-```
-
-It works the same for border-radius:
-
-```
-//you will need +1 radius on width
-.vas{
-    padding: 5px;
-
-    border-width: 0 0 10px 20px;
-    border-radius: 50% 0 50% 50%;
-    border-style: solid;
-    border-color: transparent;
-
-    background: 
-        linear-gradient(white 0 0) padding-box,
-        linear-gradient(to right, blue, pink) border-box;
-}
-
-```
-
-</details>
-
-<figure><img src="../.gitbook/assets/borderImagesradius.PNG" alt=""><figcaption><p>different border-image styles</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/scrolling.gif" alt="" width="262"><figcaption><p>scrolling clock js animation</p></figcaption></figure>
 
 ## Custom popup, checklist, expandable and buttons effects
 
@@ -2940,7 +1972,7 @@ We use **opacity** to make it _invisible_, but also **visibility:hidden/visible*
 
 </details>
 
-<figure><img src="../.gitbook/assets/Capitaland.PNG" alt=""><figcaption><p>Capital letter and popup on hover</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/Capitaland.PNG" alt=""><figcaption><p>Capital letter and popup on hover</p></figcaption></figure>
 
 ### CSS custom checklist&#x20;
 
@@ -3040,7 +2072,7 @@ For the transition effect we:
 
 </details>
 
-<figure><img src="../.gitbook/assets/checklist.PNG" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/checklist.PNG" alt="" width="334"><figcaption></figcaption></figure>
 
 ### Expandable text and animated sidebars.
 
@@ -3168,7 +2200,7 @@ For the relative **sidebar,** we **overflow:hidden** and _absolute right: 100%_ 
 
 </details>
 
-<figure><img src="../.gitbook/assets/expandible.png" alt=""><figcaption><p>Expandable and sidenav on hover</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/expandible.png" alt=""><figcaption><p>Expandable and sidenav on hover</p></figcaption></figure>
 
 ### CSS :before:after effects
 

@@ -1,5 +1,6 @@
 # Express.js Routing and Middleware
 
+* [Independent routing with express.router()](express.js-routing-and-middleware.md#independent-routing-with-express.router)
 * [Hashing passwords with bycryptjs](express.js-routing-and-middleware.md#password-hashing-with-bycryptjs)
 
 A middleware is an **express function** called during route requests, it has access to the _request_ and _response_ **objects**, its **next()** function passes control to the next stack/route handler.

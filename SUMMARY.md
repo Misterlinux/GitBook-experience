@@ -9,7 +9,9 @@
 
 ## CSS
 
-* [CSS 1: Animation, gradients and buttons effects](css/css-1.md)
+* [CSS 1: Animation, gradients and buttons effects](css/css-1/README.md)
+  * [Gradients and Mask Layers](css/css-1/gradients-and-mask-layers.md)
+  * [Clip-Path and border](css/css-1/clip-path-and-border.md)
 * [CSS 2: Flex, flex page layout and background-image](css/css-2.md)
 * [PureCSS layout grid and menu](css/purecss-layout-grid-and-menu.md)
 * [Boostrap 1 Modal, Pagination, form layout and input component](css/boostrap-1-modal-pagination-form-layout-and-input-component.md)

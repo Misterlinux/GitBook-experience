@@ -89,13 +89,3 @@ router.post("/auth", authenticate, (req, res) => {
 ```
 
 1
-
-1
-
-1
-
-1
-
-1
-
-1

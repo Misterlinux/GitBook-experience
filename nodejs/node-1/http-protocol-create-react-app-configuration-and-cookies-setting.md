@@ -118,5 +118,3 @@ On google you can find the cookies in the **application**> cookies, while in fir
 <figure><img src="../../.gitbook/assets/sentcookies.jpg" alt=""><figcaption><p>Cookies sent to the browser</p></figcaption></figure>
 
 1
-
-1

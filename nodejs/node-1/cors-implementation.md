@@ -1,5 +1,6 @@
 # CORS implementation
 
+* [Cors simple options properties.](cors-implementation.md#cors-simple-options-properties)
 * [Cors options and preflight request](cors-implementation.md#cors-options-and-preflight-requests)
 
 **CORS** (Cross-Origin-Resource-Sharing) is security feature that specifies the **origins** from which client frontend apps can make cross-origin requests, implemented by the **server** and enforced by the **browser**. It is necessary to avoid **CSRF** (Cross-Site-Request-Forgery).
@@ -377,13 +378,5 @@ The **If-None-Match** request header is used in conjunction with the ETag. It co
 The If-None-Match header is limited to GET and HEAD requests, which retrieve resources, and is not included in requests that edit or update data, such as POST, PUT, and DELETE, as they do not return a response resource.
 
 <figure><img src="../../.gitbook/assets/ETag1.png" alt="" width="504"><figcaption><p>The if-none-match and ETag headers in an GET request</p></figcaption></figure>
-
-1
-
-1
-
-1
-
-1
 
 1
