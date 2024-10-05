@@ -63,6 +63,7 @@
   * [JWT signing and verification](nodejs/node-1/jwt.md)
 * [NODE 2](nodejs/node-2.md)
 * [NODE 3](nodejs/node-3.md)
+* [JSON Syntax and Structure](nodejs/json-syntax-and-structure.md)
 
 ## DATABASE
 

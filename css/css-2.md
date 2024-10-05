@@ -42,7 +42,7 @@ The **Flex**box layout justifies and aligns items within its container, while fl
 
 ```
 
-<figure><img src="../.gitbook/assets/flexjustify.PNG" alt=""><figcaption><p>column and row</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/flexjustify.PNG" alt="" width="563"><figcaption><p>column and row</p></figcaption></figure>
 
 {% tabs %}
 {% tab title="Sidebar-flex" %}
@@ -51,17 +51,16 @@ To justify/align any element we need to use **display:flex each time**, also pos
 ```jsx
 //The height will be given by the content
 <div class="contiene">
-    <div class="sidebar">
+  <div class="sidebar">
 
-    </div>
-    <div class="stuff">
+  </div>
+  <div class="stuff">
 
-    </div>
+  </div>
 </div>
 <div class="footer">
 
 </div>
-
 ```
 
 In the CSS we use **Flex** to dynamically set the **width** of each div:
@@ -69,31 +68,31 @@ In the CSS we use **Flex** to dynamically set the **width** of each div:
 ```css
 //Flex-direction is row by default
 .contiene{
-    display: flex;
+  display: flex;
 }
 
 //1/5 of flex for sidebar while 4/5 for stuff
 .contiene .sidebar{
-    flex: 1;
-    background-color: brown;
+  flex: 1;
+  background-color: brown;
 }
 
 .contiene .stuff{
-    display: flex;
-    flex: 4;
-    justify-content: center;
-    background-color: orange;
+  display: flex;
+  flex: 4;
+  justify-content: center;
+  background-color: orange;
 }
 
 //while footer can just be
 .footer{
-    display: flex;
-    background-color: black;
+  display: flex;
+  background-color: black;
 }
 
 ```
 
-<figure><img src="../.gitbook/assets/fullflex.PNG" alt=""><figcaption><p>full page flex layout</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/fullflex.PNG" alt="" width="563"><figcaption><p>full page flex layout</p></figcaption></figure>
 {% endtab %}
 
 {% tab title="Navbar-flex" %}
@@ -132,13 +131,12 @@ For smaller screens we just set the navbar as column **on column flex container*
 
 The values for both **justify-content** and **align-items**:
 
-```
+```css
 flex-start | flex-end | center         //left, right, center
 space-between |                        //uses all the space to space the elements
-space-around |                         //uses spaces for he border
-stretch |                              //will stretch elements to use all the space                
+space-around |                         //uses spaces for the border
+stretch |                              //will stretch elements to use all the space
 baseline                               //align for baseline
-
 ```
 
 We can use **inline-flex** to use flex only on a text element width:
@@ -212,7 +210,7 @@ To get a smaller border we reduced the container:
 
 </details>
 
-<figure><img src="../.gitbook/assets/Untitled.png" alt=""><figcaption><p>row and column flex layout</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/Untitled.png" alt="" width="270"><figcaption><p>row and column flex layout</p></figcaption></figure>
 
 The **flex-wrap** property sets if flex element will **fit in one line (nowrap)** or can **warp onto multiple lines,** we can use **flex with %** to set more precise for the elements.
 
@@ -261,7 +259,7 @@ We can also use **wrap-reverse** if we needed to change the order.
 
 ```
 
-<figure><img src="../.gitbook/assets/flexflow.PNG" alt=""><figcaption><p>33% flex layout</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/flexflow.PNG" alt="" width="454"><figcaption><p>33% flex layout</p></figcaption></figure>
 {% endtab %}
 
 {% tab title="Flex-wrap and 50%" %}
@@ -274,7 +272,7 @@ We go from 1/3 to 1/2 of the page for the elements:
 
 ```
 
-<figure><img src="../.gitbook/assets/flexflowmin.PNG" alt=""><figcaption><p>50% flex </p></figcaption></figure>
+<figure><img src="../.gitbook/assets/flexflowmin.PNG" alt="" width="363"><figcaption><p>50% flex </p></figcaption></figure>
 {% endtab %}
 
 {% tab title="Flex-wrap and 100%" %}
@@ -287,7 +285,7 @@ A single element per line:
 
 ```
 
-<figure><img src="../.gitbook/assets/flexgrowmobile.PNG" alt=""><figcaption><p>100% flex-wrap</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/flexgrowmobile.PNG" alt="" width="212"><figcaption><p>100% flex-wrap</p></figcaption></figure>
 {% endtab %}
 {% endtabs %}
 
@@ -344,7 +342,7 @@ If we want to define the **space between** the flex elements we use **gap**:
 
 </details>
 
-<figure><img src="../.gitbook/assets/aligngap.png" alt=""><figcaption><p>align-content and gap </p></figcaption></figure>
+<figure><img src="../.gitbook/assets/aligngap.png" alt="" width="390"><figcaption><p>align-content and gap </p></figcaption></figure>
 
 ### CSS reset and flex navbar
 
@@ -353,68 +351,67 @@ For a **flex navbar**, we need:
 ```jsx
 //we create a row with 2 columns
 <div class="naviga">
-    <div class="col">
-        <div>lorem </div>
-        <div>lorem </div>
-    </div>
+  <div class="col">
+    <div>lorem </div>
+    <div>lorem </div>
+  </div>
 
-    <div class="col">
-        <div>lorem </div>
-        <div>lorem </div>
-        <div>lorem </div>
-    </div>
+  <div class="col">
+    <div>lorem </div>
+    <div>lorem </div>
+    <div>lorem </div>
+  </div>
 </div>
+
 
 //we use justify-content to space the nav-items
 .naviga{
-    display: flex;
-    justify-content: space-between;
-    background-color: orangered;
+  display: flex;
+  justify-content: space-between;
+  background-color: orangered;
 }
 
 .naviga .col{
-    display: flex;
+  display: flex;
 }
 
 .col div{
-    padding: 0.6em 1em;
-    color: blueviolet;
+  padding: 0.6em 1em;
+  color: blueviolet;
 }
 
 .col div:hover{
-    color: orangered;
-    background-color: blueviolet;
-    cursor: pointer;
+  color: orangered;
+  background-color: blueviolet;
+  cursor: pointer;
 }
-
 ```
 
-<figure><img src="../.gitbook/assets/flexnavhover.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/flexnavhover.png" alt="" width="504"><figcaption></figcaption></figure>
 
 We use **CSS reset** to cut **default CSS styling** from the browser:
 
-```
+```css
 //Without this we would have extra borders, and the navbar wouldn't cover the page
 HTML,body, div, form, fieldset, blockquote, header,h1,h2,h3
 {
-    font-size: 100%;
-    font-weight: normal;
+  font-size: 100%;
+  font-weight: normal;
 
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 
-    vertical-align: baseline;
+  vertical-align: baseline;
 
-    border: 0;
-    outline: 0;
-    background: transparent;
+  border: 0;
+  outline: 0;
+  background: transparent;
 }
 
 img
 {
-    border: 0;
+  border: 0;
 }
-
 ```
 
 ### HTML \<img> and Background image
@@ -425,7 +422,7 @@ We use the **\<img>** tag for _**images**_, it creates a space to link the image
 
 <summary>Image tag and flex order example</summary>
 
-```
+```html
 //we can use order to change the order of flex-items
 <div class="vedi">
     <img src="https://live.staticflickr.com/65535/52575562589_e7f248ff8f_c.jpg" alt="">
@@ -454,7 +451,15 @@ We use the **\<img>** tag for _**images**_, it creates a space to link the image
 
 </details>
 
-<figure><img src="../.gitbook/assets/images.PNG" alt=""><figcaption><p>&#x3C;img> with flex order</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/images.PNG" alt="" width="446"><figcaption><p>&#x3C;img> with flex order</p></figcaption></figure>
+
+The **aspect-ratio** property regulates the proportions between the height/width of the element independently of the screen size.
+
+```css
+//By higher it will be smaller than the other, if lower it will multiply
+height: 300px
+aspect-ratio: 3/2 // 300 = aspect-rario * x
+```
 
 We can use both the \<img> and background-Image to set a low-opacity image background to some centered text.
 
@@ -552,17 +557,32 @@ The backround 100% occupies the container.
 
 **Background-position** and **background-size** work similarly to how they worked with gradients, on CSS1.
 
-```jsx
+```css
 //position accepts X/Y values
 background-position: top/left/bottom/right/%/px
 
 //its default value is the native size of the image, auto/contain
 background-size: X/Y/%
 background-size: cover    //it stretches the image to occupy all the space, can crop
- 
 ```
 
-By default, a **background-image** that is smaller than the element it's in will **repeat** itself to **fill** it.
+The **background-position** set with **%** won't work for 100% background-size, due to how the background interacts with its container. For more details check [THIS stackOverflow](https://stackoverflow.com/questions/51731106/using-percentage-values-with-background-position-on-a-linear-gradient/51734530#51734530).
+
+```css
+//We need to reduce the size and implement this formula for the position
+//100% * ((movement=50)/(100 - (size=99.5)) = 100% * 100 = 10000%
+
+.backo{
+  width: 250px; height: 150px;
+  background-image: url("https://picsum.photos/id/1069/200/200");
+  background-size: 99.5%;
+  background-position: 10000%;
+}
+```
+
+<figure><img src="../.gitbook/assets/backgrounPosition995.jpg" alt="" width="189"><figcaption></figcaption></figure>
+
+By default, if a **background-image** is smaller than the element it's in will **repeat** itself to **fill** it.
 
 We use **background-clip** to extend it underneath its border-box, padding-box, or content-box.
 
@@ -606,7 +626,7 @@ while **background-clip**:
 
 </details>
 
-<figure><img src="../.gitbook/assets/Cattura.PNG" alt=""><figcaption><p>Background.clip and background-repeat different uses</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/Cattura.PNG" alt="" width="563"><figcaption><p>Background.clip and background-repeat different uses</p></figcaption></figure>
 
 We can include most properties with a **background shorthand** and put **multiple background-images** in one element.
 
@@ -666,25 +686,24 @@ We use a **fixed background-image** to have a fixed **scroll** image:
 </div>
 
 .barra{
-    position: fixed;
-    top: 0;
-    
-    height: 3em;
-    width: 100%;
-    background-color: red;
+  position: fixed;
+  top: 0;
+  
+  height: 3em;
+  width: 100%;
+  background-color: red;
 }
 
 .gravity{
-    background: url("https://bit.ly/3NwLCLI") 20% 3em fixed;
-    
-    background-position: bottom;
-    background-size: cover;
-    height: 22em;
+  background: url("https://bit.ly/3NwLCLI") 20% 3em fixed;
+  
+  background-position: bottom;
+  background-size: cover;
+  height: 22em;
 }
-
 ```
 
-<figure><img src="../.gitbook/assets/fixedscroll2.gif" alt=""><figcaption><p>fixed background-image with fixed top navbar</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/fixedscroll2.gif" alt="" width="505"><figcaption><p>fixed background-image with fixed top navbar</p></figcaption></figure>
 
 ### CSS box-shadow&#x20;
 
@@ -741,7 +760,7 @@ box-shadow: inset 10px -15px 10px 10px brown;
 
 </details>
 
-<figure><img src="../.gitbook/assets/boxshadowbasic.PNG" alt=""><figcaption><p>box-shadow with different offsets/blur and spread</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/boxshadowbasic.PNG" alt="" width="563"><figcaption><p>box-shadow with different offsets/blur and spread</p></figcaption></figure>
 
 We can also have **single-side box-shadow effects**:
 
@@ -768,7 +787,7 @@ box-shadow: inset 20px 0px 20px -10px green;
 
 </details>
 
-<figure><img src="../.gitbook/assets/shadowsides.PNG" alt=""><figcaption><p>single side box-shadow inset effect</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/shadowsides.PNG" alt="" width="563"><figcaption><p>single side box-shadow inset effect</p></figcaption></figure>
 
 ### CSS scrollbar styling
 
@@ -782,22 +801,21 @@ We need to set the **scroll overflow** in the container first:
 
 ```jsx
 <div class="skrull">
+  <div>
     <div>
-        <div>
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. 
-          ...
-        </div>
+      Lorem, ipsum dolor sit amet consectetur adipisicing elit. 
+      ...
     </div>
+  </div>
 </div>
 
 .skrull{
-    overflow-x: scroll;
-    overflow-y: scroll;
+  overflow-x: scroll;
+  overflow-y: scroll;
 
-    width: 30%;
-    height: 8em;
+  width: 30%;
+  height: 8em;
 }
-
 ```
 
 The **bottom/right scrollbar** area is set by height/width:
@@ -805,8 +823,8 @@ The **bottom/right scrollbar** area is set by height/width:
 ```css
 //width sets the left one, while height the bottom one
 .skrull::-webkit-scrollbar{
-    width: 12px;
-    height: 4px;
+  width: 12px;
+  height: 4px;
 }
 
 ```
@@ -815,7 +833,7 @@ while **scrollbar-track** is the actual areas
 
 ```css
 .skrull::-webkit-scrollbar-track {
-    background: orange;
+  background: orange;
 }
 
 ```
@@ -825,16 +843,15 @@ We use **scrollbar-thumb** for the css thumb:
 ```css
 //we can't reduce it, so we use border to color with the backround
 .skrull::-webkit-scrollbar-thumb{
-    background-color: rebeccapurple;
-    border-radius: 10px;
-    border: 3px solid orange;
+  background-color: rebeccapurple;
+  border-radius: 10px;
+  border: 3px solid orange;
 }
-
 ```
 
 </details>
 
-<figure><img src="../.gitbook/assets/scollint.PNG" alt=""><figcaption><p>CSS scrollbar</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/scollint.PNG" alt="" width="224"><figcaption><p>CSS scrollbar</p></figcaption></figure>
 
 The ::-webkit-scrollbar pseudo selector _doesn't work_ in the **Firefox** browser, we use **scrollbar-width** and **scrollbar-color props**.
 
@@ -862,7 +879,7 @@ First, we create the **navbar** using **radio buttons:**
 
 We create **radio buttons** with their own label:
 
-```
+```html
 //each label is linked to the radio button
 <div class="contenuto">
 
@@ -879,32 +896,30 @@ We create **radio buttons** with their own label:
   <label class="salta" for="tabC-7">4</label>
 
 </div>
-
 ```
 
 We then hide the radio buttons with CSS:
 
-```
+```css
 //We keep the buttons position 
 [type=radio] {
-    opacity: 0;
-    width: 0;
-    position: absolute;
-    display: inline-block; 
+  opacity: 0;
+  width: 0;
+  position: absolute;
+  display: inline-block; 
 }
 
 //and then we style the labels
 .salta{
-    background: transparent;
-    color: brown;
-    padding: 0em 0.4em;
+  background: transparent;
+  color: brown;
+  padding: 0em 0.4em;
 }
-
 ```
 
 </details>
 
-<figure><img src="../.gitbook/assets/navcarousel.PNG" alt=""><figcaption><p>radio buttons navbar</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/navcarousel.PNG" alt="" width="212"><figcaption><p>radio buttons navbar</p></figcaption></figure>
 
 Then use **CSS** to create and move the **carousel**.
 
@@ -994,4 +1009,4 @@ On the CSS we give each **radio button** its specific card **transition margin:*
 
 </details>
 
-<figure><img src="../.gitbook/assets/card4.PNG" alt=""><figcaption><p>Form card</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/card4.PNG" alt="" width="304"><figcaption><p>Form card</p></figcaption></figure>
