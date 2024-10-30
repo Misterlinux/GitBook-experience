@@ -33,7 +33,7 @@ app.all('*', function(req, res, next) {
 });
 ```
 
-On the **ReactJs** client we set the **fetch** configuration object for our own **server.js** route. Check [React-3](../react/react-3.md) for more API fetch().
+On the **ReactJs** client we set the **fetch** configuration object for our own **server.js** route. Check [React-3](../react/react-3/) for more API fetch().
 
 ```jsx
 //The body has to be a string or a formData, so we JSON.stringify()

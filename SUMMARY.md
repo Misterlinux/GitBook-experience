@@ -42,7 +42,8 @@
   * [Images handling and the classNames utility](react/react-1/images-handling-and-the-classnames-utility.md)
 * [REACT 2, Input props and onChange(), React form onSubmit() and formData, input multiple attribute an](react/react-2/README.md)
   * [React-Router-Dom Routes](react/react-2/react-router-dom-routes.md)
-* [REACT 3, Fetch() API, OpenAI API translation, useState() objects and conditional rendering, useContext() Providers and useCallback() ](react/react-3.md)
+* [REACT 3, Fetch() API, OpenAI API translation, useState() objects and conditional rendering, useContext() Providers and useCallback() ](react/react-3/README.md)
+  * [React-hook-form](react/react-3/react-hook-form.md)
 * [REACT 4, useMemo(), useReducer(), ReactJs scaling and useRef(()=>{}) Dom manipulation.](react/react-4-usememo-usereducer-reactjs-scaling-and-useref-greater-than-dom-manipulation./README.md)
   * [useReducer() and scale up ReactJs with useContext()](react/react-4-usememo-usereducer-reactjs-scaling-and-useref-greater-than-dom-manipulation./usereducer-and-scale-up-reactjs-with-usecontext.md)
 * [REACT 5, useRef() instance methods, React keyframe animations, useRef() scroll, onDrag() and onDrop() React Events](react/react-5-useref-instance-methods-react-keyframe-animations-useref-scroll-ondrag-and-ondrop-react-even.md)
@@ -53,6 +54,7 @@
   * [Parallax](react/react-spring-3-usespringvalue-usechain-usetrail-indeterpolation-and-parallax./parallax.md)
 * [React-Spring 4 useSpring() methods, async/await springValue(), useSpring() \[scriptsKeys\], useLayout(), useSpring() onScroll()](react/react-spring-4-usespring-methods-async-await-springvalue-usespring-scriptskeys-uselayout-usespring-o.md)
 * [React Spring 5 useResize(), useInView(), indexed useSprings()](react/react-spring-5-useresize-useinview-indexed-usesprings.md)
+* [Yarn rules and installation](react/yarn-rules-and-installation.md)
 
 ## NODEJS
 

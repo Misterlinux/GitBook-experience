@@ -460,6 +460,8 @@ The **replace** property resets the URL to the current path and disables the pre
 ```jsx
 //We can reset the scroll position with <ScrollRestoration> on dataBrowser
 //replace is false by default
+let viaggio = useNavigate()
+
 function giro(){
   viaggio("primo3", {state: {primo: "here"}, replace: true} )
 }

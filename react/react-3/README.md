@@ -1,9 +1,9 @@
 # REACT 3, Fetch() API, OpenAI API translation, useState() objects and conditional rendering, useContext() Providers and useCallback()&#x20;
 
-* [Render useState() arrays and objects](react-3.md#render-usestate-arrays-and-objects)
-* [Conditional rendering using components props](react-3.md#conditional-rendering-using-components-props)
-* [UseContext() and Provider components](react-3.md#usecontext-and-provider-components)
-* [useCallback() React hook with useMemo()](react-3.md#usecallback-react-hook-with-usememo)
+* [Render useState() arrays and objects](./#render-usestate-arrays-and-objects)
+* [Conditional rendering using components props](./#conditional-rendering-using-components-props)
+* [UseContext() and Provider components](./#usecontext-and-provider-components)
+* [useCallback() React hook with useMemo()](./#usecallback-react-hook-with-usememo)
 
 >
 
@@ -127,7 +127,7 @@ const handleOnSubmit = async (e) => {
 
 ```
 
-<figure><img src="../.gitbook/assets/multipleAItranslate.png" alt="" width="563"><figcaption><p>translation response and .text.trim()</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/multipleAItranslate.png" alt="" width="563"><figcaption><p>translation response and .text.trim()</p></figcaption></figure>
 {% endtab %}
 {% endtabs %}
 
@@ -184,7 +184,7 @@ Then we can render it.
 
 </details>
 
-<figure><img src="../.gitbook/assets/regexuseState.png" alt="" width="315"><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/regexuseState.png" alt="" width="315"><figcaption></figcaption></figure>
 
 We loop through the useState() node elements and, using **regex**, we modify **useState()** to render the translation using **map()**.
 
@@ -209,7 +209,7 @@ for(let x of canto){
 
 ```
 
-<figure><img src="../.gitbook/assets/RenderedTranslation.png" alt="" width="467"><figcaption><p>We update the useState() to get the translation to render</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/RenderedTranslation.png" alt="" width="467"><figcaption><p>We update the useState() to get the translation to render</p></figcaption></figure>
 
 ### Render useState() arrays and objects
 
@@ -292,7 +292,7 @@ function multing(){
 
 </details>
 
-<figure><img src="../.gitbook/assets/tripleObject.png" alt="" width="370"><figcaption><p>useState(9 object, add, delete and editing existing properties</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/tripleObject.png" alt="" width="370"><figcaption><p>useState(9 object, add, delete and editing existing properties</p></figcaption></figure>
 
 <details>
 
@@ -357,7 +357,7 @@ function doppio(){
 
 </details>
 
-<figure><img src="../.gitbook/assets/nestedObj.png" alt="" width="466"><figcaption><p>editing different nested properties in the object</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/nestedObj.png" alt="" width="466"><figcaption><p>editing different nested properties in the object</p></figcaption></figure>
 
 <details>
 
@@ -414,7 +414,7 @@ const [press, setPress] = useState(false)
 }
 ```
 
-<figure><img src="../.gitbook/assets/components.png" alt="" width="134"><figcaption><p>conditional rendered componentc</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/components.png" alt="" width="134"><figcaption><p>conditional rendered componentc</p></figcaption></figure>
 
 ```
 //We then use the props in the function component
@@ -591,7 +591,7 @@ function Second(){
 
 </details>
 
-<figure><img src="../.gitbook/assets/contextReact.png" alt="" width="473"><figcaption><p>Context provided value child component</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/contextReact.png" alt="" width="473"><figcaption><p>Context provided value child component</p></figcaption></figure>
 
 We **import createContext()** to create multiple different Context providers.
 
@@ -702,7 +702,7 @@ function RecentPosts() {
 
 </details>
 
-<figure><img src="../.gitbook/assets/nested-provider.png" alt="" width="173"><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/nested-provider.png" alt="" width="173"><figcaption></figcaption></figure>
 
 ### UseCallback() React hook with useMemo()
 
@@ -865,7 +865,7 @@ const ShippingForm = memo( function ShippingForm({ calling }) {
 
 </details>
 
-<figure><img src="../.gitbook/assets/useCallback.PNG" alt="" width="288"><figcaption><p>Checkbox and form ae fast while counter is slow</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/useCallback.PNG" alt="" width="288"><figcaption><p>Checkbox and form ae fast while counter is slow</p></figcaption></figure>
 
 **Rendering** a component is different from **triggering a function within it**.
 

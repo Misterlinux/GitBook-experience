@@ -31,7 +31,7 @@ Response headers set by the server
 
 For more information on specific request and response details, refer to [**CORS**](cors-implementation.md) (Cross-Origin Resource Sharing) documentation.
 
-The **Fetch API** is built on top of the HTTP protocol, enabling JavaScript to send and receive HTTP requests, check the [API section](../../react/react-3.md) for more.
+The **Fetch API** is built on top of the HTTP protocol, enabling JavaScript to send and receive HTTP requests, check the [API section](../../react/react-3/) for more.
 
 **HTTPS** is an extension of HTTP, with the added 'S' standing for security, which encrypts data in transit to provide a secure connection between the client and server.
 
