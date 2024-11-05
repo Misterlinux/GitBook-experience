@@ -305,8 +305,7 @@ The **formState** properties are updated in batches, meaning they are held and d
 
 ```jsx
 //We need to repeat formState, if we destruct properties form it
-const { 
-  register, handleSubmit, formState,
+const { register, handleSubmit, formState,
   formState: { 
     isDirty, dirtyFields, touchedFields, defaultValues, isLoading,
     isSubmitted, isSubmitSuccessful, submitCount,
