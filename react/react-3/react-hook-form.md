@@ -158,6 +158,180 @@ const [luce, setLuce] = useState(0)
 })}/>
 ```
 
+The **valueAsNumber** and **valueAsDate** properties will **parse** the input data into their respective types.  Any input value in the form data is a **string**, regardless of the input **type** attribute. If the input values cannot be parsed, it will return **NaN**.                                                                                                                     The **type** attribute in the input element controls the allowed input types and interactions within the **browser**, preventing the entry of other types of input, but it still returns **strings** to the js.
+
+The **shouldUnregister** prop applies to the single input upon unmounting.                                                     The **disabled** prop results in undefined for the input values. To avoid this, we can use the _placeholder_ attribute on the input.
+
+```jsx
+//do not use shouldUnregister with useFieldArray due to execution order
+//Use readOnly or disabled fieldset to return values from disabled inputs
+<form>
+  <input type="number/date" {...register("primo", {
+    shouldUnregister: false, //true 
+    valueAsNumber: true, valueAsDate: true,
+  })} />
+  <input {...register("secondo")} readOnly placeholder="not changeable value"/>
+  <fieldset disabled>
+    <input {...register("terzo")} placeholder="First Name" />
+  </fieldset>
+  <input type="submit" />
+</form>
+```
+
+The **setValueAs** prop modifies the input value before the validation process. It is ignored if the valueAsNumber or valueAsDate are present.
+
+The **validate** property contains the validation rule functions.                                                                          You can validate using either a **single** callback function or an **object** with multiple function properties. Any returned strings will be added to the error object under the types property. You can return false to indicate a validation error. The validate property supports asynchronous functions for validation.
+
+{% tabs %}
+{% tab title="sync validate" %}
+The setValueAs edited input can skip some validate property functions.
+
+```jsx
+//Use criteriaMode: "all" on useForm() to return multiple errors
+<form>
+  <input {...register("primo", {
+    setValueAs: (value) => ( value + "/api.com" )
+    validate: {
+      lungo: (value) => value.length < 5 && "Too short",
+      corto: v => v.length < 10 && false
+    } 
+  })} />
+</form>
+```
+{% endtab %}
+
+{% tab title="async validate" %}
+We can use the **async** fetch response on the validate process.
+
+```jsx
+//We add teh validate property to the separated register()
+const {
+  register, handleSubmit,
+  formState: { errors, isValid, isDirty },
+} = useForm();
+
+const { ref } = register("primo", {
+  validate: async (value)=>{
+    const response = await fetch('https://catfact.ninja/fact', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    let result = await response.json()
+
+    if( response.ok ){
+      console.log("Both ok and value.length for error")
+      if(value.length> 5){
+        return "Beyond we are"
+      }
+    }
+  }
+});
+
+<form>
+  <input name="primo" ref={ref} />
+</form>
+```
+{% endtab %}
+{% endtabs %}
+
+<figure><img src="../../.gitbook/assets/validateErrors.png" alt="" width="313"><figcaption><p>Returned true error value on returned false validation</p></figcaption></figure>
+
+We can modify the properties of a registered input option by **re-declaring** the **register()** function with the input's name.
+
+```jsx
+//It can be declared as a result of any event.
+function cambio(event){
+  event.target.checked ?? register('primo',{ required: true }) : register('primo');
+}
+
+<form>
+  <p> {errors.primo && "It is required"} </p>
+
+  <input {...register("primo")} /> <span> Required? </span>
+  <input {...register("check", { onChange: (e)=> (cambio(e)) } )} type="checkbox" />
+</form>
+```
+
+<figure><img src="../../.gitbook/assets/required.png" alt="" width="367"><figcaption><p>A changed register() on checkbox event</p></figcaption></figure>
+
+The **unregister()** method will manually remove an unmounted input from the form state. And any validation rules associated with the unregistered input will be removed. Its options props are [here](https://react-hook-form.com/docs/useform/unregister).
+
+```jsx
+//It aplies to the input name, instead of using shouldUnregister prop
+//If just un-registered the input will be re-registered on render
+const [vede, setVede] = useState(true)
+
+function togli(){
+  setVede(false); unregister("primo.uno")
+}
+
+<form>
+  <button onClick={togli}> Un-register </button>
+  {vede && <input {...register("primo.uno")} />}
+</form>
+```
+
+The returned **formState** object contains information about the form, it allows you to track user interactions, validation status, and any errors that may occur during form submission.
+
+```jsx
+//We can create instances of the formState properties
+const { register, formState: { isDirty } } = useForm();
+const { register: register1, formState: { isDirty: isDirty1 } } = useForm();
+```
+
+<details>
+
+<summary>List of formState properties</summary>
+
+The properties of the useForm(), like **defaultValues** and **mode**, affect how the formState properties behave.
+
+* **isDirty**: boolean for the entire form, true if any value is changed from its defaultValues.
+* **dirtyFields**: {inputName: boolean}, returns an object with the inputs that have been changed.
+* **touchedFields**: like dirtyFields, it returns true for any interaction the user had with the input.
+* **defaultValues**: returns the useForm() returnValues.
+* **isSubmitted**: boolean, true after any submit event, even if blocked by errors.
+* **isSubmittedSuccessfull**: boolean, true only for complete submit events
+* **submitCount**: integer, counts even unsuccessful submits.
+* **errors**: object, gets updated by the built-in and validate input rules.
+* **isValid**: boolean, updated in real time, returns true if all input validations are passed.
+* **isValidating**: boolean, Depending on the validation mode set in useForm(), it returns true at the start of the validation process and false after the event is completed.
+* **validatingFields**: {inputName: boolean}, returns an object with the inputs being validated.
+* **isLoading**: boolean, returns true when the defaultValues, if async, is being set.
+
+</details>
+
+The **formState** properties are updated in batches, meaning they are held and do not trigger a re-render until all updates are processed. Therefore, when subscribing to formState properties through useEffect, we need to include the entire formState as a dependency for the effect to work correctly.
+
+```jsx
+//We need to repeat formState, if we destruct properties form it
+const { 
+  register, handleSubmit, formState,
+  formState: { 
+    isDirty, dirtyFields, touchedFields, defaultValues, isLoading,
+    isSubmitted, isSubmitSuccessful, submitCount,
+    isValid, isValidating, validatingFields, errors, disabled
+  }
+} = useForm({mode: "onblur"})
+
+useEffect(() => {
+  /* Triggered formState property */
+  console.log( "On validation event", formState.validatingFields )
+},[formState]);
+
+<form onSubmit={handleSubmit(valori)}>
+  <p> {errors.terzo && "It is required"} </p>
+
+  <input {...register("primo", { required: true, 
+    validate: (value)=>{                    
+      if(value.length > 5){
+        return "Failed triggered validate event"
+      }
+    }
+  })}/>
+</form>
+```
+
 1
 
 1
