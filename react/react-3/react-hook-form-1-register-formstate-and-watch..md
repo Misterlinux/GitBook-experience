@@ -1,8 +1,8 @@
-# React-hook-form
+# React-hook-form 1, register, formState and watch.
 
-* 1
-* 1
-* 1
+* [The useForm() register function.](react-hook-form-1-register-formstate-and-watch..md#the-useform-register-function)
+* [The formState useForm() object.](react-hook-form-1-register-formstate-and-watch..md#the-formstate-useform-object)
+* [The useForm() watch method.](react-hook-form-1-register-formstate-and-watch..md#the-useform-watch-method)
 
 The **React-Hook-Form** is a _form management library_ for React. It minimizes re-renders by leveraging the native **form validation API** and easily integrates with other UI libraries.                                                   It features a simple API structure through the **useForm() hook**, which offers methods for handling forms, it supports both synchronous and asynchronous validation, along with built-in error handling.
 
@@ -107,6 +107,8 @@ We edit useForm() properties using their assigned state values.
 </button>
 ```
 
+### The useForm() register function
+
 The **register()** function, returned by **useForm()**, registers a field into the form state.                                   It returns an object that, when destructured within an \<input> element, provides all the necessary **props** and **event handlers** from the useForm() hook.                                                                                            The input's **name** is used as an argument for the **register** function to link the input to the form state. We can also include a configuration **options objec**t as an argument to the register function.
 
 The **register()** function can be destructured outside of the input tag.                                                              Any function returned by the register event handler needs to be called on each native input event to ensure that the updated values are available in the form state.
@@ -147,10 +149,15 @@ The register options object includes all **built-in** validation rules.         
 
 ```jsx
 //Use the useForm() value prop to set input values
+//We can return strings with the built in validation rules.
 const [luce, setLuce] = useState(0)
 
 <input {...register("primo", {
-  required: true, minLength: 5, maxLength: 10, pattern: /^[a-zA-Z]+$/,
+  required: {
+    value: true, 
+    message: "The input is empty"
+  }, 
+  minLength: 5, maxLength: 10, pattern: /^[a-zA-Z]+$/,
   value: luce,
   onBlur: (event) => {
     console.log("Past input:", event.target.value);
@@ -272,6 +279,8 @@ function togli(){
 </form>
 ```
 
+### The formState useForm() object.
+
 The returned **formState** object contains information about the form, it allows you to track user interactions, validation status, and any errors that may occur during form submission.
 
 ```jsx
@@ -331,14 +340,41 @@ useEffect(() => {
 </form>
 ```
 
-1
+### The useForm() watch method.
 
-1
+The useForm() **watch** method _subscribes_ to changes in the specified registered input.                                It triggers a re-render whenever the input value is updated. It can include a **defaultValue** as its second **argument**, which sets the initial value of the watched input.
 
-1
+```jsx
+//The defaultValue watch will be updated with the useForm() defaultValue
+const {register, handleSubmit, watch} = useForm({
+  defaultValues: { secondo: "seconded value" }
+})
 
-1
+let seco = watch("secondo", "prime value")
+let vedi = () => console.log( seco )  //"prime value" , "seconded value"
 
-1
+<form> <input {...register("secondo")}/> </form>
 
-1
+//We can create mutiple watch variables
+let [sec, tez] = watch(["secondo", "terzo"])  //"secondo" , "terzo"
+let ultimi = watch(["secondo", "terzo"])      //["secondo", "terzo"]
+let tutto= watch() 			      //{} containig the entire form.
+```
+
+In the **useEffect()** hook, we can monitor the form values without triggering a re-render by using the extracted **unsubscribe** method during the cleanup function.
+
+```jsx
+//We destruct the callback function arguments
+let sottoprimo = watch((value, { name, type }) => {
+  console.log( value )
+})
+
+useEffect(() => {
+  const { unsubscribe } = watch(({secondo}) => {
+    if( secondo ){
+      console.log(secondo)
+    }
+  })
+  return () => unsubscribe()
+}, [watch])
+```
