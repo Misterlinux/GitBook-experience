@@ -18,7 +18,7 @@ layout:
 * 1
 * 1
 
-**useMemo(**function, dependencies**)** is a React Hook that **caches** the **return value** of a function _between re-renders_.
+**useMemo(**&#x66;unction, dependencie&#x73;**)** is a React Hook that **caches** the **return value** of a function _between re-renders_.
 
 ```jsx
 const memoized = useMemo(

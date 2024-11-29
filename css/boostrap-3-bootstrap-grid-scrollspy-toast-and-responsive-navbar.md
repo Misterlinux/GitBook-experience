@@ -697,7 +697,7 @@ We can use **external buttons** to **close** a toast:
 
 ### Bootstrap offcanvas&#x20;
 
-**Offcanvas** are hidden sidebars, using **data-bs-toggle** and **data-bs-target** on the button**.**
+**Offcanvas** are hidden sidebars, using **data-bs-toggle** and **data-bs-target** on the butto&#x6E;**.**
 
 While using **offcanvas** and **offcanvas-(position)** on the content.
 

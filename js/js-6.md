@@ -187,7 +187,7 @@ _Promises_ can only change **from pending to fulfilled** or pending to rejected.
 
 The **Blob** object can represent data as a file-like object that doesn't need to be in a javascript-native format, like **images**.
 
-The response**.blob()** method's promise renders an **image** with **URL.createObjectURL()**.
+The respons&#x65;**.blob()** method's promise renders an **image** with **URL.createObjectURL()**.
 
 ```
 //it will return empty("") if its prototype.type is opaque

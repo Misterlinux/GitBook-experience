@@ -1,9 +1,8 @@
-# React-hook-form 2
+# React-hook-form 2: trigger() validate, errors, values and  formState methods.
 
-* 1
-* 1
-* 1
-* 1
+* [The setErrors() and clearErrors() Form methods](react-hook-form-2-trigger-validate-errors-values-and-formstate-methods..md#the-seterrors-and-clearerrors-form-methods)
+* [The setValue(), getValues() and getFormState() Form methods](react-hook-form-2-trigger-validate-errors-values-and-formstate-methods..md#the-setvalue-getvalues-and-getformstate-form-methods)
+* [The setFocus() and validation trigger().](react-hook-form-2-trigger-validate-errors-values-and-formstate-methods..md#the-setfocus-and-validation-trigger)
 
 The **reset()** method resets the form data with the useForm() defaultValues. It can update the input fields and configure the reset process using its _options object_.
 
@@ -85,6 +84,8 @@ function resetto(){
 </form>
 ```
 
+### The setErrors() and clearErrors() Form methods
+
 The **setErrors()** method updates the errors object outside of the input validation rules, it won't affect the submit event.
 
 It assigns an error to its input, along with an object that contains its error type and message. Its option object can include the **shouldFocus** property, which will focus the input field where the error is set. This property doesn't work on Controller inputs.
@@ -150,6 +151,8 @@ function togli3(){
 </form>
 ```
 
+### The setValue(), getValues()  and getFormState() Form methods
+
 The **setValue()** method _programatically_ sets values on a single registered input, for a multi-input change use reset().
 
 A programmatic change is considered different from an user initialized change, it won't trigger a re-render or the formDate validation properties by default.
@@ -192,16 +195,88 @@ function setter(){
 </form>
 ```
 
-1
+The **getValues()** method programmatically accesses the values of form inputs without triggering a re-render, as it does **not subscribe** to input changes like the [**watch** ](react-hook-form-1-register-formstate-and-watch..md#the-useform-watch-method)method.                                                             It can return a single value or an array of values. It returns undefined on **disabled** inputs, so use the **reactOnly** input attribute like in [useForm](react-hook-form-1-register-formstate-and-watch..md#the-formstate-useform-object).
 
-1
+```jsx
+//It will return the input defautlValues on unedited inputs
+const { register, getValues } = useForm({
+  defaultValues: { primo: 'Initial Value' }
+})
 
-1
+//If empty it returns the entire formData
+function valori(){
+  console.log(getValues())  //{primo: "valore1", secondo: "valore2"}
+  console.log(getValues( ["primo", "secondo"] ))  //["valore1", "valore2"]
+  console.log(getValues("primo") )  //"valore1"
+  console.log(getValues(["primo"]) )  //["valore1"]
+}
 
-1
+<form>
+  <input {...register("primo")}/>
+  <input {...register("secondo")}/>
+</form>
+```
 
-1
+The **getFieldState()** method programmatically returns the individual field state properties: **isValid**, **isDirty**, **isTouched**, and the **error** object. Use _getValues()_ to retrieve the input value.
 
-1
+```jsx
+//Will work on forms set with useForm(), useFormState(), useFormContext()
+const { 
+  register,getFieldState, formState: { errors, isDirty, isValid, isTouched}
+} = useForm()
 
-1
+function stato(){
+  console.log( getFieldState("primo") )	
+  //{isValid: , isDirty: ,isTouched: ,errors: }
+}
+
+<form>
+  <input {...register("primo")}/>
+</form>
+```
+
+### The setFocus() and validation trigger().
+
+The **setFocus()** method programmatically focus a registered input, and its **shouldSelect** property selects the entire content of the input.
+
+```jsx
+//It might interfere with the reset() if called immediately afterward.
+//It interacts with teh DOM trought the ref prop returned from register
+const {register, setFocus} = useForm()
+
+function focused(){
+  setFocus( "primo", {
+    shouldSelect: true
+  })
+}
+
+<form>
+  <input {...register("primo")}/>
+</form>
+```
+
+The **trigger()** method programmatically triggers the input **validation function**, including the built-in validation rules. Its options object includes the **shouldFocus** property, which moves the _cursor_ to the target input.
+
+It can target all inputs in the form or an **array** of specific inputs. The React Hook Form _optimitation_ re-renders only the input components that are affected by the trigger.
+
+```jsx
+//Symilar to how mode and reValidateMode mode useForm() properties trigger validate
+const { register, trigger, formState: { errors }} = useForm()
+
+function togli2(){
+  trigger()
+  trigger("primo", {shouldFocus: true})
+  trigger(["primo", "terzo"])
+}
+
+<form>
+  <input {...register("primo", {
+    validate: (value)=>{
+      return value.length > 5 && "trigger on validate"
+    }
+  })}/>
+  <input {...register("secondo", {
+    maxLength: { value: 4, message: "trigger() on built-in rules"}
+  })}/>
+</form>
+```

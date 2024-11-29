@@ -208,11 +208,7 @@ display: block will occupy the entire line and accept width/height, with the tag
 {% endtab %}
 {% endtabs %}
 
-<div align="center">
-
-<img src="../../.gitbook/assets/block.PNG" alt="Even if used the span tag, we used block in the CSS" width="115">
-
-</div>
+<div align="center"><img src="../../.gitbook/assets/block.PNG" alt="Even if used the span tag, we used block in the CSS" width="115"></div>
 
 **Inline** elements will share the same line between them and won't take the full width of their containers.
 
@@ -770,7 +766,7 @@ For a transform-origin: **25% 25%**, and a transform: rotate().
 
 <summary>Steps(&#x3C;direction>) and animation-fill-mode</summary>
 
-For single-dimension elements we need only 1 Transform-origin keyword**:**
+For single-dimension elements we need only 1 Transform-origin keywor&#x64;**:**
 
 ```css
 .pendolo{
@@ -2158,7 +2154,7 @@ details[open] summary ~ * {
 
 ```
 
-For the relative **sidebar,** we **overflow:hidden** and _absolute right: 100%_ before the hover_:_
+For the relative **sidebar,** we **overflow:hidden** and _absolute right: 100%_ before the hove&#x72;_:_
 
 ```
 .sidebar{

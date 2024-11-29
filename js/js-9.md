@@ -182,7 +182,7 @@ muove.remove()            //to remove the Marker
 {% endtab %}
 {% endtabs %}
 
-We can also use **Geojson** for the Markers data**:**
+We can also use **Geojson** for the Markers dat&#x61;**:**
 
 ```
 const geojson = {
@@ -258,7 +258,7 @@ let ker= new mapboxgl.Marker(drag)
 
 <figure><img src="../.gitbook/assets/MarkerPopup.PNG" alt=""><figcaption></figcaption></figure>
 
-Remember that **Popup() doesn't have the **_**element**_** property**:
+Remember that **Popup() doesn't have the&#x20;**_**element**_**&#x20;property**:
 
 ```
 //so if you want to add DOM content you need to

@@ -391,7 +391,7 @@ setDeck((x)=>({
 
 ### Conditional rendering using components props
 
-The if statement is not a **{**javascript expression**}**, so we use the **component's props** in the **function component** to return and render **JSX**.
+The if statement is not a **{**&#x6A;avascript expressio&#x6E;**}**, so we use the **component's props** in the **function component** to return and render **JSX**.
 
 ```
 //We first use && logical operator to render the components onClick()

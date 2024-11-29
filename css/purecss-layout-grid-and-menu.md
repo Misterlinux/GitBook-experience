@@ -41,7 +41,7 @@ _**Fonts**_ can be implemented:
 
 </code></pre>
 
-The **responsive grid** is implemented with **pure-g** and **pure-u** classes_**:**_
+The **responsive grid** is implemented with **pure-g** and **pure-u** classe&#x73;_**:**_
 
 ```
 //A pure-g(rid) parent tag, which container pure-u(nits)
@@ -179,7 +179,7 @@ The **pure-u** can change the **layout** of the form:
 
 ```
 
-Due to the **pure-u-1-3** or **pure-u-2-3** on the \<div>inputs we have different layouts, also we need the **pure-form-stacked** to keep the spacing for the inputs and labels**:**
+Due to the **pure-u-1-3** or **pure-u-2-3** on the \<div>inputs we have different layouts, also we need the **pure-form-stacked** to keep the spacing for the inputs and label&#x73;**:**
 
 ![pure-u-2-3 form](../.gitbook/assets/Cattura2-3.PNG)
 

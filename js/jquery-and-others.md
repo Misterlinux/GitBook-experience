@@ -149,7 +149,7 @@ function pass(ecco, sound){
 
 ```
 
-to actually _**play**_** the audio** in Jquery we use:
+to actually _**play**_**&#x20;the audio** in Jquery we use:
 
 ```
 //we use the .trigger("action")

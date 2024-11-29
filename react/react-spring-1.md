@@ -17,7 +17,7 @@ We _**import**_ the **animated** higher-order **component**, a function that tak
 
 {% tabs %}
 {% tab title="Animation object" %}
-We **useSpring({})** hook to set up the **animation object** properties **(**from, to**)**, then we deconstruct it on the **style** property to trigger it on mount.
+We **useSpring({})** hook to set up the **animation object** properties **(**&#x66;rom, t&#x6F;**)**, then we deconstruct it on the **style** property to trigger it on mount.
 
 ```jsx
 //we append the component on the animated high-order tag
@@ -352,7 +352,7 @@ CSS animation on an useSpring() interpolated string
 
 ### A useState() conditional useSpering() prop.
 
-We use an **array** of <mark style="background-color:blue;">**to**</mark> style **objects** for multiple animations, the array has to **include** the <mark style="background-color:blue;">**from**</mark> object **(**any object before it will be ignored**)**.
+We use an **array** of <mark style="background-color:blue;">**to**</mark> style **objects** for multiple animations, the array has to **include** the <mark style="background-color:blue;">**from**</mark> object **(**&#x61;ny object before it will be ignore&#x64;**)**.
 
 ```jsx
 //A loop: true would skip to the starter point, we need to add reverse.
@@ -509,7 +509,7 @@ Both **images share** the useSpring() style **properties**, the **front** image 
 
 ### The useTransition() animation styles and methods
 
-The **useTransition(**array, config**)** hook **sequentially** _animates_ datasets of elements on the DOM.
+The **useTransition(**&#x61;rray, confi&#x67;**)** hook **sequentially** _animates_ datasets of elements on the DOM.
 
 ```jsx
 //enter{} is the current style, from/leave are before/after the transition

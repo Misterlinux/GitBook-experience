@@ -741,7 +741,7 @@ let tomato = new Potato("mayo")
 {% endtab %}
 {% endtabs %}
 
-**.Call()** is a Javascript method, it invokes (call) **a method from another object** using **this.**owner object as an argument.
+**.Call()** is a Javascript method, it invokes (call) **a method from another object** using **this.**&#x6F;wner object as an argument.
 
 ```
 //This allows us to use any object with uno/due property as argument
@@ -773,7 +773,7 @@ occa.ancora.call(exem, "1", "quadrato")    //ecco is the 1 altro is indeed quadr
 
 ```
 
-**instanceof** checks if a prototype chain of an **instance** has **a constructor.prototype,** returning a boolean value**:**
+**instanceof** checks if a prototype chain of an **instance** has **a constructor.prototype,** returning a boolean valu&#x65;**:**
 
 ```
 function Pro(){ this.primo= "primo" }

@@ -7,7 +7,7 @@
 
 We use **ExpressJs**, an open-source NodeJs framework, to handle HTTPS requests with routing support.
 
-The **REST** (Representational State Transfer) **API** exchanges data between applications through **HTTPS methods** like _GET, PUT, POST_, and _DELETE_. **(**Client-> API -> Database -> Database data**).**
+The **REST** (Representational State Transfer) **API** exchanges data between applications through **HTTPS methods** like _GET, PUT, POST_, and _DELETE_. **(**&#x43;lient-> API -> Database -> Database dat&#x61;**).**
 
 To start a **NodeJs server** we import/require **express methods,** each route will include an **endpoint** and its **handler function**:
 

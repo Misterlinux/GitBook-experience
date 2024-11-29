@@ -182,7 +182,7 @@ The **bcrypt** module is a _wrapper library_ to interface with the C-based bcryp
 
 The **npm i bcryptjs** module is a _pure JavaScript_ implementation of the bcrypt algorithm, it runs on Nodejs without relying on external code.
 
-Its **getSalt(**rounds**)** method generates a random string used for the **hash()** of the password.
+Its **getSalt(**&#x72;ound&#x73;**)** method generates a random string used for the **hash()** of the password.
 
 ```jsx
 //Being a drop-in replacement it inherits all the previous methods

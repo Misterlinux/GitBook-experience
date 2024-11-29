@@ -81,7 +81,7 @@ We need to use **flexGrow:0** for the nav elements justify and a custom-fill **S
 Navbar and Navbar collapse on React-Bootstrap
 {% endembed %}
 
-We can edit the **.carousel-indicators** and **.carousel-control-prev-icon (SVG)** in the CSS**.**
+We can edit the **.carousel-indicators** and **.carousel-control-prev-icon (SVG)** in the CS&#x53;**.**
 
 ```css
 /*Even if the selectors don't appear in the HTML*/
@@ -167,11 +167,7 @@ function mossi(e){
 
 </details>
 
-<div align="center" data-full-width="true">
-
-<figure><img src="../.gitbook/assets/CenteredCarousel.jpg" alt=""><figcaption><p>Carousel with image imageBar + border current image</p></figcaption></figure>
-
-</div>
+<div align="center" data-full-width="true"><figure><img src="../.gitbook/assets/CenteredCarousel.jpg" alt=""><figcaption><p>Carousel with image imageBar + border current image</p></figcaption></figure></div>
 
 1
 

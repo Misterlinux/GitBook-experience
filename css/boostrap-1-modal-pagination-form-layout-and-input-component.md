@@ -588,7 +588,7 @@ We need to add **list** to the \<input> and link it to the **datalist** using **
 {% endtab %}
 {% endtabs %}
 
-We use **form-check** (or **form-check reverse**) to add radio **form-check-input** buttons and **form-check-label,** in order to display them **inline** we used **col** containers for each**.**
+We use **form-check** (or **form-check reverse**) to add radio **form-check-input** buttons and **form-check-label,** in order to display them **inline** we used **col** containers for eac&#x68;**.**
 
 ```jsx
 //Radio buttons need to share the Input Name

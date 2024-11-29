@@ -533,7 +533,7 @@ let [quad, api3] = useSpring(() => ({
 
 The React hooks _useEffect_() and _useLayout_() affect the **server** and the **client** respectively.   &#x20;
 
-We properly render _useSpring()_ effects with **useIsomorphicLayoutEffect(),** using a **useState()** to dependency-animate **useSpring()** properties**.**
+We properly render _useSpring()_ effects with **useIsomorphicLayoutEffect(),** using a **useState()** to dependency-animate **useSpring()** propertie&#x73;**.**
 
 ```jsx
 //We can't insert a loop:true in a start() or a single value useSpring()

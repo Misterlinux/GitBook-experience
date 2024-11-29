@@ -91,7 +91,7 @@ bot.current.hasAttribute("class") 	//true
 bot.current.getAttribute("class") 	//btn btn-primary
 ```
 
-We edit a useRef() attribute with **setAttribute(**attribute, value**)**:
+We edit a useRef() attribute with **setAttribute(**&#x61;ttribute, valu&#x65;**)**:
 
 ```jsx
 //or we modify the className property of the ref
@@ -152,7 +152,7 @@ On the **DOM** the **ref** will store and update the input.value (we **append()*
 {% endtab %}
 
 {% tab title="useState().target.value" %}
-**useState() can {**render**}** the **input.target value** without a useRef(), but we need to _value/onChange()_ the input.
+**useState() can {**&#x72;ende&#x72;**}** the **input.target value** without a useRef(), but we need to _value/onChange()_ the input.
 
 ```jsx
 const [run, setRun] = useState("")
@@ -481,7 +481,7 @@ The **onDrop() target** DOM element can trigger:
 </div>
 ```
 
-We use the **dataTransfer** object during the _drag-and-drop_ events.                                                     We **setData(**"type format", "value"**)**, **setDragImage(**image, Xoffset, Yoffset**)** for the feedback image and **effectsAllowed** for the _cursor dropEffect_.
+We use the **dataTransfer** object during the _drag-and-drop_ events.                                                     We **setData(**"type format", "value"**)**, **setDragImage(**&#x69;mage, Xoffset, Yoffse&#x74;**)** for the feedback image and **effectsAllowed** for the _cursor dropEffect_.
 
 We set the **dropEffect** _onDragOver()/onDragStart()_ and check it **onDragEnd()** to **filter** drag operations.
 
@@ -526,9 +526,9 @@ function drop(e){
 
 <figure><img src="../.gitbook/assets/dragImageGet.png" alt="" width="326"><figcaption><p>onDrag() with dragImage() and dataTransfer data</p></figcaption></figure>
 
-The **onDragEnd()** event returns a _dropEffect= "none"_ if the onDrop() fails.                                                 We use **dataTransfer.types.includes(**data format**)** to filter the dataTransfer object.                                         We can use **e.clientX/Y** to check the **dropped position**.                              &#x20;
+The **onDragEnd()** event returns a _dropEffect= "none"_ if the onDrop() fails.                                                 We use **dataTransfer.types.includes(**&#x64;ata forma&#x74;**)** to filter the dataTransfer object.                                         We can use **e.clientX/Y** to check the **dropped position**.                              &#x20;
 
-We can dataTransfer.**clearData(**data format**)** to delete the setData() (it seems to work only onDragStart() )
+We can dataTransfer.**clearData(**&#x64;ata forma&#x74;**)** to delete the setData() (it seems to work only onDragStart() )
 
 <details>
 
