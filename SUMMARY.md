@@ -44,7 +44,7 @@
   * [React-Router-Dom Routes](react/react-2/react-router-dom-routes.md)
 * [REACT 3, Fetch() API, OpenAI API translation, useState() objects and conditional rendering, useContext() Providers and useCallback() ](react/react-3/README.md)
   * [React-hook-form 1: register, formState and watch.](react/react-3/react-hook-form-1-register-formstate-and-watch..md)
-  * [React-hook-form 2: trigger() validate, errors, values and  formState methods.](react/react-3/react-hook-form-2-trigger-validate-errors-values-and-formstate-methods..md)
+  * [React-hook-form 2: trigger() validate, errors, values and  formState methods.](react/react-3/react-hook-form-2.md)
   * [Page](react/react-3/page.md)
 * [REACT 4, useMemo(), useReducer(), ReactJs scaling and useRef(()=>{}) Dom manipulation.](react/react-4-usememo-usereducer-reactjs-scaling-and-useref-greater-than-dom-manipulation./README.md)
   * [useReducer() and scale up ReactJs with useContext()](react/react-4-usememo-usereducer-reactjs-scaling-and-useref-greater-than-dom-manipulation./usereducer-and-scale-up-reactjs-with-usecontext.md)

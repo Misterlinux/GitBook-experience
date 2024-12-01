@@ -1,8 +1,8 @@
 # React-hook-form 2: trigger() validate, errors, values and  formState methods.
 
-* [The setErrors() and clearErrors() Form methods](react-hook-form-2-trigger-validate-errors-values-and-formstate-methods..md#the-seterrors-and-clearerrors-form-methods)
-* [The setValue(), getValues() and getFormState() Form methods](react-hook-form-2-trigger-validate-errors-values-and-formstate-methods..md#the-setvalue-getvalues-and-getformstate-form-methods)
-* [The setFocus() and validation trigger().](react-hook-form-2-trigger-validate-errors-values-and-formstate-methods..md#the-setfocus-and-validation-trigger)
+* [The setErrors() and clearErrors() Form methods](react-hook-form-2.md#the-seterrors-and-clearerrors-form-methods)
+* [The setValue(), getValues() and getFormState() Form methods](react-hook-form-2.md#the-setvalue-getvalues-and-getformstate-form-methods)
+* [The setFocus() and validation trigger().](react-hook-form-2.md#the-setfocus-and-validation-trigger)
 
 The **reset()** method resets the form data with the useForm() defaultValues. It can update the input fields and configure the reset process using its _options object_.
 
