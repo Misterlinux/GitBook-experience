@@ -102,10 +102,10 @@ The **\<Controller/>** integrates components without needing to access their **r
 
 {% tabs %}
 {% tab title="Controller render" %}
-1
+The useForm() formState properties can be used within render.
 
 ```jsx
-//We can also direclty use the formState useForm() props
+//Remember to no repeat the properties names.
 const { register, control, formState: { errors }} = useForm()
 
 <form onSubmit={handleSubmit(valori)}>
@@ -121,12 +121,8 @@ const { register, control, formState: { errors }} = useForm()
       return (
         <div>
           <input
-            {...fields}
-            onChange={(e)=>{
-              onChange( e.target.value )
-            }}
-            value={value}
-            disabled={false}
+            {...fields} value={value} disabled={false}
+            onChange={(e)=>{ onChange( e.target.value ) }}
           />
           {Object.entries(errori).length !== 0 && "Any errors on form"}
           {error && "Error on the field" }
@@ -135,36 +131,53 @@ const { register, control, formState: { errors }} = useForm()
     }
     ...
   />
-
-  <input type="submit"/>
 </form>
 ```
 {% endtab %}
 
 {% tab title="Controller render component" %}
-1
+A **render** \<component> should be defined outside the function containing the **\<Controller>**, so to prevent the input from being reset and re-rendered during form event handlers.
 
 ```jsx
-// Some code
+//Any input onChange or submit reset the component if not external.
+function Separato({props: {field: {value, onChange, ...field}}}){
 
+  return(
+    <div>
+      <input 
+        {...field} value={value} disabled={false}
+        onChange={(e)=>{ onChange(e.target.value)}}
+      />
+    </div>
+  )
+}
 
+function Esempio(){
+  const {register, control, formState: { errors }} = useForm()
 
+  return(
+    <div>
+      <form>
+        <Controller
+          name="controlled" control={control}
+          render={(props) => {
+            return <Separato props={props} />
+          }}
+        />
+
+        <input type="submit" />
+      </form>
+    </div>
+  )
+}
 ```
-
-1
-
-1
-
-1
-
-1
 {% endtab %}
 
 {% tab title="Third-party <Select> component" %}
-1
+The field render property works on third party components.
 
 ```jsx
-//
+//Object defaultValues for Select type inputs.
 import Select from "react-select";
 
 const { register, control, formState: { errors }} = useForm({
@@ -174,8 +187,7 @@ const { register, control, formState: { errors }} = useForm({
 })
 
 <Controller
-  name="seletto"
-  control={control}
+  name="seletto" control={control}
   render={({field})=>(
     <Select 
       {...field}
@@ -188,20 +200,110 @@ const { register, control, formState: { errors }} = useForm({
     />
   )}
 />
+```
+{% endtab %}
+{% endtabs %}
 
+### The useController()
+
+The **useController()** custom hook can create _multiple and reusable_ controller inputs.                                     It returns the **render props** of the **\<Controller>** while using its arguments, it requires the useForm() **control** object.
+
+```jsx
+//It can be used for components inside or outside the form function 
+//Remember to set a defaultValue to avoid the uncontroller/controlled error.
+const Sottoforma = ({control1, name}) =>{
+  const { field, fieldState } = useController({ 
+    control: control1, rules: { required: true },
+    name, defaultValue: "insert",
+  });
+
+  const { field: campo } = useController({
+    control: control1, name: "secondo", defaultValue: "quid"
+  })
+
+  return(
+    <div>
+      <input {...field} value={field.value}
+        onChange={(e)=>{ field.onChange(e.target.value) }}
+      />
+
+      <input {...campo} onChange={(e)=>{ campo.onChange(e.target.value) }}/>
+      
+      <p> {fieldState.isDirty && "Only this element has been modyfied"} </p>
+    </div>
+  )
+}
+
+const { register, control } = useForm()
+
+return( 
+  <div>
+    <form>
+      <input {...register("primo")} />
+      <Sottoforma control1={control} name="used" />
+    </form>
+  </div>
+)
 ```
 
 1
 
 1
 
-1
+### The useFormContext()
 
-1
-{% endtab %}
-{% endtabs %}
+The **useFormContext()** hook accesses the **useForm() context** provided by the **\<FormProvider>**, without passing the properties trought _component props_.                                                                                                              It enables child components to subscribe to methods and properties from the form context.
 
-1
+```jsx
+//Often used in nested forms, it requires all useForm() methods
+//At the base level we extract the useForm() props from methods.
+//If rendering formState props set the component outside the form function component.
+function Costume(){
+  let {formState, register} = useFormContext()
+  
+  return(
+    <div>
+      <input {...register("sauce1")}/>
+      {formState.isDirty && "The thing has been dirtied" }
+    </div>
+  )
+}
+
+const methods = useForm({
+  defaultValues: { primo: 'Initial Value', sauce: "contexto value"}
+})
+
+const valori = (data) => {console.log( data )}
+
+return(
+  <FormProvider {...methods}>
+  <div>
+    <form onSubmit={methods.handleSubmit(valori)}>
+      <input {...methods.register("primo", { required: "The error state" })}/>
+      <Costume />
+    </form>
+  </div>
+  </FormProvider>
+)
+```
+
+We can create **\<Controller>** and **useController()** inputs within the nested components, using the **context** control prop.
+
+```jsx
+//We access the register/formState from the controller.
+let {control} = useFormContext()
+
+let {field, formState} = useController({
+  control: control, name: "sauce1"
+})
+
+return(
+  <div>
+    <input {...field}/>
+    {formState.isDirty && "The thing has been dirtied" }
+  </div>
+)
+```
 
 1
 
