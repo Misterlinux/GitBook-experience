@@ -1,9 +1,8 @@
 # FormArrays rules and sets
 
-* 1
-* 1
-* 1
-* 1
+* [The useFieldArray() methods](formarrays-rules-and-sets.md#the-usefieldarray-methods)
+* [The fieldArray inputs and values rules on useForm() render](formarrays-rules-and-sets.md#the-fieldarray-inputs-and-values-rules-on-useform-render)
+* A[ fieldArray form with nested useForm() components.](formarrays-rules-and-sets.md#a-fieldarray-form-with-nested-useform-components)
 
 The **useFieldArray** hook allows us to render and update inputs in a **dynamic** form, improving user experience and performance.
 
@@ -135,6 +134,8 @@ The fieldArray inputs can be rendered using different **components**.
 />
 ```
 
+### The useFieldArray() methods
+
 The **fieldArray returns** include the **methods** to edit the rendered field object:
 
 <details>
@@ -207,6 +208,8 @@ function mettiaggiunt(){
   setDoppio((x)=> x + 1)
 }
 ```
+
+### The fieldArray inputs and values rules on useForm() render
 
 The **fieldArray <**&#x69;nput> index can be used to conditionally render an input or dynamically modify the form based on the input's position.
 
@@ -375,7 +378,7 @@ function Noinput(){
 }
 ```
 
-1
+### A fieldArray form with nested useForm() components.
 
 We render a **parent fieldArray** useForm() with a **nested useForm()** component.
 
