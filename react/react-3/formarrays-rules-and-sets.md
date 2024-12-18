@@ -176,11 +176,18 @@ update(1, {master: "duel", coco: "cola", sec: "sepa"})
 replace( [{party: "basic", locro: "mais"}, {giravolta: "salti"}] )
 ```
 
-1
+All **useFieldArray()** methods focus the input indexes they apply to.                                                                   The **append**, **prepend**, and **insert** methods include optional properties, **shouldFocus** and **focusIndex**, which determine whether to focus its object index or a specific input object in the fieldArray.
 
-1
+```jsx
+//The properties are contained in the method optional object property
+<button onClick={()=>{insert(2, {paguro: "newo"}, {shouldFocus: false}) }} >
+  inserto
+</button>
 
-1
+<button onClick={()=>{prepend({ last: "foreva", every: "body" }, {focusIndex: 2}) }}>
+  prependa
+</button>
+```
 
 Do not stack useFieldArray **methods**; instead, we _useEffect()_ to **sequentially** trigger methods based on specific useState dependencies.
 
@@ -201,12 +208,16 @@ function mettiaggiunt(){
 }
 ```
 
+The **fieldArray <**&#x69;nput> index can be used to conditionally render an input or dynamically modify the form based on the input's position.
+
+{% tabs %}
+{% tab title="fieldArray index conditional inputs" %}
 A useFieldArray will automatically create its array even without defaultValues when input objects are added.
 
-We **useWatch()** the **\<input>** index value as condition to render the specific \<input> property. Any added input property will be returned by the **onSubmit** function, even if it is not rendered.                                                   The static form ensures that only one **conditional input** will be rendered at a time.
+We **useWatch()** the **\<input>** index value as condition to render the specific \<input> property.   Any added input property will be returned by the **onSubmit** function, even if it is not rendered.                                                   The static form ensures that only one **conditional input** will be rendered at a time.
 
 ```jsx
-//A dynamic form might rendeer multiple inputs with the same name or returned value
+//A dynamic form might re-renderinputs with the same name or returned value
 //We destruct and pass the index and control as object properties 
 //The handlesubmit can filter the un-rendered input properties.
 const ConditionalInput = ({ control, index }) => {
@@ -261,19 +272,269 @@ return(
 ```
 
 <figure><img src="../../.gitbook/assets/ConditionalInput.png" alt="" width="375"><figcaption><p>Conditional Input component with fieldArray methods</p></figcaption></figure>
+{% endtab %}
+
+{% tab title="fieldArray index dynamic form methods" %}
+In a fieldArray, we can use the current \<input> **index** to customize the **move** method or conditionally disable the input buttons.
+
+```jsx
+//We disable the first and last fieldArray elements form moving.
+//We move each input forward or backwards by 1
+const { register, handleSubmit, control} = useForm()
+
+const {fields, append, prepend, remove, move} = useFieldArray({
+  name: "campo", control
+})
+
+const handleMove = (fromIndex, toIndex) => {
+  move(fromIndex, toIndex);
+};
+
+<form onSubmit={handleSubmit(vediamo)} className="m-5">
+  {fields.map((item, index)=>{
+    
+    return(
+      <div key={item.id}>
+        {Object.keys(item)
+          .filter((x)=> x !== "id" )
+          .map((key, value)=>{
+
+            return(
+              <input 
+                {...register( `campo.${index}.${key}` )}
+                key={ key } defaultValue={ value }
+              />
+            )
+          })
+        }
+
+        <button 
+          onClick={() => handleMove(index, index - 1)} 
+          disabled={index === 0}>
+            Move Up
+        </button>
+        <button
+          onClick={() => handleMove(index, index + 1)} 
+          disabled={index === fields.length - 1}>
+            Move Down
+        </button>
+
+        <button type="button" onClick={() => remove(index)}>
+          Delete
+        </button>
+      </div>
+    )
+  })}
+</form>
+```
+
+<figure><img src="../../.gitbook/assets/conditionalInputButton.jpg" alt="" width="482"><figcaption><p>Disabling buttons that can't be moved in the fieldsArray</p></figcaption></figure>
+{% endtab %}
+{% endtabs %}
+
+The fieldArray will **batch updates** during the component's re-render, and any functions that access it will retrieve the **last rendered form object**.
+
+We create an object that merges the **fieldArray** with its **watch()** current values, allowing us to have the complete field values available.
+
+```jsx
+//The formArray will be avaiable on the onSubmit() event handler 
+//We map() loop and update each fieldArray input object with the watch() 
+function Noinput(){
+  const { register, control, watch, formState } = useForm();
+  const { fields, append, remove, move } = useFieldArray({
+    control, name: "fieldArray"
+  });
+
+  const watchFieldArray = watch("fieldArray");
+  const controlledFields = fields.map((field, index) => {
+    return {
+      ...field,
+      ...watchFieldArray[index]
+    };
+  });
+  //The current fieldArray inputs and values will be avaiable
+  const passo = () => console.log(controlledFields);
+
+  return(
+    <form>
+      <input {...register("primo")} />
+
+      {fields.map((field, index) => {
+        return <input key={field.id} {...register(`fieldArray.${index}.name`)} />; 
+      })}
+
+      <button onClick={() => append({ primo: "yet to", secondo: "be updated" })}>
+        Double
+      </button>
+      
+      <button onClick={() => passo()}>
+        Access current firldArray values
+      </button>
+    </form>
+  )
+}
+```
 
 1
 
-1
+We render a **parent fieldArray** useForm() with a **nested useForm()** component.
 
-1
+The nested component \<Singular> will render and **register** the fieldArray i**nput objects**, and **onSubmit()** it will **update** the parent fieldArray, using the index and useFieldArray() update props
 
-1
+<details>
 
-1
+<summary>The useWatch() hook update on different useForm() control object properties</summary>
 
-1
+A custom hook (like **useWatch()**) will update based on the **useForm() structure** of its **control** property.
 
-1
+The parent useForm() will get updated based on its **fieldArray** structure, not its field values. The child useForm() registers the inputs, so its control will trigger the useWatch() on input change to return the current field values.
+
+We use a ternary operator useWatch() name to specify the input index being watched, an undefined name would return the entire form, so we use a non-existent input name.
+
+```jsx
+//Parent fieldArray useForm(), will update only on re-render
+function Diretto(){
+  ...
+  return(
+    <div className="mb-5">
+      ...
+      {fields.map((item, index)=>{
+        return(
+          <div key={item.id}>
+            <Singular 
+              control={control} update={update}
+              index={index} value={item}
+            />
+          </div>
+        ) 
+      })}
+    </div>
+  )
+}
+
+//Child useForm(), the useWatch() nestControl will trigger on input change
+//The dot notation to access the array object
+const Singular = ({ control, update, index, value }) => {
+  const { register, handleSubmit, control: nestControl } = useForm({
+    defaultValues: value
+  })
+
+  const data = useWatch({
+    control: nestControl,
+    name: index == 1 ? `secondName` : "none",
+  });
+  console.log( "Current value", data )
+
+  //This can also access the field value, but only on fieldArray change.
+  const data1 = useWatch({
+    control,
+    name: "valori.1.secondName"
+  })
+  console.log( "Current value on updated fieldArray", data1 )
+  
+  return(
+    <div>
+      <Risulta control={control} index={index}/>
+
+      <input {...register("firstName", {required: "true"})}/>
+      <input {...register("secondName", {required: "true"})}/>
+      <label> Input checked:
+        <input type="checkbox" {...register("working")}/>
+      </label>
+    </div>
+  )
+}
+```
+
+</details>
+
+The third child component \<Risulta> will be **conditionally rendered** based on its index input **values**.             It will be re-rendered each time the **fieldArray** is updated due to the **useWatch() control** property.
+
+```jsx
+//On fieldArray update will return null if field value is empty
+const Risulta = ({ control, index }) => {
+  const data = useWatch({
+    name: `valori.${index}`,control
+  })
+
+  if (!data?.firstName) return null;
+
+  return(
+    <div>
+      <p> Updated: {data?.firstName} {data?.lastName} </p>
+      <p>{Boolean(data?.working) && data?.working && "I am working."}</p>
+    </div>
+  )
+}
+
+//Any new fieldArray input object can be passed as a prop into a defaultValue.
+//The update prop form useFieldArray() method updates the fieldArray
+const Singular = ({ control, update, index, value }) => {
+  const { register, handleSubmit, control: nestControl } = useForm({
+    defaultValues: value
+  })
+  
+  return(
+    <div>
+      <Risulta control={control} index={index}/>
+
+      <input {...register("firstName", {required: "true"})}/>
+      <input {...register("secondName", {required: "true"})}/>
+      <label> Input checked:
+        <input type="checkbox" {...register("working")}/>
+      </label>
+
+      <button type="button" onClick={handleSubmit((data)=>{update(index, data)})}>
+        fieldArrayUpdate
+      </button>
+    </div>
+  )
+}
+
+function Diretto(){
+  const { register, handleSubmit, control } = useForm()
+  const {fields, update, remove, append} = useFieldArray({
+    name: "valori", control
+  })
+
+  const manda = (dati) => console.log( dati )
+
+  return(
+    <div>
+      <form onSubmit={handleSubmit(manda)}>
+        <input {...register("primo")} />
+
+        {fields.map((item, index)=>{
+
+          return(
+            <div key={item.id}>
+              <Singular 
+                control={control} update={update}
+                index={index} value={item}
+              />
+
+              <button type="button" onClick={()=>{ remove(index) }}> 
+                delete 
+              </button>
+            </div>
+          ) 
+        })}
+
+        <button onClick={()=>{ append({firstName: "", secondName: ""}) }}>
+          primo 
+        </button>
+
+        <input type="submit" />
+      </form>
+    </div>
+  )
+}
+```
+
+
+
+{% embed url="https://codesandbox.io/p/sandbox/usefieldarray-with-preview-odmtx5" %}
+Append and render fieldArray input object components
+{% endembed %}
 
 1
