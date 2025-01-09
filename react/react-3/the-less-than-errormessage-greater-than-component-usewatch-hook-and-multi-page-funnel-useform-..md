@@ -1,7 +1,6 @@
-# Page
+# The \<errorMessage> component, useWatch() hook and multi-page funnel useForm().
 
-* 1
-* 1
+* [The useWatch() method.](the-less-than-errormessage-greater-than-component-usewatch-hook-and-multi-page-funnel-useform-..md#the-usewatch-method)
 * 1
 * 1
 * 1
@@ -153,16 +152,125 @@ function Formcomp(){
 
 </details>
 
-1
+### Multi-Step Form with local-state-machine
 
-1
+A funnel, or **wizard form**, **segments** a complex form among **multiple** pages.                                                      The [**local-state-machine**](https://github.com/beekai-oss/little-state-machine) library manages the form state in **sessionStorage**, providing **context** across all funnel pages.
 
-1
+The **createStore()** method initializes the form data in sessionStorage. It accepts two object arguments: one for the initial **default values** of the form state, and another for its **configuration properties**.
 
-1
+> **name**: string. Sets the name of the sessionStorage state object. Defaults to \_\__LSM\_\__.&#x20;
+>
+> **middlewares**: array of functions. Contains functions that wil execute after useStateMachine() functions. They won't trigger if the sessionStorage state is modified externally.
 
-1
+```jsx
+//The log functions don't return anything.
+//The sessionStorage state needs to be action updated before being visible
+npm install little-state-machine
+import { createStore } from "little-state-machine";
 
-1
+function log(store) {
+  console.log("before or after the result?: ", store);
+  return ;
+}
 
-1
+createStore({
+  default: 'siamo messi', value: 'male'
+}, {
+  name: "elementi", middleWares: [ log ]
+});
+```
+
+Each component within the form funnel needs to call the **useStateMachine()** custom hook.                 The useStateMachine() returns its current form **state** and an **action** object containing the functions declared in the hook, which are used to interact with the shared form **context**.
+
+**Action** functions can be triggered within any event handler. On form submit, they update the current state using the form data as the **payload**.
+
+```jsx
+//Update merges the current state and the payload destructed objects
+//Return null will trigger error if a state value is used in the form
+import { useNavigate } from "react-router-dom";
+import { useStateMachine} from "little-state-machine";
+
+function updateAction = (state, payload) => ( {...state, ...payload} )
+function deleteAction = (state) => ({}) //or ()
+
+//We onSubmit() navigate to the next funnel form, with updated data.
+const { register, handleSubmit } = useForm();
+const { state, actions } = useStateMachine({ updateAction, deleteAction });
+let viaggio = useNavigate()
+
+const delete = () => actions.deleteAction()
+
+function nextform(data){
+  action.updateAction(data)
+  viaggio( "funnel" )
+}
+
+<form onSubmit={handleSubmit(nextform)}>
+  ...<input/>
+  <input type="submit" />
+  <button onClick={()=>{actions.updateAction()}}> Alternative update </button>
+</form>
+```
+
+We can use the sessionStorage's methods to remove state objects.
+
+```jsx
+//Provided by the browser's Web Storage API,
+//Won't trigger logs functions nor errors if state is used in the form
+sessionStorage.removeItem("__LSM__")	//the defaulName has 2 _
+sessionStorage.clear()
+```
+
+The updated **state** value persists across navigation, it can be used as the input's defaultValue, allowing users to retain their previous input values.
+
+```jsx
+//If state becomes null it returns error
+<form>
+  <input {...register("firstName")} defaultValue={state.firstName} />
+  <input {...register("lastName")} defaultValue={state.lastName} />
+</form>
+```
+
+The **\<StateMachineProvider/>** makes the state context available to all components rendered within the React Router.
+
+```jsx
+//The createStore() needs to be set in the same file as its StateMachineProvider
+import {StateMachineProvider, createStore} from "little-state-machine";
+createStore({}, {});
+
+function Final() {
+  return (
+    <StateMachineProvider>
+      <Routes>
+        <Route path="/" element={<Primo />} />
+        <Route path="/avanti" element={<Secondo />}/>
+        <Route path="/avanti/funnel" element={<Finalizza />}/>
+      </Routes>
+    </StateMachineProvider>
+  );
+}
+```
+
+If createStorage() contains **nested objects**, you need to destructure them within the update function to correctly modify their values.
+
+```jsx
+//We can choose where to locate the payload data
+createStore({
+  unchanged: {metro: "booming"},
+  primo: 'siamo messi'
+});
+
+function updateAction(state, payload) {
+  return {
+    ...state, 
+    unchanged: {
+      ...state.unchanged,
+      ...payload
+    }
+  };
+}
+```
+
+{% embed url="https://codesandbox.io/p/sandbox/react-hook-form-wizard-form-9pg6j" %}
+Funnel JS example
+{% endembed %}
