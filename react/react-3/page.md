@@ -1,9 +1,7 @@
 # The \<errorMessage> component, useWatch() hook and multi-page funnel useForm().
 
-* [The useWatch() method.](the-less-than-errormessage-greater-than-component-usewatch-hook-and-multi-page-funnel-useform-..md#the-usewatch-method)
-* 1
-* 1
-* 1
+* [The useWatch() method.](page.md#the-usewatch-method)
+* [Multi-Step Form with local-state-machine](page.md#multi-step-form-with-local-state-machine)
 
 The **\<errorMessage>** is an imported component used to render an input formState error.
 

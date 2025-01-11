@@ -1,8 +1,8 @@
 # The fieldArray structure and methods on useForm()
 
-* [The useFieldArray() methods](the-fieldarray-structure-and-methods-on-useform.md#the-usefieldarray-methods)
-* [The fieldArray inputs and values rules on useForm() render](the-fieldarray-structure-and-methods-on-useform.md#the-fieldarray-inputs-and-values-rules-on-useform-render)
-* [A fieldArray form with nested useForm() components.](the-fieldarray-structure-and-methods-on-useform.md#a-fieldarray-form-with-nested-useform-components)
+* [The useFieldArray() methods](formarrays-rules-and-sets.md#the-usefieldarray-methods)
+* [The fieldArray inputs and values rules on useForm() render](formarrays-rules-and-sets.md#the-fieldarray-inputs-and-values-rules-on-useform-render)
+* [A fieldArray form with nested useForm() components.](formarrays-rules-and-sets.md#a-fieldarray-form-with-nested-useform-components)
 
 The **useFieldArray** hook allows us to render and update inputs in a **dynamic** form, improving user experience and performance.
 
