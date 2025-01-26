@@ -31,7 +31,7 @@ We can use classes to add **margin** and **padding**:
 
 And for _**display**_ and _**media-query** breakpoints_:
 
-```
+```javascript
 //we display with d-
 d-flex /d-block /d-inline-block
 
@@ -40,7 +40,6 @@ d-flex /d-block /d-inline-block
 d-block d-sm-none    //D(isplay)-block but AFTER -sm-D(isplay)-none, only visible in small
 d-none d-sm-block    //D(isplay) AFTER small-block but BEFORE is -none
 d-none d-sm-block d-md-none    //visible only in md (none in default and AFTER md)
-
 ```
 
 ### PureCSS and Modal

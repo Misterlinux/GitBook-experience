@@ -170,7 +170,3 @@ function mossi(e){
 <div align="center" data-full-width="true"><figure><img src="../.gitbook/assets/CenteredCarousel.jpg" alt=""><figcaption><p>Carousel with image imageBar + border current image</p></figcaption></figure></div>
 
 1
-
-1
-
-1
