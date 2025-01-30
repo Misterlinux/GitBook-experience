@@ -231,6 +231,9 @@ It uses **declarative** objects, such as **validation schemas**, to define the v
 
 ```jsx
 //The strings are the input fomrState error message
+npm install yup
+import * as yup from 'yup';
+
 const validationSchema = yup.object({
   firstName: yup.string().required("error one"),
   lastName: yup.string().required("error two"),
