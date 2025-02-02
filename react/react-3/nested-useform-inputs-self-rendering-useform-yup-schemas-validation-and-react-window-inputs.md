@@ -1,9 +1,8 @@
-# Smart components rendering.
+# Nested useForm() inputs, Self-Rendering useForm(), Yup schemas validation and React-window inputs
 
-* 1
-* 1
-* 1
-* 1
+* [Self-Rendering Form Components](nested-useform-inputs-self-rendering-useform-yup-schemas-validation-and-react-window-inputs.md#self-rendering-form-components)
+* [Implementing Yup schemas on form validation](nested-useform-inputs-self-rendering-useform-yup-schemas-validation-and-react-window-inputs.md#implementing-yup-schemas-for-form-validation)
+* [Virtualized useForm() inputs with React-Window](nested-useform-inputs-self-rendering-useform-yup-schemas-validation-and-react-window-inputs.md#virtualized-useform-inputs-with-react-window)
 
 The \<FormProvider> makes the **useForm() context** available to nested components.                                       The \<ConnectForm> component simplifies access to the form context. It retrieves methods from useFormContext() and passes them as **props** to its child **render function**, which uses them to register() input elements with the form.
 
@@ -90,7 +89,7 @@ function Secondo(){
 
 </details>
 
-### Builindg reusable useForm() with modular components.
+### Self-Rendering Form Components
 
 A **form composition** implements the useForm() hook by leveraging its input function components.         It automatically renders and **registers** complex forms by iterating over the **React child elements**.
 
@@ -223,7 +222,7 @@ function Ultimate(){
 
 </details>
 
-### Yup validation
+### Implementing Yup schemas for form validation
 
 React-Hook-Form can integrate external **validation libraries**, like **Yup**.
 
@@ -349,7 +348,7 @@ function Terzo() {
 
 </details>
 
-### React-window done
+### Virtualized useForm() inputs with React-Window
 
 The **React-Window** library optimizes the rendering of large **lists** of data through **virtualization**.
 
@@ -428,8 +427,6 @@ function Terzo() {
   )
 }
 ```
-
-1
 
 <details>
 
@@ -514,13 +511,3 @@ function List({ items }) {
 1
 
 </details>
-
-1
-
-1
-
-1
-
-1
-
-1
