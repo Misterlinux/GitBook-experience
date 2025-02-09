@@ -12,7 +12,7 @@ function steps(req, res, next){
 }
 
 app.get("/first", <a data-footnote-ref href="#user-content-fn-1">steps</a> ,(req, res)=>{
-  res.send("end stack")
+  res.send("end stack")  //first step, end stack
 })
 </code></pre>
 
@@ -23,18 +23,19 @@ The express method **app.use()** mounts the middlewares on the route paths.
 If no route is specified then it's applied to **every** route, their **order** depends on when were they declared.
 
 ```jsx
-//Imported middleware will be invoked last
+//Aplied to all requests routes
 app.use(steps)
 
-//It has to share the same route of the route it is included in
-app.use("/means", (req, res, next)=>{
-  console.log("This is the second")
-  next()
+app.get("/ruota", (req, res)=>{
+  console.log("This is the return")  //first step, this is the return
+  res.send("how does a middleware work")
 })
 
-app.get("/means", preso, (req, res)=>{
-  console.log("This is the return")
-  res.send("how does a middleware work")
+//This middleware will be ignored.
+app.use("/ruota", (req, res, next)=>{
+  console.log("This is the second")
+
+  next()
 })
 ```
 {% endtab %}
@@ -57,7 +58,7 @@ let basi = [secondabase, primabase]
 app.get("/linea/:primo/:secondo", basi, (req, res, next)=>{
   console.log("This is the last part")
 
-  res.send("end of the wave")
+  res.send("end of the wave")    
 })
 ```
 {% endtab %}
@@ -66,11 +67,12 @@ app.get("/linea/:primo/:secondo", basi, (req, res, next)=>{
 A middleware can end a route path with **res.send()** and **res.redirect()**.
 
 ```jsx
+//If > 5 res.send, if not it redirects
 function check(req, res, next){
   req.params.part.length > 5 ? next() : res.redirect("/means")
 }
 
-app.get("/take/:part", (req, res)=>{
+app.get("/take/:part", check, (req, res)=>{
   res.send("The params is higher than 5")
 })
 ```
@@ -117,7 +119,7 @@ This is useful to handle errors before they reach the route handler function.
 
 </details>
 
-We can **module.export** middlewares to the router.
+We can **module.export** middlewares to use() in the router.
 
 ```jsx
 //middle.js
@@ -135,12 +137,12 @@ app.use( preso1 )
 
 ### Independent routing with express.router()
 
-The **express.router()** class can create independent **routing instances**, that need to be **app.use()** mounted to a **path** of the routing system.
+The **express.router()** class create independent routing instances, which need to be mounted to a specific path using **app.use()**, effectively **prefixing** all routes defined within the **router**.
 
 it inherits methods and properties from the express framework (like **middlewares**).
 
 ```jsx
-//Router.js 
+//Router stored in routes/router.js 
 const router = express.Router();
 
 function solo(req, res, next){
@@ -148,17 +150,18 @@ function solo(req, res, next){
   next()
 }
 
-//path localhost3030/first/ahead
+//path /localhost3030/first/ahead
 router1.get("/ahead", solo, (req, res)=>{
-  console.log( "router handler" )
-
+  console.log( req.body )
   res.send("sent")
 })
 
 module.exports = router1;
 
-//server.js
-let rotta = require("./router")
+//All previously defined middlewares will be aplied to the mounted router.
+app.use(express.json())  //Will parse the router req.body
+
+let rotta = require("./routes/router")
 app.use("/first", rotta)
 ```
 
@@ -178,16 +181,18 @@ app.route('/users')
 
 ### Password hashing with bycryptjs
 
-The **bcrypt** module is a _wrapper library_ to interface with the C-based bcrypt **password algorithm**, it provides us a javascript API to hash passwords, but it's not longer mantained.
+The **bcrypt** module is a wrapper library for the C-based bcrypt **password hashing algorithm**.                                 It provides a javascript **API** to hash passwords, due to the C compilation, extra dependencies may be required depending on the platform.
 
-The **npm i bcryptjs** module is a _pure JavaScript_ implementation of the bcrypt algorithm, it runs on Nodejs without relying on external code.
+The **npm i bcryptjs** module is a pure _JavaScript implementation_ of the bcrypt algorithm, it doesn't require external code and runs directly in Node.js.
 
 Its **getSalt(**&#x72;ound&#x73;**)** method generates a random string used for the **hash()** of the password.
 
 ```jsx
+//bcryptjs is less performant than bcrypt but they share functions
 //Being a drop-in replacement it inherits all the previous methods
 //A higher rounds value for a more complex but slower hash.
 const bcryptjs = require('bcryptjs');
+const bcrypt = require("bcrypt");
 
 const sale = await bcryptjs.genSalt(10)
 const cryptopass = await bcryptjs.hash(password, sale)
@@ -195,17 +200,16 @@ const cryptopass = await bcryptjs.hash(password, sale)
 
 Bcryptjs provides **synchronous** versions of its _promise-based methods,_ which block the execution of the program until they complete and return a value.
 
-```jsx
-console.log( bcrypt.genSalt(10))          //Promise { <pending> }
-console.log( bcryptjs.genSaltSync(10))    //$2a$...
-console.log( await bcryptjs.genSalt(10))  //$2a$...
-```
+<pre class="language-jsx"><code class="lang-jsx"><strong>console.log( bcrypt.genSalt(10))          //Promise { &#x3C;pending> }
+</strong>console.log( bcryptjs.genSaltSync(10))    //$2a$...
+console.log( await bcrypt.genSalt(10))    //$2a$...
+</code></pre>
 
 The **compare()** method compares a _plaintext_ and a _hashed password,_ using its salt, to return a boolean value.
 
 ```jsx
 //Ther is also compareSync
-const newtrue = await bcryptjs.compare( password, hashpassword) //true/false
+const newtrue = await bcryptjs.compare( password, hashpassword ) //true/false
 
 //The salt value is visible in the hashed password
 $2b$10$q.KYbb.xmNQ0KEikk5EfWenciYtBMJBsfhmPqnf7HTWeTcHnDAI5q
@@ -239,7 +243,7 @@ We manage its error handling with a **try/catch** block:
     }
     
   }catch (error) {
-    console.error(error.message + " massa");
+    console.error(error.message + " non validated");
     res.status(500).send({error: error.message});
   }
 })

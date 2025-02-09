@@ -1,9 +1,6 @@
 # JWT signing and verification
 
 * 1
-* 1
-* 1
-* 1
 
 A JSON Web Token (**JWT**) is a compact, URL-safe, digitally signed token used for authentication and information exchange.
 

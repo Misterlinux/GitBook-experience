@@ -19,7 +19,7 @@ async function passa(e){
   ...
 }
 
-//CORS implementation on the server
+//CORS implementation on the server.js
 app.all('*', (req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
@@ -102,13 +102,16 @@ app.use( cors(corsOptions) )
 {% endtab %}
 
 {% tab title="Middleware response headers" %}
-Both send the CORS headers in teh server response
+Both send the CORS headers in the server response
 
 ```jsx
+//It can adapt other CORS properties too
 app.all('*', function(req, res, next) {
   res.header('Access-Control-Allow-Origin', 'http://localhost:10000');
   res.header('Access-Control-Allow-Methods', 'PUT, DELETE');
   res.header('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Expose-Headers', 'nuovo, token');
   
   next();
 });
@@ -153,8 +156,8 @@ The <mark style="background-color:blue;">allowedHeaders</mark> property specifie
 The safelisted CORS headers that won't trigger a preflight are **Accept, Accept-Language, Content-Language, and Content-Type** with specific values like _multipart/form-data_, or _text/plain_.                   Any non-safelisted header not included in the allowedHeaders will block the cors request.
 
 ```jsx
-//This header won't trigger a preflight
-let fetchOption= {
+//This client header won't trigger a preflight
+let fetchOption = {
   method: "POST", 
   body: "mode=cors",
   headers: {
@@ -305,7 +308,6 @@ A preflight is a type of OPTIONS request, often used to query the capabilities o
 //A POST wouldn't trigger the preflight
 //A single value can trigger the preflight 
 async function nonval(){
-
   let oggetto= {
     method: "PUT",
     body: JSON.stringify({"primo": "parte", "predappio": "altrime" }),

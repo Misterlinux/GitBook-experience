@@ -45,6 +45,45 @@ const valori = async (data) => {
 }
 ```
 
+<details>
+
+<summary>handleSubmit() on different register() intances and forms</summary>
+
+The handleSubmit is a higher-order function that returns a function for form validation and submission.
+
+It accesses inputs registered with the **same useForm()** instance.\
+It can be triggered by any event, even those outside the form.
+
+```jsx
+// Some code
+const {register, handleSubmit} = useForm()
+const {register: register1, handleSubmit: handleSubmit1} = useForm()
+
+const risulta = (data) => console.log(data)
+
+<form>
+  <input {...register("primo")} />
+  <input {...register("second")} />
+
+  <input {...register1("terzo")} />
+  <select {...register1("gender")}>
+    <option value="female">female</option>
+    <option value="male">male</option>
+    <option value="other">other</option>
+  </select>
+</form>
+
+<button onClick={handleSubmit(risulta)}>
+  first instance
+</button>
+
+<button onClick={handleSubmit1(risulta)}>
+  Second instance
+</button>
+```
+
+</details>
+
 ### The \<Controller> input component.
 
 The **\<Controller/>** is a higher-order component that wraps and **custom registers** an input component. Its properties, such as **name**, **defaultValue**, **shouldUnregister**. and **rules**, manage the **render** input registration.&#x20;

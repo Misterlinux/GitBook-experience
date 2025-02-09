@@ -61,29 +61,47 @@ Cookies can originate from both the server and the browser. They can be accessed
 
 ```jsx
 //In the browser only the name/value pair will be visible
+//It can return multiple cookies
+//resp.header.get("Set-Cookie") won't work due to it being a forbidden header name
 document.cookie = 
   "sessionId=biscotto; Path=/; Domain=localhost; Max-Age=15; Secure; SameSite=None`"
 console.log( document.cookie )    //sessionId=biscotto
 
-//In the server
+//The cooie.parser() middleware parses the request cookies in the server
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
+
 res.cookie(name, value, [options])
 ```
 
-Cookies are used to record requests from the **same user**, and can store small amounts of data, limited to a recommended maximum size of 4kb; for larger amounts, alternatives like the Storage API can be used.
+The **Request** and **Response** headers handle cookies differently.                                                                                      The request's Cookie header automatically includes all browser-stored cookies, while the response's Set-Cookie header includes only the cookies set or updated by the server.
 
-Once set, **cookies** are included in subsequent **request headers**, enabling the storage of session data, such as user state and authentication tokens. This allows the browser to retrieve the data for personalization, tracking, and session management purposes, enabling **stateless HTTP** to maintain user context.
+This allows the browser to store session data, such as user state and authentication tokens, enabling stateless HTTP to maintain user context.
 
 ```jsx
 //Only the name/value pairs
-
-app.get("/testo", (req, res)=> {
-  console.log( req.cookies )  //{username: 'john donny', username1: 'john doe'}
+async function bisco(){
+  document.cookie = "sessionId=biscotto; ...`"
+ 
+  let ops={ method: "POST", credentials: "include" }
+  let resp = await fetch("http://localhost:3030/test2", ops)
 }
+
+app.post("/test2", (req, res) => {
+  console.log( req.cookies )	//{sessionId: 'biscotto'}
+
+  res.header( "Set-Cookie", `username=Jonh Doe; ...` );
+  res.set('novino', 'not too easy');
+  res.send( req.body )
+})
 ```
+
+<figure><img src="../../.gitbook/assets/cookiesHeaders.png" alt="" width="559"><figcaption><p>Cookie header in Request, and Set-Cookie in Response</p></figcaption></figure>
 
 When making a **fetch request** from a browser, if the request either **receives** a cookie or **sends** it to the server, the <mark style="background-color:blue;">credentials</mark> property must be included in the fetch **options**.                                                              This is necessary as the default behavior of the Fetch API is to omit cookies to prevent CSRF attacks. Additionally, the server must also include the **credentials** property in its **CORS** options to allow the credentials to be sent and received.
 
 <pre class="language-jsx"><code class="lang-jsx"><strong>//browser allowing cookies
+</strong><strong>//It doesn't modify the cookies per se, it allows them in cors calls
 </strong>let options= {
   method: "GET",
   credentials: "include"
@@ -105,12 +123,15 @@ The **httpOnly** property makes the cookie inaccesible from the javascript.     
 ```jsx
 //Expires is an absolute Date() while max-age is relative to the current
 //path= "example.com" includes subdomains like "foo.example.com"
-res.header("Set-Cookie", `username="john doe"; Path=/; 
-  Domain=localhost; Max-Age=20; Secure; httpOnly; SameSite=None`);
+//Returns error if it breaks the string line
+res.header(
+  "Set-Cookie", `username=john doe; Path=/; Domain=localhost; Max-Age=20; Secure; httpOnly; SameSite=None`
+);
 
-res.cookie( "username", "john doe", 
- {path: '/', domain: 'localhost', expires: new Date(new Date().getTime() +20 *1000),
-  secure: true, sameSite: "none", httpOnly: true})
+res.cookie( 
+  "username", "john doe", 
+  {path: '/', domain: 'localhost', expires: new Date(new Date().getTime() +20 *1000), secure: true, sameSite: "none", httpOnly: true}
+)
 ```
 
 On google you can find the cookies in the **application**> cookies, while in firefox in archiviation> cookies.

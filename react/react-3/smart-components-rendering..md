@@ -1,8 +1,8 @@
 # Nested useForm() inputs, Self-Rendering useForm(), Yup schemas validation and React-window inputs
 
-* [Self-Rendering Form Components](nested-useform-inputs-self-rendering-useform-yup-schemas-validation-and-react-window-inputs.md#self-rendering-form-components)
-* [Implementing Yup schemas on form validation](nested-useform-inputs-self-rendering-useform-yup-schemas-validation-and-react-window-inputs.md#implementing-yup-schemas-for-form-validation)
-* [Virtualized useForm() inputs with React-Window](nested-useform-inputs-self-rendering-useform-yup-schemas-validation-and-react-window-inputs.md#virtualized-useform-inputs-with-react-window)
+* [Self-Rendering Form Components](smart-components-rendering..md#self-rendering-form-components)
+* [Implementing Yup schemas on form validation](smart-components-rendering..md#implementing-yup-schemas-for-form-validation)
+* [Virtualized useForm() inputs with React-Window](smart-components-rendering..md#virtualized-useform-inputs-with-react-window)
 
 The \<FormProvider> makes the **useForm() context** available to nested components.                                       The \<ConnectForm> component simplifies access to the form context. It retrieves methods from useFormContext() and passes them as **props** to its child **render function**, which uses them to register() input elements with the form.
 

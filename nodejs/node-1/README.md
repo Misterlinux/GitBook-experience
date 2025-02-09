@@ -34,7 +34,6 @@ Contrary to _React_, the server needs to re-start to update, to avoid that we **
 
 ```jsx
 //In the package.json we create a custom script 
-
 "scripts": {
   "start": "nodemon server.js"      //now is npm start
 }
@@ -47,7 +46,6 @@ Contrary to _React_, the server needs to re-start to update, to avoid that we **
 ```jsx
 //We request them with req.query.___, and add them to the endpoint
 //we add a query with ?(name set in route)=(query value) in the URL
-
 app.get('/', (req, res) => {
   let cava = req.query.v
   res.send("Hello World! , we have the " + cava );
@@ -87,11 +85,30 @@ app.get("/add", function (req, res) {
 
 //we pass its multiple values in the Endpoint
 app.get("/add1/:primo/:second", function (req, res) {
-    let sum1 = Number( req.params.primo )
-    let sum2 = Number( req.params.second )
-    res.send("The result is " + (sum1 + sum2 ));
+  let sum1 = Number( req.params.primo )
+  let sum2 = Number( req.params.second )
+  res.send("The result is " + (sum1 + sum2 ));
 });
 ```
+
+Postman allows testing of custom **headers** for use in server.js.
+
+```jsx
+//We can use Auth bearer token or custom headers
+function authenticate(req, res, next) {
+  let token = req.header("Authorization");
+  console.log("Postman tested token " + token);  //
+}
+
+router.post("/sign-up", async (req, res) => {
+  const {name, email, password} = req.body;
+
+  let token = req.header("token");
+  console.log( token )
+}
+```
+
+<figure><img src="../../.gitbook/assets/PosteManAutho.png" alt="" width="563"><figcaption><p>Tests for server headers </p></figcaption></figure>
 
 For more information about **Middlewares** check [here](express.js-routing-and-middleware.md).
 
@@ -101,7 +118,6 @@ To _**body-parse** request body_ elements we **use()** the **express.json()** bu
 
 ```jsx
 //Unlike normal middleware, it doesn't need to be included in routes
-//
 //This allows request.body to be available in route paths.
 app.use(express.json())
 
@@ -138,16 +154,13 @@ To **update** the JSON file with the Postman POST body, we **filter** both its *
 
 ```jsx
 //Splice() uses the index so we need to lower it
-
 app.put("/quotes/:id", function(req, res){
-
   const messo= req.body
   let index= Number( req.params.id )
 
   if( index > quotes.length-1 || messo.id > quotes.length-1 ){
     res.send("object to update not present")
-  }else{
-
+  }else
     quotes.splice( index-1 , 1, messo )
 
     fs.writeFileSync("./quotes.json", JSON.stringify(quotes));
@@ -160,7 +173,6 @@ To **DELETE** a JSON element by its **ID** parameter, we **filter()** it and use
 
 ```jsx
 //album returns an array, we [0] to extract its index
-
 app.delete("/quotes/:id", function(req, res){
   let canc = Number( req.params.id )
 
@@ -218,7 +230,7 @@ Check the [CORS section](cors-implementation.md) to know more about the configur
 //Implement the CORS middleware
 const express = require("express");
 const app = express();
-app.use(express.json());
+app.use(express.json());    //req.body parser
 const cors = require("cors");
 
 const corsOptions = {
@@ -321,7 +333,6 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 function authenticate (req, res, next) {
-
   let token = req.header("authorization");
 
   if (!token) {

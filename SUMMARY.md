@@ -48,7 +48,7 @@
   * [React-Hook-form 3: Controller, useController(), useformState() and form Context.](react/react-3/react-hook-form-3-controller-usecontroller-useformstate-and-form-context..md)
   * [The fieldArray structure and methods on useForm()](react/react-3/formarrays-rules-and-sets.md)
   * [The \<errorMessage> component, useWatch() hook and multi-page funnel useForm().](react/react-3/page.md)
-  * [Nested useForm() inputs, Self-Rendering useForm(), Yup schemas validation and React-window inputs](react/react-3/nested-useform-inputs-self-rendering-useform-yup-schemas-validation-and-react-window-inputs.md)
+  * [Nested useForm() inputs, Self-Rendering useForm(), Yup schemas validation and React-window inputs](react/react-3/smart-components-rendering..md)
   * [Jest testing, useMemo() inputs, controlled inputs and onChange() value parsing](react/react-3/jest-testing-usememo-inputs-controlled-inputs-and-onchange-value-parsing.md)
 * [REACT 4, useMemo(), useReducer(), ReactJs scaling and useRef(()=>{}) Dom manipulation.](react/react-4-usememo-usereducer-reactjs-scaling-and-useref-greater-than-dom-manipulation./README.md)
   * [useReducer() and scale up ReactJs with useContext()](react/react-4-usememo-usereducer-reactjs-scaling-and-useref-greater-than-dom-manipulation./usereducer-and-scale-up-reactjs-with-usecontext.md)
@@ -69,7 +69,7 @@
   * [CORS implementation](nodejs/node-1/cors-implementation.md)
   * [HTTP protocol, create-react-app configuration, and Cookies setting](nodejs/node-1/http-protocol-create-react-app-configuration-and-cookies-setting.md)
   * [JWT signing and verification](nodejs/node-1/jwt.md)
-* [NODE 2](nodejs/node-2.md)
+* [NODE 2 explaining the fetch.](nodejs/node-2.md)
 * [NODE 3](nodejs/node-3.md)
 * [JSON Syntax and Structure](nodejs/json-syntax-and-structure.md)
 

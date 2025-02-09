@@ -5,8 +5,6 @@
 * [UseContext() and Provider components](./#usecontext-and-provider-components)
 * [useCallback() React hook with useMemo()](./#usecallback-react-hook-with-usememo)
 
->
-
 The **fetch() API** provides us a javascript interface to access the protocol, by using the **global method fetch()** and an URL path it returns a promise that will resolve into a **response object**.
 
 The **protocol** is the set of rules used to define **data formats**, needed to allow data exchange between devices.
@@ -15,7 +13,6 @@ The promise-based fetch method can implement HTTP concepts like **CORS (Cross-Or
 
 ```jsx
 //We can add an init argument to the fetch(url, init) method
-
 let init= {
   method: 'POST',                 //GET, POST, PUT, DELETE, etc
   body: JSON.stringify({
@@ -25,7 +22,6 @@ let init= {
     'Content-type': 'application/json; charset=UTF-8',
   },
 }
-
 ```
 
 We use **try/catch** to handle network and Cors errors, but we also need to check the **promise.ok**  property to avoid other types of errors (like 404).
@@ -34,7 +30,6 @@ Request and Response bodies can only be used once, we use a **request constructo
 
 ```jsx
 //The url detects the language the q string property is
-
 let url = 'https://libretranslate.de/detect';
 
 const lengua= new Request(url, init)
@@ -206,7 +201,6 @@ for(let x of canto){
     ))
   }
 }
-
 ```
 
 <figure><img src="../../.gitbook/assets/RenderedTranslation.png" alt="" width="467"><figcaption><p>We update the useState() to get the translation to render</p></figcaption></figure>
@@ -217,7 +211,7 @@ The **useState()** is a react Hook we use to have **state variables** in functio
 
 To modify useState() arrays we use the **spread syntax** and **slice()** method.
 
-```
+```jsx
 //slice() doesn't modify the starting useState() it creates a new one
 const [linea, setLinea] = useState( [2, 3, 4, 5, 6, 7] )
 
@@ -393,7 +387,7 @@ setDeck((x)=>({
 
 The if statement is not a **{**&#x6A;avascript expressio&#x6E;**}**, so we use the **component's props** in the **function component** to return and render **JSX**.
 
-```
+```jsx
 //We first use && logical operator to render the components onClick()
 //do not use single numeric conditions, it will return {0} instead of false
 
@@ -416,7 +410,7 @@ const [press, setPress] = useState(false)
 
 <figure><img src="../../.gitbook/assets/components.png" alt="" width="134"><figcaption><p>conditional rendered componentc</p></figcaption></figure>
 
-```
+```jsx
 //We then use the props in the function component
 
 function Item({name, back, pack}){
@@ -450,7 +444,7 @@ To **share data** between separate and nested **components** we don't use **prop
 {% tab title="useContext() Providers" %}
 We set the Context provided **values once**.
 
-<pre><code>import Relevant from './components/Externals';
+<pre class="language-jsx"><code class="lang-jsx">import Relevant from './components/Externals';
 <strong>const [drill, setDrill] = useState("element")
 </strong>
 &#x3C;OutContext.Provider value={{drill,setDrill}}>
@@ -460,7 +454,7 @@ We set the Context provided **values once**.
 
 In the imported component we **deconstruct** the context **value object** property.
 
-```
+```jsx
 function Relevant(){
   const {drill, setDrill} = useContext(OutContext)
   let dodice = drill + " added"
@@ -481,7 +475,7 @@ function Relevant(){
 
 And its **nested components** will have access to the **same context value** (even if imported).
 
-```
+```jsx
 function Sollievo(){
   const {drill} = useContext(OutContext) 
   let dodice = drill + " 12"

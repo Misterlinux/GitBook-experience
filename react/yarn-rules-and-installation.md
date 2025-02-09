@@ -23,6 +23,7 @@ yarn add nodemon
 
 //and to update we use up
 yarn up
-```
 
-1
+//Starts up the project with
+yarn start
+```

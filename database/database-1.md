@@ -94,7 +94,6 @@ INSERT INTO hotels (name, rooms, postcode)
 VALUES 
 ('Triple Point Hotel', 10, 'CM194JS'),
 ('The 2-star palace', 7, 'AW124T5');
-
 ```
 
 For _logical operations_ use **'='** instead of '=='.

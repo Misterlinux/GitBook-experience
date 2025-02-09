@@ -1,4 +1,4 @@
-# NODE 2
+# NODE 2 explaining the fetch.
 
 * 1
 * 1
@@ -21,6 +21,7 @@ The **cross-origin fetch requests**, sent from the **ReactJs** client to the **N
 We add a **middleware** to allow the **content-type** methods.
 
 ```jsx
+//The CORS config handles it automatically
 app.all('*', function(req, res, next) {
   res.header('Access-Control-Allow-Origin','URLs to trust of allow');
   res.header('Access-Control-Allow-Methods','GET, POST, OPTIONS, PUT, PATCH,DELETE');
@@ -48,8 +49,7 @@ async function mandato(e){
     method: "POST",    //For the app.post() route in server.js
     body: JSON.stringify(valore),
     headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
+      'Content-Type': 'application/json'
     }
   }
   

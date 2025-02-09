@@ -23,6 +23,7 @@ The **reset()** method resets the form data with the useForm() defaultValues. It
 
 ```jsx
 //The option object requires a value, undefined if we reset defaultValues.
+//The <Controller> defaultValue can replace the useForm() for reset()
 const {
   register, reset, 
   formState: { errors, isDirty, submitCount, isValid, isSubmitSuccessful}

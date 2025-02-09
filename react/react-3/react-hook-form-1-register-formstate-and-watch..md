@@ -1,4 +1,4 @@
-# React-hook-form 1, register, formState and watch.
+# React-hook-form 1: register, formState and watch.
 
 * [The useForm() register function.](react-hook-form-1-register-formstate-and-watch..md#the-useform-register-function)
 * [The formState useForm() object.](react-hook-form-1-register-formstate-and-watch..md#the-formstate-useform-object)
@@ -48,7 +48,7 @@ The **useForm() hook** configures the form behavior through its options object p
 
 <mark style="color:orange;">resetOptions</mark>: It seems to only work on teh reset() option.
 
-<mark style="color:orange;">criteriaMode</mark>: It determines how validation errors are handled; by default, only the first error is recorded, but we can configure it to include all returned errors.
+<mark style="color:orange;">criteriaMode</mark>: It determines how validation errors are handled; by default, only the **first error of each input** is recorded, but we can configure it to include all returned errors.
 
 <mark style="color:orange;">shouldFocusError</mark>: By default it will focus on the input field that has an error. If set to false, it will not trigger any focus on errors. This feature works with inputs that have linked refs.
 
@@ -378,3 +378,5 @@ useEffect(() => {
   return () => unsubscribe()
 }, [watch])
 ```
+
+For a detailed explanation of how and when `watch` and `useWatch` cause form components to **re-render**, refer to [this page](page.md#the-watch-and-usewatch-rules-for-external-input-components).
