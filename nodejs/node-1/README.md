@@ -39,6 +39,8 @@ Contrary to _React_, the server needs to re-start to update, to avoid that we **
 }
 ```
 
+For more information on using fetch in client-server request/response interactions, see this link.
+
 **Postman** is a scalable testing tool, it can retrieve information sent by the **server routes**.
 
 **Queries** are the url part that comes after a **?...=**, it is used to _pass information_ from the endpoint to the **server routes**.

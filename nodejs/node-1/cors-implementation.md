@@ -215,12 +215,13 @@ async function sentData(){
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
+      "token": "temperatura"
     }
   }
 
   let resp = await fetch("http://localhost:3030/heads", oggetto)
   console.log(resp.headers);              // Log all response headers
-  console.log(resp.headers.get("token")); // Get specific header
+  console.log(resp.headers.get("token")); // Get specific header token
 
   let json = await resp.text()
 }

@@ -11,6 +11,9 @@ The **register()** method from the useForm() hook tracks each **input** name and
 We manage multiple independent forms by creating different **instances** of the useForm() methods.
 
 ```jsx
+npm install react-hook-form
+import { useForm } from "react-hook-form"
+
 //The inputs maintain their built-in attributes
 const { register, handleSubmit } = useForm()
 const { register: register1, handleSubmit: handleSubmit1} = useForm();

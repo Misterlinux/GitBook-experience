@@ -131,6 +131,60 @@ json.length ? console.log(json) : console.log("Emptyness status")
 
 ### Deploying a full-stack app on the web
 
+We configure a **PostgreSQL database** instance and connect to it locally using [DBeaver](https://community.render.com/t/i-cant-establish-a-connection-to-postgresql-with-dbeaver/15413/2), employing the provided database name, username, and password.
+
+```jsx
+//We connect the DBeaver Host using the Render hostname
+//To check the exact location check the external URL
+_HostName_.frankfurt-postgres.render.com
+```
+
+<figure><img src="../.gitbook/assets/RenderDatabase.png" alt="" width="563"><figcaption><p>From Render to DBeaver</p></figcaption></figure>
+
+We deploy a **server.js web service** to handle _backend logic_.                                                                                    This service connects to the **Render**-hosted _PostgreSQL database_ using its **internal URL**, designed to minimize latence between services deployed on Render.
+
+```jsx
+//The Pool connect to teh internal URL, storing the included password in .env
+require('dotenv').config();
+const { Pool } = require("pg");
+
+const connectionString = 
+    `postgresql://userdb:${process.env.DATABASE_PASSWORD}@dpg-cupju01opnds7395o040-a/databasedb_cxni`;
+
+const pool = new Pool({ connectionString });
+
+//In Render we can use the Render .env variable option (without "")
+//Or import/paste the .env data (with "")
+```
+
+1
+
+1
+
+<figure><img src="../.gitbook/assets/envRender.png" alt="" width="563"><figcaption><p>ENV database variable</p></figcaption></figure>
+
+The **client-side** application can be hosted anywhere. It communicates with the backend by making API calls to the **URL** of the **deployed server.js** web service.
+
+```jsx
+//It takes path routes as any fetch call.
+async function messo(data){
+  let resp = await fetch("https://renderserver-1-3wv4.onrender.com/hotels")
+  let json = await resp.json()
+
+  console.log( json )
+}
+```
+
+<figure><img src="../.gitbook/assets/webServerExample.jpg" alt="" width="242"><figcaption><p>connect on server.js render web service</p></figcaption></figure>
+
+1
+
+1
+
+1
+
+1
+
 We deploy the NodeJs app on [Render](https://render.com/), we set up a <mark style="background-color:blue;">web service</mark> instance using the <mark style="background-color:blue;">build command</mark> and the <mark style="background-color:blue;">start command</mark>.
 
 ```jsx
@@ -146,35 +200,9 @@ npm install
 
 <figure><img src="../.gitbook/assets/Render.jpg" alt="" width="361"><figcaption><p>How we import a repository from github</p></figcaption></figure>
 
-We create a **postSQL** database in Render, we connect it to **DBeaver** using the Render properties, any **SQL script** will be stored in the database. We deconstruct the external URL to set the host, check [here](https://community.render.com/t/i-cant-establish-a-connection-to-postgresql-with-dbeaver/15413/2).
+1
 
-```jsx
-//We extract the DBeaver hostname from the external URL
-'postgresql://username:password@hostname:port/database_name';
-```
-
-<figure><img src="../.gitbook/assets/RenderDatabase.png" alt="" width="563"><figcaption><p>From Render to DBeaver</p></figcaption></figure>
-
-We connect the _server.js_ to the _database_ using the <mark style="background-color:blue;">pg</mark> module, both are stored in Render so we use the **internal URL**.
-
-```jsx
-//A link instead of a DBeaver object
-const { Pool } = require("pg");
-
-const connectionString = 
-  'postgres://dbeaver_user:__passwword__@dpg-cp6s87q0si5c73ajhufg-a/dbeaver';
-
-const pool = new Pool({
-  connectionString,
-});
-```
-
-On the ReactJs frontEnd we use the server Render deployed Url for the fetch requests.
-
-```jsx
-//The frontEnd can be stored in any other websites
-let segnale = await fetch("https://serving.onrender.com/vedo", manda)
-```
+1
 
 ### Private data on .env files
 
@@ -211,6 +239,10 @@ app.listen(PORT, () => console.log("Server is up and running"))
 
 1
 
-1
+Render gives us the option to inject .env data for sensible information securely on the site, we can the render variable option (without "") or import/paste the .env data (with "").
+
+<figure><img src="../.gitbook/assets/envRender.png" alt="" width="563"><figcaption><p>ENV database variable</p></figcaption></figure>
+
+
 
 1

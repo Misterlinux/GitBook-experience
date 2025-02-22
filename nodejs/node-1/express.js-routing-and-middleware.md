@@ -3,6 +3,13 @@
 * [Independent routing with express.router()](express.js-routing-and-middleware.md#independent-routing-with-express.router)
 * [Hashing passwords with bycryptjs](express.js-routing-and-middleware.md#password-hashing-with-bycryptjs)
 
+The imported **express** library returns a function that, when invoked, creates the **Express application object (app).** This object configures the server and define its **routes**.
+
+```jsx
+const express = require('express');
+const app = express();
+```
+
 A middleware is an **express function** called during route requests, it has access to the _request_ and _response_ **objects**, its **next()** function passes control to the next stack/route handler.
 
 <pre class="language-jsx"><code class="lang-jsx">//It can be included directly in the Route request
