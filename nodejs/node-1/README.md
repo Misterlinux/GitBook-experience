@@ -30,7 +30,7 @@ app.listen(3000, () => console.log("Server is up and running"))
 
 The **endpoint** is the part of the _URL_ that comes after **/**.
 
-Contrary to _React_, the server needs to re-start to update, to avoid that we **npm i nodemon**.
+Contrary to _React_, the server needs to re-start in order to update, to avoid that we **npm i nodemon**.
 
 ```jsx
 //In the package.json we create a custom script 
@@ -38,6 +38,23 @@ Contrary to _React_, the server needs to re-start to update, to avoid that we **
   "start": "nodemon server.js"      //now is npm start
 }
 ```
+
+<details>
+
+<summary>Alternative to nodemon: Supervisor</summary>
+
+**Supervisor** is a Node.js **process manager**, it monitors and restarts the the application on crashes or file changes.                                                                                                                                             Typically used in production, it offers similar functionality to Nodemon but is not a dependency or library.
+
+```jsx
+//If Nodemon restarts become unreliable or get stuck 
+[nodemon] restarting due to changes...
+
+//we globally install it and start it with
+npm install supervisor -g
+supervisor server.js     //depending on its path position server/server.js
+```
+
+</details>
 
 For more information on using fetch in client-server request/response interactions, see this link.
 

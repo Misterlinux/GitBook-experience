@@ -76,6 +76,7 @@
 ## DATABASE
 
 * [Database 1: SQL Databases with DBeaver, SQL Scripts, and the Node-Postgres Module](database/database-1.md)
+* [Node-Postgres Module](database/node-postgres-module.md)
 
 ## OTHER
 

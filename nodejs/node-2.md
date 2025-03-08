@@ -141,27 +141,33 @@ _HostName_.frankfurt-postgres.render.com
 
 <figure><img src="../.gitbook/assets/RenderDatabase.png" alt="" width="563"><figcaption><p>From Render to DBeaver</p></figcaption></figure>
 
-We deploy a **server.js web service** to handle _backend logic_.                                                                                    This service connects to the **Render**-hosted _PostgreSQL database_ using its **internal URL**, designed to minimize latence between services deployed on Render.
+We deploy a **server.js web service** to handle _backend logic_.
 
 ```jsx
-//The Pool connect to teh internal URL, storing the included password in .env
+//For the Build command you can also use
+npm install
+
+//Remove any external library for the start command
+"scripts": {
+  "start": "node server.js",
+},
+```
+
+<figure><img src="../.gitbook/assets/Render.jpg" alt="" width="361"><figcaption><p>How we import a repository from github</p></figcaption></figure>
+
+This service connects to the **Render**-hosted _PostgreSQL database_ using its **internal URL**, designed to minimize latence between services deployed on Render.
+
+```jsx
+//The Pool connect to the internal URL, storing the included password in .env
 require('dotenv').config();
 const { Pool } = require("pg");
 
 const connectionString = 
-    `postgresql://userdb:${process.env.DATABASE_PASSWORD}@dpg-cupju01opnds7395o040-a/databasedb_cxni`;
+    `postgresql://userdb:${process.env.DATABASE_PASSWORD}@dpg-cupju01opnds7395o040-a/
+     databasedb_cxni`;
 
 const pool = new Pool({ connectionString });
-
-//In Render we can use the Render .env variable option (without "")
-//Or import/paste the .env data (with "")
 ```
-
-1
-
-1
-
-<figure><img src="../.gitbook/assets/envRender.png" alt="" width="563"><figcaption><p>ENV database variable</p></figcaption></figure>
 
 The **client-side** application can be hosted anywhere. It communicates with the backend by making API calls to the **URL** of the **deployed server.js** web service.
 
@@ -176,33 +182,6 @@ async function messo(data){
 ```
 
 <figure><img src="../.gitbook/assets/webServerExample.jpg" alt="" width="242"><figcaption><p>connect on server.js render web service</p></figcaption></figure>
-
-1
-
-1
-
-1
-
-1
-
-We deploy the NodeJs app on [Render](https://render.com/), we set up a <mark style="background-color:blue;">web service</mark> instance using the <mark style="background-color:blue;">build command</mark> and the <mark style="background-color:blue;">start command</mark>.
-
-```jsx
-//Usually the build command is contained in the package.json scripts
-//Or we can use it directly 
-npm install
-
-//Use the pure node commands for the start command, avoid imported modules like
-"scripts": {
-  "start": "nodemon server.js",  //use node server.js instead
-},
-```
-
-<figure><img src="../.gitbook/assets/Render.jpg" alt="" width="361"><figcaption><p>How we import a repository from github</p></figcaption></figure>
-
-1
-
-1
 
 ### Private data on .env files
 
@@ -235,14 +214,8 @@ const PORT = process.env.PORT || 3030;
 app.listen(PORT, () => console.log("Server is up and running"))
 ```
 
-1
-
-1
-
-Render gives us the option to inject .env data for sensible information securely on the site, we can the render variable option (without "") or import/paste the .env data (with "").
+**Render** allows secure injection of **.env data** for sensitive information, either through Render's **variable** option (without "") or by **importing/pasting** the .env data directly (using "").
 
 <figure><img src="../.gitbook/assets/envRender.png" alt="" width="563"><figcaption><p>ENV database variable</p></figcaption></figure>
-
-
 
 1
