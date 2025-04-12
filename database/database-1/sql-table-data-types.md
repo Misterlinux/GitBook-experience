@@ -5,11 +5,10 @@
 * 1
 * 1
 
-PostgreSQL data types define the data **format** of data within table columns.\
-These types can be either built-in or user-defined, encompassing various categories:
+**Data types** in PostgreSQL define the data format within table column.
 
 ```jsx
-//Types can be 
+//Data types within column definition
 TEXT and CHAR(n), VARCHAR(n):        text based types, 
 DATE, TIME, TIMESTAMP, and INTERVAL: include date and time types
 JSON:                                for semi structured data, 
@@ -18,7 +17,7 @@ ENUM, ARRAY:                         specialized types
 ```
 
 The **TEXT**, **CHAR(n),** and **VARCHAR(n)** data types store **string** values in table columns.\
-The TEXT data type allows strings of any **length**. While both CHAR(n) and VARCHAR(n) set a **maximum n** length for their strings.\
+TEXT allows strings of any **length**. While both CHAR(n) and VARCHAR(n) set a **maximum n** length.\
 The CHAR(n) is also a **fixed-length** type, it will pad the end of the string with trailing spaces in order to mantain its specified length.
 
 ```sql
@@ -32,23 +31,19 @@ values (' accidenti ', ' accidenti ', ' accidenti ');
 //(" accidenti              "," accidenti "," accidenti ")
 ```
 
-We can proceed string operations with string values within column values.\
-The string values can be concatenated using the **||** operator, which wil convert the resulting string into TEXT,&#x20;regardless of the previous VARCHAR() or CHAR() VALUES or diffferent data types.
-
-We can perform operations in the column string values, within PostgreSQL.\
-The **||** operator concatenates string values, with the return string converted to TEXT regardless of the data types being used.\
-The **substring()** function returns a segment of a string, starting at the index specified by FROM and continuing for the length specified by FOR.\
+The **||** operator concatenates string values, with the return string converted to TEXT regardless of the data types being used.\
+The **substring()** function returns a segment of a string, starting at the FROM index and continuing for the FOR length.\
 The **replace()** function searches each string in a column for a specified substring and replaces all occurrences with a given new string.
 
 ```sql
 //We can concatenate different data types.
-select (text 'prima ' || ' e ' || 211 );
+select (text 'prima ' || ' e ' || 211 );    //TEXT "prima  e 211" 
 
 //We can concatenate string values from columns.
 SELECT nome || ' ' || titolo as new_sting FROM parole;
 
 //The strings follow the 1-index rule, like the arrays
-select substring('parola'::text from 1 for 3);  //par
+select substring('parola'::text from 1 for 3);      //par
 SELECT substring(nome FROM 1 FOR 5) FROM parole;    //It selects from table columns
 
 //It can either be a specific column or a stirng value, it replaces the substring
@@ -56,117 +51,121 @@ select replace('mottura'::text, 'ttu', 'lla' ); //mollara
 SELECT replace(nome, 'pre', 'post') FROM parole where id=2;
 ```
 
-The **INTERVAL** data type represents a duration of time, enabling the addition or subtraction of time intervals from date and time values.\
-The standard format for an interval value is **years-months days hours:minutes:seconds**, with the hyphen specifically separating years and months.
+The **INTERVAL** data type represents a time _duration_, which allows adding and subtracting intervals from date and time values.\
+The standard format for an interval value is **years-months days hours:minutes:seconds**, with the hyphen(-) specifically separating years and months.
 
 ```sql
 //It is not affected by time zones
-//We can use either numerical and string values, singular or plural depending on.
-//The returned interval value will depend on the positions of the values.
+//We can use either numerical and string values, singular or plural.
 create table inte(
     id serial primary key, numero INTERVAL
 );
 
-INSERT INTO inte (numero) VALUES ('47'); //single values seconds by default
-INSERT INTO inte (numero) VALUES ('12:50');  //Hours and Minutes
-INSERT INTO inte (numero) VALUES ('00:21:47');   //necessary 00 for Minutes and Seconds
-INSERT INTO inte (numero) VALUES ('21 minutes 47');  //String interval integration
+INSERT INTO inte (numero) 
+    VALUES ('47'); //single values seconds by default
+    VALUES ('12:50');  //Hours and Minutes
+    VALUES ('00:21:47');   //necessary 00 for Minutes and Seconds
+    VALUES ('21 minutes 47');  //String interval integration
 
-INSERT INTO inte (numero) VALUES ('2 12:12:50');    //Days value
-INSERT INTO inte (numero) VALUES ('1 2 12:12:50');   //error, Year required for month int value
-INSERT INTO inte (numero) VALUES ('0-1 2 12:12:50');  //correct only month interval value
-INSERT INTO inte (numero) VALUES ('1 months 12:12:50'); //stirng intervals can skip elemtns
+    VALUES ('2 12:12:50');    //Days value
+    VALUES ('1 2 12:12:50');   //error, Year required for month int value
+    VALUES ('0-1 2 12:12:50');  //correct only month interval value
+    VALUES ('1 months 12:12:50'); //stirng intervals can skip element
 ```
 
-The justify\_interval function adjusts the intervals to the largests appropriate unit, used for when intervals\
-exceed natural time unit limits and to reconcile intervals created from literal or numerical operations.
+The **justify\_interval** function converts intervals and **interval operations** that exceed their time unit limit.
+
+> The normalized intervals will be more context-dependent than purely arithmetic.
+>
+> * The **hours-days** and **days-months** (30 days) overflows are more common and standardized conversions.
+> * The **months-years** convertion isn't standardized, the number of months in a year can be context-dependants (like in accounting systems).
+> * The **seconds-minutes** and **minutes-hours** follow fixed rules and don't typically require justification.
 
 ```sql
-//Evene within the justify_interval, minutes and seconds can't be above 59.
-//We perform INTERVAL operations using +/-
+//Type casting not needed if no operations
+select justify_interval('0-1 20 100:20:20');  -- 1 mon 24 days 04:20:20
+select justify_interval('2 days 10:90:69');   -- error outide the allowed interval
+select justify_interval('0-1 50 10:12:12');   -- 2 mons 20 days 10:12:12
 
-//04:31:30
-insert into inte(numero) values (INTERVAL '5 hours 1 minute 30 seconds' - INTERVAL '30 minutes');  
+insert into inte(numero) values 
+    ('99:59:59' - '10:00:00');                      -- error, type casting necessary
+    (interval '99:59:59' - '10 hours 10 seconds');  -- 89:59:49
+    ('99:59:59'::interval - '10 hours 10' );        -- 89:59:49
 
-insert into inte(numero) values (INTERVAL '5:01:30' - INTERVAL '100 minutes');  //04:31:30
-INSERT INTO inte(numero) values ('5:01:30'::INTERVAL - INTERVAL '200 minutes'); //01:41:30
-
-//The SELECT for the justified interval can include teh old value.
-insert into inte(numero) values ('99:59:59');
-select numero, justify_interval(numero) as new_value from inte where id = 5; 
-//numero      new_value
-//99:59:59    4 days 03:59:59
+//The justify_interval converts literal/integer string results
+select tempo, justify_interval(tempo) as new_value from lista where id=2; 
+-- numero       new_value
+-- 89:59:49     3 days 17:59:49
 
 //INTERVAL operations on TIME values return TIME.
 SELECT TIME '12:30:00' + INTERVAL '30 minutes' AS new_time;     //13:00:00
 ```
 
-The **JSON** and **JSONB** data types store and manipulate JSON data, like semi-structural data and web APIs.\
-JSON mantains its original plain text format, while JSONB store data in a decomposed binary format, which enhances query performance and storage efficiency.\
-PostgreSQL validates any JSON data inserted into a JSONB column, converting it to an internal binary format. Upon retrieval, this format is automatically converted back to a JSON literal; the binary representation is for internal use only.
+The **JSON** and **JSONB** data types store and manipulate JSON data in the table rows.\
+JSON mantains its original plain text format, while JSONB store data in a **decomposed binary** format, which enhances query performance and storage efficiency.
+
+PostgreSQL validates any JSON data inserted into a JSONB column, converting it to an internal binary format. Upon retrieval, this format is automatically converted back to a JSON literal; the binary representation is for **internal use** only.
 
 ```sql
+//JSONB supports GIN indexing 
 //JSONB also removes any unnecessary whitespace and orders the keys
 create table basico(
     id SERIAL primary key,
-    torta   JSONB
+    parte JSONB
 );
 
-insert into basico(torta) values 
+insert into basico(parte) values 
 ('{"name": "Alice", "age": 30, "city": "New York"}'),
 ('{"products": [{"id": 1, "name": "Laptop"}, {"id": 2, "name": "Mouse"}]}');
 ```
 
-The '->' operator retrieves the JSON value associated with the selected key, preserving its original type.
+The '**->**' operator retrieves the JSON value associated with the selected key, preserving its original type.
 
 ```sql
 //->> will return the string-converted value
-//For nested JSON we repeat -> for each layer
-('{"name": "Alice", "numero": 30, "city": "New York"}'),
-('{"products": [{"id": 1, "name": "Laptop"}, {"id": 2, "name": "Mouse", "numero": 67 }]}');
-
-SELECT torta -> 'numero' FROM basico where id = 1;  //30, int 
-SELECT torta -> 'products' -> 1 ->> 'numero' FROM basico where id = 2;  //
+//For nested JSON we repeat -> for each layer, using the index to access arrays values
+SELECT parte -> 'numero' FROM basico where id = 1;  //30 jsonb 
+SELECT parte -> 'products' -> 1 ->> 'name' FROM basico where id = 2;  //Mouse text
 
 //The #> operator extracts JSON values based on a specified path.
 //And #>> returns the value as string.
-select torta #> '{numero}' from basico where id = 1;    //30
-select torta #>> '{products,1,numero}' from basico where id = 2;    //'67'
+select parte #> '{numero}' from basico where id = 1;    //30 jsonb 
+select parte #>> '{products,1,numero}' from basico where id = 2;    //'67' text
 ```
 
--— ADD IMAGE for different type on dbeaver
+<figure><img src="../../.gitbook/assets/Jsonfieldtypes.png" alt=""><figcaption><p>Different data types on JSON select</p></figcaption></figure>
 
-The @> operator checks if a JSON object contains a specified subset.
+The **@>** operator checks if a JSON object contains a specified subset.
 
 ```sql
 //While the <@ to check if its contained within another
-SELECT * FROM basico WHERE torta @> '{"city": "New York"}';
-SELECT * FROM basico WHERE '{"city": "New York"}' <@ torta ;
+SELECT * FROM basico WHERE parte @> '{"city": "New York"}';
+SELECT * FROM basico WHERE '{"city": "New York"}' <@ parte;
 ```
 
-The ? operator checks if a single key exists at the top level of a JSON object and returns the matching JSON object.
+The **?** operator checks if a single key exists at the _top level_ of a JSON object and returns the matching JSON object.
 
 ```sql
-//It's not designed for path navigation
-SELECT * FROM basico WHERE torta ? 'numero';    //{..., "numero": 30}
+//Can't access nested objects, can return multiple rows
+SELECT * FROM basico WHERE parte ? 'numero';    //{..., "numero": 30}
 ```
 
-The ?| operator checks if any key from an array exists in a JSON object.
+The **?|** operator returns rows where any string from the array exists as a top-level key in the JSON.
 
 ```sql
-//It can return multiple objects
-select * from basico where torta ?| ARRAY[ 'name', 'chiavi' ];  //{"name": "Alice", ....}
+//It can return multiple objects, can't access nested objects
+select * from basico where torta ?| ARRAY['name', 'chiavi'];  //{"name": "Alice", ...}
 ```
 
-The &? operator checks if all keys in an array are present in a JSON object.
+The **&?** operator returns rows where all keys from the array exist as top-level keys in the JSON.
 
 ```sql
-//
-select * from basico where torta ?& ARRAY[ 'name', 'chiavi' ];  //none
-select * from basico where torta ?& ARRAY[ 'name', 'city' ];    //{"name":"Alice", ...}.
+//It can return multiple objects, can't access nested objects
+select * from basico where torta ?& ARRAY['name', 'chiavi'];  //none
+select * from basico where torta ?& ARRAY['name', 'city'];    //{"name":"Alice", ...}.
 ```
 
-The REAL data type stores floating-point and scientific notation values with approximate precision.
+The **REAL** data type stores floating-point and scientific notation values with _approximate precision_.
 
 ```sql
 //REAL stores data in 4 bytes instead of the 8 of FLOAT
@@ -182,29 +181,15 @@ insert into basico(numa) values (1.6E+19);
 insert into basico(numa) values ( pi() );
 ```
 
-The ENUM type defines a set of allowed values for a table column.\
-It defines the type of teh data stored in teh column,
+The **ENUM** custom data type defines a **set** of allowed values for a table column.\
+It cannot be defined directly in a column definition; we must **CREATE TYPE** it outside the table.&#x20;
 
-It cant be defined in teh cpliumn definition, it has to be declared as a separate object,\
-requires a create ype statement,
-
-The order of the ENUM listed values wil affect the valeus when being sorted and\
-when using comparison ooperators on them.\
-The ENUM values will b einternally stored as small integers for efficenty,\
-WE can ALTER the ENUM and ADD VALUE to teh ENUM list of avaiable\
-BUT we cannnot remove or RENAME existing enum values,\
-and their order cannot be changed,
-
-The ENUM data type defines a set of allowed values for a table column.\
-Unlike most data types, ENUM types cannot be defined directly in a column definition; they must be created separately using CREATE TYPE.
-
-The order of ENUM values affects their sorting and their comparison operations. They are stored internally as\
-small integers.
+PostgreSQL stores ENUM values _internally_ as small **integers**. The **pg\_enum** system catalog maps the integers to theirs ENUM values during queries.
 
 We can add new ENUM values using ALTER TYPE, but we cannot remove or rename existing values, nor change their order.
 
 ```sql
-//The ENUM has to be declared outside
+//The ENUM order will affect its values sorting and comparison operations
 CREATE TYPE status AS ENUM ('primo', 'secondo', 'terzo', 'quarto');
 //DROP TYPE status; //It won't remove automatically on table delete
 
