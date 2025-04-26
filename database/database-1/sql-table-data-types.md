@@ -191,7 +191,7 @@ We can add new ENUM values using ALTER TYPE, but we cannot remove or rename exis
 ```sql
 //The ENUM order will affect its values sorting and comparison operations
 CREATE TYPE status AS ENUM ('primo', 'secondo', 'terzo', 'quarto');
-//DROP TYPE status; //It won't remove automatically on table delete
+DROP TYPE status; //It won't remove automatically on table delete
 
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
@@ -202,10 +202,6 @@ CREATE TABLE users (
 //We can only add column values from the ENUM 
 INSERT INTO users (username, account_status) VALUES ('Alice', 'primo'); //secondo, ...
 
-//ENUM order on comparison operators
-select * from users where account_status < 'secondo';   //'primo'
-select * from users where account_status > 'secondo';   //'terzo', 'quarto'
-
 //error: non ENUM value being added
 INSERT INTO users (username, account_status) VALUES ('yanico', 'sesto');   
 
@@ -213,64 +209,87 @@ INSERT INTO users (username, account_status) VALUES ('yanico', 'sesto');
 ALTER TYPE status ADD VALUE 'quinto' AFTER 'quarto';        //('quarto', 'quinto')
 ALTER TYPE status ADD VALUE 'semisecondo' BEFORE 'terzo';   //('semisecondo', 'terzo')
 INSERT INTO users (username, account_status) VALUES ('Alice', 'quinto');
-INSERT INTO users (username, account_status) VALUES ('Alice', 'semisecondo');
+INSERT INTO users (username, account_status) VALUES ('Alice', 'semisecond');
+
+//Operations on ENUM values will be based on their set positions
+select * from users where account_status < 'terzo'; //{'primo','secondo','semisecond'}
+select * from users where account_status > 'terzo'; // {'quarto', 'quinto'}
 ```
 
-The ARRAY data type stores an ordered collection of elements within a single column.
+The **ARRAY** data type stores an ordered collection of elements ofthe same data type within a single column.
 
-During column definition, we specify both the data type of the ARRAY elements and the ARRAY dimension(check below for details), which determines the nesting level of accepted values.
+We define arrays columns using their **data type** and dimention level, we **INSERT** array values as **{}** strings or using the **ARRAY** constructor.
 
-We INSERT array values as strings using curly braces {} or the ARRAY\[] constructor, which are then converted\
-to their column data type.
+In the current PostgreSQL implementation, the database will not strictly enforce the declared array dimension at runtime; it's mainly for user documentation.
 
 ```sql
-//The [] backets have a different use in the PostgreSQL parser.
-//Nested array values must contain the same number of elements. 
+//All arrays will be considered as one-dimention internally
+//Nested array elements must contain the same number of elements
 CREATE TABLE resorce (
     id SERIAL PRIMARY KEY,
-    lista   INT[2],
-    testo   VARCHAR(5)[]
+    lista   INT[2], testo   VARCHAR(5)[]
 );
 
-//NULL can be used to keep the same length between nested arrays
-insert into resorce(lista, TESTO) values 
-( '{{12, 12}, {45, null}}', '{"fuori", "corto", "min"}' );
-
-//Error, 2-dimention INT array with different nested lengths and strng above teh varChar() length
+//Error, different nested array elements and above 5-digit string
 insert into resorce(lista, TESTO) values ('{{12, 12}, {45}}', '{"ridotto"}');
 
+//Null can be used to mantain the same number of elements in nested arrays
+insert into resorce(lista, testo) values 
+	( '{{12, 12}, {34, 67}}', ARRAY['List', 'minna'] );
+	( '{12, null, 99}', ARRAY['basic'] ); 			-- {12,,99}
+	( ARRAY[[33, 33], [null, 43] ], '{pent, ball, prin}' ); --[, 43]
+
 //The PostgreSQL arrays use 1-based indexing for retrieving data.
-select testo from resorce where id = 1;         --{fuori,corto,min}
-select testo[1] from resorce where id = 1;      --fuori
+select testo from resorce where id = 1;         --{List,minna}
+select testo[1] from resorce where id = 1;      --List
 select lista[1][1] from resorce where id = 1;   --12
 ```
 
-The \[start:end] syntax slices its array, with both its indices being inclusive.\
-In multi-dimensional arrays, it will only slice the outer level, due to how PostgreSQL structures arrays.
+Array **columns** can convert compatible array data during their **INSERT** operations.\
+**Arrays literals** declared outside a column definition need to be type-casted to be recognized as arrays.
+
+— Array operations in PostgreSQL require identical data types; TEXT\[] and VARCHAR\[] arrays, both containing string literals values, will be treated as different types.\
+For arrays defined with curly braces {}, the PostgreSQL parser performs implicit conversions. It infers and adjusts the array data to match the target column.
+
+— The ARRAY\[] constructor interprets its string literals TEXT by default and do not convert their data based on the target column.\
+Explicit type casting is needed to convert TEXT arrays to the target column's data type. This is particularly useful in complex table structures.
+
+The **\[ : ]** syntax can slice an array section, with both ends being **inclusive**.
 
 ```sql
-//[:] will include the entire array, due to how the default bounds work
-//The {} data infer works on INSERT operations, if not we explicitly define its array data type
+//On multi-dimentional arrays, it wil only slice the outmost array elements
+//Empty array bounds are by default infinite, [:] will return the entire array 
+INSERT INTO resorce (id, testo, lista) VALUES 
+    (3, '{551,"corto", 12, 62, "cinque"}', '{{"12", 5}, {8, 20}}');
 
-SELECT testo[3:] from resorce;
-SELECT (ARRAY[1, 2, 3, 45, 4])[3:];     //{3,45,4}
-SELECT ('{12, 34, 56, 67}'::int[])[:2]; //{12,34}
+select testo[4:] from intero where id = 3;  -- {62,cinque}
+SELECT (ARRAY[1, 2, 3, 45, 4])[3:];         -- {3,45,4}
+SELECT ('{12, 34, 56, 67}'::int[])[:2];     -- {12,34}
+select ('{{{12, 34}, {56, 67}, {null, 99}}}'::int[])[:2];  --{{{12,34},{56,67},{,99}}}
 ```
 
-PostgreSQL provides operators like @> (contains) and && (overlaps), along with functions for modifying arrays, such as array\_append() and array\_length().
-
-The array\_append() function returns a new array with the specified element appended at the end, it doesn't support multi-dimantional arrays.\
-We use the UPDATE to edit the array in the table.
+PostgreSQL applies the **immutable** principle to its functions and operators.\
+PostgreSQL's built-in **array functions** return new array values, requiring the **UPDATE** command to modify the corresponding table column data.\
+The **array\_append()** function appends a specified element to the end of the array.
 
 ```sql
-//It appends to each element within the column if not specified
-select array_append(testo, 'ultimo') from resorce;  //{out,corto,min1,ultimo}, {..., ultimo}
+//It doesn't support multi dimentional arrays.
+//Will append to each array in the rows if not specified. 
+select array_append(testo, 'ultimo') from resorce;  //{corto,min1,ultimo},{...,ultimo}
 update resorce set testo = array_append(testo, 'speci') where id = 1;  
 ```
 
-The array\_remove function ....
+The **array\_remove()** function returns a new array with the specified element removed.
 
-The array\_length() function returns the length of an array, requiring both the array column and its dimension.
+```sql
+//It doesn't support multi-dimantional arrays
+select array_remove('{12, 145, 12}', 12);   -- {145}
+
+insert into resorce(id, testo) VALUES (1, '{uno, due , bindolo}');
+update resorce set testo = array_remove(testo, 'bindolo')  where id = 1;  -- {uno,due}
+```
+
+The **array\_length()** function returns the length its array argument, based on the specified dimension level.
 
 ```sql
 //Both arguments are required
@@ -279,100 +298,85 @@ select array_length(testo, 1) from resorce;     //1, 1, 2
 select array_length(array[ [12, 55], [null, 32], [99, null] ], 2);  //2
 ```
 
-Array operations in PostgreSQL require identical data types; TEXT\[] and VARCHAR\[] arrays, both containing string literals values, will be treated as different types.\
-For arrays defined with curly braces {}, the PostgreSQL parser performs implicit conversions. It infers and adjusts the array data to match the target column.
-
-The ARRAY\[] constructor interprets its string literals TEXT by default and do not convert their data based on the target column.\
-Explicit type casting is needed to convert TEXT arrays to the target column's data type. This is particularly useful in complex table structures.
+The **containment** operator **@>** checks if the first array contains all elements of the second array.\
+It ignores duplicates, meaning ARRAY\[1] and ARRAY\[1, 1] are considered equivalent.
 
 ```sql
-//The {} will return error if the values can't be converted to the data type.
-//We ::dataType and add [] to specify that its an array containg the values.
-
+//We add [] to specify the array datatype
 insert into resorce(lista, TESTO) values ( '{{12, 12}}', '{"min"}' );
 insert into resorce(lista, TESTO) values ( '{{92, 12}}', '{"min1"}' );
 
-//The testo column is VARCHAR(5)[]
-SELECT * from resorce where testo  @> ARRAY['min1', 'min1']::VARCHAR(5)[];  //{out,corto,min1}
+SELECT * from resorce where testo @> ARRAY['min1', 'min1']::VARCHAR(5)[];  
+//{out,corto,min1}
 
-SELECT * from resorce where lista  @> ARRAY[12, 12];    //{{12,12}, ...}, {{99,12}, ...}
+SELECT * from resorce where lista  @> ARRAY[12, 12]; //{{12,12}, ...}, {{99,12}, ...}
 SELECT * from resorce where lista  @> ARRAY[12];    //{{12,12}, ...}, {{99,12}, ...}
-//The overlap && will check only for the presence of any shared values
 ```
 
-The containment operator @> checks if all elements of one array are present in another, regardless of declared dimensions. Duplicates are ignored, so ARRAY\[1] and ARRAY\[1, 1] are considered equivalent.
-
-PostgreSQL does not enforce multidimensional arrays; when declared in table column they serve as user documentation.\
-At runtime they are treated as one-dimentional arrays containing nested arrays, rather than as true two-dimensional arrays.
-
-The ANY keyword is designed to compare a single value to array columns, returning true if any element matches.\
-It functions similarly to WHERE for single values and supports various comparison operators (<, >, =).
+The **ANY** keyword functions as a **quantifier**, modifying a _comparison operation_ to allow a single value to be compared to each element within an **array**.
 
 ```sql
-//Any array that includes the single value will be returned
+//it returns true if ANY element satisfies the comparison operation.
 create table doppio(
     id  serial primary key,
-    serie   INT[],
-    numeri  INT
+    serie   INT[], numeri  INT
 )
 
+//Symilar to how WHERE compares to single values
 INSERT into doppio (serie) VALUES (array[101, 12]), (array[12]);
 insert into doppio (numeri) values (101), (12);
 
+//It returns the entire array
 select * from doppio where 30 > any (serie);    //{12}, {101, 12}
 select * from doppio where 30 > numeri;     //12
 
 select 4 = any (array[1, 2, 3, 4, 5]);  //true, an element within the array is = 4
 ```
 
-ANY is a quantifier. It modifies the comparison process to compare each array element to the provided single value.\
-The ANY keyword must be placed on the right side of the comparison operator to be processed correctly. On the left side, it is treated as a function, resulting in an invalid comparison.
+The ANY keyword must be placed on the **right side** of the comparison operator. On the left side, it is treated as a function, resulting in an invalid comparison.
 
 ```sql
-//Different ways to return arrays without the single value.
-SELECT * FROM numeri WHERE 23 <> any (schedule); 
-SELECT * FROM numeri WHERE 23 != any (schedule); 
-SELECT * FROM numeri WHERE NOT (23 = ANY (schedule));
+//Different ways to return the "NOT equal to" value from an array.
+SELECT * FROM doppio WHERE 23 <> any (serie); 
+SELECT * FROM doppio WHERE 23 != any (serie); 
+SELECT * FROM doppio WHERE NOT (23 = ANY (serie));
 ```
 
-Both ANY and IN compare a value against a series of values.\
-ANY works directly with array literals and table array columns, enabling element-wise comparisons,\
-IN is designed for explicit comma-separated value sets and subqueries, requiring UNNEST for table arrays.
+Both **ANY** and **IN** compare a value against a series of values:\
+\- ANY works directly with array **literals** and **table array** columns, enabling element-wise comparisons,\
+\- IN is designed for explicit comma-separated value **sets** and **subqueries**, requiring UNNEST for table arrays.
 
 ```sql
-//UNNEST will return the array as a list for the IN
-SELECT 4 = ANY ('{1, 2, 3, 4, 5}'::INT[]);
-select 4 in (1, 2,3, 4, 5);
+//We could UNNEST an array, using a temporary table and column
+SELECT 4 = ANY ('{1, 2, 3, 4, 5}'::INT[]);    //true
+select 4 in (1, 2,3, 4, 5);        //true
+
+SELECT 4 IN (SELECT unnest FROM UNNEST('{1, 2, 3, 4, 5}'::INT[]) AS t(unnest));
 
 //Subqueries return result list, compatible with both ANY and IN
 SELECT * FROM numeri
 WHERE column1 IN (SELECT column2 FROM table2 WHERE condition);
 
-SELECT *
-FROM table1
+SELECT * FROM table1
 WHERE column1 = ANY (SELECT column2 FROM table2 WHERE condition);
 ```
 
-The && operator checks for overlap between arrays and ranges, returning true if any elements are shared.\
-It requires identical data types between the values and doesn't work on subqueries.
+The `&&` logical operator returns `true` if the compared **arrays** have any elements **overlapping**.&#x20;
 
 ```sql
-//It performs the OR operator between the array/range elements.
+//It doesn't work on subqueries
 CREATE TABLE numeri (
     employee_id SERIAL PRIMARY KEY,
     schedule INT[]
 );
 
-INSERT into doppio (serie) VALUES
-(array[101]), (array[12]), (array[23]);
-
+INSERT into doppio (serie) VALUES (array[101]), (array[12]), (array[23]);
 select * from doppio where ARRAY[30, 12] && serie;  //{12}
 
 select ARRAY[1, 2, 3] && ARRAY[2, 4, 5];    //true
 ```
 
-The ALL operator compares a single value to an array column and returns true only if each element satisfies the comparison.\
-It supports multiple math and logical operators (>, <, !=) and works on subqueries;
+The **ALL** keyword is a quantifier that compares a value to every element of an array, returning true only if all comparisons are true. It works on subqueries.
 
 ```sql
 //Not suited for multi-dimantional arrays unless UNNEST
@@ -389,16 +393,14 @@ select * from doppio where 50 > ALL(serie); //{12,45}
 SELECT 10 != ALL (ARRAY[5, 8, 2, 5]);   //true
 ```
 
-The EXISTS operator returns true if its subquery returns at least one row.
+The **EXISTS** operator is a logical operator that requires a subquery as its operand.\
+It is used in the WHERE clause to specify which rows the main query will process, and returns **true** if its subquery returns at least one row.
 
-We create a correlation between the outer query and the subquery, by incorporating outer query data within\
-the subquery, so that each row evaluates its EXISTS condition individually.
+We **correlate** the outer query with the subquery by using a variable.\
+This allows the EXISTS condition to evaluate each row of the outer query against related data in the subquery.
 
 ```sql
-//Without correlation it might use the first EXISTS result for the other rows withoun re valuating
-//We correlate the empjob form the ouyter query to the depname of the subquery
-//Each row evaluation of the outer query SELECT will update the subquery comparison and 
-//trigger the EXISTS update, results
+//The subquery correlates to the current outher query column for each row it executes.
 CREATE TABLE departments (
     depid   SERIAL PRIMARY KEY,
     depname VARCHAR(100)
@@ -406,8 +408,7 @@ CREATE TABLE departments (
 
 CREATE TABLE employees (
     empid   SERIAL PRIMARY KEY,
-    empname VARCHAR(100),
-    empjob  TEXT
+    empname VARCHAR(100), empjob  TEXT
 );
 
 insert into departments(depname) values ('human'), ('info'), ('market');
@@ -424,31 +425,27 @@ WHERE EXISTS (
 //lowrence
 ```
 
-Both IN and JOIN can perform similar operations to EXISTS, but they require the\
-complete evaluation of the subquery or table join. While EXISTS stops\
-evaluation at the first match, avoiding full table scans.
+Both **IN** and **JOIN** can perform similar operations to EXISTS, but they require the complete evaluation of the subquery or a table join. While EXISTS stops evaluation at the first match, avoiding full table scans.
 
 <details>
 
-<summary>JOIN and IN on conditional returns, alternatives methods</summary>
+<summary>JOIN and IN on conditional query returns.</summary>
 
-JOIN is more efficient for creating explicit relationships between tables. While IN can be more readable.
-
-We query JOIN the tables based on the matching condition, to then SELECT the columns form teh joined table
+The **JOIN** operator combines rows from two tables based on a matching condition.\
+It creates a direct relationship between columns at the same **query level**, unlike the EXISTS subquery correlation.
 
 ```sql
-//It has to precess the entire tables
-//We use one column (empjon) for teh comparison but then select the otehr empname
+//It processes the entire page
+//The matchign colummn and teh SELECT column can be different (empname/empjob)
 SELECT emp.empname 
 FROM employees AS emp
 JOIN departments AS dept ON emp.empjob = dept.depname;
 ```
 
-The query uses the IN operator to compare the empjob column against a list of\
-department names generated by a subquery. It then selects the empname for any matching rows.
+The **IN** operator returns the rows that match any of the values returned by its subquery.
 
 ```sql
-//Th esubquery needs to process the entire table to return its set.
+//It processes the entire subquery table for each outher query
 SELECT empname
 FROM employees AS emp
 WHERE empjob IN (SELECT depname FROM departments);
