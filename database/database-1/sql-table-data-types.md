@@ -31,8 +31,6 @@ values (' accidenti ', ' accidenti ', ' accidenti ');
 //(" accidenti              "," accidenti "," accidenti ")
 ```
 
-
-
 The **||** operator concatenates string values, with the return string converted to TEXT regardless of the data types being used.\
 The **substring()** function returns a segment of a string, starting at the FROM index and continuing for the FOR length.\
 The **replace()** function searches each string in a column for a specified substring and replaces all occurrences with a given new string.
@@ -291,7 +289,7 @@ insert into resorce(lista) values
 The **\[ : ]** syntax can slice an array section, with both ends being **inclusive**.
 
 ```sql
-//On multi-dimentional arrays, it wil only slice the outmost array elements
+//On multi-dimentional arrays, it will only slice the outmost array elements
 //Empty array bounds are by default infinite, [:] will return the entire array 
 INSERT INTO resorce (id, testo, lista) VALUES 
     (3, '{551,"corto", 12, 62, "cinque"}', '{{"12", 5}, {8, 20}}');
@@ -303,8 +301,71 @@ select ('{{{12, 34}, {56, 67}, {null, 99}}}'::int[])[:2];  --{{{12,34},{56,67},{
 ```
 
 PostgreSQL applies the **immutable** principle to its functions and operators.\
-PostgreSQL's built-in **array functions** return new array values, requiring the **UPDATE** command to modify the corresponding table column data.\
+PostgreSQL's built-in **array functions** return new array values, requiring the **UPDATE** command to modify the corresponding table column data.
+
+1
+
+1
+
+1
+
+{% tabs %}
+{% tab title="Array_append()" %}
+1
+
 The **array\_append()** function appends a specified element to the end of the array.
+
+```sql
+//It doesn't support multi dimentional arrays.
+//Will append to each array in the rows if not specified. 
+select array_append(testo, 'ultimo') from resorce;  
+    //{corto,min1,ultimo},{...,ultimo}
+update resorce set testo = array_append(testo, 'speci') where id = 1;  
+```
+
+1
+
+1
+
+1
+{% endtab %}
+
+{% tab title="Array_remove()" %}
+The **array\_remove()** function returns a new array with the specified element removed.
+
+```sql
+//It doesn't support multi-dimantional arrays
+select array_remove('{12, 145, 12}', 12);   -- {145}
+
+insert into resorce(id, testo) VALUES (1, '{uno, due , bindolo}');
+update resorce set testo = array_remove(testo, 'bindolo') where id = 1;  
+    //{uno,due}
+```
+
+1
+
+1
+
+1
+{% endtab %}
+
+{% tab title="Array_length()" %}
+The **array\_length()** function returns the length its array argument, based on the specified dimension level.
+
+```sql
+//Both arguments are required
+//It returns the lengths of the arrays contained in the testo columns
+select array_length(testo, 1) from resorce;     //1, 1, 2
+select array_length(array[ [12, 55], [null, 32], [99, null] ], 2);  //2
+```
+{% endtab %}
+{% endtabs %}
+
+1
+
+1
+
+The **array\_append()** function appends a specified element to the end of the array.
 
 ```sql
 //It doesn't support multi dimentional arrays.
@@ -332,6 +393,10 @@ select array_length(testo, 1) from resorce;     //1, 1, 2
 select array_length(array[ [12, 55], [null, 32], [99, null] ], 2);  //2
 ```
 
+The array data type, symilar to interval, has access to the `@>` and `&&` operators.
+
+{% tabs %}
+{% tab title="Array @> operator" %}
 The **containment** operator **@>** checks if the first array contains all elements of the second array.\
 It ignores duplicates, meaning ARRAY\[1] and ARRAY\[1, 1] are considered equivalent.
 
@@ -343,9 +408,28 @@ insert into resorce(lista, TESTO) values ( '{{92, 12}}', '{"min1"}' );
 SELECT * from resorce where testo @> ARRAY['min1', 'min1']::VARCHAR(5)[];  
 //{out,corto,min1}
 
-SELECT * from resorce where lista  @> ARRAY[12, 12]; //{{12,12}, ...}, {{99,12}, ...}
-SELECT * from resorce where lista  @> ARRAY[12];    //{{12,12}, ...}, {{99,12}, ...}
+SELECT * from resorce where lista  @> ARRAY[12, 12]; //{{12,12},.}, {{99,12},.}
+SELECT * from resorce where lista  @> ARRAY[12];    //{{12,12},.}, {{99,12},.}
 ```
+{% endtab %}
+
+{% tab title="Array && operator" %}
+The `&&` logical operator returns `true` if the compared **arrays** have any elements **overlapping**.&#x20;
+
+```sql
+//It doesn't work on subqueries
+CREATE TABLE numeri (
+    employee_id SERIAL PRIMARY KEY,
+    schedule INT[]
+);
+
+INSERT into doppio (serie) VALUES (array[101]), (array[12]), (array[23]);
+select * from doppio where ARRAY[30, 12] && serie;  //{12}
+
+select ARRAY[1, 2, 3] && ARRAY[2, 4, 5];    //true
+```
+{% endtab %}
+{% endtabs %}
 
 The **ANY** keyword functions as a **quantifier**, modifying a _comparison operation_ to allow a single value to be compared to each element within an **array**.
 
@@ -367,7 +451,11 @@ select * from doppio where 30 > numeri;     //12
 select 4 = any (array[1, 2, 3, 4, 5]);  //true, an element within the array is = 4
 ```
 
-The ANY keyword must be placed on the **right side** of the comparison operator. On the left side, it is treated as a function, resulting in an invalid comparison.
+<details>
+
+<summary>ANY query rules and differences with the IN () operator</summary>
+
+The ANY keyword must be placed on the **right side** of the comparison operator. On the left side, it is treated as a function, resulting in an invalid comparison.
 
 ```sql
 //Different ways to return the "NOT equal to" value from an array.
@@ -385,7 +473,7 @@ Both **ANY** and **IN** compare a value against a series of values:\
 SELECT 4 = ANY ('{1, 2, 3, 4, 5}'::INT[]);    //true
 select 4 in (1, 2,3, 4, 5);        //true
 
-SELECT 4 IN (SELECT unnest FROM UNNEST('{1, 2, 3, 4, 5}'::INT[]) AS t(unnest));
+SELECT 4 IN(SELECT unnest FROM UNNEST('{1, 2, 3, 4, 5}'::INT[]) AS t(unnest));
 
 //Subqueries return result list, compatible with both ANY and IN
 SELECT * FROM numeri
@@ -395,20 +483,7 @@ SELECT * FROM table1
 WHERE column1 = ANY (SELECT column2 FROM table2 WHERE condition);
 ```
 
-The `&&` logical operator returns `true` if the compared **arrays** have any elements **overlapping**.&#x20;
-
-```sql
-//It doesn't work on subqueries
-CREATE TABLE numeri (
-    employee_id SERIAL PRIMARY KEY,
-    schedule INT[]
-);
-
-INSERT into doppio (serie) VALUES (array[101]), (array[12]), (array[23]);
-select * from doppio where ARRAY[30, 12] && serie;  //{12}
-
-select ARRAY[1, 2, 3] && ARRAY[2, 4, 5];    //true
-```
+</details>
 
 The **ALL** keyword is a quantifier that compares a value to every element of an array, returning true only if all comparisons are true. It works on subqueries.
 
@@ -435,21 +510,15 @@ This allows the EXISTS condition to evaluate each row of the outer query against
 
 ```sql
 //The subquery correlates to the current outher query column for each row it executes.
-CREATE TABLE departments (
-    depid   SERIAL PRIMARY KEY,
-    depname VARCHAR(100)
-);
-
-CREATE TABLE employees (
-    empid   SERIAL PRIMARY KEY,
-    empname VARCHAR(100), empjob  TEXT
-);
+CREATE TABLE departments ( depname VARCHAR(100) );
+CREATE TABLE employees ( empname VARCHAR(100), empjob  TEXT );
 
 insert into departments(depname) values ('human'), ('info'), ('market');
 
 insert into employees(empname, empjob) values
 ('lowrence', 'market'), ('mike', 'bus'), ('dory', 'walk');
 
+//The correlated emp.empjob column is updated for each row of teh employees table
 SELECT empname FROM employees AS emp
 WHERE EXISTS (
     SELECT 1
