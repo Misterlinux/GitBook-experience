@@ -31,7 +31,9 @@ values (' accidenti ', ' accidenti ', ' accidenti ');
 //(" accidenti              "," accidenti "," accidenti ")
 ```
 
-The **||** operator concatenates string values, with the return string converted to TEXT regardless of the data types being used.\
+
+
+The **||** operator concatenates string values, with the return string converted to TEXT regardless of the data types being used.\
 The **substring()** function returns a segment of a string, starting at the FROM index and continuing for the FOR length.\
 The **replace()** function searches each string in a column for a specified substring and replaces all occurrences with a given new string.
 
@@ -62,16 +64,20 @@ create table inte(
 );
 
 INSERT INTO inte (numero) 
-    VALUES ('47'); //single values seconds by default
-    VALUES ('12:50');  //Hours and Minutes
-    VALUES ('00:21:47');   //necessary 00 for Minutes and Seconds
+    VALUES ('47');             //single values seconds by default
+    VALUES ('12:50');          //Hours and Minutes
+    VALUES ('00:21:47');       //necessary 00 for Minutes and Seconds
     VALUES ('21 minutes 47');  //String interval integration
 
-    VALUES ('2 12:12:50');    //Days value
-    VALUES ('1 2 12:12:50');   //error, Year required for month int value
-    VALUES ('0-1 2 12:12:50');  //correct only month interval value
-    VALUES ('1 months 12:12:50'); //stirng intervals can skip element
+    VALUES ('2 12:12:50');         //Days value
+    VALUES ('1 2 12:12:50');       //error, Year required for month int value
+    VALUES ('0-1 2 12:12:50');     //correct only month interval value
+    VALUES ('1 months 12:12:50');  //stirng intervals can skip element
 ```
+
+<details>
+
+<summary>Interval convertion with the  justify_interval() function</summary>
 
 The **justify\_interval** function converts intervals and **interval operations** that exceed their time unit limit.
 
@@ -81,14 +87,15 @@ The **justify\_interval** function converts intervals and **interval operations*
 > * The **months-years** convertion isn't standardized, the number of months in a year can be context-dependants (like in accounting systems).
 > * The **seconds-minutes** and **minutes-hours** follow fixed rules and don't typically require justification.
 
+{% code fullWidth="true" %}
 ```sql
 //Type casting not needed if no operations
 select justify_interval('0-1 20 100:20:20');  -- 1 mon 24 days 04:20:20
-select justify_interval('2 days 10:90:69');   -- error outide the allowed interval
+select justify_interval('2 days 10:90:69');   -- error, outside the allowed interval
 select justify_interval('0-1 50 10:12:12');   -- 2 mons 20 days 10:12:12
 
 insert into inte(numero) values 
-    ('99:59:59' - '10:00:00');                      -- error, type casting necessary
+    ('99:59:59' - '10:00:00');              -- error, type casting necessary
     (interval '99:59:59' - '10 hours 10 seconds');  -- 89:59:49
     ('99:59:59'::interval - '10 hours 10' );        -- 89:59:49
 
@@ -100,6 +107,9 @@ select tempo, justify_interval(tempo) as new_value from lista where id=2;
 //INTERVAL operations on TIME values return TIME.
 SELECT TIME '12:30:00' + INTERVAL '30 minutes' AS new_time;     //13:00:00
 ```
+{% endcode %}
+
+</details>
 
 The **JSON** and **JSONB** data types store and manipulate JSON data in the table rows.\
 JSON mantains its original plain text format, while JSONB store data in a **decomposed binary** format, which enhances query performance and storage efficiency.
@@ -124,8 +134,8 @@ The '**->**' operator retrieves the JSON value associated with the selected key,
 ```sql
 //->> will return the string-converted value
 //For nested JSON we repeat -> for each layer, using the index to access arrays values
-SELECT parte -> 'numero' FROM basico where id = 1;  //30 jsonb 
-SELECT parte -> 'products' -> 1 ->> 'name' FROM basico where id = 2;  //Mouse text
+SELECT parte -> 'numero' FROM basico where id = 1;  //30 ,jsonb 
+SELECT parte -> 'products' -> 1 ->> 'name' FROM basico where id = 2;  //Mouse ,text
 
 //The #> operator extracts JSON values based on a specified path.
 //And #>> returns the value as string.
@@ -134,6 +144,10 @@ select parte #>> '{products,1,numero}' from basico where id = 2;    //'67' text
 ```
 
 <figure><img src="../../.gitbook/assets/Jsonfieldtypes.png" alt=""><figcaption><p>Different data types on JSON select</p></figcaption></figure>
+
+<details>
+
+<summary>The Containment @> and object key ? operators</summary>
 
 The **@>** operator checks if a JSON object contains a specified subset.
 
@@ -147,23 +161,25 @@ The **?** operator checks if a single key exists at the _top level_ of a JSON ob
 
 ```sql
 //Can't access nested objects, can return multiple rows
-SELECT * FROM basico WHERE parte ? 'numero';    //{..., "numero": 30}
+SELECT * FROM basico WHERE parte ? 'age';    //{..., "numero": 30}
 ```
 
 The **?|** operator returns rows where any string from the array exists as a top-level key in the JSON.
 
 ```sql
 //It can return multiple objects, can't access nested objects
-select * from basico where torta ?| ARRAY['name', 'chiavi'];  //{"name": "Alice", ...}
+select * from basico where parte ?| ARRAY['name', 'city'];  //{"name": "Alice", ...}
 ```
 
 The **&?** operator returns rows where all keys from the array exist as top-level keys in the JSON.
 
 ```sql
 //It can return multiple objects, can't access nested objects
-select * from basico where torta ?& ARRAY['name', 'chiavi'];  //none
-select * from basico where torta ?& ARRAY['name', 'city'];    //{"name":"Alice", ...}.
+select * from basico where parte ?& ARRAY['name', 'chiavi'];  //none
+select * from basico where parte ?& ARRAY['name', 'city'];    //{"name":"Alice", ...}.
 ```
+
+</details>
 
 The **REAL** data type stores floating-point and scientific notation values with _approximate precision_.
 
@@ -186,8 +202,6 @@ It cannot be defined directly in a column definition; we must **CREATE TYPE** it
 
 PostgreSQL stores ENUM values _internally_ as small **integers**. The **pg\_enum** system catalog maps the integers to theirs ENUM values during queries.
 
-We can add new ENUM values using ALTER TYPE, but we cannot remove or rename existing values, nor change their order.
-
 ```sql
 //The ENUM order will affect its values sorting and comparison operations
 CREATE TYPE status AS ENUM ('primo', 'secondo', 'terzo', 'quarto');
@@ -200,23 +214,36 @@ CREATE TABLE users (
 );
 
 //We can only add column values from the ENUM 
-INSERT INTO users (username, account_status) VALUES ('Alice', 'primo'); //secondo, ...
+INSERT INTO users (username, account_status) VALUES 
+    ('Alice', 'primo'),     //secondo, ...
+    ('yanico', 'sesto');    //Error: non ENUM value being added 
+```
 
-//error: non ENUM value being added
-INSERT INTO users (username, account_status) VALUES ('yanico', 'sesto');   
+<details>
 
+<summary>enum ALTER TYPE rules</summary>
+
+We can add new ENUM values using **ALTER TYPE**, but we cannot remove or rename existing values, nor change their order.
+
+```sql
 //The BEFORE, AFTER clauses set the position of new ENUM values
-ALTER TYPE status ADD VALUE 'quinto' AFTER 'quarto';        //('quarto', 'quinto')
-ALTER TYPE status ADD VALUE 'semisecondo' BEFORE 'terzo';   //('semisecondo', 'terzo')
+ALTER TYPE status ADD VALUE 'quinto' AFTER 'quarto';        
+    //('quarto', 'quinto')
+ALTER TYPE status ADD VALUE 'semisecondo' BEFORE 'terzo';   
+    //('semisecondo', 'terzo')
 INSERT INTO users (username, account_status) VALUES ('Alice', 'quinto');
 INSERT INTO users (username, account_status) VALUES ('Alice', 'semisecond');
 
 //Operations on ENUM values will be based on their set positions
-select * from users where account_status < 'terzo'; //{'primo','secondo','semisecond'}
-select * from users where account_status > 'terzo'; // {'quarto', 'quinto'}
+select * from users where account_status < 'terzo'; 
+    //{'primo','secondo','semisecond'}
+select * from users where account_status > 'terzo'; 
+    // {'quarto', 'quinto'}
 ```
 
-The **ARRAY** data type stores an ordered collection of elements ofthe same data type within a single column.
+</details>
+
+The **ARRAY** data type stores an ordered collection of elements of the same data type within a single column.
 
 We define arrays columns using their **data type** and dimention level, we **INSERT** array values as **{}** strings or using the **ARRAY** constructor.
 
@@ -245,14 +272,21 @@ select testo[1] from resorce where id = 1;      --List
 select lista[1][1] from resorce where id = 1;   --12
 ```
 
-Array **columns** can convert compatible array data during their **INSERT** operations.\
-**Arrays literals** declared outside a column definition need to be type-casted to be recognized as arrays.
+During the INSERT operation, the PostgreSQL parser infers`{}` array values and converts them to the target **column's array data type**.
 
-— Array operations in PostgreSQL require identical data types; TEXT\[] and VARCHAR\[] arrays, both containing string literals values, will be treated as different types.\
-For arrays defined with curly braces {}, the PostgreSQL parser performs implicit conversions. It infers and adjusts the array data to match the target column.
+Arrays literals defined outside a column definition require **explicit** type casting to be recognized at their specific data type, array operations only allow arrays with identical data types.
 
-— The ARRAY\[] constructor interprets its string literals TEXT by default and do not convert their data based on the target column.\
-Explicit type casting is needed to convert TEXT arrays to the target column's data type. This is particularly useful in complex table structures.
+```sql
+//The ARRAY[] constructor default data type is TEXT
+//String literals will be considered incompatible based on their data types
+select array['pear', 'banjo'] && ARRAY['mango', 'banjo'];  -- true
+select array['pear', 'banjo'] && ARRAY['mango', 'banjo']::VARCHAR(5)[]; -- ERROR
+
+//The ARRAY[] constructor doesn't get inferred on INSERT
+insert into resorce(lista) values 
+    (array[[44, null], ['44', '122']]),    -- Error
+    ('{ {44, null}, {"44", "122"} }');     --{{44, },{44,122}}
+```
 
 The **\[ : ]** syntax can slice an array section, with both ends being **inclusive**.
 
@@ -495,19 +529,5 @@ WHERE EXISTS (
     WHERE o.customer_id = c.customer_id
 );
 ```
-
-1
-
-1
-
-1
-
-1
-
-1
-
-1
-
-1
 
 1
