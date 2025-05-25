@@ -1,8 +1,7 @@
 # SQL table Data Types
 
-* 1
-* 1
-* 1
+* [JSON and REAL ](sql-table-data-types.md#json-and-real)
+* [ENUM and ARRAY](sql-table-data-types.md#enum-and-array)
 * 1
 
 **Data types** in PostgreSQL define the data format within table column.
@@ -109,6 +108,8 @@ SELECT TIME '12:30:00' + INTERVAL '30 minutes' AS new_time;     //13:00:00
 
 </details>
 
+### JSON and REAL&#x20;
+
 The **JSON** and **JSONB** data types store and manipulate JSON data in the table rows.\
 JSON mantains its original plain text format, while JSONB store data in a **decomposed binary** format, which enhances query performance and storage efficiency.
 
@@ -194,6 +195,8 @@ insert into basico(numa) values (1.0e6);
 insert into basico(numa) values (1.6E+19);
 insert into basico(numa) values ( pi() );
 ```
+
+### ENUM and ARRAY
 
 The **ENUM** custom data type defines a **set** of allowed values for a table column.\
 It cannot be defined directly in a column definition; we must **CREATE TYPE** it outside the table.&#x20;
@@ -303,16 +306,8 @@ select ('{{{12, 34}, {56, 67}, {null, 99}}}'::int[])[:2];  --{{{12,34},{56,67},{
 PostgreSQL applies the **immutable** principle to its functions and operators.\
 PostgreSQL's built-in **array functions** return new array values, requiring the **UPDATE** command to modify the corresponding table column data.
 
-1
-
-1
-
-1
-
 {% tabs %}
 {% tab title="Array_append()" %}
-1
-
 The **array\_append()** function appends a specified element to the end of the array.
 
 ```sql
@@ -322,12 +317,6 @@ select array_append(testo, 'ultimo') from resorce;
     //{corto,min1,ultimo},{...,ultimo}
 update resorce set testo = array_append(testo, 'speci') where id = 1;  
 ```
-
-1
-
-1
-
-1
 {% endtab %}
 
 {% tab title="Array_remove()" %}
@@ -341,12 +330,6 @@ insert into resorce(id, testo) VALUES (1, '{uno, due , bindolo}');
 update resorce set testo = array_remove(testo, 'bindolo') where id = 1;  
     //{uno,due}
 ```
-
-1
-
-1
-
-1
 {% endtab %}
 
 {% tab title="Array_length()" %}
@@ -360,38 +343,6 @@ select array_length(array[ [12, 55], [null, 32], [99, null] ], 2);  //2
 ```
 {% endtab %}
 {% endtabs %}
-
-1
-
-1
-
-The **array\_append()** function appends a specified element to the end of the array.
-
-```sql
-//It doesn't support multi dimentional arrays.
-//Will append to each array in the rows if not specified. 
-select array_append(testo, 'ultimo') from resorce;  //{corto,min1,ultimo},{...,ultimo}
-update resorce set testo = array_append(testo, 'speci') where id = 1;  
-```
-
-The **array\_remove()** function returns a new array with the specified element removed.
-
-```sql
-//It doesn't support multi-dimantional arrays
-select array_remove('{12, 145, 12}', 12);   -- {145}
-
-insert into resorce(id, testo) VALUES (1, '{uno, due , bindolo}');
-update resorce set testo = array_remove(testo, 'bindolo')  where id = 1;  -- {uno,due}
-```
-
-The **array\_length()** function returns the length its array argument, based on the specified dimension level.
-
-```sql
-//Both arguments are required
-//It returns the lengths of the arrays contained in the testo columns
-select array_length(testo, 1) from resorce;     //1, 1, 2
-select array_length(array[ [12, 55], [null, 32], [99, null] ], 2);  //2
-```
 
 The array data type, symilar to interval, has access to the `@>` and `&&` operators.
 
@@ -556,47 +507,36 @@ WHERE empjob IN (SELECT depname FROM departments);
 
 </details>
 
-The EXISTS operator offers advantages when dealing with large tables correlated to smaller ones,\
-as it can terminate comparisons faster than processing the entire table.
+The EXISTS predicate queries the specific columns from the main table based on the related table data, without performing a full join or processing the subquery on the entire main table.
 
 ```sql
-//We create and populate the table with a large number of values
+//The main table from where we will process query
 CREATE TABLE large_customers (
     customer_id SERIAL PRIMARY KEY,
     customer_name VARCHAR(100)
 );
 
-//The generate_series() creates a series of unique values for the table
-//It is not compatible with INSERT, it returns an unique series instead of being a multiple series of VALUES.
-//The SELECT takes data and insertes it into the table
+//We insert 1000 rows of unique values
 INSERT INTO large_customers (customer_name)
-SELECT 'Customer ' || generate_series(1, 1000);
+select uuid_generate_v4() FROM generate_series(1, 1000);
 
--- we create a smaller table with the same ID as the big one, but with less elements
-
-//We create a smaller table that references the ID values form the largests.
+//The second table will store specific id values which may be in the main table
 CREATE TABLE customers_with_orders (
-    customer_id INT REFERENCES large_customers(customer_id)
+    customer_id INT
 );
 
--- Populate with some customers who have placed orders
-
-//We fill the table with 1/100 of the larget table values,  
+//We insert 100 values which might be shared with main table id
 INSERT INTO customers_with_orders (customer_id)
-SELECT customer_id
-FROM large_customers
-WHERE customer_id % 100 = 0;
+select floor(random() * 2000)::integer FROM generate_series(1, 100);
 
--- Query using EXISTS (efficient)
-
-//The query will return the correlated values faster thna IN and JOIN
-SELECT customer_name
+//We return the rows form the customer_id values that match in the main table
+//The EXIST predicate returns only the second table ids present in the main table
+SELECT customer_id ,customer_name
 FROM large_customers c
 WHERE EXISTS (
     SELECT 1
     FROM customers_with_orders o
     WHERE o.customer_id = c.customer_id
 );
+//43/100 rows are returned from 100 in the second table for example.
 ```
-
-1

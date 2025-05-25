@@ -303,7 +303,7 @@ console.log(callbacks.map(
 
 We use **Regular Expression Search Methods** to search **patterns** in strings:
 
-```
+```javascript
 //text pattern between // and letters for modifiers 
 let pattern = /Lorem/i        //i is for case insensitive
 
