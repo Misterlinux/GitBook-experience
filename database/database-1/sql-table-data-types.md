@@ -2,7 +2,6 @@
 
 * [JSON and REAL ](sql-table-data-types.md#json-and-real)
 * [ENUM and ARRAY](sql-table-data-types.md#enum-and-array)
-* 1
 
 **Data types** in PostgreSQL define the data format within table column.
 
@@ -128,9 +127,10 @@ insert into basico(parte) values
 ('{"products": [{"id": 1, "name": "Laptop"}, {"id": 2, "name": "Mouse"}]}');
 ```
 
-The '**->**' operator retrieves the JSON value associated with the selected key, preserving its original type.
+The '**->**' operator retrieves the **JSON** value associated with the selected key, preserving its original type.
 
 ```sql
+//-> returns a jsonb value, regardless of its property value in the jsonb column
 //->> will return the string-converted value
 //For nested JSON we repeat -> for each layer, using the index to access arrays values
 SELECT parte -> 'numero' FROM basico where id = 1;  //30 ,jsonb 

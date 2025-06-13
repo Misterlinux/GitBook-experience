@@ -77,7 +77,8 @@
 
 * [Database 1: SQL Databases with DBeaver, SQL Scripts, and the Node-Postgres Module](database/database-1/README.md)
   * [SQL table Data Types](database/database-1/sql-table-data-types.md)
-  * [Range and Multiranges data types](database/database-1/range-and-multiranges-data-types.md)
+  * [Range, Multiranges and composite data types](database/database-1/range-multiranges-and-composite-data-types.md)
+  * [Page](database/database-1/page.md)
 * [Node-Postgres Module](database/node-postgres-module.md)
 
 ## OTHER
