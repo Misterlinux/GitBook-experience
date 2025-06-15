@@ -129,6 +129,104 @@ SELECT car_check(
 
 1
 
+### PostgreSQL base custom data type&#x20;
+
+A base custom data type creates a **new, fundamental data** type using C code functions.\
+The CREATE TYPE statement must include the custom **input** and **output functions**, which are used to convert between the **textual** representation and the **binary** storage format. Additionally, functions associated with the base data type can **forward reference** the created data type even if it has not been fully defined yet.
+
+```sql
+//The C custom functions can have the base custom data type as return or argument
+CREATE FUNCTION mytype_in(cstring//mytype)  //mytype
+RETURNS mytype//cstring     //even before the data type is defined.
+AS 'path/to/my_type.so', 'mytype_in_c_function_name'
+LANGUAGE C IMMUTABLE STRICT;
+
+//We define the convertion logic functions within the fields
+//We can include a receive and send function to transfer binary data back and forth
+CREATE TYPE mytype (
+    internallength = 16, //bytes of internal storage
+    input = mytype_in, output = mytype_out,
+);
+```
+
+Each **custom** data type **includes** a corresponding **array** data type, which shares its original name with an underscore appended.
+
+The associated array type employs its **array\_in function** for table columns containing arrays of custom data types. It **parses** each literal string element within the array and **delegates** their **conversion** to the **input function** provided by the custom data type.
+
+The array\_in function then stores the resulting **binary data** within the **table column's** array structure.\
+For single-value table columns, we directly pass the ROW literal string to the custom type's input function.
+
+```sql
+//It will include a _user_info array data type, which parses the INSERT values.
+CREATE TYPE user_info AS (
+    phone_number TEXT, email TEXT
+);
+
+CREATE TABLE esempio (
+    sensor_id SERIAL PRIMARY KEY,
+    operator_contact user_info[]
+);
+
+insert into esempio(operator_contact) values ( 
+    ARRAY[('1240', 'malago')::user_info, ('3456', 'flotil')::user_info] 
+);
+```
+
+1
+
+11
+
+1
+
+1
+
+The binary data's structure within the table column depends entirely on its data type's internal definition.&#x20;For composite types, this is a **sequence of binary representations for each individual field**.
+
+**Binary data** is the compact, internal format in which all data in PostgreSQL is ultimately stored.                    The conversion between the SQL-level ROW representation and the internal binary format is handled by the input\_function of the composite type during data insertion, and by its output\_function when data is retrieved.
+
+Let's clarify some key data concepts related to custom types in PostgreSQL:
+
+> A **ROW** is the direct SQL representation of the data values, custom or built-in, used in SQL input and output operations.
+>
+> The **%ROWTYPE** is a composite data type that directly mirrors a table's column structure. It is used as a variable within a PL/pgSQL function to access and manipulate the table column data.
+>
+> **Binary data** is the underlying format PostgreSQL uses to store all database information on disk.
+
+The **pg\_type system catalog** stores the properties and data type relations of the **custom data type**.\
+The Unique Object ID (**OID**) identifies every element within a PostgreSQL database. Each custom data type includes the **typarray** property, which indicates the OID of its **corresponding array** data type. Conversely, every array data type contains the **typelem** property, which indicates the OID of the element contained within the array.
+
+```sql
+//System catalogs are built-in metadata tables, accessible without extensions.
+//We seach the array data type using its _underscore name
+//pg_type identifies the data type while pg_stat checks for the data type performances
+CREATE TYPE user_info AS ( phone_number TEXT, email TEXT );
+
+//OID is a serial number, stored in TYP (not type) properties
+select 
+    t1.typname, t1.oid, t1.typelem, t1.typarray
+from pg_type as t1
+where t1.typname = 'user_info';
+    
+--typname  |oid   |typelem|typarray|
+-----------+------+-------+--------+
+--user_info|245819|      0|  245818|
+ 
+SELECT
+    typname, oid, typelem, typarray
+FROM pg_type as t2
+WHERE t2.typname = '_user_info';  //Implicity array data type name
+
+--typname   |oid   |typelem|typarray|
+------------+------+-------+--------+
+--_user_info|245818| 245819|       0|
+```
+
+**Custom data type functions** run directly in PostgreSQL's backend processes, granting them access to the database's internal memory. They must be declared as IMMUTABLE and STABLE in order to ensure data consistency within the database.
+
+1
+
+1
+
 1
 
 1
