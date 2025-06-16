@@ -1,8 +1,7 @@
 # Page
 
-* 1
-* 1
-* 1
+* [PostgreSQL base custom data type](page.md#postgresql-base-custom-data-type)
+* [PostgreSQL binary data storage and SQL standard syntax](page.md#postgresql-binary-data-storage-and-sql-standard-syntax)
 
 The RANGE custom data type allows us to define an **interval of values** for a specified **subtype**. It offers options to specify the data type's behavior.\
 The **subtype\_diff** function calculates the distance between two values of quantifiable subtypes, which helps optimize indexing. The **canonical** function standardizes the range boundaries, ensuring a consistent representation of borders.
@@ -127,7 +126,7 @@ SELECT car_check(
 
 </details>
 
-1
+ENUM Custom data types were exaplined in the [SQL data Types section](sql-table-data-types.md#enum-and-array).
 
 ### PostgreSQL base custom data type&#x20;
 
@@ -148,6 +147,14 @@ CREATE TYPE mytype (
     input = mytype_in, output = mytype_out,
 );
 ```
+
+**Custom data type functions** run directly in PostgreSQL's backend processes, granting them access to the database's internal memory. They must be declared as IMMUTABLE and STABLE in order to ensure data consistency within the database.
+
+Both **PL/pgSQL** and **C functions** are managed and executed by the **backend process** within the server's **RAM**.&#x20;PostgreSQL stores their executable code in different parts of the file system.
+
+> **PL/pgSQL** functions have their textual source code stored in the **pg\_proc system catalog**, within the database's internal data files. Once called by an SQL script, it gets retrieved and executed in the backend process after applying the PL/pgSQL **interpreter**.
+>
+> **C** functions are compiled into **shared library files**, which are reusable code sections that can be accessed across multiple processes. These files are part of the system files, separate from the database's internal data files. The pg\_proc system catalog stores the function's name and the **path** to its shared library file within its metadata, which the backend process then uses to retrieve and execute the function.
 
 Each **custom** data type **includes** a corresponding **array** data type, which shares its original name with an underscore appended.
 
@@ -172,13 +179,7 @@ insert into esempio(operator_contact) values (
 );
 ```
 
-1
-
-11
-
-1
-
-1
+### PostgreSQL binary data storage and SQL standard syntax.
 
 The binary data's structure within the table column depends entirely on its data type's internal definition.&#x20;For composite types, this is a **sequence of binary representations for each individual field**.
 
@@ -221,9 +222,10 @@ WHERE t2.typname = '_user_info';  //Implicity array data type name
 --_user_info|245818| 245819|       0|
 ```
 
-**Custom data type functions** run directly in PostgreSQL's backend processes, granting them access to the database's internal memory. They must be declared as IMMUTABLE and STABLE in order to ensure data consistency within the database.
+The **SQL standard** defines the fundamental language baseline for all SQL-compliant database systems. Each **database vendor** incorporates its own extensions to this standard to offer unique features or optimize existing functionalities.
 
-1
+PostgreSQL **extensions** enable the creation of empty tables and data types, as well as the definition of custom types like ENUM, ARRAY and BASE——expanding upon the composite data types included in the SQL standard syntax.\
+While these commands deviate from the official SQL standard, PostgreSQL fully understands and executes them within its own environment.
 
 1
 
