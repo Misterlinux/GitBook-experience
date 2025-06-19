@@ -11,6 +11,9 @@ A **database** is a structured set of data, it checks **data validity** and **se
 
 **DBeaver** is a _SQL client software application_ and a _relational database administrative tool_, we create PostgreSQL database connections and SQL scripts to create database objects (like tables, etc).
 
+> The **Postmaster** is PostgreSQL's main server process. It initializes new database connections by starting dedicated backend processes called '**postgres**' within RAM. These **backend processes** can execute SQL queries and retrieve data from the database's file system.> \
+> We can control the postmaster's behavior, including starting and stopping the server, using the **pg\_ctl** utility command.
+
 ### DBeaver tables and SQL script&#x20;
 
 On DBeaver we create a **connection**-> select the **PostSQL driver**-> open the **SQL script** file (f3).             To find our tables we _schemas_-> _public_-> _tables_.
@@ -19,12 +22,14 @@ On DBeaver we create a **connection**-> select the **PostSQL driver**-> open the
 
 In a **relational database**, data is stored in **tables** of rows and columns.
 
-We **create table()** and set its **column** properties **name (keys)** and **data type**, **not null** for mandatory values on user rows.                                                                                                                                                       **Varchar(n)** for strings, **int** for integers, **date** for date() objects, and **boolean** for true/false values.                    The **Serial primary key** is a unique identifier for the user rows, it increments after each insert.
+We CREATE TABLE() and set its **column** properties **name (keys)** and **data type**, **not null** for mandatory values on user rows.                                                                                                                                                       **Varchar(n)** for strings, **int** for integers, **date** for date() objects, and **boolean** for true/false values.                    The **Serial primary key** is a unique identifier for the user rows, it increments after each insert.
+
+Check the [**composite data type section**](sql-scalar-table-data-types.md#enum-and-array) for insight into PostgreSQL table structure.
 
 ```sql
 //The Varchar(n) is the max string.length(n)
 //In SQL you need to select the code and execute it with crtl+enter
-create table multi(
+CREATE TABLE multi(
   id		SERIAL primary key,
   name		VARCHAR(15) not null,
   employed	boolean,
@@ -143,8 +148,6 @@ SELECT * FROM bookings WHERE checkin_date > '2019/10/01' AND nights >= 2;
 SELECT * FROM hotels WHERE name='Royal Cosmos Hotel' OR rooms > 10;
 ```
 
-1
-
 <details>
 
 <summary>More Select options and matching pattern table %strings%</summary>
@@ -261,11 +264,5 @@ table drop varietas
 //delete a row with condition
 delete from varietas where id=4;                                 
 ```
-
-1
-
-1
-
-1
 
 1
