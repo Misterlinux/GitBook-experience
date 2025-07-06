@@ -1,6 +1,7 @@
 # Database 2: SQL constraints
 
-* 1
+1
+
 * 1
 * 1
 
@@ -142,7 +143,7 @@ CASE c.contype
 END AS constraint_type_description
 ```
 
-### PostgreSQL UNIQUE constraint
+### The PostgreSQL UNIQUE constraint
 
 The UNIQUE constraint ensures that each row in the table has a **distinct combination** of values for the specified **columns**.
 
@@ -170,6 +171,117 @@ ALTER TABLE doppio DROP CONSTRAINT coppia;
 ALTER TABLE doppio ADD CONSTRAINT coppianull unique nulls NOT DISTINCT (nome, numero);
 //error, when validating the previous rows the second ''volan' is not unique for 21.
 ```
+
+The SQL standard syntax treats each NULL as a **distinct** value; this causes multiple NULL within UNIQUE columns not to violate the constraint.
+
+The **nulls NOT DISTINCT** option explicitly treats NULL values as equal (non-distinct) in the UNIQUE constraint, matching how NULL is evaluated in other database systems.
+
+<details>
+
+<summary>The UNIQUE comparison operator on nulls NOT DISTINCT columns</summary>
+
+The nulls NOT DISTINCT option, introduced in PostgreSQL 15, changes how the NULL values are treated within an UNIQUE constraint **comparison operator**.
+
+Within the SQL standard, any operation involving NULL values returns UNKNOWN, due to its **three-valued logic**.
+
+The UNIQUE constraint triggers an error only when its comparison operator **explicitly** returns TRUE, this will allow multiple NULL entries within the UNIQUE columns.
+
+The nulls NOT DISTINCT option changes the result for NULL comparison operations (NULL = NULL) to TRUE, which enables the UNIQUE constraint to block multiple entries containing NULLs.
+
+```sql
+create table cambio(
+    uno INT UNIQUE, due INT unique nulls NOT DISTINCT
+)
+
+insert into cambio (uno, due) values
+    (NULL, NULL),    
+    (null, 12),    //The NULL == NULL operation returns UNKNOWN in uno
+    (12, NULL);    //Error, NULL == NULL is TRUE for nulls NOT DISTINCT unique
+```
+
+</details>
+
+A UNIQUE constraint inherently generates a **B-tree index** on its specified columns to enforce the uniqueness rule.
+
+The **UNIQUE INDEX** stores and orders all specified column values. Its **access method** includes a function that **compares** each new value against existing ones, blocking the operation if it finds two equal (non-distinct) values.
+
+A UNIQUE constraint's entry in **pg\_constraint** includes its OID, conname, and contype, while its **conbin** column is set to NULL.\
+The query executor doesn't use the **conbin binary data** to enforce the UNIQUE constraint. Instead, it relies on the **index** referenced by the **conindid OID**, while the **conrelid OID** identifies the **table** where the constraint applies.
+
+```sql
+//The conindid is NULL for CHECK constraints
+//The OID works as the primary key, identifying the constraint
+//Both conrelid and conindid are foreign keys pointing to other elements
+select
+    OID, conname, conrelid, conbin, contype, conindid
+from pg_constraint where oid = 327735;
+
+oid   |conname|conrelid|conbin|contype|conindid|
+------+-------+--------+------+-------+--------+
+327735|nullita|  327728|      |u      |  327734|
+```
+
+The UNIQUE index, identified by the **conindid** OID, stores its metadata across the **pg\_class** and **pg\_index**.
+
+The **`pg_class`** system catalog contains the **physical** and **relational properties** of a UNIQUE index, treating it as a storage entity. Aside from its OID, it includes:
+
+> **relname**: The name of the index. For UNIQUE constraints, it matches the constraint name.> \
+> **relkind**: A character code indicating the relation's type.> \
+> **relpages**: The estimated number of 8KB disk pages the index occupies.> \
+> **relhasindex**: Primarily used for tables, it indicates an index associated with the relation
+
+```sql
+//relking is 'i' for index
+//relhashindex is false for indexes relations
+select 
+    OID, relname, relkind, relpages, relhasindex 
+from pg_class where oid = 327734;
+
+oid   |relname|relkind|relpages|relhasindex|
+------+-------+-------+--------+-----------+
+327734|nullita|i      |       1|false      |
+```
+
+The **pg\_index** system catalog returns the **logical** and **semantic properties** specific to an index:
+
+> **indrelid**: This is a foreign key referencing the OID of the **table** to which the index is applied.> \
+> **indisunique**: A boolean value indicating if it's a UNIQUE index.> \
+> **indnullsnotdistinct**: A boolean value indicating if the index was created with the NULLS NOT DISTINCT option.> \
+> **indkey**: An array of smallint values. It represents the column attribute numbers (table positions) and their order set during the index definition.
+
+```sql
+//indexrelid is the primary key OID of the pg_index.
+select
+    indrelid, indisunique, indnullsnotdistinct, indkey 
+from pg_index where indexrelid = 327734;
+
+indrelid|indisunique|indnullsnotdistinct|indkey|
+--------+-----------+-------------------+------+
+  327728|true       |true               |2     |
+```
+
+We retrieve the comprehensive **index metadata** by joining the system catalog tables that contain its full definition and properties.
+
+```sql
+//We retrieve the metadata from the relation specified in the WHERE clause.
+//The relname='multi1' would select the table relation columns, not the index.
+select 
+    classe.OID, conindid, indice.indexrelid, conbin, relkind, indisunique
+from
+    pg_class as classe
+join
+    pg_constraint AS consta ON classe.oid = consta.conindid
+join
+    pg_index AS indice on indice.indexrelid = consta.conindid
+where 
+    classe.relname = 'nullita'
+
+oid   |conindid|indexrelid|conbin|relkind|indisunique|
+------+--------+----------+------+-------+-----------+
+327734|  327734|    327734|      |i      |true       |
+```
+
+1
 
 1
 
