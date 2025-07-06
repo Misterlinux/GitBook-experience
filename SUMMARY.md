@@ -76,9 +76,9 @@
 ## DATABASE
 
 * [Database 1: SQL Databases with DBeaver, SQL Scripts, and the Node-Postgres Module](database/database-1/README.md)
-  * [SQL Scalar table Data Types](database/database-1/sql-scalar-table-data-types.md)
+  * [SQL Scalar table Data Types](database/database-1/sql-table-data-types.md)
   * [Range, Multiranges and composite data types](database/database-1/range-multiranges-and-composite-data-types.md)
-  * [Custom Range and base data types and PostgreSQL binary data](database/database-1/custom-range-and-base-data-types-and-postgresql-binary-data.md)
+  * [Custom Range and base data types and PostgreSQL binary data](database/database-1/page.md)
 * [Database 2: SQL constraints](database/database-2-sql-constraints.md)
 * [Node-Postgres Module](database/node-postgres-module.md)
 

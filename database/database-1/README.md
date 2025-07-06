@@ -24,7 +24,7 @@ In a **relational database**, data is stored in **tables** of rows and columns.
 
 We CREATE TABLE() and set its **column** properties **name (keys)** and **data type**, **not null** for mandatory values on user rows.                                                                                                                                                       **Varchar(n)** for strings, **int** for integers, **date** for date() objects, and **boolean** for true/false values.                    The **Serial primary key** is a unique identifier for the user rows, it increments after each insert.
 
-Check the [**composite data type section**](sql-scalar-table-data-types.md#enum-and-array) for insight into PostgreSQL table structure.
+Check the [**composite data type section**](sql-table-data-types.md#enum-and-array) for insight into PostgreSQL table structure.
 
 ```sql
 //The Varchar(n) is the max string.length(n)

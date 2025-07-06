@@ -25,6 +25,8 @@ select * from multi;    //{jeff, false, 16:43:35, [12, 25]}
 
 The CHECK constraint applies a SQL **boolean expression** to each value in its column to ensure data validity.
 
+**Table-level** constraints define conditions that include multiple columns, we declare them after all the table columns have been defined.
+
 ```sql
 //Check constraints can include multiple Boolean operators but not external columns.
 //Multiple constraints can be grouped at the end of the table
@@ -125,6 +127,49 @@ The JOIN condition matches the **c.conrelid** column with the **table's OID**, s
 </details>
 
 <figure><img src="../.gitbook/assets/pgconstaintquery.jpg" alt="" width="542"><figcaption><p>pg_constrant query on unnamed check conditions</p></figcaption></figure>
+
+The pg\_constraint includes multiple single-character codes to filter results based on a specific constraint.
+
+```sql
+CASE c.contype
+    WHEN 'c' THEN 'CHECK'
+    WHEN 'f' THEN 'FOREIGN KEY'
+    WHEN 'p' THEN 'PRIMARY KEY'
+    WHEN 'u' THEN 'UNIQUE'
+    WHEN 't' THEN 'CONSTRAINT TRIGGER'
+    WHEN 'x' THEN 'EXCLUSION'
+    ELSE 'UNKNOWN'
+END AS constraint_type_description
+```
+
+### PostgreSQL UNIQUE constraint
+
+The UNIQUE constraint ensures that each row in the table has a **distinct combination** of values for the specified **columns**.
+
+It can be applied to a single column or to multiple columns as a **table-level constraint**.&#x20;Each UNIQUE constraint operates independently, enforcing uniqueness only for its specified column values.
+
+Before being added, any new constraint **validates** all existing rows in its specified columns.
+
+```sql
+//Named constrints appear in error messages
+//Rows can repeat single column values, but their value combinations must be unique
+create table doppio(
+    nome TEXT, numero INT, extra INT UNIQUE,
+    constraint coppia unique(nome, numero)
+)
+
+//Columns not included in the insert will default to NULL in the table row.
+//Repeated NULL values will not be considered equal by the UNIQUE constraint
+insert into doppio(nome, extra) values('volan', 12);    //(volan |NULL |12 |)
+insert into doppio(nome, extra) values('volan', 12);    //Error, repeated 12 in extra
+insert into doppio(nome, extra) values('volan', 21);    //(volan |NULL |21 |)
+
+//We can DROP and ADD only named constraints
+ALTER TABLE doppio DROP CONSTRAINT coppia;
+
+ALTER TABLE doppio ADD CONSTRAINT coppianull unique nulls NOT DISTINCT (nome, numero);
+//error, when validating the previous rows the second ''volan' is not unique for 21.
+```
 
 1
 

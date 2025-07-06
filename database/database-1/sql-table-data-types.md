@@ -1,7 +1,7 @@
 # SQL Scalar table Data Types
 
-* [JSON and REAL ](sql-scalar-table-data-types.md#json-and-real)
-* [ENUM and ARRAY](sql-scalar-table-data-types.md#enum-and-array)
+* [JSON and REAL ](sql-table-data-types.md#json-and-real)
+* [ENUM and ARRAY](sql-table-data-types.md#enum-and-array)
 
 **Data types** in PostgreSQL define the data format within table column.
 
