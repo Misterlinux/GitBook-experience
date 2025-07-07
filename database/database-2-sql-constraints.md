@@ -203,6 +203,13 @@ insert into cambio (uno, due) values
 
 A UNIQUE constraint inherently generates a **B-tree index** on its specified columns to enforce the uniqueness rule.
 
+```sql
+//A b-tree index created to list ONLY column due
+create table tutto(
+    uno INT, due INT constraint nullita UNIQUE
+)
+```
+
 The **UNIQUE INDEX** stores and orders all specified column values. Its **access method** includes a function that **compares** each new value against existing ones, blocking the operation if it finds two equal (non-distinct) values.
 
 A UNIQUE constraint's entry in **pg\_constraint** includes its OID, conname, and contype, while its **conbin** column is set to NULL.\
@@ -220,6 +227,92 @@ oid   |conname|conrelid|conbin|contype|conindid|
 ------+-------+--------+------+-------+--------+
 327735|nullita|  327728|      |u      |  327734|
 ```
+
+1
+
+The UNIQUE index, identified by the **conindid** OID, stores its metadata across the **pg\_class** and **pg\_index**.
+
+{% tabs %}
+{% tab title="First Tab" %}
+The **`pg_class`** system catalog contains the **physical** and **relational properties** of a UNIQUE index, treating it as a storage entity. Aside from its OID, it includes:
+
+> **relname**: The name of the index. For UNIQUE constraints, it matches the constraint name.> \
+> **relkind**: A character code indicating the relation's type.> \
+> **relpages**: The estimated number of 8KB disk pages the index occupies.> \
+> **relhasindex**: Primarily used for tables, it indicates an index associated with the relation
+
+```sql
+//relking is 'i' for index
+//relhashindex is false for indexes relations
+select 
+    OID, relname, relkind, relpages, relhasindex 
+from pg_class where oid = 327734;
+
+oid   |relname|relkind|relpages|relhasindex|
+------+-------+-------+--------+-----------+
+327734|nullita|i      |       1|false      |
+```
+{% endtab %}
+
+{% tab title="Second Tab" %}
+1
+
+The **pg\_index** system catalog returns the **logical** and **semantic properties** specific to an index:
+
+> **indrelid**: This is a foreign key referencing the OID of the **table** to which the index is applied.> \
+> **indisunique**: A boolean value indicating if it's a UNIQUE index.> \
+> **indnullsnotdistinct**: A boolean value indicating if the index was created with the NULLS NOT DISTINCT option.> \
+> **indkey**: An array of smallint values. It represents the column attribute numbers (table positions) and their order set during the index definition.
+
+```sql
+//indexrelid is the primary key OID of the pg_index.
+select
+    indrelid, indisunique, indnullsnotdistinct, indkey 
+from pg_index where indexrelid = 327734;
+
+indrelid|indisunique|indnullsnotdistinct|indkey|
+--------+-----------+-------------------+------+
+  327728|true       |true               |2     |
+```
+
+1
+
+1
+{% endtab %}
+
+{% tab title="Untitled" %}
+1
+
+We retrieve the comprehensive **index metadata** by joining the system catalog tables that contain its full definition and properties.
+
+```sql
+//We retrieve the metadata from the relation specified in the WHERE clause.
+//The relname='multi1' would select the table relation columns, not the index.
+select 
+    classe.OID, conindid, indice.indexrelid, conbin, relkind, indisunique
+from
+    pg_class as classe
+join
+    pg_constraint AS consta ON classe.oid = consta.conindid
+join
+    pg_index AS indice on indice.indexrelid = consta.conindid
+where 
+    classe.relname = 'nullita'
+
+oid   |conindid|indexrelid|conbin|relkind|indisunique|
+------+--------+----------+------+-------+-----------+
+327734|  327734|    327734|      |i      |true       |
+```
+
+1
+
+1
+{% endtab %}
+{% endtabs %}
+
+1
+
+1
 
 The UNIQUE index, identified by the **conindid** OID, stores its metadata across the **pg\_class** and **pg\_index**.
 
@@ -320,6 +413,10 @@ insert into fuori(uno, due) values ('compa', 7);    //Error, repeated uno for du
 A partial unique index is designed to **optimize the queries** for a subset of specific values.\
 The **query planner** will use the index, instead of a full table scan, if the query's WHERE clause guarantees that it will **only** SELECT rows contained within the **partial index**.
 
+<details>
+
+<summary>Query conditions for a PARTIAL INDEX scan</summary>
+
 A query that SELECTS the indexed columns and **shares** the WHERE clause with the partial index will use the index.
 
 ```sql
@@ -347,6 +444,8 @@ The query planner will use the partial index only if the **query** WHERE conditi
 * The opposite isn't true, a query for x < 2 can't use a partial index defined with a x < 1 WHERE clause, because the query might retrieve values (like 1.5) that are outside the partial index.
 
 The query planner is **not optimized** to interpret complex conditions that **logically** imply the use of an index's clause. This includes expressions like 'column = "true"' and 'column != "false"'.
+
+</details>
 
 The query planner decides whether to use an index during **query planning time**, not during execution.\
 It **excludes** placeholder and parameter values from its index planning evaluation, as they are unknown during that stage and defined only at runtime.
