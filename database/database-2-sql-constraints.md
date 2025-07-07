@@ -281,15 +281,104 @@ oid   |conindid|indexrelid|conbin|relkind|indisunique|
 327734|  327734|    327734|      |i      |true       |
 ```
 
-1
+A UNIQUE index, whether created by a UNIQUE constraint or **independently**, can enforce uniqueness for specific columns through its **inherent** equality comparison operator.
 
-1
+```sql
+//We can define it outside a table without a constraint
+create table unico(
+    nome TEXT, numero INT, extra INT
+)
 
-1
+create unique index solo on unico(nome, numero);
 
-1
+insert into unico(nome,numero) values ('unolo', 122);
+insert into unico(nome,numero) values ('uno', 12);
+insert into unico(nome,numero) values ('uno', 12);  //Error, repeated value in index
 
-1
+select * from unico;
+```
+
+A **partial** unique index includes a WHERE clause in its definition, which **filters** the inserted rows and allows only a **subset** to be included in the **index**.
+
+The uniqueness comparison operator will be aplied only to the rows **included in the index**. A new value will be blocked from the table only if it passes the WHERE clause and **matches** an existing value within the **partial unique index**.
+
+All rows excluded by the WHERE partial index clause will still be inserted into the table, allowing the presence of duplicate values.
+
+```sql
+//Its WHERE condition can include columns that are not part of the index.
+create table fuori(
+    uno TEXT, due INT
+)
+
+create unique index indice on fuori(uno) where due < 10;
+
+insert into fuori(uno, due) values ('compa', 11), ('altro', 11), ('compa', 11);
+insert into fuori(uno, due) values ('compa', 7);
+insert into fuori(uno, due) values ('compa', 7);    //Error, repeated uno for due < 10
+```
+
+A partial unique index is designed to **optimize the queries** for a subset of specific values.\
+The **query planner** will use the index, instead of a full table scan, if the query's WHERE clause guarantees that it will **only** SELECT rows contained within the **partial index**.
+
+A query that SELECTS the indexed columns and **shares** the WHERE clause with the partial index will use the index.
+
+```sql
+create unique index indice on fuori(uno, due) where due < 10;
+select (uno, due) from fuori where due < 10;
+```
+
+A query that SELECTS the indexed columns but with a **different** WHERE clause will not use the partial index.&#x20;The query planner can't guarantee that **all** the SELECT columns can be **fetched** from the index, so it will opt for a full table scan to avoid missing rows.
+
+```sql
+select uno from fuori where due <= 15;
+```
+
+A query that SELECTS **different columns** but matches the WHERE clause might use the partial index via a **heap fetch**.\
+In this process, the **query planner** retrieves row identifiers (**TIDs**) from the index and then uses them to efficiently **fetch** the complete row data, including the additional columns, from the **main table** (the heap).
+
+```sql
+//Rows retrieved from the index will also contain the other columns values
+select tre from fuori where due < 10;
+```
+
+The query planner will use the partial index only if the **query** WHERE condition **mathematically implies** it as a **subset** of the **partial index** WHERE clause.
+
+* A query for x < 1 will use a partial index defined with a x < 2 WHERE clause, because all the query values are included in the index's condition.
+* The opposite isn't true, a query for x < 2 can't use a partial index defined with a x < 1 WHERE clause, because the query might retrieve values (like 1.5) that are outside the partial index.
+
+The query planner is **not optimized** to interpret complex conditions that **logically** imply the use of an index's clause. This includes expressions like 'column = "true"' and 'column != "false"'.
+
+The query planner decides whether to use an index during **query planning time**, not during execution.\
+It **excludes** placeholder and parameter values from its index planning evaluation, as they are unknown during that stage and defined only at runtime.
+
+```sql
+//The PREPARE plan will not use the index, regadless of the EXECUTE query's values
+//If a window opens after the PREPARE command, type the $1 for the $1 placeholder
+PREPARE my_query (INTEGER) AS
+SELECT * FROM fuori WHERE due > $1;
+
+EXECUTE my_query(7);
+
+//PREPARE planes are stored for the session, drop them using
+DEALLOCATE my_query;
+```
+
+The UNIQUE constraint is **not designed** for effective use with RANGE and ARRAY data types.\
+It enforces uniqueness only for ranges and arrays that share the **exact same order** and **values**; it will not detect range overlaps or check for shared elements within different arrays.
+
+```sql
+//It treates RANGE and ARRAY as atomic values
+create table rangio(
+    raggio int4range, lista INT[],
+    unique(raggio, lista)
+)
+
+insert into rangio(raggio, lista) values 
+	(int4range(12, 34) , array[12, 34]),	  
+	(int4range(12, 34) , array[12, 34, 101]), //No error if ARRAY contains values
+	(int4range(12, 34, '[]') , array[12, 34]),//No error if ARRAY changes order
+	(int4range(12, 34) , array[12, 34]);	//ERROR: exact duplicate value on both
+```
 
 1
 
