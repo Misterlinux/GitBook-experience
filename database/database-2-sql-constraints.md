@@ -201,6 +201,23 @@ insert into cambio (uno, due) values
 
 </details>
 
+The UNIQUE constraint is **not designed** for effective use with RANGE and ARRAY data types.\
+It enforces uniqueness only for ranges and arrays that share the **exact same order** and **values**; it will not detect range overlaps or check for shared elements within different arrays.
+
+```sql
+//It treates RANGE and ARRAY as atomic values
+create table rangio(
+    raggio int4range, lista INT[],
+    unique(raggio, lista)
+)
+
+insert into rangio(raggio, lista) values 
+	(int4range(12, 34) , array[12, 34]),	  
+	(int4range(12, 34) , array[12, 34, 101]), //No error if ARRAY contains values
+	(int4range(12, 34, '[]') , array[12, 34]),//No error if ARRAY changes order
+	(int4range(12, 34) , array[12, 34]);	//ERROR: exact duplicate value on both
+```
+
 A UNIQUE constraint inherently generates a **B-tree index** on its specified columns to enforce the uniqueness rule.
 
 ```sql
@@ -209,6 +226,10 @@ create table tutto(
     uno INT, due INT constraint nullita UNIQUE
 )
 ```
+
+To know more about indexes check the INDEX section.
+
+### Implementing UNIQUE Constraints with UNIQUE INDEX
 
 The **UNIQUE INDEX** stores and orders all specified column values. Its **access method** includes a function that **compares** each new value against existing ones, blocking the operation if it finds two equal (non-distinct) values.
 
@@ -228,12 +249,10 @@ oid   |conname|conrelid|conbin|contype|conindid|
 327735|nullita|  327728|      |u      |  327734|
 ```
 
-1
-
 The UNIQUE index, identified by the **conindid** OID, stores its metadata across the **pg\_class** and **pg\_index**.
 
 {% tabs %}
-{% tab title="First Tab" %}
+{% tab title="Index pg_class metadata" %}
 The **`pg_class`** system catalog contains the **physical** and **relational properties** of a UNIQUE index, treating it as a storage entity. Aside from its OID, it includes:
 
 > **relname**: The name of the index. For UNIQUE constraints, it matches the constraint name.> \
@@ -254,9 +273,7 @@ oid   |relname|relkind|relpages|relhasindex|
 ```
 {% endtab %}
 
-{% tab title="Second Tab" %}
-1
-
+{% tab title="Index pg_index metadata" %}
 The **pg\_index** system catalog returns the **logical** and **semantic properties** specific to an index:
 
 > **indrelid**: This is a foreign key referencing the OID of the **table** to which the index is applied.> \
@@ -280,9 +297,7 @@ indrelid|indisunique|indnullsnotdistinct|indkey|
 1
 {% endtab %}
 
-{% tab title="Untitled" %}
-1
-
+{% tab title="Entire Index metadata query" %}
 We retrieve the comprehensive **index metadata** by joining the system catalog tables that contain its full definition and properties.
 
 ```sql
@@ -303,76 +318,8 @@ oid   |conindid|indexrelid|conbin|relkind|indisunique|
 ------+--------+----------+------+-------+-----------+
 327734|  327734|    327734|      |i      |true       |
 ```
-
-1
-
-1
 {% endtab %}
 {% endtabs %}
-
-1
-
-1
-
-The UNIQUE index, identified by the **conindid** OID, stores its metadata across the **pg\_class** and **pg\_index**.
-
-The **`pg_class`** system catalog contains the **physical** and **relational properties** of a UNIQUE index, treating it as a storage entity. Aside from its OID, it includes:
-
-> **relname**: The name of the index. For UNIQUE constraints, it matches the constraint name.> \
-> **relkind**: A character code indicating the relation's type.> \
-> **relpages**: The estimated number of 8KB disk pages the index occupies.> \
-> **relhasindex**: Primarily used for tables, it indicates an index associated with the relation
-
-```sql
-//relking is 'i' for index
-//relhashindex is false for indexes relations
-select 
-    OID, relname, relkind, relpages, relhasindex 
-from pg_class where oid = 327734;
-
-oid   |relname|relkind|relpages|relhasindex|
-------+-------+-------+--------+-----------+
-327734|nullita|i      |       1|false      |
-```
-
-The **pg\_index** system catalog returns the **logical** and **semantic properties** specific to an index:
-
-> **indrelid**: This is a foreign key referencing the OID of the **table** to which the index is applied.> \
-> **indisunique**: A boolean value indicating if it's a UNIQUE index.> \
-> **indnullsnotdistinct**: A boolean value indicating if the index was created with the NULLS NOT DISTINCT option.> \
-> **indkey**: An array of smallint values. It represents the column attribute numbers (table positions) and their order set during the index definition.
-
-```sql
-//indexrelid is the primary key OID of the pg_index.
-select
-    indrelid, indisunique, indnullsnotdistinct, indkey 
-from pg_index where indexrelid = 327734;
-
-indrelid|indisunique|indnullsnotdistinct|indkey|
---------+-----------+-------------------+------+
-  327728|true       |true               |2     |
-```
-
-We retrieve the comprehensive **index metadata** by joining the system catalog tables that contain its full definition and properties.
-
-```sql
-//We retrieve the metadata from the relation specified in the WHERE clause.
-//The relname='multi1' would select the table relation columns, not the index.
-select 
-    classe.OID, conindid, indice.indexrelid, conbin, relkind, indisunique
-from
-    pg_class as classe
-join
-    pg_constraint AS consta ON classe.oid = consta.conindid
-join
-    pg_index AS indice on indice.indexrelid = consta.conindid
-where 
-    classe.relname = 'nullita'
-
-oid   |conindid|indexrelid|conbin|relkind|indisunique|
-------+--------+----------+------+-------+-----------+
-327734|  327734|    327734|      |i      |true       |
-```
 
 A UNIQUE index, whether created by a UNIQUE constraint or **independently**, can enforce uniqueness for specific columns through its **inherent** equality comparison operator.
 
@@ -387,8 +334,6 @@ create unique index solo on unico(nome, numero);
 insert into unico(nome,numero) values ('unolo', 122);
 insert into unico(nome,numero) values ('uno', 12);
 insert into unico(nome,numero) values ('uno', 12);  //Error, repeated value in index
-
-select * from unico;
 ```
 
 A **partial** unique index includes a WHERE clause in its definition, which **filters** the inserted rows and allows only a **subset** to be included in the **index**.
@@ -462,22 +407,162 @@ EXECUTE my_query(7);
 DEALLOCATE my_query;
 ```
 
-The UNIQUE constraint is **not designed** for effective use with RANGE and ARRAY data types.\
-It enforces uniqueness only for ranges and arrays that share the **exact same order** and **values**; it will not detect range overlaps or check for shared elements within different arrays.
+### The NOT NULL constraint
+
+The NOT NULL constraint prevents a table column from containing NULL values.&#x20;It's more efficient than its **equivalent CHECK** constraint (column IS NOT NULL).\
+It can be applied with other constraints in any order and is enforced directly **by the table** without requiring an index.
+
+Its inverse constraint, NULL, allows a column to accept NULL values. It is set **by default** and is mainly used for compatibility with other database systems.
 
 ```sql
-//It treates RANGE and ARRAY as atomic values
-create table rangio(
-    raggio int4range, lista INT[],
-    unique(raggio, lista)
+//Missing column values will be treated as NULL errors
+//It can only be aplied at the column level and cannot be named.
+CREATE TABLE products (
+    produ integer NOT NULL, name text NOT NULL, price numeric null
+);
+
+insert into products(produ, name, price) values 
+    (34, 'primo', 12),    
+    (0, '', NULL),    //No error, 0 and '' are different from NULL
+    (66, NULL, 12),   //ERROR, NULL on not null column
+    ('dron', 12);     //ERROR, missing column on NOT NULL column
+
+//An added NOT NULL constraint will first validate previous columns values
+ALTER TABLE products 
+ALTER COLUMN price SET NOT NULL;    //Error, the column "price" contains NULL values
+```
+
+### The PRIMARY KEY CONSTRAINT
+
+The PRIMARY KEY constraint identifies table rows through its specified columns. It sets them as UNIQUE and NOT NULL, to avoid duplicate identifiers and missing column values respectively.
+
+A table can have only one PRIMARY KEY, which automatically generates a **B-tree index** on its specified columns for efficient row retrieval.
+
+```sql
+//It's a UNIQUE constraint that also includes a NOT NULL rule
+CREATE TABLE test(
+    chiave integer PRIMARY KEY, --Same results as UNIQUE NOT NULL
+    name text, price numeric
+);
+
+insert into test(chiave, name, price) values (12, '12', 12);
+insert into test(chiave, name, price) values (12, '122', 122);  //Error, repeated key
+insert into test(name, price) values ('12', 12);    //Error, null primary key
+
+//Applying a PRIMARY KEY to multiple columns creates a composite PRIMARY KEY.
+create table combi(
+    uno INT, due INT, tre INT,
+    primary KEY(uno, due, tre)
+);
+
+insert into combi(uno, due, tre) values (12, 34, 56);
+insert into combi(uno, due, tre) values (12, 34, NULL); //error, null in composite key
+insert into combi(due, tre) values (34, 56);    //error, null in composte key
+```
+
+Primary keys can be used by GUI applications or as default targets for f**oreign keys**.
+
+1
+
+The FOREIGN KEY constraint creates and enforces a **reference link** between 2 columns.\
+It ensures that a **referencing column** (the child) can only contain values already present in its **referenced column** (the parent).
+
+A FOREIGN KEY is defined within the child table, its REFERENCES keyword points to the **parent table** and its specific columns. Multiple child rows can reference the same parent column value.
+
+```sql
+//The child column must match the parent data type
+//A PRIMARY KEY parent column avoids any duplicate column value and NULL for the child
+CREATE TABLE products (
+    chiave integer PRIMARY KEY, name text, price numeric
+);
+
+insert into products(chiave, name, price) values (15, 'brio',550), (10, 'malbo',200);
+
+//Any existing constraint still applies within the child table
+//If the parent column is omitted, it will use its own column name for the reference.
+CREATE TABLE orders (
+    order integer,   //UNIQUE can limit the child columns values
+    chiavetta integer REFERENCES products (chiave)  //Will use chiavetta if omitted
+);
+
+//The FOREIGN KEY only allows values form the specified column, not the entire table.
+insert into orders(order, chiavetta) values 
+    (3, 15),
+    (10, 10),  //The parent reference value can be repeated within the row
+    (3, 15),   //If UNIQUE, would be error for order column
+    (3, 200);  //Error, it violates the foreign key constraint
+```
+
+A child FOREIGN KEY must reference UNIQUE or PRIMARY KEY **parent columns**.                                                                                                                                                                   The JOIN operation combines table columns data using the FOREIGN KEY relations.
+
+<details>
+
+<summary>Referencing multiple parent column using the composite FOREIGN KEY constraint</summary>
+
+A **composite FOREIGN KEY** references a unique **set** of parent columns.&#x20;\
+All its child columns must be referenced from a _single_, explicitly defined composite constraint.
+
+The FOREIGN KEY **clause** can omit the parent columns list if they reference a PRIMARY KEY constraint; the database will **implicitly map** the child columns by position.                                              While the UNIQUE parent columns must always be **explicitly listed**.
+
+Invalid FOREIGN KEY constraints:
+
+* A FOREIGN KEY can't reference a **subset** of columns from a composite parent constraint.  \
+  A unique composite **set** can contain **repeated individual column** values (like (1, 10) and (1, 20)), making the database unable to identify parent rows based on a single referenced column.
+* A composite FOREIGN KEY cannot reference multiple independent parent columns.  \
+  It must reference a single composite constraint that contains all the parent columns within its unique set.
+
+We **can't directly modify** a foreign key; we must first DROP and ADD a **named** new one within the child table.&#x20;Any new foreign key added must reference existing constraints in the parent table.
+
+```sql
+//uno being both part of UNIQUE and PRIMARY KEY constraints
+create table singolo(
+    uno INT primary key, due INT not null,
+    unique (uno, due)
+)
+insert into singolo(uno, due) values (15, 30), (3, 12);
+
+//We use CONSTRAINT to name a foreign key
+//Named single column: 'base TEXT constraint based REFERENCES uno'
+create table doppio(
+    base TEXT, primo INT, secondo INT,  
+    //We must specify the parent columns in an UNIQUE constraint reference
+    CONSTRAINT coppia
+        foreign key (primo, secondo) references singolo(uno, due)
 )
 
-insert into rangio(raggio, lista) values 
-	(int4range(12, 34) , array[12, 34]),	  
-	(int4range(12, 34) , array[12, 34, 101]), //No error if ARRAY contains values
-	(int4range(12, 34, '[]') , array[12, 34]),//No error if ARRAY changes order
-	(int4range(12, 34) , array[12, 34]);	//ERROR: exact duplicate value on both
+into doppio(base, primo, secondo) values
+    ('you', 15, 30), ('you', 3, 12),
+    ('you', 15, 12);    //ERROR, it violates the coppia set in FOREIGN KEY
+
+//We can ALTER only named constraints
+ALTER TABLE doppio DROP CONSTRAINT coppia;
+//It references the PRIMARY KEY constraint also aplied to the uno column
+//Only create table keys can omit the PRIMARY KEY parent columns list
+ALTER TABLE doppio ADD constraint nuovo 
+    FOREIGN KEY (primo) REFERENCES singolo(uno);
+
+//The new constraint allows repeated uno values from a PRIMARY KEY parent
+//The PRIMARY KEY constraint applies to the parent column, not the child's.
+insert into doppio(base, primo, secondo) values ('you', 15, 12);    
+
+base|primo|secondo|
+----+-----+-------+
+you |   15|     30|
+you |    3|     12|
+you |   15|     12|
 ```
+
+</details>
+
+1
+
+1
+
+1
+
+1
+
+1
 
 1
 
