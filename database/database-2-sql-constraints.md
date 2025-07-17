@@ -475,7 +475,6 @@ A FOREIGN KEY is defined within the child table, its REFERENCES keyword points t
 CREATE TABLE products (
     chiave integer PRIMARY KEY, name text, price numeric
 );
-
 insert into products(chiave, name, price) values (15, 'brio',550), (10, 'malbo',200);
 
 //Any existing constraint still applies within the child table
@@ -489,7 +488,7 @@ CREATE TABLE orders (
 insert into orders(order, chiavetta) values 
     (3, 15),
     (10, 10),  //The parent reference value can be repeated within the row
-    (3, 15),   //If UNIQUE, would be error for order column
+    (3, 15),   //Allowed if teh order child columns isn't UNIQUE
     (3, 200);  //Error, it violates the foreign key constraint
 ```
 
@@ -553,6 +552,48 @@ you |   15|     12|
 ```
 
 </details>
+
+A column that **references** the PRIMARY KEY of a row within the **same table** is called **self-referencing**.\
+It creates a hierarchical **structure** where rows are organized into **branches** based on the PRIMARY KEY they reference, with rows containing NULL **foreign key** values serving as the **root nodes** that originate the structure.\
+It enabled the query to retrieve and order data based on the relations between the table rows.
+
+A query involving self-referencing columns uses multiple **instances** of the **same table** within its FROM clause.\
+The first instance (t1) represents the **current row** being processed, while the second instance (t2) is used in the **matching operation**. This comparison links the foreign key value from the first instance to its referenced parent primary key, found using the second instance.
+
+<pre class="language-sql"><code class="lang-sql">//It references the PRIMARY KEY by default.
+CREATE TABLE tree (
+    node_id integer PRIMARY KEY, name TEXT, 
+    parent_id integer REFERENCES tree -- Self-referencing foreign key
+);
+
+INSERT INTO tree (node_id, parent_id, name) values 
+    (1, NULL, 'base camp'), (2, NULL, 'aviation'), (101, 1, 'tank'), 
+    (102, 1, 'jep'), (201, 101, 'soldier'), (301, 2, 'plane'), 
+    (302, 302, 'suplies'),  -- self referring column
+    (305, 90, 'dog');       -- ERROR, no PRIMARY KEY to reference
+
+//The INNER JOIN clause only returns matching row values in the output.
+select 
+    t1.node_id, t1.name, t2.name as parent_name
+from
+    tree as t1
+left join 
+    tree as t2 on t1.parent_id = t2.node_id
+order by t1.node_id
+
+<strong>node_id|name     |parent_name|
+</strong>-------+---------+-----------|101|tank     |base camp  |
+      1|base camp|           |102|jep      |base camp  |301|plane    |aviation   |
+      2|aviation |           |201|soldier  |tank       |302|suplies  |suplies    |
+</code></pre>
+
+The LEFT JOIN clause includes all rows from the **current** table instance (the **left operand**) in the query's output. It appends the result columns from the matching operation, assigning NULL to unmatched rows. It effectively flattens the output, presenting both child and parent information within the same row.
+
+1
+
+1
+
+1
 
 1
 
