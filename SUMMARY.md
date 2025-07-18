@@ -79,7 +79,8 @@
   * [SQL Scalar table Data Types](database/database-1/sql-table-data-types.md)
   * [Range, Multiranges and composite data types](database/database-1/range-multiranges-and-composite-data-types.md)
   * [Custom Range and base data types and PostgreSQL binary data](database/database-1/page.md)
-* [Database 2: SQL constraints](database/database-2-sql-constraints.md)
+* [Database 2: SQL constraints](database/database-2-sql-constraints/README.md)
+  * [Foreign key](database/database-2-sql-constraints/foreign-key.md)
 * [Node-Postgres Module](database/node-postgres-module.md)
 
 ## OTHER

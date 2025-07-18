@@ -127,7 +127,7 @@ The JOIN condition matches the **c.conrelid** column with the **table's OID**, s
 
 </details>
 
-<figure><img src="../.gitbook/assets/pgconstaintquery.jpg" alt="" width="542"><figcaption><p>pg_constrant query on unnamed check conditions</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/pgconstaintquery.jpg" alt="" width="542"><figcaption><p>pg_constrant query on unnamed check conditions</p></figcaption></figure>
 
 The pg\_constraint includes multiple single-character codes to filter results based on a specific constraint.
 
