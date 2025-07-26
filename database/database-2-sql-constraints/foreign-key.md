@@ -85,6 +85,131 @@ insert into solo(mano, libro) values (11, 44);  //Error, repeated child value
 
 1
 
+The database **restricts** any change made to parent columns currently being referenced.                                                                                                                                                                                      The FOREIGN KEYS must follow the **referencial integrity rule**, which states that all **non-NULL child values** must references an existing parent column.
+
+The **event specifiers** set the parent row actions that will trigger a child's column response.\
+The **referential actions** then define how the foreign key values will be modified to maintain the referential integrity after parent changes.
+
+1
+
+{% tabs %}
+{% tab title="CASCADE option" %}
+The CASCADE option, with the ON DELETE event specifier, ensures that deleting a parent row also deletes all its related child rows, preventing any unassigned non-NULL child values.
+
+```sql
+//The action specifier REQUIRES a referencial action option to work
+create table base(
+    primo INT primary key, name TEXT
+)
+insert into base(primo, name) values (12, 'moto'), (8, 'car'), (99, 'lambo');
+
+create table casca(
+    secondo INT references base on delete CASCADE, name TEXT
+)
+insert into casca(secondo, name) values (12, 'mirai'), (99 ,'goldie');
+
+//The entire child row gets deleted, not just the referencing columns
+delete from base where primo = 12;
+select * from casca;
+secondo|cognome|
+-------+-------+
+     99|goldie |
+```
+{% endtab %}
+
+{% tab title="RESTRICT option" %}
+The RESTRICT option, set by default, prevents the deletion of any parent row **while it's being referenced** by a child row.
+
+```sql
+create table base1(
+    primo INT primary key, name TEXT
+)
+insert into base1(primo, name) values (12, 'moto'), (8, 'car'), (99, 'lambo');
+
+create table resto(
+    secondo INT references base1 on delete RESTRICT, name TEXT
+)
+insert into resto(secondo, cognome) values (12, 'mirai'), (99 ,'goldie');
+
+//Error, it violates the foreign key relation rule
+delete from base1 where primo = 12; 
+```
+{% endtab %}
+{% endtabs %}
+
+1
+
+The NO ACTION option prevents parent operations, symilar to RESTRICT.\
+It's the only referential action that can be combined with the DEFERRABLE clause, which enables it to **delay** the referential integrity check until the end of its **transaction**. It allows **subsequent operations** within the same transaction to resolve any potential integrity violations before the final **commit**.
+
+The DEFERRABLE clause, by itself, results in an INITIALLY IMMEDIATE **integrity check**. We need to **explicitly** specify the INITIALLY DEFERRED clause to enable the delayed referential check.
+
+{% tabs %}
+{% tab title="INITIALLY DEFERRED clause" %}
+Many database editors **group multiple** operations into a single transaction, allowing a DEFERRED clause to place its referential integrity check at the transaction's final commit.
+
+```sql
+//NO ACTION and RESTRICT are exactly the same in some database systems
+create table base2(
+    primo INT primary key, name TEXT
+)
+insert into base2(primo, name) values (12, 'uno'), (5, 'due'), (42, 'tre');
+
+create table azione(
+  catena INT references base2 on delete NO action DEFERRABLE INITIALLY DEFERRED,
+  modo TEXT
+)
+insert into azione values (12, 'primo'), (5, 'due'), (42, 'terzo');
+
+//We delete both parent and childs in the same transaction to keep the integrity
+delete from base2 where primo = 12;     //By itself: Error.
+delete from azione where catena = 12;   //Executed together: Correct.
+
+select * from azione;
+```
+
+We can change the FOREIGN KEY's current DEFERRABLE **setting** using the SET CONSTRAINTS command.
+{% endtab %}
+
+{% tab title="SET CONSTRAINT command" %}
+The SET CONSTRAINTS command can dynamically change the DEFERRABLE behavior of a named NO ACTION constraint.\
+The command will be applied only to the specific set of operations it's included in.
+
+```sql
+//It is usefull when editing columns within child tables
+//and unorganized data loads where referential integrity is handled internally.
+create table base2(
+    primo INT primary key, name TEXT
+)
+insert into base2(primo, name) values (12, 'uno'), (5, 'due'), (42, 'tre');
+insert into base2(primo, name) values (12, 'uno');
+
+create table azione(
+  catena INT constraint chiave references base2 on delete NO action DEFERRABLE,
+  modo TEXT
+)
+insert into azione values (12, 'primo'), (5, 'due'), (42, 'terzo');
+
+//We change the DEFFERRABLE default initially immediate with DEFERRED
+//SET CONSTRAINTS { ALL | constraint_name [, ...] } { DEFERRED | IMMEDIATE };
+//It will not change the table set DEFERRABLE constraint
+SET CONSTRAINTS chiave DEFERRED;
+delete from base2 where primo = 12;
+delete from azione where catena = 12;
+```
+{% endtab %}
+{% endtabs %}
+
+1
+
+1
+
+1
+
+1
+
+1
+
 1
 
 1
