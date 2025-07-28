@@ -140,7 +140,7 @@ delete from base1 where primo = 12;
 1
 
 The NO ACTION option prevents parent operations, symilar to RESTRICT.\
-It's the only referential action that can be combined with the DEFERRABLE clause, which enables it to **delay** the referential integrity check until the end of its **transaction**. It allows **subsequent operations** within the same transaction to resolve any potential integrity violations before the final **commit**.
+It's the only referential action that can be combined with the DEFERRABLE clause, which enables it to **delay** the referential integrity check until the end of its **transaction**.  It allows **subsequent operations** within the same transaction to resolve any potential integrity violations before the final **commit**.
 
 The DEFERRABLE clause, by itself, results in an INITIALLY IMMEDIATE **integrity check**. We need to **explicitly** specify the INITIALLY DEFERRED clause to enable the delayed referential check.
 
@@ -196,6 +196,173 @@ insert into azione values (12, 'primo'), (5, 'due'), (42, 'terzo');
 SET CONSTRAINTS chiave DEFERRED;
 delete from base2 where primo = 12;
 delete from azione where catena = 12;
+```
+{% endtab %}
+{% endtabs %}
+
+The SET NULL and SET DEFAULT options maintain referential integrity by changing the foreign key column values within the child rows.
+
+{% tabs %}
+{% tab title="SET NULL on DELETE " %}
+The SET NULL option, applied ON DELETE, sets the foreign key columns in the child row to NULL when its referenced parent row gets deleted. The NULL value, following the **referential integrity rule**, implicitly **removes** the parent-child reference in its FOREIGN KEY column.
+
+```sql
+//It can be aplied only to NULLABLE columns
+create table base3(
+    base INT primary key, name TEXT
+)
+insert into base3(base, name) values (9, 'scala'), (12, 'piano'), (33, 'molo');
+
+create table resetta(
+    foglio INT references base3 on delete set null, name TEXT
+)
+insert into resetta(foglio, name) values (9, 'piede'),(12, 'sala'),(33, 'nave');
+
+delete from base3 where base = 9;
+select * from resetta;
+foglio|name |
+------+-----+
+    12|sala |
+    33|nave |
+      |piede|
+```
+{% endtab %}
+
+{% tab title="SET DEFAULT on DELETE" %}
+The SET DEFAULT option sets the foreign key columns to their predefined default values when its referencing parent row is deleted. The referential integrity is maintained only if its non-NULL default values **reference an existing parent column**.
+
+```sql
+//If no default is specified, it will act as SET NULL using NULL defaults.
+create table base4(
+    base INT primary key, name TEXT
+)
+insert into base4(base, name) values (9, 'scala'), (12, 'piano'), (33, 'molo');
+
+create table defalta(
+    foglio INT default 50 references base4 on delete set default, name TEXT
+)
+insert into defalta(foglio, name) values (9, 'piede'),(12, 'sala'),(33, 'nave');
+
+delete from base4 where base = 9;   //Error, there is no parent with 50 as value
+insert into base4(base, name) values (50, 'torre');
+delete from base4 where base = 9;   //Allowed, now it references a parent row
+delete from base4 where base = 33;  //Its default references the same parent.
+
+select * from defalta;
+foglio|name |
+------+-----+
+    12|sala |
+    50|piede|
+    50|nave |
+```
+{% endtab %}
+{% endtabs %}
+
+The event specifiers must still satisfy any pre-existing constraints on their foreign key child columns.
+
+1
+
+Both **event specifiers** and **referential actions** can't be directly applied to PRIMARY KEY columns.
+
+We call **identifying foreign keys** the foreign keys columns that are used as PRIMARY KEYS values.   They will be implicitly set as NOT NULL and UNIQUE, while also needing to reference **existing parent column** values. This dual role limits the types of referential actions that can be applied to them.
+
+```sql
+//It is mostly used in many-to-many relations
+create table student1(
+    stud_id INT primary key, name TEXT
+)
+insert into student1(stud_id, name) values (12, 'volan'), (1, 'prima'), (7, 'emmy');
+
+create table corsi1(
+    cors_id INT primary key, name TEXT
+)
+insert into corsi1(cors_id, name) values (5, 'bio'), (12, 'volan'), (17, 'ruota');
+
+create table classe1(
+    student_id INTEGER REFERENCES student1, course_id INT references corsi1,
+    PRIMARY KEY (student_id, course_id)
+)
+insert into classe1(student_id, course_id) values (12, 5);
+insert into classe1(student_id, course_id) values (7, 12);
+insert into classe1(student_id, course_id) values (12, 12);
+
+select * from classe1;
+```
+
+{% tabs %}
+{% tab title="SET NULL option " %}
+We can add a SET NULL option to an identifying FOREING KEY, but the database won't execute it.&#x20;If a referenced parent row is deleted, the foreign key columns cannot be updated to NULL because of their **implicit** NOT NULL constraint when used as **primary keys.**
+
+```sql
+//The parent delete will return error
+delete from student1 where stud_id=12;
+
+create table classe1(
+    student_id INTEGER REFERENCES student1 ON DELETE set NULL,
+    ...
+)
+```
+{% endtab %}
+
+{% tab title="CASCADE option  " %}
+The CASCADE option will delete the entire child row of the identifying foreign key.\
+It implicitly satisfies the primary key's NOT NULL constraint **by removing** the entire row, and it will delete **all other columns** included in the primary key, regardless of their individual options.
+
+```sql
+//It keeps the only student_id values that weren't 12
+delete from student1 where stud_id=12;
+
+create table classe1(
+    student_id INTEGER REFERENCES student1 ON DELETE CASCADE,
+    course_id INT references corsi1 ON DELETE NOT NULL,
+    PRIMARY KEY (student_id, course_id)
+)
+
+select * from classe1;
+student_id|course_id|
+----------+---------+
+         7|       12|
+```
+
+1
+
+1
+
+1
+{% endtab %}
+
+{% tab title="SET DEFAULT" %}
+The SET DEFAULT option usually doesn't work with an identifying foreign key. The default value must satisfy the UNIQUE constraint among the **existing** identifying foreign key values.
+
+```sql
+//A default 7 will return error, for the existing (7, 12) primary key.
+delete from student1 where stud_id=12;
+
+create table classe1(
+    student_id INTEGER default 1 REFERENCES student1 ON DELETE set DEFAULT,
+    ...
+)
+```
+{% endtab %}
+
+{% tab title="initially DEFERRED" %}
+The NO ACTION DEFERRABLE initially DEFERRED option can be applied to an identifying foreign key. It allows for multiple operations in a single transaction involving the child column value.
+
+```sql
+//We re-assign the identifying foreing key value to an existing parent
+delete from student1 where stud_id=12;
+update classe1 set student_id=1 where student_id=12;
+
+//We can delete the child row using the identifying foreign key
+delete from student1 where stud_id=12;
+DELETE FROM coppia1 WHERE student_id = 12; 
+
+create table classe1(
+    student_id INTEGER REFERENCES student1 ON DELETE 
+        no action deferrable initially DEFERRED,
+    ...
+)
+select * from classe1;
 ```
 {% endtab %}
 {% endtabs %}
