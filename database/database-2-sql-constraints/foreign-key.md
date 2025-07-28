@@ -369,19 +369,107 @@ select * from classe1;
 
 1
 
-1
+The ON UPDATE event specifier **implements** its referential actions differently from ON DELETE.\
+Because the parent row **still exists** after the update, the database must either **maintain the reference** to the updated parent row or delete the foreign key's reference without deleting the entire child row.
 
-1
+{% tabs %}
+{% tab title="on update CASCADE" %}
+The CASCADE option maintains the referential integrity by **updating** the child column values to **match** the new parent column.
 
-1
+```sql
+//It can update a single column from a composite foreign key.
+create table base6(
+    uno int, due TEXT,
+    primary KEY(uno, due)
+)
+insert into base6(uno, due) values (1, 'copiato'), (2, 'secondo'), (3, 'terzo');
+update base6 set uno=11 where uno=1 returning *;
 
-1
+create table cambio(
+    base INT, primo INT, secondo TEXT,
+    foreign KEY(primo, secondo) references base6 on update CASCADE
+)
+insert into cambio(base, primo, secondo) values (12, 1, 'copiato');
+insert into cambio(base, primo, secondo) values (12, 2, 'secondo');
+insert into cambio(base, primo, secondo) values (3, 1, 'copiato');
 
-1
+select * from cambio;
+base|primo|secondo|
+----+-----+-------+
+  12|    2|secondo|
+  12|   11|copiato|
+   3|   11|copiato|
+```
+{% endtab %}
 
-1
+{% tab title="on update  SET NULL" %}
+The SET NULL option updates all the child columns related to the updated parent row to NULL.  It maintains the referential integrity by using NULL to indicate a removed foreign key reference.
 
-1
+```sql
+//The UPDATE event isn't usually used to delete child rows.
+create table base61(
+    uno int, due TEXT,
+    primary KEY(uno, due)
+)
+insert into base61(uno, due) values (1, 'copiato'),(2, 'secondo'),(3, 'terzo');
+update base61 set uno=11 where uno=1 returning *;
+
+create table cambio6(
+    base INT, primo INT, secondo TEXT,
+    foreign KEY(primo, secondo) references base61 on update set null
+)
+insert into cambio6(base, primo, secondo) values (12, 1, 'copiato');
+insert into cambio6(base, primo, secondo) values (12, 2, 'secondo');
+insert into cambio6(base, primo, secondo) values (3, 1, 'copiato');  
+
+select * from cambio6;
+base|primo|secondo|
+----+-----+-------+
+  12|    2|secondo|
+  12|     |       |
+   3|     |       |
+```
+{% endtab %}
+{% endtabs %}
+
+The MATCH SIMPLE option, set by default, considers a foreign key not part of any reference if any of its columns are NULL.\
+The MATCH FULL option requires all foreign key columns to be NULL for it to be considered **unreferenced**.&#x20;It blocks any operation that might result in a partially NULL foreign key, such as SET NULL with specified columns, or SET DEFAULT where some default values are NULL.
+
+```sql
+//MATCH FULL requires all foreign keys to be either null or not-null.
+//The option goes before the event specifier.
+create table base7(
+    primo INT, secondo INT, name TEXT, 
+    primary KEY(primo, secondo)
+)
+insert into base7(primo, secondo, name) values 
+    (1, 12, 'vaso'), (3, 22, 'sedia'), (5, 8, 'root');
+
+delete from base7 where primo = 3;  //ERROR, partial set null.
+
+create table tutti(
+    uno INT, due INT, name TEXT,
+    foreign key (uno, due) references base7 match full on delete set NULL(uno)
+)
+insert into tutti(uno, due, name) values 
+    (1, 12, 'altro'), (3, 22, 'basso'), (5, 8, 'lato');
+```
+
+The values of the PRIMARY KEY and UNIQUE **parent** columns are implicitly stored in an **index** structure.\
+It validates the child columns that reference the parent's values, but it doesn't store any data about the relation.
+
+Referential actions like CASCADE, SET NULL, and SET DEFAULT involve **locating child column** values after parent row operations. We use an additional index on the foreign key columns to optimize the retrieval.
+
+```sql
+//It can optimize JOIN operations that use the foreign key columns.
+create table tutti(
+    uno INT, due INT, name TEXT,
+    foreign key (uno, due) references base7 match full on delete set NULL
+)
+CREATE INDEX tutti_index ON tutti (uno, due);
+```
+
+The foreign key constraint specifies the rules for column values, but it is not a column definition that can directly include an index statement.
 
 1
 
