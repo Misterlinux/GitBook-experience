@@ -2,9 +2,130 @@
 
 1
 
-1
+The FOREIGN KEY constraint creates and enforces a **reference link** between 2 columns.\
+It ensures that a **referencing column** (the child) can only contain values already present in its **referenced column** (the parent).
 
-1
+A FOREIGN KEY is defined within the child table, its REFERENCES keyword points to the **parent table** and its specific columns. Multiple child rows can reference the same parent column value.
+
+```sql
+//The child column must match the parent data type
+//A PRIMARY KEY parent column avoids any duplicate column value and NULL for the child
+CREATE TABLE products (
+    chiave integer PRIMARY KEY, name text, price numeric
+);
+insert into products(chiave, name, price) values (15, 'brio',550), (10, 'malbo',200);
+
+//Any existing constraint still applies within the child table
+//If the parent column is omitted, it will use its own column name for the reference.
+CREATE TABLE orders (
+    order integer,   //UNIQUE can limit the child columns values
+    chiavetta integer REFERENCES products (chiave)  //Will use chiavetta if omitted
+);
+
+//The FOREIGN KEY only allows values form the specified column, not the entire table.
+insert into orders(order, chiavetta) values 
+    (3, 15),
+    (10, 10),  //The parent reference value can be repeated within the row
+    (3, 15),   //Allowed if teh order child columns isn't UNIQUE
+    (3, 200);  //Error, it violates the foreign key constraint
+```
+
+A child FOREIGN KEY must reference UNIQUE or PRIMARY KEY **parent columns**.                                                                                                                                                                   The JOIN operation combines table columns data using the FOREIGN KEY relations.
+
+<details>
+
+<summary>Referencing multiple parent column using the composite FOREIGN KEY constraint</summary>
+
+A **composite FOREIGN KEY** references a unique **set** of parent columns.&#x20;\
+All its child columns must be referenced from a _single_, explicitly defined composite constraint.
+
+The FOREIGN KEY **clause** can omit the parent columns list if they reference a PRIMARY KEY constraint; the database will **implicitly map** the child columns by position.                                              While the UNIQUE parent columns must always be **explicitly listed**.
+
+Invalid FOREIGN KEY constraints:
+
+* A FOREIGN KEY can't reference a **subset** of columns from a composite parent constraint.  \
+  A unique composite **set** can contain **repeated individual column** values (like (1, 10) and (1, 20)), making the database unable to identify parent rows based on a single referenced column.
+* A composite FOREIGN KEY cannot reference multiple independent parent columns.  \
+  It must reference a single composite constraint that contains all the parent columns within its unique set.
+
+We **can't directly modify** a foreign key; we must first DROP and ADD a **named** new one within the child table.&#x20;Any new foreign key added must reference existing constraints in the parent table.
+
+```sql
+//uno being both part of UNIQUE and PRIMARY KEY constraints
+create table singolo(
+    uno INT primary key, due INT not null,
+    unique (uno, due)
+)
+insert into singolo(uno, due) values (15, 30), (3, 12);
+
+//We use CONSTRAINT to name a foreign key
+//Named single column: 'base TEXT constraint based REFERENCES uno'
+create table doppio(
+    base TEXT, primo INT, secondo INT,  
+    //We must specify the parent columns in an UNIQUE constraint reference
+    CONSTRAINT coppia
+        foreign key (primo, secondo) references singolo(uno, due)
+)
+
+into doppio(base, primo, secondo) values
+    ('you', 15, 30), ('you', 3, 12),
+    ('you', 15, 12);    //ERROR, it violates the coppia set in FOREIGN KEY
+
+//We can ALTER only named constraints
+ALTER TABLE doppio DROP CONSTRAINT coppia;
+//It references the PRIMARY KEY constraint also aplied to the uno column
+//Only create table keys can omit the PRIMARY KEY parent columns list
+ALTER TABLE doppio ADD constraint nuovo 
+    FOREIGN KEY (primo) REFERENCES singolo(uno);
+
+//The new constraint allows repeated uno values from a PRIMARY KEY parent
+//The PRIMARY KEY constraint applies to the parent column, not the child's.
+insert into doppio(base, primo, secondo) values ('you', 15, 12);    
+
+base|primo|secondo|
+----+-----+-------+
+you |   15|     30|
+you |    3|     12|
+you |   15|     12|
+```
+
+</details>
+
+A column that **references** the PRIMARY KEY of a row within the **same table** is called **self-referencing**.\
+It creates a hierarchical **structure** where rows are organized into **branches** based on the PRIMARY KEY they reference, with rows containing NULL **foreign key** values serving as the **root nodes** that originate the structure.\
+It enabled the query to retrieve and order data based on the relations between the table rows.
+
+A query involving self-referencing columns uses multiple **instances** of the **same table** within its FROM clause.\
+The first instance (t1) represents the **current row** being processed, while the second instance (t2) is used in the **matching operation**. This comparison links the foreign key value from the first instance to its referenced parent primary key, found using the second instance.
+
+<pre class="language-sql"><code class="lang-sql">//It references the PRIMARY KEY by default.
+CREATE TABLE tree (
+    node_id integer PRIMARY KEY, name TEXT, 
+    parent_id integer REFERENCES tree -- Self-referencing foreign key
+);
+
+INSERT INTO tree (node_id, parent_id, name) values 
+    (1, NULL, 'base camp'), (2, NULL, 'aviation'), (101, 1, 'tank'), 
+    (102, 1, 'jep'), (201, 101, 'soldier'), (301, 2, 'plane'), 
+    (302, 302, 'suplies'),  -- self referring column
+    (305, 90, 'dog');       -- ERROR, no PRIMARY KEY to reference
+
+//The INNER JOIN clause only returns matching row values in the output.
+select 
+    t1.node_id, t1.name, t2.name as parent_name
+from
+    tree as t1
+left join 
+    tree as t2 on t1.parent_id = t2.node_id
+order by t1.node_id
+
+<strong>node_id|name     |parent_name|
+</strong>-------+---------+-----------|101|tank     |base camp  |
+      1|base camp|           |102|jep      |base camp  |301|plane    |aviation   |
+      2|aviation |           |201|soldier  |tank       |302|suplies  |suplies    |
+</code></pre>
+
+The LEFT JOIN clause includes all rows from the **current** table instance (the **left operand**) in the query's output. It appends the result columns from the matching operation, assigning NULL to unmatched rows. It effectively flattens the output, presenting both child and parent information within the same row.
 
 1
 
@@ -12,13 +133,12 @@ There are multipe types of tables relationships, based on their **cardinality**:
 
 {% tabs %}
 {% tab title="Many-To-Many" %}
-It requires an extra **linking table** that references the **parent primary keys** in its child columns.\
-Its **foreign keys** are then used to form the child's composite primary key.
-
-Similar to a one-to-many relationship, where child values can repeat for a single parent column, the many-to-many allows **repeated values** from both parents to be used within the linking table's composite primary key.
+It requires an extra linking table that references the **parent primary keys** in its child columns.\
+The composite primary key **combines** the foreign key columns, with each column referencing a different table.
 
 ```sql
 //Both parent tables are referenced using their PRIMARY KEY
+//A FOREIGN KEY keyword can't define it, as it can only reference one parent.
 create table meal(
     porta INT primary key, name TEXT
 )
@@ -39,6 +159,9 @@ insert into cena(meal_id, vaso_id, cost) values
     (12, 7, 40),    //Repeated vaso_id primary key value allowed
     (5, 7, 120);    //Error, repeated primary key set 
 ```
+
+Parent column values are defined once but can be referenced **many** times in the linking table.\
+Any update will only affect the parent table it's declared in, with no need to change its corresponding reference in the linking table.
 {% endtab %}
 
 {% tab title="One-To-Many" %}
@@ -366,6 +489,59 @@ select * from classe1;
 ```
 {% endtab %}
 {% endtabs %}
+
+1
+
+1
+
+<details>
+
+<summary>Defining a Foreign Key Hierarchy in a Child Table.</summary>
+
+We can create a hierarchy of **multiple foreign keys** within the same **child table**, where each is defined by the specific **referential action** triggered by its parent table event.
+
+We define the **main foreign key** column as part of the composite primary key.\
+The foreign key's CASCADE referential action establishes the referenced table as the **main parent**, and makes the specific foreign key a necessary component in the child table.
+
+We define the **secondary child column** as part of a composite foreign key referencing another table.&#x20;The foreign key's SET NULL referencial action defines the parent columns's values as **non-essential** for the child table.\
+We can remove the reference link by deleting its specified foreign key columns values, while maintaining the rest of the child row and preserving the specified identifying foreign key.
+
+```sql
+//The main parent table is referenced in the secondary parent table
+CREATE TABLE tenants (
+    tenant_id integer PRIMARY KEY
+);
+insert into tenants(tenant_id) values (1), (2), (4);
+
+//The secondary parent table includes added columns in its primary key
+CREATE TABLE users (
+    tenant_id integer REFERENCES tenants ON DELETE CASCADE, user_id integer,
+    PRIMARY KEY (tenant_id, user_id)
+);
+insert into users(tenant_id, user_id) values (1, 15), (2, 12), (4, 9);
+
+//The author_id references the second column (user_id) of the users parent
+CREATE TABLE posts (
+    tenant_id integer REFERENCES tenants ON DELETE CASCADE,
+    post_id integer NOT NULL, author_id integer,
+    PRIMARY KEY (tenant_id, post_id),
+    FOREIGN KEY (tenant_id, author_id) 
+        REFERENCES users ON DELETE SET NULL (author_id)
+);
+insert into posts(tenant_id, post_id, author_id) values 
+    (1, 3340, 15), (2, 5570, 12), (4, 1800, 9);
+
+//The on delete on the primary foreign key will delete the entire row 
+delete from tenants where tenant_id=1;  //
+//The on delete on the secondary foreing key will SET NULL some columns
+delete from users where user_id=9;  
+
+select * from posts;
+```
+
+</details>
+
+1
 
 1
 
