@@ -1,6 +1,9 @@
-# Foreign key
+# FOREIGN KEY constraint: rules and methods
 
-1
+* [Self-referencing tables and the FOREING KEY relationships types.](foreign-key-constraint-rules-and-methods.md#self-referencing-tables-and-the-foreing-key-relationships-types)
+* [Referential Actions and Event Specifiers for Referential Integrity.](foreign-key-constraint-rules-and-methods.md#referential-actions-and-event-specifiers-for-referential-integrity)
+* [Identifying Foreign Keys used as a child Primary Key.](foreign-key-constraint-rules-and-methods.md#identifying-foreign-keys-used-as-a-child-primary-key)
+* [Foreign keys ON UPDATE actions and the MATCH FULL option.](foreign-key-constraint-rules-and-methods.md#foreign-keys-on-update-actions-and-the-match-full-option)
 
 The FOREIGN KEY constraint creates and enforces a **reference link** between 2 columns.\
 It ensures that a **referencing column** (the child) can only contain values already present in its **referenced column** (the parent).
@@ -91,6 +94,8 @@ you |   15|     12|
 
 </details>
 
+### Self-referencing tables and the FOREING KEY relationships types.
+
 A column that **references** the PRIMARY KEY of a row within the **same table** is called **self-referencing**.\
 It creates a hierarchical **structure** where rows are organized into **branches** based on the PRIMARY KEY they reference, with rows containing NULL **foreign key** values serving as the **root nodes** that originate the structure.\
 It enabled the query to retrieve and order data based on the relations between the table rows.
@@ -126,8 +131,6 @@ order by t1.node_id
 </code></pre>
 
 The LEFT JOIN clause includes all rows from the **current** table instance (the **left operand**) in the query's output. It appends the result columns from the matching operation, assigning NULL to unmatched rows. It effectively flattens the output, presenting both child and parent information within the same row.
-
-1
 
 There are multipe types of tables relationships, based on their **cardinality**:
 
@@ -206,14 +209,12 @@ insert into solo(mano, libro) values (11, 44);  //Error, repeated child value
 {% endtab %}
 {% endtabs %}
 
-1
+### Referential Actions and Event Specifiers for Referential Integrity
 
 The database **restricts** any change made to parent columns currently being referenced.                                                                                                                                                                                      The FOREIGN KEYS must follow the **referencial integrity rule**, which states that all **non-NULL child values** must references an existing parent column.
 
 The **event specifiers** set the parent row actions that will trigger a child's column response.\
 The **referential actions** then define how the foreign key values will be modified to maintain the referential integrity after parent changes.
-
-1
 
 {% tabs %}
 {% tab title="CASCADE option" %}
@@ -259,8 +260,6 @@ delete from base1 where primo = 12;
 ```
 {% endtab %}
 {% endtabs %}
-
-1
 
 The NO ACTION option prevents parent operations, symilar to RESTRICT.\
 It's the only referential action that can be combined with the DEFERRABLE clause, which enables it to **delay** the referential integrity check until the end of its **transaction**.  It allows **subsequent operations** within the same transaction to resolve any potential integrity violations before the final **commit**.
@@ -383,7 +382,7 @@ foglio|name |
 
 The event specifiers must still satisfy any pre-existing constraints on their foreign key child columns.
 
-1
+### Identifying Foreign Keys used as a child Primary Key
 
 Both **event specifiers** and **referential actions** can't be directly applied to PRIMARY KEY columns.
 
@@ -490,10 +489,6 @@ select * from classe1;
 {% endtab %}
 {% endtabs %}
 
-1
-
-1
-
 <details>
 
 <summary>Defining a Foreign Key Hierarchy in a Child Table.</summary>
@@ -541,9 +536,7 @@ select * from posts;
 
 </details>
 
-1
-
-1
+### Foreign keys ON UPDATE actions and the MATCH FULL option.
 
 The ON UPDATE event specifier **implements** its referential actions differently from ON DELETE.\
 Because the parent row **still exists** after the update, the database must either **maintain the reference** to the updated parent row or delete the foreign key's reference without deleting the entire child row.
@@ -646,11 +639,3 @@ CREATE INDEX tutti_index ON tutti (uno, due);
 ```
 
 The foreign key constraint specifies the rules for column values, but it is not a column definition that can directly include an index statement.
-
-1
-
-1
-
-1
-
-1
