@@ -5,6 +5,7 @@
 * [Implementing partial UNIQUE constraints with WHERE](./#implementing-partial-unique-constraints-with-where)
 * [The NOT NULL constraint](./#the-not-null-constraint)
 * [The PRIMARY KEY constraint](./#the-primary-key-constraint)
+* [The EXCLUDE constraint](./#the-exclude-constraint)
 
 **Constraints** are declarative rules applied to PostgreSQL table **columns**, designed to enforce data integrity.&#x20;They will return an error and prevent any data modification that violates the constraint rules.
 
@@ -463,34 +464,58 @@ insert into combi(uno, due, tre) values (12, 34, NULL); //error, null in composi
 insert into combi(due, tre) values (34, 56);    //error, null in composte key
 ```
 
-Primary keys can be used by GUI applications or as default targets for f**oreign keys**.
+Primary keys can be used by GUI applications or as default targets for [f**oreign keys**](foreign-key-constraint-rules-and-methods.md).
 
-1
+### The EXCLUDE constraint
 
-1
+The EXCLUDE constraint uses a set of **comparison rules** to filter the new rows in a table.\
+It's similar to the UNIQUE constraint, as it compares the new row to all existing table values while also using comparison operators other than equality(=), like the overlap operator(**&&**).
 
-1
+It's similar to the CHECK constraint, as it can include **multiple columns** and operations within a single constraint. It doesn't rely on specific comparison values; instead, it validates using its comparison operators on the **existing table values**.\
+It excludes the new row if its specified column values return TRUE for **all** the comparison rules.
 
-1
+```sql
+//An EXCLUDE that contains only (=) operations acts as a less effective UNIQUE
+//Extention necessary for (=) operations in GIST indexes, checkthe index section
+CREATE EXTENSION btree_gist;
 
-1
+//It EXCLUDE argument works with commutative operations
+CREATE TABLE reservations (
+    reservation_id SERIAL PRIMARY KEY, room_id INT,
+    start_time TIMESTAMP, end_time TIMESTAMP,
+    EXCLUDE USING gist (
+        room_id WITH =, tsrange(start_time, end_time) WITH &&
+    ) where (room_id < 5)
+);
 
-1
+//Each new value is compared individually with every existing row.
+INSERT INTO reservations (room_id, start_time, end_time) VALUES 
+  (1, '2023-10-27 10:00:00', '2023-10-27 12:00:00'), //OK
+  (1, '2023-10-27 11:00:00', '2023-10-27 13:00:00'), //Error: overlap
+  (5, '2023-10-27 11:00:00', '2023-10-27 13:00:00'), //OK (different room)
+  (5, '2023-10-27 11:00:00', '2023-10-27 12:15:00'); //Overlap,OK outside the WHERE
+```
 
-1
+We can define a WHERE **predicate condition** on the EXCLUDE, which turns it into a **partial** constraint that only applies to a **subset** of the rows, making the index included in the constraint require **less storage**.
 
-1
+The **index** contains the **specified column** values from the table rows. It allows for quick, **pair-to-pair** comparisons with the new row's values, avoiding a slow full table scan.
 
-1
+<details>
 
-1
+<summary>Compatible Indexes in the EXCLUDE constraint.</summary>
 
-1
+The EXCLUDE constraint specifies its index's **access method** in the USING keyword, which defines the **index structure** used to perform the **comparison** operations.
 
-1
+Only a compatible index can be used with the EXCLUDE constraint. Its access method must include the **amgettuple** function in the **API** defined by the index's internal structure.
 
-1
+The database requires the amgettuple function to **validate** the values in the EXCLUDE constraint. It allows the database to **sequentially compare** each key of the index using the provided comparison **operators**.
 
-1
+* The **B-tree** and **HASH** index structure allows the use of the amgettuple function in the EXCLUDE constraint.  &#x20;They are optimized **only** for equality operations, using them results in EXCLUDE being a less effective UNIQUE constraint.
+* The **GIN** index is designed for text searches and complex data types, with each key storing a list of its value locations.  &#x20;Its internal structure doesn't support the amgettuple function, which is needed for the sequential comparisons used by the EXCLUDE constraint.
+* The **GiST** index structure is **compatible** with the amgettuple function, which allows it to perform the sequential comparisons needed to validate the more complex operations in the EXCLUDE constraint.
+
+</details>
+
+For more details about indexes check the Index session.
 
 [^1]: an expression that returns a Boolean value
