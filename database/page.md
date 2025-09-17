@@ -8,6 +8,140 @@ An index is an additional **database structure** built with the specified column
 
 The index optimizes queries that reference its columns, which allows the query planner to avoid a **full table scan**.&#x20;The size and speed of an index depend on its design and the type of data it holds.
 
+11
+
+The CREATE INDEX command creates an index for its specified **table columns**.\
+The B-tree indexing method defines an index structure optimized for equality and range queries.
+
+```sql
+//Indexes are most effective on large datasets
+CREATE TABLE tavole (
+    id  SERIAL PRIMARY KEY, codice  INT
+);
+
+INSERT INTO tavole (codice, nome)
+    SELECT FLOOR(RANDOM() * 10000) FROM GENERATE_SERIES(1, 10000);
+
+//If no specified the database creates a B-tree index
+CREATE INDEX indice ON tavole(codice);
+
+/We disable the sec. scan to make the index be used by the query planner.
+SET enable_seqscan = off;
+SET enable_seqscan = on;
+
+//Explain Analyze returns the scan stats
+explain analyze select * from tavole where codice > 5000;
+```
+
+IMMAGGINE
+
+The query planner uses an index if its **overhead cost** is lower than that of a sequential scan.\
+It also depends on the query clauses (e.g., LIKE or JOIN), as some are not supported by certain index types.
+
+An index can be implicitly created by a constraint and is automatically deleted when its associated table is dropped.
+
+```sql
+//The unique constraint implicitly creates a b-tree index
+CREATE TABLE intervalli (
+    inizio INTEGER,
+    fine INTEGER,
+    UNIQUE (inizio, fine)
+);
+
+//Equivalent to an EXCLUDE with extendable comparison conditions
+CREATE TABLE intervalli1 (
+    inizio INTEGER,
+    fine INTEGER,
+    EXCLUDE USING btree (inizio WITH =, fine with =)
+);
+```
+
+1
+
+The CREATE INDEX includes the **option** argument using the WITH keyword.\
+It configures the **index access method** but offers a more limited set of available options compared to other index types.
+
+```sql
+//FILLFACTOR sets the percentage of a node that can be filled with entries.
+CREATE INDEX my_index ON my_table (my_column) WITH (FILLFACTOR = 90);
+```
+
+1
+
+A B-tree **composite index** includes multiple columns in its CREATE INDEX statement.\
+Each composite key is a combination of the indexed column values, and it points to a single TID.
+
+The structure of a composite index is defined by its first CREATE INDEX column.\
+The B-tree uses the first **column's value** to define the ranges and distribution of its nodes.  All the following **columns' positions** within the composite key will depend on the placement of the first column value.\
+A **query** must include the **first column** in its WHERE condition to effectively **navigate** a composite index. A **latter column** would have to scan every entry to find a its value, resulting in an operation similar to a full table scan.
+
+1
+
+We follow the "**left sort rule**" when creating a composite index to optimize its queries.                                                   We decice the **order of the columns** based on the type of data they contain and the **query** operations they're involved in.\
+It prioritizes columns with the highest **cardinality** (most unique values) as they allow the index to quickly filter a large number of rows.\
+It prioritizes columns involved in more **specific operations**, like equality checks (=), as they allow the index to filter out more specific results.\
+It doesn't prioritize columns used in the ORDER BY clause as they are used to sort results that have already been filtered at the end of the query.\
+We can include the ASC and DESC keywords in the CREATE INDEX statement to match the sort order of an ORDER BY clause. This allows the database to skip the sorting step in the query.
+
+```sql
+//Being the default sorting index as ASC
+CREATE INDEX idx_products_price_desc ON products(price DESC);
+SELECT * FROM products ORDER BY price DESC;
+
+CREATE INDEX (col_a, col_b DESC)
+WHERE col_a= ORDER BY col_DESC
+```
+
+1
+
+The database can perform an **index-only scan** on queries that use only **indexed columns** for all of their elements, including the SELECT list and all clauses (WHERE, ORDER BY, etc.).
+
+It's a highly optimized **database operation** triggered by the query planner. It retrieves the data directly from the index structure, without using the entry TIDs to access its table row data.
+
+1
+
+The database applies a **table lock** when creating an index, which prevents any other **operations** on the table's data.
+
+We can avoid the inaccessibility period by using the CONCURRENCY keyword in the CREATE INDEX statement. It allows the database to create the index without locking the table, keeping it available for other operations.
+
+The CONCURRENCY keyword builds the index in a temporary space, requiring **multiple scans** to include any tuple updates and maintain data consistency with the table heap. Once it's complete, the database applies the new **index** to the table.
+
+The first scan creates the **initial version** of the index by reading all the current table rows.\
+The second scan, triggered after the first is complete, verifies any **changes** made to the table during the initial index build, adding any new or updated tuples to the temporary index.\
+The final **data consistency** check validates the **atomic swap**, which is a single, indivisible action that replaces the old index with the new one.\
+The deleted tuples are handled by the standard VACUUM process, which marks their space as available.\
+An index created with the CONCURRENCY option will still contain entries that point to outdated tuples, they will be removed by later maintenance operations.
+
+We can apply a **constraint** directly to the values within an **index**.\
+The index's structure optimizes the constraint validation check on the current values, without having to scan the entire table. It's aplied only on constraint that implicitly create and use indexes, like UNIQUE and PRIMARY KEY.
+
+```sql
+CREATE UNIQUE INDEX CONCURRENTLY equipment_equip_id
+ON equipment (equip_id);
+
+ALTER TABLE equipment
+ADD CONSTRAINT unique_equip_id UNIQUE USING INDEX equipment_equip_id;
+```
+
+Indexes can't be used to create multiple **logical partitions** of data from the **same column**.\
+The query planner has access to the index conditions but can't determine if they are mutually exclusive. It will check all relevant indexes, which adds overhead and makes the operation as slow as a table scan.\
+Instead we use the **declarative partitioning**, which is designed to handle this exact scenario.
+
+```sql
+//The query planner can't make any high-level logical partitionig analysis.
+CREATE INDEX sales_2023_idx ON sales (sale_date) WHERE sale_date BETWEEN '2023-01-01' AND '2023-12-31';
+
+CREATE INDEX sales_2024_idx ON sales (sale_date) WHERE sale_date BETWEEN '2024-01-01' AND '2024-12-31';
+```
+
+1
+
+1
+
+1
+
+1
+
 A B-tree index is designed to store **sequential data,** and it uses its **operation classes** to organize entries in a **linear** order.
 
 It is a **multi-way balanced** tree optimized for consistent **single-entry** and **range** data retrieval.\
