@@ -106,6 +106,24 @@ We can avoid the inaccessibility period by using the CONCURRENCY keyword in the 
 
 The CONCURRENCY keyword builds the index in a temporary space, requiring **multiple scans** to include any tuple updates and maintain data consistency with the table heap. Once it's complete, the database applies the new **index** to the table.
 
+1
+
+1
+
+The MVCC (**Multi-Version Concurrency Control**) is a database method that manages concurrency.\
+**Concurrency** is a property of the **database management system** that allows it to handle multiple **transactions** on the same data unit simultaneously.\
+The MVCC provides a **consistent data** version for all transactions and prevents uncommitted changes from blocking other operations.\
+Multiple operations can maintain data concurrency, but not all of them employ the MVCC method.
+
+The UPDATE operation employs the MVCC by not physically changing a tuple in the table heap.\
+It creates a **new version** of the tuple while keeping the old version available for any ongoing operation that started before the transaction was **commited**.\
+The process is a local read/write operation that leaves the outdated tuple for later maintenance operations like VACUUM.\
+The CONCURRENCY option applied to the CREATE INDEX operation doesn't use the MVCC.\
+It's a **schema-level operation** that maintains the concurrency of the table by avoiding a lock during index creation, allowing other operations to proceed.\
+It's not part of the MVCC approach because it **physically** creates and replaces an entire index instead of just **managing** local operations.
+
+1
+
 The first scan creates the **initial version** of the index by reading all the current table rows.\
 The second scan, triggered after the first is complete, verifies any **changes** made to the table during the initial index build, adding any new or updated tuples to the temporary index.\
 The final **data consistency** check validates the **atomic swap**, which is a single, indivisible action that replaces the old index with the new one.\
@@ -129,9 +147,11 @@ Instead we use the **declarative partitioning**, which is designed to handle thi
 
 ```sql
 //The query planner can't make any high-level logical partitionig analysis.
-CREATE INDEX sales_2023_idx ON sales (sale_date) WHERE sale_date BETWEEN '2023-01-01' AND '2023-12-31';
+CREATE INDEX sales_2023_idx ON sales (sale_date) 
+    WHERE sale_date BETWEEN '2023-01-01' AND '2023-12-31';
 
-CREATE INDEX sales_2024_idx ON sales (sale_date) WHERE sale_date BETWEEN '2024-01-01' AND '2024-12-31';
+CREATE INDEX sales_2024_idx ON sales (sale_date) 
+    WHERE sale_date BETWEEN '2024-01-01' AND '2024-12-31';
 ```
 
 1
