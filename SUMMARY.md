@@ -81,7 +81,8 @@
   * [Custom Range and base data types and PostgreSQL binary data](database/database-1/page.md)
 * [Database 2: SQL constraints](database/database-2-sql-constraints/README.md)
   * [FOREIGN KEY constraint: rules and methods](database/database-2-sql-constraints/foreign-key-constraint-rules-and-methods.md)
-* [Page](database/page.md)
+* [Database 3:PostgreSQL Indexes, B-tree](database/database-3-postgresql-indexes-b-tree/README.md)
+  * [B-tree, properties and](database/database-3-postgresql-indexes-b-tree/b-tree-properties-and.md)
 * [Node-Postgres Module](database/node-postgres-module.md)
 
 ## OTHER

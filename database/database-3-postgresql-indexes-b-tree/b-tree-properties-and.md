@@ -1,162 +1,150 @@
-# Page
+# B-tree, properties and
 
-1
+* 1
+* 1
+* 1
+* 1
 
-1
+A B-tree index is designed to store **sequential data,** and it uses its **operation classes** to organize entries in a **linear** order.
 
-An index is an additional **database structure** built with the specified columns of an existing table.
+It's a **multi-way balanced** tree optimized for consistent **single-entry** and **range** data retrieval.\
+It's `balanced` because all leaf nodes are located in the bottom level, ensuring every search passes through the same number of **layers**.\
+It is `multi-way` because each node can branch out into multiple **child nodes**, making the tree wider and minimizing the number of levels necessary for a query search.
 
-The index optimizes queries that reference its columns, which allows the query planner to avoid a **full table scan**.&#x20;The size and speed of an index depend on its design and the type of data it holds.
+\--IMMAGGINE editare--
 
-11
+The B-tree entries are stored in **physical disk pages**, while its structure is made of **logical nodes** that can have multiple roles depending on their position in the tree.
 
-The CREATE INDEX command creates an index for its specified **table columns**.\
-The B-tree indexing method defines an index structure optimized for equality and range queries.
+> The **root node**, located at the top of the tree, is the starting point for every query. It provides the initial pointers to the first set of internal nodes.
+>
+> The **internal nodes**, located between the root and leaf nodes, contain key-pointer pairs that direct the search to> &#x20;the corresponding child node.
+>
+> The **leaf node**, located at the bottom of the tree, contains the actual entries.
 
-```sql
-//Indexes are most effective on large datasets
-CREATE TABLE tavole (
-    id  SERIAL PRIMARY KEY, codice  INT
-);
+An index entry is composed of a **key-pointer** pair. The `key` is the exact **column value** being stored in the b-tree, and its **size** depends on its data type and length. The `pointer` is a fixed size adress that points to the **location** of the entry data.
 
-INSERT INTO tavole (codice, nome)
-    SELECT FLOOR(RANDOM() * 10000) FROM GENERATE_SERIES(1, 10000);
+The role of a **pointer** depends on the node it's placed in:\
+In an **internal node**, the pointer acts as a roadmap, referencing the specific **child node** that includes the searched entry value in its range.\
+In a **leaf node**, the pointer is a specific **address** to the **physical location** of the **table row** containing the entry key **column value**; it can be a tuple identifier or a memory block notation.
 
-//If no specified the database creates a B-tree index
-CREATE INDEX indice ON tavole(codice);
+In a standard B-tree, the single pointers in the internal nodes can be used to retrieve the actual table data, depending on the implementation.
 
-/We disable the sec. scan to make the index be used by the query planner.
-SET enable_seqscan = off;
-SET enable_seqscan = on;
+\--IMMAGGINE INTERNLA node leaf node--
 
-//Explain Analyze returns the scan stats
-explain analyze select * from tavole where codice > 5000;
-```
+B-tree **nodes** are designed to have the same size as a **disk page**. This allows the entire node to be retrieved in a single I/O operation, making the query require only one **disk access** on each index level.
 
-IMMAGGINE
+A B-tree node can contain data equivalent to multiple disk pages (e.g., 4KB, 8KB, or 16KB), allowing the index to **adapt** efficiently to larger databases.
 
-The query planner uses an index if its **overhead cost** is lower than that of a sequential scan.\
-It also depends on the query clauses (e.g., LIKE or JOIN), as some are not supported by certain index types.
+\--IMMAGGINE DISK PAGE ACCESS--
 
-An index can be implicitly created by a constraint and is automatically deleted when its associated table is dropped.
+The maximum size of a B-tree entry is 1/3 of the node it's placed in. This rule ensures that every node can branch out to a minimum number of child nodes, which helps maintain a wide, **horizontal index** structure.
 
-```sql
-//The unique constraint implicitly creates a b-tree index
-CREATE TABLE intervalli (
-    inizio INTEGER,
-    fine INTEGER,
-    UNIQUE (inizio, fine)
-);
+The **order** (m) of a B-tree determines the maximum number of children an internal node can have.           It also defines the maximum number  (m−1) and the minimum number of keys (m/2) .an index can have.
 
-//Equivalent to an EXCLUDE with extendable comparison conditions
-CREATE TABLE intervalli1 (
-    inizio INTEGER,
-    fine INTEGER,
-    EXCLUDE USING btree (inizio WITH =, fine with =)
-);
-```
+In an internal node, pointers act as **dividers** that create **ranges** between their **key values**, which are then represented by the child nodes. In a leaf node, the the `m−1` key rule doesn't apply because each key-pointer pair points to the **single physical location** of its data.
 
-1
+An incomplete child node will only fill its empty spaces with entries that fall within the specific range implicitly defined by its parent node's pointers.
 
-The CREATE INDEX includes the **option** argument using the WITH keyword.\
-It configures the **index access method** but offers a more limited set of available options compared to other index types.
+<figure><img src="../../.gitbook/assets/domanda.jpg" alt="" width="362"><figcaption></figcaption></figure>
 
-```sql
-//FILLFACTOR sets the percentage of a node that can be filled with entries.
-CREATE INDEX my_index ON my_table (my_column) WITH (FILLFACTOR = 90);
-```
+Once the number of **keys** in a node exceeds the index's order (m), the node **splits**.\
+A new parent internal node is created containing the **lowest median key** value. The original node's entries are split between the newly created **child nodes**, using the internal node's median key as the **divider**.
 
-1
+The internal node contains only single values, not ranges like its child nodes. It gets updated each time one of its children splits.\
+Once an internal node becomes full, it creates a new **parent internal node** with its median value.\
+It splits the internal node's entries and their corresponding child nodes between the original node and the new **sibling node**.
 
-A B-tree **composite index** includes multiple columns in its CREATE INDEX statement.\
-Each composite key is a combination of the indexed column values, and it points to a single TID.
-
-The structure of a composite index is defined by its first CREATE INDEX column.\
-The B-tree uses the first **column's value** to define the ranges and distribution of its nodes.  All the following **columns' positions** within the composite key will depend on the placement of the first column value.\
-A **query** must include the **first column** in its WHERE condition to effectively **navigate** a composite index. A **latter column** would have to scan every entry to find a its value, resulting in an operation similar to a full table scan.
-
-1
-
-We follow the "**left sort rule**" when creating a composite index to optimize its queries.                                                   We decice the **order of the columns** based on the type of data they contain and the **query** operations they're involved in.\
-It prioritizes columns with the highest **cardinality** (most unique values) as they allow the index to quickly filter a large number of rows.\
-It prioritizes columns involved in more **specific operations**, like equality checks (=), as they allow the index to filter out more specific results.\
-It doesn't prioritize columns used in the ORDER BY clause as they are used to sort results that have already been filtered at the end of the query.\
-We can include the ASC and DESC keywords in the CREATE INDEX statement to match the sort order of an ORDER BY clause. This allows the database to skip the sorting step in the query.
-
-```sql
-//Being the default sorting index as ASC
-CREATE INDEX idx_products_price_desc ON products(price DESC);
-SELECT * FROM products ORDER BY price DESC;
-
-CREATE INDEX (col_a, col_b DESC)
-WHERE col_a= ORDER BY col_DESC
-```
-
-1
+The **ranges** defined by the **internal node's** entries have different boundaries for the left and right sides.\
+The key-pointers for 5 and 12 will create child nodes that cover these respective ranges:                                               `x<5, 5≤x<12, x≥12`\
+All nodes are sorted horizontally in a linear order.
 
 The database can perform an **index-only scan** on queries that use only **indexed columns** for all of their elements, including the SELECT list and all clauses (WHERE, ORDER BY, etc.).
+
+```sql
+//It skips the leaf pointer data retrieval and it returns the key values
+create table dritto( uno INT, due TEXT )
+
+insert into dritto(uno, due) values (12, 'penna'),(7, 'mano'),(3, 'foglio');
+create index dritto_idx on dritto(uno);
+
+explain analyze select uno from dritto where uno>=7;
+```
 
 It's a highly optimized **database operation** triggered by the query planner. It retrieves the data directly from the index structure, without using the entry TIDs to access its table row data.
 
 1
 
-The database applies a **table lock** when creating an index, which prevents any other **operations** on the table's data.
+— Somehng anticipating teh optimitation and WAL.
 
-We can avoid the inaccessibility period by using the CONCURRENCY keyword in the CREATE INDEX statement. It allows the database to create the index without locking the table, keeping it available for other operations.
+<details>
 
-The CONCURRENCY keyword builds the index in a temporary space, requiring **multiple scans** to include any tuple updates and maintain data consistency with the table heap. Once it's complete, the database applies the new **index** to the table.
+<summary>LINEAR INSERTS optimitaton</summary>
 
-1
+The index's INSERT operations are slowed down by **non-linear** or randomly generated data types.\
+They can cause unpredictable page splits and lead to inefficient leaf-node entry distribution, but they won' affect SELECT operations.
 
-1
+The PostgreSQL SERIAL and MySQL AUTO\_INCREMENT constructs create **efficient sequences** of column values in the index. They generate values in a linear order, allowing for an efficient leaf-node storage and reducing the node splits.
 
-The MVCC (**Multi-Version Concurrency Control**) is a database method that manages concurrency.\
-**Concurrency** is a property of the **database management system** that allows it to handle multiple **transactions** on the same data unit simultaneously.\
-The MVCC provides a **consistent data** version for all transactions and prevents uncommitted changes from blocking other operations.\
-Multiple operations can maintain data concurrency, but not all of them employ the MVCC method.
+The database loads copies of frequently accessed data pages into its RAM cache, allowing it to update the pages without I/O operations. It then pushes the changes to the physical disk before the page split.
 
-The UPDATE operation employs the MVCC by not physically changing a tuple in the table heap.\
-It creates a **new version** of the tuple while keeping the old version available for any ongoing operation that started before the transaction was **commited**.\
-The process is a local read/write operation that leaves the outdated tuple for later maintenance operations like VACUUM.\
-The CONCURRENCY option applied to the CREATE INDEX operation doesn't use the MVCC.\
-It's a **schema-level operation** that maintains the concurrency of the table by avoiding a lock during index creation, allowing other operations to proceed.\
-It's not part of the MVCC approach because it **physically** creates and replaces an entire index instead of just **managing** local operations.
+The database uses a sequential **Write-Ahead Log** (WAL) on the disk to prevent data loss.\
+Any change to a data page is first recorded in the WAL before it's applied to the page in the RAM cache. The database will replay the WAL operations to restore the data after a system crash.
 
-1
+The **entry's size** impacts the B-tree structure and efficency.\
+A **large key** data type causes the node to contain fewer entries before it splits, making the index taller and slowing down the data retrieval.\
+A **small key** data type may not provide enough unique values due to its shorter length.\
+An INT 32-bit integer has 2.1 billion possible values, while a BIGINT 64-bit integer has 9.2 quintillion values, offering more unique values in exchange for a larger entry size.
 
-The first scan creates the **initial version** of the index by reading all the current table rows.\
-The second scan, triggered after the first is complete, verifies any **changes** made to the table during the initial index build, adding any new or updated tuples to the temporary index.\
-The final **data consistency** check validates the **atomic swap**, which is a single, indivisible action that replaces the old index with the new one.\
-The deleted tuples are handled by the standard VACUUM process, which marks their space as available.\
-An index created with the CONCURRENCY option will still contain entries that point to outdated tuples, they will be removed by later maintenance operations.
+</details>
 
-We can apply a **constraint** directly to the values within an **index**.\
-The index's structure optimizes the constraint validation check on the current values, without having to scan the entire table. It's aplied only on constraint that implicitly create and use indexes, like UNIQUE and PRIMARY KEY.
-
-```sql
-CREATE UNIQUE INDEX CONCURRENTLY equipment_equip_id
-ON equipment (equip_id);
-
-ALTER TABLE equipment
-ADD CONSTRAINT unique_equip_id UNIQUE USING INDEX equipment_equip_id;
-```
-
-Indexes can't be used to create multiple **logical partitions** of data from the **same column**.\
-The query planner has access to the index conditions but can't determine if they are mutually exclusive. It will check all relevant indexes, which adds overhead and makes the operation as slow as a table scan.\
-Instead we use the **declarative partitioning**, which is designed to handle this exact scenario.
-
-```sql
-//The query planner can't make any high-level logical partitionig analysis.
-CREATE INDEX sales_2023_idx ON sales (sale_date) 
-    WHERE sale_date BETWEEN '2023-01-01' AND '2023-12-31';
-
-CREATE INDEX sales_2024_idx ON sales (sale_date) 
-    WHERE sale_date BETWEEN '2024-01-01' AND '2024-12-31';
-```
+— IMMAGGINE WAL e RAM CACHE --
 
 1
 
-1
+### INDEX MAINTENANCE on Update operation, for outdated entries.
+
+The database stores a table's rows in a collection of **disk pages**, which is called a **table heap**.\
+It's optimized for size, and organized into unordered tuples, with each containing the column data for a single table row.
+
+The database will require a table scan to retrieve tuple data from the heap, or an index scan. The index includes a TID (Tuple Identifier) for each entry of its indexed columns, which is used to locate the specific tuple in the heap.
+
+— IMMAGGINE TABLE HEAP, AND TUPLES structure --
+
+The table heap will append any new INSERT tuple to the end of the heap, without any page range condition or ordering like in the B-tree. On UPDATE operations, the new tuple's position depends on whether the updated **tuple columns** are part of a table's **index**.
+
+An UPDATE value including an indexed column will be appended as a new tuple in the heap, and it creates a **new entry** in the **index**, which points to the **new version** of the **tuple** with its TID.\
+Any outdated tuple and index entry will be kept and handled by the later maintenance operations.\
+An UPDATE value that doesn't include an indexed column will instead result in a HOT update.
+
+A **Heap-Only-Tuple**(HOT) UPDATE modifies the table heap without triggering an **index update**.\
+It adds a new version of the tuple to the **same disk page** as the old one. It also adds a **forward pointer** to the old tuple, which allows its index entry TID to find the correct data.\
+If there is no available space on the old tuple's disk page, it defaults to an indexed update.\
+The database management system contains the rules for the HOT update. The **query planner** provides the **execution plan** for the database after analyzing a query.
+
+— HOT UPDATE and forward pointer IMAGE --
+
+### Maintenance
+
+The **version bloat** forms when the index or the table heap gets full of outdated values.\
+A tuple is marked as dead on DELETE or UPDATE and will be removed after a **visibility check** during maintenance. An index entry isn't explicitly marked; its TID is checked to see if it points to a dead tuple.
+
+— MAYBE image about TUPLE bloat and index outdated --
+
+The REINDEX command is a global maintenance operation. It performs a complete table scan to **rebuild** the index from the **current tuples** in the table heap, which is then used to replace and update the old index.\
+It relies on a prior VACUUM visibility check to detect the live tuples; if not, it defaults to indexing all tuples, even outdated ones.
+
+The BOTTOM-UP **defragmentation** process triggers when a full B-tree index page is about to split.\
+It is a **localized** and immediate maintenance operation that cleans up outdated **index entries**.
+
+The VACUUM operation is a page-by-page maintenance process that **deletes** **dead tuples** in the table heap and **marks outdated index** entries for removal.\
+The VACUUM is triggered manually while the AUTOVACUUM is triggered on a schedule. The space from deleting dead tuples is not returned to the operator system; it is marked as **free internally** for new tuples in the same table heap.\
+A table heap's size is reduced by relocating its data to a smaller set of disk pages, which requires blocking all transactions. The VACUUM mantains the table heap under the MVCC conditions, mantaining concurrent access during UPDATE operations.
+
+The VACUUM FULL command **removes dead tuples** by replacing the old table heap with a new one with only live tuples. It includes a REINDEX for the index, rebuilding it using the live tuples from the new table heap.
+
+The VACUUM operation uses the **transaction IDs** to determine the visibility state of a tuple.\
+Every transaction is assigned a unique **XID**, which is assigned to the XMIN property of the new tuples it creates and the XMAX property of any tuples it updates or deletes.\
+The VACUUM sets its cleanup cutoff point based on the XID of the **oldest currently active transaction**. It will remove tuples with an XMAX value lower than the XID, as they are no longer visible to any ongoing transactions.
 
 ### Property
 
@@ -171,10 +159,6 @@ The **pgstatindex()** function is part of the pgstattuple extension, and returns
 > **tree\_level**: The number of levels in the index, from the root page down to the leaf pages. **leaf\_pages/internal\_pages**: The total number of leaf and internal pages that make up the index. **index\_size**: The total size of the index on disk, in bytes.                                                                              **tuple\_count:** The number of index entries in the leaf pages. avg\_tuple\_size: The average size of each entry in the index, in bytes.                                                                                                           **avg\_leaf\_density**: It measures the **internal fragmentation**, represented by the average **percentage** of space used within each index leaf page. It's low in highly fragmented pages with empty and inefficent space and it's affected by the VACUUM operation.                                                                                                        **leaf\_fragmentation**: It measures the **external fragmentation**, showing how physically scattered the index's leaf pages are on the disk. A high value indicates that **logically sequential pages** are not **physically located** next to each other. It can slow down index scans, as the disk must jump between different locations to read the data.
 
 The External fragmentation is related to an **index's activity**, not its size. A large but static index will have low fragmentation, while a smaller index with frequent updates will become highly fragmented. This condition is correlated with how the index handles **page splits**. The process is opportunistic, meaning it uses the first available disk page to store the new node's data.                                                                  The fragmentation measures the **physical distance** on the disk between leaf pages that are logically supposed to be right next to each other.
-
-1
-
-1
 
 <details>
 
@@ -265,60 +249,108 @@ CREATE TABLE table_vacuum (
 
 </details>
 
-1
+— METTI QUI L'IMMAGNE DEI DATI --
 
 1
 
-A B-tree index is designed to store **sequential data,** and it uses its **operation classes** to organize entries in a **linear** order.
+### COMPOSITE
 
-It is a **multi-way balanced** tree optimized for consistent **single-entry** and **range** data retrieval.\
-It is `balanced` because all leaf nodes are located in the bottom level, ensuring every search passes through the same number of **layers**.\
-It is `multi-way` because each node can branch out into multiple **child nodes**, making the tree wider and minimizing the number of levels necessary for a query search.
+A B-tree **composite index** includes multiple columns in its CREATE INDEX statement.\
+Each composite key is a combination of the indexed column values, and it points to a single TID.
 
-IMMAGGINE
+```sql
+//A single index with each key includes the 2 columns values
+CREATE table multi( uno INT, due TEXT, tre INT );
+insert into multi (uno, due, tre) values (12,'base', 22), (7,'pen',43), (17,'cup',19);
 
-The B-tree entries are stored in **physical disk pages**, while its structure is made of **logical nodes** that can have multiple roles depending on their position in the tree.
+create index multi_idx on multi(uno, due);
+```
 
-> The **root node**, located at the top of the tree, is the starting point for every query. It provides the initial pointers to the first set of internal nodes.
->
-> The **internal nodes**, located between the root and leaf nodes, contain key-pointer pairs that direct the search to> &#x20;the corresponding child node.
->
-> The **leaf node**, located at the bottom of the tree, contains the actual entries.
+The structure of a composite index is defined by its first CREATE INDEX column.\
+The B-tree uses the first **column's value** to define the ranges and distribution of its nodes.  All the following **columns' positions** within the composite key will depend on the placement of the first column value.\
+A **query** must include the **first column** in its WHERE condition to effectively **navigate** a composite index. A **latter column** would have to scan every entry to find a its value, resulting in an operation similar to a full table scan.
 
-An index entry is composed of a **key-pointer** pair. The `key` is the exact **column value** being stored in the b-tree, and its **size** depends on its data type and length. The `pointer` is a fixed size adress that points to the **location** of the entry data.
+— IMMAGGINE OF COMPOSITE INDEX WITH FIRST KEY ordering --
 
-The role of a **pointer** depends on the node it's placed in:\
-In an **internal node**, the pointer acts as a roadmap, referencing the specific **child node** that includes the searched entry value in its range.\
-In a **leaf node**, the pointer is a specific **address** to the **physical location** of the **table row** containing the entry key **column value**; it can be a tuple identifier or a memory block notation.
+We follow the "**left sort rule**" when creating a composite index to optimize its queries.                                                   We decice the **order of the columns** based on the type of data they contain and the **query** operations they're involved in.\
+It prioritizes columns with the highest **cardinality** (most unique values) as they allow the index to quickly filter a large number of rows.\
+It prioritizes columns involved in more **specific operations**, like equality checks (=), as they allow the index to filter out more specific results.\
+It doesn't prioritize columns used in the ORDER BY clause as they are used to sort results that have already been filtered at the end of the query.\
+We can include the ASC and DESC keywords in the CREATE INDEX statement to match the sort order of an ORDER BY clause. This allows the database to skip the sorting step in the query.
 
-In a standard B-tree, the single pointers in the internal nodes can be used to retrieve the actual table data, depending on the implementation.
+```sql
+//Being the default sorting index as ASC
+CREATE INDEX idx_products_price_desc ON products(price DESC);
+SELECT * FROM products ORDER BY price DESC;
+
+CREATE INDEX (col_a, col_b DESC)
+WHERE col_a= ORDER BY col_DESC
+```
 
 1
 
-B-tree **nodes** are designed to have the same size as a **disk page**. This allows the entire node to be retrieved in a single I/O operation, making the query require only one **disk access** on each index level.
+### Table LOCK and CONCURRENCY option and MVCC
 
-A B-tree node can contain data equivalent to multiple disk pages (e.g., 4KB, 8KB, or 16KB), allowing the index to **adapt** efficiently to larger databases.
+The database applies a **table lock** when creating an index, which prevents any other **operations** on the table's data.
 
-1
+We can avoid the inaccessibility period by using the CONCURRENCY keyword in the CREATE INDEX statement. It allows the database to create the index without locking the table, keeping it available for other operations.
 
-The maximum size of a B-tree entry is 1/3 of the node it's placed in. This rule ensures that every node can branch out to a minimum number of child nodes, which helps maintain a wide, **horizontal index** structure.
+The CONCURRENCY keyword builds the index in a temporary space, requiring **multiple scans** to include any tuple updates and maintain data consistency with the table heap. Once it's complete, the database applies the new **index** to the table.
 
-The **order** (m) of a B-tree determines the maximum number of children an internal node can have.           It also defines the maximum number  (m−1) and the minimum number of keys (m/2) .an index can have.
+```sql
+//It keeps the table open for operation during long inserts like GENERATE_SERIES()
+create table bloc( uno INT, due TEXT )
 
-In an internal node, pointers act as **dividers** that create **ranges** between their **key values**, which are then represented by the child nodes. In a leaf node, the the `m−1` key rule doesn't apply because each key-pointer pair points to the **single physical location** of its data.
+insert into bloc select i, md5(i::text) from generate_series(1, 10000) as i;
+create index CONCURRENTLY on block(uno)
+```
 
-An incomplete child node will only fill its empty spaces with entries that fall within the specific range implicitly defined by its parent node's pointers.
+The MVCC (**Multi-Version Concurrency Control**) is a database method that manages concurrency.\
+**Concurrency** is a property of the **database management system** that allows it to handle multiple **transactions** on the same data unit simultaneously.\
+The MVCC provides a **consistent data** version for all transactions and prevents uncommitted changes from blocking other operations.\
+Multiple operations can maintain data concurrency, but not all of them employ the MVCC method.
 
-Once the number of **keys** in a node exceeds the index's order (m), the node **splits**.\
-A new parent internal node is created containing the **lowest median key** value. The original node's entries are split between the newly created **child nodes**, using the internal node's median key as the **divider**.
+The UPDATE operation employs the MVCC by not physically changing a tuple in the table heap.\
+It creates a **new version** of the tuple while keeping the old version available for any ongoing operation that started before the transaction was **commited**.\
+The process is a local read/write operation that leaves the outdated tuple for later maintenance operations like VACUUM.
 
-The internal node contains only single values, not ranges like its child nodes. It gets updated each time one of its children splits.\
-Once an internal node becomes full, it creates a new **parent internal node** with its median value.\
-It splits the internal node's entries and their corresponding child nodes between the original node and the new **sibling node**.
+The CONCURRENCY option applied to the CREATE INDEX operation doesn't use the MVCC.\
+It's a **schema-level operation** that maintains the concurrency of the table by avoiding a lock during index creation, allowing other operations to proceed.\
+It's not part of the MVCC approach because it **physically** creates and replaces an entire index instead of just **managing** local operations.
 
-The **ranges** defined by the **internal node's** entries have different boundaries for the left and right sides.\
-The key-pointers for 5 and 12 will create child nodes that cover these respective ranges:                                               `x<5, 5≤x<12, x≥12`\
-All nodes are sorted horizontally in a linear order.
+— Immaggine for MVCC maybe --
+
+The first scan creates the **initial version** of the index by reading all the current table rows.\
+The second scan, triggered after the first is complete, verifies any **changes** made to the table during the initial index build, adding any new or updated tuples to the temporary index.\
+The final **data consistency** check validates the **atomic swap**, which is a single, indivisible action that replaces the old index with the new one.\
+The deleted tuples are handled by the standard VACUUM process, which marks their space as available.\
+An index created with the CONCURRENCY option will still contain entries that point to outdated tuples, they will be removed by later maintenance operations.
+
+\--IMMAGGINE for concurrent triple scan --
+
+We can apply a **constraint** directly to the values within an **index**.\
+The index's structure optimizes the constraint validation check on the current values, without having to scan the entire table. It's aplied only on constraint that implicitly create and use indexes, like UNIQUE and PRIMARY KEY.
+
+```sql
+CREATE UNIQUE INDEX CONCURRENTLY equipment_equip_id
+ON equipment (equip_id);
+
+ALTER TABLE equipment
+ADD CONSTRAINT unique_equip_id UNIQUE USING INDEX equipment_equip_id;
+```
+
+Indexes can't be used to create multiple **logical partitions** of data from the **same column**.\
+The query planner has access to the index conditions but can't determine if they are mutually exclusive. It will check all relevant indexes, which adds overhead and makes the operation as slow as a table scan.\
+Instead we use the **declarative partitioning**, which is designed to handle this exact scenario.
+
+```sql
+//The query planner can't make any high-level logical partitionig analysis.
+CREATE INDEX sales_2023_idx ON sales (sale_date) 
+    WHERE sale_date BETWEEN '2023-01-01' AND '2023-12-31';
+
+CREATE INDEX sales_2024_idx ON sales (sale_date) 
+    WHERE sale_date BETWEEN '2024-01-01' AND '2024-12-31';
+```
 
 1
 
@@ -326,6 +358,8 @@ All nodes are sorted horizontally in a linear order.
 
 The B-tree assigns an **operation class** to each **data type** allowed within the index.\
 It contains the functions that set and maintain the linear sorting order of the index values, such as _sorting_ and _operator functions_.
+
+— Immagine for operator classes --
 
 The **sorting function** uses the **trichotomy rule** to determine the mathematical relationship between two values.&#x20;It establishes the **initial sorted order** of the index and maintains it for every new entry added.
 
@@ -339,15 +373,17 @@ The **operator functions** handle the five comparison operations (<, >, =, ≤, 
 A single-value query uses the (<) and (>) operators to **navigate** the B-tree index positions, then confirms the matching value using the (=) operator.\
 A range-value query uses the (≤) and (≥) operators to locate the start of the range and includes all entries until it finds the last key value that satisfies the condition.
 
-1
-
 **Operation families** group multiple operation **classes** for data types with equivalent **sorting rules**, like `int4` and `int8`, and allow for **cross-data type comparison** queries on the B-tree.
+
+— MAYBE IMAGES FOR operator families, including and crossword --
 
 The database identifies the different data types in the index query and checks if their operation classes are part of the same operation family. This allows it to **implicitly convert** one of the data types during the cross-data type comparison.
 
 Some compatible data types, like NUMERIC and FLOAT, are not suitable for cross-data type comparisons. Their **different precision levels** would result in a converted NUMERIC value being different from the original, which breaks the transitive rule (A != A).
 
 The metadata for the operation class functions is stored in the **pg\_amop** and **pg\_amoproc** system catalogs.
+
+— Maybe I can check for real examples on teh postgresql output --
 
 The **Access Method Operator** (`pg_amop`) system catalog is a central registry that links high-level comparison **operators** to their corresponding low-level **comparison functions**.                                                      The **metadata** for each entry contains a combination of the specific operator, data type, and index type used in the query. The database uses the information of the **matching entry** to retrieve the **operator class** that can process the query (from the **pg\_opclass** catalog).                                                                               The catalog includes an operator family column, which is used by the database to validate cross-data type comparisons in a query.
 
@@ -416,45 +452,6 @@ If an indexed column can hold multiple compatible data types (e.g., VARCHAR and 
 
 1
 
-### INDEX MAINTENANCE on Update operation, for outdated entries.
-
-The database stores a table's rows in a collection of **disk pages**, which is called a **table heap**.\
-It's optimized for size, and organized into unordered tuples, with each containing the column data for a single table row.
-
-The database will require a table scan to retrieve tuple data from the heap, or an index scan. The index includes a TID (Tuple Identifier) for each entry of its indexed columns, which is used to locate the specific tuple in the heap.
-
-The table heap will append any new INSERT tuple to the end of the heap, without any page range condition or ordering like in the B-tree. On UPDATE operations, the new tuple's position depends on whether the updated **tuple columns** are part of a table's **index**.
-
-An UPDATE value including an indexed column will be appended as a new tuple in the heap, and it creates a **new entry** in the **index**, which points to the **new version** of the **tuple** with its TID.\
-Any outdated tuple and index entry will be kept and handled by the later maintenance operations.\
-An UPDATE value that doesn't include an indexed column will instead result in a HOT update.
-
-A **Heap-Only-Tuple**(HOT) UPDATE modifies the table heap without triggering an **index update**.\
-It adds a new version of the tuple to the **same disk page** as the old one. It also adds a **forward pointer** to the old tuple, which allows its index entry TID to find the correct data.\
-If there is no available space on the old tuple's disk page, it defaults to an indexed update.\
-The database management system contains the rules for the HOT update. The **query planner** provides the **execution plan** for the database after analyzing a query.
-
-The **version bloat** forms when the index or the table heap gets full of outdated values.\
-A tuple is marked as dead on DELETE or UPDATE and will be removed after a **visibility check** during maintenance. An index entry isn't explicitly marked; its TID is checked to see if it points to a dead tuple.
-
-The REINDEX command is a global maintenance operation. It performs a complete table scan to **rebuild** the index from the **current tuples** in the table heap, which is then used to replace and update the old index.\
-It relies on a prior VACUUM visibility check to detect the live tuples; if not, it defaults to indexing all tuples, even outdated ones.
-
-The BOTTOM-UP **defragmentation** process triggers when a full B-tree index page is about to split.\
-It is a **localized** and immediate maintenance operation that cleans up outdated **index entries**.
-
-The VACUUM operation is a page-by-page maintenance process that **deletes** **dead tuples** in the table heap and **marks outdated index** entries for removal.\
-The VACUUM is triggered manually while the AUTOVACUUM is triggered on a schedule. The space from deleting dead tuples is not returned to the operator system; it is marked as **free internally** for new tuples in the same table heap.\
-A table heap's size is reduced by relocating its data to a smaller set of disk pages, which requires blocking all transactions. The VACUUM mantains the table heap under the MVCC conditions, mantaining concurrent access during UPDATE operations.
-
-The VACUUM FULL command **removes dead tuples** by replacing the old table heap with a new one with only live tuples. It includes a REINDEX for the index, rebuilding it using the live tuples from the new table heap.
-
-The VACUUM operation uses the **transaction IDs** to determine the visibility state of a tuple.\
-Every transaction is assigned a unique **XID**, which is assigned to the XMIN property of the new tuples it creates and the XMAX property of any tuples it updates or deletes.\
-The VACUUM sets its cleanup cutoff point based on the XID of the **oldest currently active transaction**. It will remove tuples with an XMAX value lower than the XID, as they are no longer visible to any ongoing transactions.
-
-1
-
 ### THE B+TREE
 
 The B+tree is a streamlined version of the B-tree data structure.
@@ -474,27 +471,6 @@ Both follow the N keys for N+1 child pointers rule for their internal nodes.
 The B+ tree is used for a table's primary key index. Its TID works as a unique row identifier.\
 It's created by default on CREATE TABLE when a primary key is included in a column definition, it optimizes data retrieval on the table's heap.
 
-1
-
-### LINEAR INSERTS optimitaton
-
-The index's INSERT operations are slowed down by **non-linear** or randomly generated data types.\
-They can cause unpredictable page splits and lead to inefficient leaf-node entry distribution, but they won' affect SELECT operations.
-
-The PostgreSQL SERIAL and MySQL AUTO\_INCREMENT constructs create **efficient sequences** of column values in the index. They generate values in a linear order, allowing for an efficient leaf-node storage and reducing the node splits.
-
-The database loads copies of frequently accessed data pages into its RAM cache, allowing it to update the pages without I/O operations. It then pushes the changes to the physical disk before the page split.
-
-The database uses a sequential **Write-Ahead Log** (WAL) on the disk to prevent data loss.\
-Any change to a data page is first recorded in the WAL before it's applied to the page in the RAM cache. The database will replay the WAL operations to restore the data after a system crash.
-
-The **entry's size** impacts the B-tree structure and efficency.\
-A **large key** data type causes the node to contain fewer entries before it splits, making the index taller and slowing down the data retrieval.\
-A **small key** data type may not provide enough unique values due to its shorter length.\
-An INT 32-bit integer has 2.1 billion possible values, while a BIGINT 64-bit integer has 9.2 quintillion values, offering more unique values in exchange for a larger entry size.
-
-1
-
-1
+— Immaggine B+Tree --
 
 1
