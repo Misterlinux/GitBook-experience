@@ -29,13 +29,13 @@ In a **leaf node**, the pointer is a specific **address** to the **physical loca
 
 In a standard B-tree, the single pointers in the internal nodes can be used to retrieve the actual table data, depending on the implementation.
 
-\--IMMAGGINE INTERNLA node leaf node--
+<figure><img src="../../.gitbook/assets/Btree.png" alt="" width="476"><figcaption><p>Each leaf node entry TID points to the table row</p></figcaption></figure>
 
 B-tree **nodes** are designed to have the same size as a **disk page**. This allows the entire node to be retrieved in a single I/O operation, making the query require only one **disk access** on each index level.
 
 A B-tree node can contain data equivalent to multiple disk pages (e.g., 4KB, 8KB, or 16KB), allowing the index to **adapt** efficiently to larger databases.
 
-\--IMMAGGINE DISK PAGE ACCESS--
+<figure><img src="../../.gitbook/assets/nodePage.png" alt="" width="563"><figcaption><p>Both will require a single I/O access to the disk </p></figcaption></figure>
 
 The maximum size of a B-tree entry is 1/3 of the node it's placed in. This rule ensures that every node can branch out to a minimum number of child nodes, which helps maintain a wide, **horizontal index** structure.
 
@@ -97,7 +97,7 @@ An INT 32-bit integer has 2.1 billion possible values, while a BIGINT 64-bit int
 
 </details>
 
-— IMMAGGINE WAL e RAM CACHE --
+<figure><img src="../../.gitbook/assets/WALrambuffer.png" alt="" width="563"><figcaption><p>All RAM changes are stored in as binary code for recoverability</p></figcaption></figure>
 
 1
 
@@ -106,9 +106,9 @@ An INT 32-bit integer has 2.1 billion possible values, while a BIGINT 64-bit int
 The database stores a table's rows in a collection of **disk pages**, which is called a **table heap**.\
 It's optimized for size, and organized into unordered tuples, with each containing the column data for a single table row.
 
-The database will require a table scan to retrieve tuple data from the heap, or an index scan. The index includes a TID (Tuple Identifier) for each entry of its indexed columns, which is used to locate the specific tuple in the heap.
+The database will require a table scan to retrieve tuple data from the heap, or an index scan.                                           The index includes a TID (Tuple Identifier) for each entry of its indexed columns, which is used to locate the specific tuple in the heap.
 
-— IMMAGGINE TABLE HEAP, AND TUPLES structure --
+<figure><img src="../../.gitbook/assets/Tableheap1.png" alt="" width="563"><figcaption><p>The disk pages are stored within a relation file </p></figcaption></figure>
 
 The table heap will append any new INSERT tuple to the end of the heap, without any page range condition or ordering like in the B-tree. On UPDATE operations, the new tuple's position depends on whether the updated **tuple columns** are part of a table's **index**.
 
@@ -121,7 +121,7 @@ It adds a new version of the tuple to the **same disk page** as the old one. It 
 If there is no available space on the old tuple's disk page, it defaults to an indexed update.\
 The database management system contains the rules for the HOT update. The **query planner** provides the **execution plan** for the database after analyzing a query.
 
-— HOT UPDATE and forward pointer IMAGE --
+<figure><img src="../../.gitbook/assets/HOTupdate.png" alt="" width="521"><figcaption><p>The t_ctid tuple property gets updated with a forward pointer on HOT update</p></figcaption></figure>
 
 ### Maintenance
 
@@ -156,9 +156,143 @@ The **pgstattuple()** function analyzes the physical layout of its table heap:
 
 The **pgstatindex()** function is part of the pgstattuple extension, and returns statistics about the physical properties of a B-tree index:&#x20;
 
-> **tree\_level**: The number of levels in the index, from the root page down to the leaf pages. **leaf\_pages/internal\_pages**: The total number of leaf and internal pages that make up the index. **index\_size**: The total size of the index on disk, in bytes.                                                                              **tuple\_count:** The number of index entries in the leaf pages. avg\_tuple\_size: The average size of each entry in the index, in bytes.                                                                                                           **avg\_leaf\_density**: It measures the **internal fragmentation**, represented by the average **percentage** of space used within each index leaf page. It's low in highly fragmented pages with empty and inefficent space and it's affected by the VACUUM operation.                                                                                                        **leaf\_fragmentation**: It measures the **external fragmentation**, showing how physically scattered the index's leaf pages are on the disk. A high value indicates that **logically sequential pages** are not **physically located** next to each other. It can slow down index scans, as the disk must jump between different locations to read the data.
+> **tree\_level**: The number of levels in the index, from the root page down to the leaf pages. **leaf\_pages/internal\_pages**: The total number of leaf and internal pages that make up the index. **index\_size**: The total size of the index on disk, in bytes.                                                                                                                                                **avg\_tuple\_size**: The average size of each entry in the index, in bytes.                                                                                                           **avg\_leaf\_density**: It measures the **internal fragmentation**, represented by the average **percentage** of space used within each index leaf page. It's low in highly fragmented pages with empty and inefficent space and it's affected by the VACUUM operation.                                                                                                        **leaf\_fragmentation**: It measures the **external fragmentation**, showing how physically scattered the index's leaf pages are on the disk. A high value indicates that **logically sequential pages** are not **physically located** next to each other. It can slow down index scans, as the disk must jump between different locations to read the data.
 
 The External fragmentation is related to an **index's activity**, not its size. A large but static index will have low fragmentation, while a smaller index with frequent updates will become highly fragmented. This condition is correlated with how the index handles **page splits**. The process is opportunistic, meaning it uses the first available disk page to store the new node's data.                                                                  The fragmentation measures the **physical distance** on the disk between leaf pages that are logically supposed to be right next to each other.
+
+— CODEABOUT USING TEH EXTENTION TO ACCESS, also the system catalog access --
+
+```sql
+//We create a 10 concatenate series of md5 string algorit to increase teh size of the 
+//insert.
+//We longer strings y repeatng and appending them to each other in teh same column.
+//We use additional fillfactor 70 to reduce teh avaiable sopace for teh insert and present, it will increase the number of nodes necessary as a part of teh space is reserved for the next updates on teh index.
+
+create table spazio(
+  uno INT, due TEXT
+)
+
+insert into spazio 
+  select i, repeat(md5(i::text), 10) from GENERATE_SERIES(1, 100000) as i;
+create index spazio_idx on spazio(due) with (FILLFACTOR = 70);	
+
+SELECT 'space' as table_name, PG_SIZE_PRETTY(table_len), tuple_count, free_percent
+FROM pgstattuple('spazio');
+
+//The index returns the tree levels include the root level as 1.
+SELECT 'space' as index_name, tree_level, 
+  leaf_pages, internal_pages, PG_SIZE_PRETTY(index_size), avg_leaf_density
+FROM pgstatindex('spazio_idx');
+
+```
+
+1
+
+We can access a **table's** or **index's** structure using the **pg\_class** system catalog view.\
+The pg\_class is a built-in feature that provides a native view of the **metadata** for every database **relation**. Unlike extensions, it requires no installation. It returns high-level data **estimates**, which are calculated by the database during maintenance operations and doesn't scan the physical storage pages.
+
+The **view** includes the following key columns:
+
+> **relname**: The name of the relation> \
+> **relkind**: A code indicating the type of relation> \
+> **relpages**: The estimated number of disk pages used for the relation's storage.> \
+> **reltuples**: The number of tuples or index entries in the relation.> \
+> **oid**: The unique identifier used by the database to retrieve the relation's physical size.> \
+> **reloptions**: The storage options specified when the relation was created
+
+```sql
+//On the same spazio table as before
+//The 'r' and 'i' relkind are for tables and indexes respetevly.
+SELECT  relname, relkind, relpages, reltuples
+  , PG_SIZE_PRETTY(PG_RELATION_SIZE(oid)), reloptions
+FROM pg_class
+WHERE relname LIKE '%spazio%'
+ORDER BY relkind DESC;
+
+relname   |relkind|relpages|reltuples|pg_size_pretty|reloptions     |
+----------+-------+--------+---------+--------------+---------------+
+spazio    |r      |    4546| 100000.0|36 MB         |NULL           |
+spazio_idx|i      |    6644| 100000.0|52 MB         |{fillfactor=70}|
+```
+
+The database provides many specialized **system views** and **functions** that rely on the pg\_class master **catalog**.&#x20;The unique OID stored in pg\_class is used to retrieve the relation's metadata from its specific directory.
+
+<details>
+
+<summary>More system view, access relations</summary>
+
+We query system views or functions using the **relation's name**; PostgreSQL's internal process automatically retrieves the linked pg\_class **OID**, which is the actual value used internally by the **operating system functions** to access the metadata.
+
+The **pg\_indexes system view** provides logical metadata about the indexes.\
+It returns the index's name, its table, its SQL script command, and its assigned tablespace.\
+The TABLESPACE keyword defines a custom directory for database files, storing them in a separate physical location from the default PostgreSQL data directory.
+
+```sql
+//We can access the assigned table 
+SELECT tablename, indexname, indexdef, tablespace
+FROM pg_indexes WHERE tablename = 'spazio';
+
+//It can be defined in create table or index.
+CREATE TABLE my_table (...) TABLESPACE new_disk;
+CREATE INDEX my_index ON my_table (col) TABLESPACE faster_disk;
+```
+
+The **pg\_stat\_all\_tables()** function provides the table's **runtime statistics**.                                                        It includes the **row operation** counts, the number and types of **scans**, the number of live and dead **tuples**, and **timestamps** of the last maintenance operation.                                                                       The **statistics collector** provides the exact table activity paramethers from a dedicated runtime **directory**, enabling the efficient monitoring and validation of maintenance processes without requiring a full table scan.
+
+```sql
+//It represent how the table has been used, not its structure
+//Unlike pg_class that provides estimates updated ON maintenance operations
+SELECT relname, n_live_tup, n_dead_tup    //Tuples count
+    , n_tup_ins, n_tup_upd, n_tup_del     //Rows table operations, of tuples
+    , seq_scan, idx_scan                  //Table scans, sequential or by index
+    , last_vacuum, last_autovacuum, last_analyze, last_autoanalyze
+FROM pg_stat_all_tables 
+WHERE relname = 'spazio';
+```
+
+The **pg\_stat\_all\_indexes()** provides similar statistics specific to the index, like the number of index entry reads.
+
+The **pg\_relation\_size()** function returns the exact size of a database relation.                                                        It doesn't rely on the pg\_class metadata estimates, it queries operating system functions to access the **physical disk location** of the relation.
+
+```sql
+//It returns it in bytes, unless we pretty it, includeinf index and tables, 
+select pg_relation_size('spazio_idx'), 
+    pg_size_pretty(pg_relation_size('spazio_idx'));
+```
+
+The **pg\_total\_relation\_size()** function queries the same operating system functions as pg\_relation\_size() but includes the table's **additional structures**, like TOAST while excluding any associated indexes. A TOAST table stores column values that are too large to fit on a standard data page.
+
+```sql
+// Some code
+//It doesnt work on indexes
+select pg_total_relation_size('spazio'), 
+    pg_size_pretty(pg_total_relation_size('spazio'));
+```
+
+The **pg\_table\_size()** function queries the same operating system functions as pg\_total\_relation\_size(), it accesses the table physical file to return the exact table size and its associated structures.                                                                                                                                                 The **pg\_indexes\_size()** shares the same queries but accesses different physical file locations, as it returns the combined sizes of all **indexes associated** with the specified table.
+
+```sql
+// Some code
+select pg_table_size('spazio'), pg_size_pretty(pg_table_size('spazio'));
+
+select pg_indexes_size('spazio');
+```
+
+</details>
+
+1
+
+1
+
+1
+
+1
+
+1
+
+1
+
+Presentation of the bloat.
 
 <details>
 
