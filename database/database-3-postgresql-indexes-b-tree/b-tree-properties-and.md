@@ -11,8 +11,6 @@ It's a **multi-way balanced** tree optimized for consistent **single-entry** and
 It's `balanced` because all leaf nodes are located in the bottom level, ensuring every search passes through the same number of **layers**.\
 It is `multi-way` because each node can branch out into multiple **child nodes**, making the tree wider and minimizing the number of levels necessary for a query search.
 
-\--IMMAGGINE editare--
-
 The B-tree entries are stored in **physical disk pages**, while its structure is made of **logical nodes** that can have multiple roles depending on their position in the tree.
 
 > The **root node**, located at the top of the tree, is the starting point for every query. It provides the initial pointers to the first set of internal nodes.
@@ -50,7 +48,7 @@ An incomplete child node will only fill its empty spaces with entries that fall 
 Once the number of **keys** in a node exceeds the index's order (m), the node **splits**.\
 A new parent internal node is created containing the **lowest median key** value. The original node's entries are split between the newly created **child nodes**, using the internal node's median key as the **divider**.
 
-The internal node contains only single values, not ranges like its child nodes. It gets updated each time one of its children splits.\
+The **internal node** contains only single values, not ranges like its child nodes. It gets updated each time one of its children splits.\
 Once an internal node becomes full, it creates a new **parent internal node** with its median value.\
 It splits the internal node's entries and their corresponding child nodes between the original node and the new **sibling node**.
 
@@ -72,13 +70,11 @@ explain analyze select uno from dritto where uno>=7;
 
 It's a highly optimized **database operation** triggered by the query planner. It retrieves the data directly from the index structure, without using the entry TIDs to access its table row data.
 
-1
-
-— Somehng anticipating teh optimitation and WAL.
+B-tree indexes are optimized for high-volume row operations; rather than writing directly to disk, changes are buffered in RAM and recorded sequentially in the **WAL** log.
 
 <details>
 
-<summary>LINEAR INSERTS optimitaton</summary>
+<summary>B-tree RAM buffers for write optimitation and index entries size properties</summary>
 
 The index's INSERT operations are slowed down by **non-linear** or randomly generated data types.\
 They can cause unpredictable page splits and lead to inefficient leaf-node entry distribution, but they won' affect SELECT operations.
@@ -98,8 +94,6 @@ An INT 32-bit integer has 2.1 billion possible values, while a BIGINT 64-bit int
 </details>
 
 <figure><img src="../../.gitbook/assets/WALrambuffer.png" alt="" width="563"><figcaption><p>All RAM changes are stored in as binary code for recoverability</p></figcaption></figure>
-
-1
 
 ### INDEX MAINTENANCE on Update operation, for outdated entries.
 
@@ -146,31 +140,35 @@ The VACUUM operation uses the **transaction IDs** to determine the visibility st
 Every transaction is assigned a unique **XID**, which is assigned to the XMIN property of the new tuples it creates and the XMAX property of any tuples it updates or deletes.\
 The VACUUM sets its cleanup cutoff point based on the XID of the **oldest currently active transaction**. It will remove tuples with an XMAX value lower than the XID, as they are no longer visible to any ongoing transactions.
 
-### Property
+### The B-tree index property ??
 
 The **pgstattuple** extension provides **functions** that reveal low-level details about the database's **physical storage**. It returns properties like **bloat** and **unused space**, which are invisible to high-level commands like SELECT.                                                                                                                                                              It's included in the PostgreSQL, but must be first activated with the CREATE EXTENSION command.
 
+{% tabs %}
+{% tab title="The pgstattuple()" %}
 The **pgstattuple()** function analyzes the physical layout of its table heap:
 
 > **table\_len**: The total size of the table in bytes, including the empty and unassigned space. **tuple\_count/tuple\_percent**: The number of all tuples (both live and dead) and the percentage of the table's space they occupy.                                                                                                    **dead\_tuple\_count/dead\_tuple\_percent**: The number of dead tuples and the percentage of the table's space they occupy.                                                                                                                       **free\_space/free\_percent**: The amount of empty space on the table's pages, measured in bytes, and the percentage of reusable space in the table's total disk space.
+{% endtab %}
 
+{% tab title="The pgstatindex()" %}
 The **pgstatindex()** function is part of the pgstattuple extension, and returns statistics about the physical properties of a B-tree index:&#x20;
 
 > **tree\_level**: The number of levels in the index, from the root page down to the leaf pages. **leaf\_pages/internal\_pages**: The total number of leaf and internal pages that make up the index. **index\_size**: The total size of the index on disk, in bytes.                                                                                                                                                **avg\_tuple\_size**: The average size of each entry in the index, in bytes.                                                                                                           **avg\_leaf\_density**: It measures the **internal fragmentation**, represented by the average **percentage** of space used within each index leaf page. It's low in highly fragmented pages with empty and inefficent space and it's affected by the VACUUM operation.                                                                                                        **leaf\_fragmentation**: It measures the **external fragmentation**, showing how physically scattered the index's leaf pages are on the disk. A high value indicates that **logically sequential pages** are not **physically located** next to each other. It can slow down index scans, as the disk must jump between different locations to read the data.
 
-The External fragmentation is related to an **index's activity**, not its size. A large but static index will have low fragmentation, while a smaller index with frequent updates will become highly fragmented. This condition is correlated with how the index handles **page splits**. The process is opportunistic, meaning it uses the first available disk page to store the new node's data.                                                                  The fragmentation measures the **physical distance** on the disk between leaf pages that are logically supposed to be right next to each other.
+The External fragmentation is related to an **index's activity**, not its size. A large but static index will have low fragmentation, while a smaller index with frequent updates will become highly fragmented.&#x20;
 
-— CODEABOUT USING TEH EXTENTION TO ACCESS, also the system catalog access --
+This condition is correlated with how the index handles **page splits**. The process is opportunistic, meaning it uses the first available disk page to store the new node's data. The fragmentation measures the **physical distance** on the disk between leaf pages that are logically supposed to be right next to each other.
+{% endtab %}
+{% endtabs %}
+
+These functions provide a low-level view of tuples and index entries by accessing their **physical location** within the database.
 
 ```sql
-//We create a 10 concatenate series of md5 string algorit to increase teh size of the 
-//insert.
-//We longer strings y repeatng and appending them to each other in teh same column.
-//We use additional fillfactor 70 to reduce teh avaiable sopace for teh insert and present, it will increase the number of nodes necessary as a part of teh space is reserved for the next updates on teh index.
-
-create table spazio(
-  uno INT, due TEXT
-)
+//We increase the string size by repeating the md5 string 10 times
+//Longer strings and the FILLFACTOR multiply the leaf nodes for a multi level b-tree
+CREATE EXTENSION IF NOT EXISTS pgstattuple;
+create table spazio( uno INT, due TEXT )
 
 insert into spazio 
   select i, repeat(md5(i::text), 10) from GENERATE_SERIES(1, 100000) as i;
@@ -179,14 +177,103 @@ create index spazio_idx on spazio(due) with (FILLFACTOR = 70);
 SELECT 'space' as table_name, PG_SIZE_PRETTY(table_len), tuple_count, free_percent
 FROM pgstattuple('spazio');
 
-//The index returns the tree levels include the root level as 1.
+//The index tree_level includes the root level as 1
 SELECT 'space' as index_name, tree_level, 
   leaf_pages, internal_pages, PG_SIZE_PRETTY(index_size), avg_leaf_density
 FROM pgstatindex('spazio_idx');
 
 ```
 
-1
+<figure><img src="../../.gitbook/assets/pgstats.png" alt="" width="534"><figcaption><p>The low-level physical values of the relations</p></figcaption></figure>
+
+The pgstattuple extension functions access the low-level data to measure the **bloat** and **fragmentation** caused by row operations. We can use it to track the effectiveness of the **maintenance operations**.
+
+<details>
+
+<summary>Different pgstatuple properties for HOT updates on a no-AUTOVACUUM table.</summary>
+
+We used the pgstattuple and pgstatindex extensions to gather data on **table** and **index bloat.** This allows us to analyze the impact of VACUUM after a series of **sequential updates**.
+
+We create two identical tables, one with autovacuum disabled, and populate each with 10,000 rows. We then create an index on the id column for both tables before we performed five consecutive **HOT updates** on a non-indexed column.
+
+```sql
+//For both pgstattuple() and pgstatindex()
+CREATE EXTENSION IF NOT EXISTS pgstattuple;
+
+CREATE TABLE no_vacuum (id INT, nome TEXT) WITH (autovacuum_enabled = false);
+CREATE TABLE table_vacuum (id INT, nome TEXT);
+
+INSERT INTO no_vacuum SELECT i, MD5(i::TEXT) FROM GENERATE_SERIES(1,10000) i;
+INSERT INTO table_vacuum SELECT i, MD5(i::TEXT) FROM GENERATE_SERIES(1,10000) i
+
+//index andupdate on different columns id/name
+CREATE index idx_no_vacuumed ON no_vacuum(id);
+CREATE index idx_table_vacuumed ON table_vacuum(id);
+
+DO $$
+BEGIN
+  FOR i IN 1..5 LOOP
+    UPDATE no_vacuum SET nome = nome || 'x';
+    UPDATE table_vacuum SET nome = nome || 'x';
+  END LOOP;
+END; $$;
+```
+
+On the table without autovacuum, pgstattuple shows a **dead\_tuple\_count** of 5 and a high **dead\_tuple\_percent**. This reflects the five outdated **tuple versions** left in the table heap.         The table with autovacuum has both properties at 0, as the background process has already cleaned up the outdated tuples.
+
+```sql
+//The AS table_name doesn't influence the pgstattuple() 
+SELECT 'no_vacuum' as table_name, dead_tuple_count, dead_tuple_percent
+FROM pgstattuple('no_vacuum');
+
+//It returns the index bloat
+SELECT 'idx_no_vacuumed' as index_name, 
+          leaf_fragmentation, avg_leaf_density, index_size
+FROM pgstatindex('idx_no_vacuumed');
+
+//Table heap/Index properties of the AUTOVACUUM table
+SELECT 'table_vacuum' as table_name, dead_tuple_count, dead_tuple_percent
+FROM pgstattuple('table_vacuum');
+
+SELECT 'idx_table_vacuumed' as index_name, 
+          leaf_fragmentation, avg_leaf_density, index_size
+FROM pgstatindex('idx_table_vacuumed');
+
+VACUUM table_without_autovacuum;
+//Once aplied to the "no_vacuum" table, it equates its properties
+```
+
+The AUTOVACUUM only affects the internal fragmentation of the table it runs on.                    The GENERATE\_SERIES() INSERTs uses all **available space** on the disk pages because of the default FILLFACTOR of 100.                                                                                                                                             A Heap-Only Tuple (HOT) update requires free space on the page to store the new version of a row. Without any available space, the HOT **optimization fails**, and the system performs a standard update, creating a **new index** entry for every updated row.&#x20;
+
+The AUTOVACUUM removes the **outdated entries** from a leaf page. The created empty space lowers the **avg\_leaf\_density**, which remains high in a non-vacuumed table.                                            The process doesn't affect the external fragmentation. The Leaf\_fragmentation represents how organized the data is within the **physical index structure**.&#x20;
+
+The GENERATE\_SERIES() INSERTs maintain a low **external fragmentation** by creating an organized and contiguous series of data, while UPDATE operations increase it.                                     The string-based data types are **not ordered linearly** like integers, an updated entry will not be placed in a contiguous location next to its old value, even if the string is mostly the same.                   The external index structure can be reorganized by the REINDEX operation, which completely rebuilds the data's distribution across the index pages.
+
+A lower FILLFACTOR increases the chances for successful HOT updates, which in turn decreases the index size. The leaf\_fragmentation is also lower because fewer new pages are created and scattered across the disk, resulting in a more compact index structure. The avg\_leaf\_density, however, varies depending on the index's size.                                                                     The FILLFACTOR also slightly influences the table heap's dead\_tuple\_percent. It doesn't change the number of tuples inserted or which ones are considered live or dead, but it increases the number of disk pages needed to store the initial data. The larger table size results in a lower dead\_tuple\_percent.
+
+```sql
+//The FILLFACTOR infleunces the no_vacuum table heap and index
+CREATE TABLE no_vacuum (
+    id INT, nome TEXT
+) WITH (autovacuum_enabled = false, FILLFACTOR = 80/60/40);
+```
+
+<figure><img src="../../.gitbook/assets/FINALfillfacvtorEXAMPLE.png" alt="" width="563"><figcaption><p>Table and index stats on different FILLFACTOR </p></figcaption></figure>
+
+```sql
+//The FILLFACTOR can influence even the AUTOVACUUM table/index
+CREATE TABLE table_vacuum (
+    id INT, nome TEXT
+) with (FILLFACTOR = 50);
+
+index_name        |leaf_fragmentation|avg_leaf_density|index_size|
+------------------+------------------+----------------+----------+
+idx_table_vacuumed|             32.93|           30.21|    688128|
+```
+
+</details>
+
+<figure><img src="../../.gitbook/assets/VacuumANDUnvacuum.png" alt="" width="563"><figcaption><p>The impact of AUTOVACUUM on a GENERATE_SERIES() of HOT updates</p></figcaption></figure>
 
 We can access a **table's** or **index's** structure using the **pg\_class** system catalog view.\
 The pg\_class is a built-in feature that provides a native view of the **metadata** for every database **relation**. Unlike extensions, it requires no installation. It returns high-level data **estimates**, which are calculated by the database during maintenance operations and doesn't scan the physical storage pages.
@@ -219,7 +306,7 @@ The database provides many specialized **system views** and **functions** that r
 
 <details>
 
-<summary>More system view, access relations</summary>
+<summary>The additional system views and functions for database relations</summary>
 
 We query system views or functions using the **relation's name**; PostgreSQL's internal process automatically retrieves the linked pg\_class **OID**, which is the actual value used internally by the **operating system functions** to access the metadata.
 
@@ -281,107 +368,6 @@ select pg_indexes_size('spazio'), pg_size_pretty(pg_indexes_size('spazio'));
 
 The system views and functions outside of pg\_class provide a better view into a table's physical storage.\
 They can reveal properties not directly visible in pg\_class, like the TABLESPACE (physical directory), and include the size of associated relations, like the TOAST (The Oversized Attribute Storage Technique) tables.
-
-1
-
-1
-
-1
-
-1
-
-Presentation of the bloat.
-
-<details>
-
-<summary>Esercizio Effetti VACUUM on failed HOT update and its inèact of properties</summary>
-
-We used the pgstattuple and pgstatindex extensions to gather data on **table** and **index bloat.** This allows us to analyze the impact of VACUUM after a series of **sequential updates**.
-
-We create two identical tables, one with autovacuum disabled, and populate each with 10,000 rows. We then create an index on the id column for both tables before we performed five consecutive **HOT updates** on a non-indexed column.
-
-On the table without autovacuum, pgstattuple shows a **dead\_tuple\_count** of 5 and a high **dead\_tuple\_percent**. This reflects the five outdated **tuple versions** left in the table heap. The table with autovacuum has both properties at 0, as the background process has already cleaned up the outdated tuples.
-
-```sql
-//For both pgstattuple() and pgstatindex()
-CREATE EXTENSION IF NOT EXISTS pgstattuple;
-
-CREATE TABLE no_vacuum (id INT, nome TEXT) WITH (autovacuum_enabled = false);
-CREATE TABLE table_vacuum (id INT, nome TEXT);
-
-INSERT INTO no_vacuum SELECT i, MD5(i::TEXT) FROM GENERATE_SERIES(1,10000) i;
-INSERT INTO table_vacuum SELECT i, MD5(i::TEXT) FROM GENERATE_SERIES(1,10000) i
-
-//index andupdate on different columns id/name
-CREATE index idx_no_vacuumed ON no_vacuum(id);
-CREATE index idx_table_vacuumed ON table_vacuum(id);
-
-DO $$
-BEGIN
-  FOR i IN 1..5 LOOP
-    UPDATE no_vacuum SET nome = nome || 'x';
-    UPDATE table_vacuum SET nome = nome || 'x';
-  END LOOP;
-END; $$;
-
-//The AS table_name doesn't influence the pgstattuple() 
-SELECT 'no_vacuum' as table_name, dead_tuple_count, dead_tuple_percent
-FROM pgstattuple('no_vacuum');
-
-//It returns the index bloat
-SELECT 'idx_no_vacuumed' as index_name, 
-          leaf_fragmentation, avg_leaf_density, index_size
-FROM pgstatindex('idx_no_vacuumed');
-
-//Table heap/Index properties of the AUTOVACUUM table
-SELECT 'table_vacuum' as table_name, dead_tuple_count, dead_tuple_percent
-FROM pgstattuple('table_vacuum');
-
-SELECT 'idx_table_vacuumed' as index_name, 
-          leaf_fragmentation, avg_leaf_density, index_size
-FROM pgstatindex('idx_table_vacuumed');
-
-VACUUM table_without_autovacuum;
-//Once aplied to teh "no_vacuum" table, it equates its properties
-```
-
-The AUTOVACUUM only affects the internal fragmentation of the table it runs on.                    The GENERATE\_SERIES() INSERTs uses all **available space** on the disk pages because of the default FILLFACTOR of 100.                                                                                                                                             A Heap-Only Tuple (HOT) update requires free space on the page to store the new version of a row. Without any available space, the HOT **optimization fails**, and the system performs a standard update, creating a **new index** entry for every updated row.&#x20;
-
-The AUTOVACUUM removes the **outdated entries** from a leaf page. The created empty space lowers the **avg\_leaf\_density**, which remains high in a non-vacuumed table.                                            The process doesn't affect the external fragmentation. The Leaf\_fragmentation represents how organized the data is within the **physical index structure**.&#x20;
-
-The GENERATE\_SERIES() INSERTs maintain a low external fragmentation by creating an organized and contiguous series of data, while UPDATE operations increase it.                                     The string-based data types are **not ordered linearly** like integers, an updated entry will not be placed in a contiguous location next to its old value, even if the string is mostly the same.                   The external index structure can be reorganized by the REINDEX operation, which completely rebuilds the data's distribution across the index pages.
-
-— IMMAGGINE I RITORNI DEI DATI AUTOVACUUM
-
-A lower FILLFACTOR increases the chances for successful HOT updates, which in turn decreases the index size. The leaf\_fragmentation is also lower because fewer new pages are created and scattered across the disk, resulting in a more compact index structure. The avg\_leaf\_density, however, varies depending on the index's size.                                                                     The FILLFACTOR also slightly influences the table heap's dead\_tuple\_percent. It doesn't change the number of tuples inserted or which ones are considered live or dead, but it increases the number of disk pages needed to store the initial data. The larger table size results in a lower dead\_tuple\_percent.
-
-```sql
-//The FILLFACTOR infleunces the no_vacuum table heap and index
-CREATE TABLE no_vacuum (
-    id INT, nome TEXT
-) WITH (autovacuum_enabled = false, FILLFACTOR = 80/60/40);
-```
-
-— IMMAGGINE ESEMPI FILLFACTOR
-
-1
-
-```sql
-//The FILLFACTOR can influence even the AUTOVACUUM table/index
-CREATE TABLE table_vacuum (
-    id INT, nome TEXT
-) with (FILLFACTOR = 50);
-```
-
-1
-
-1
-
-1
-
-</details>
-
-— METTI QUI L'IMMAGNE DEI DATI --
 
 1
 
