@@ -225,64 +225,62 @@ We query system views or functions using the **relation's name**; PostgreSQL's i
 
 The **pg\_indexes system view** provides logical metadata about the indexes.\
 It returns the index's name, its table, its SQL script command, and its assigned tablespace.\
-The TABLESPACE keyword defines a custom directory for database files, storing them in a separate physical location from the default PostgreSQL data directory.
+The TABLESPACE keyword defines the table's **directory physical location**. It contains all the **logical storage** unit used for the table and its associated **relations**.
 
 ```sql
-//We can access the assigned table 
+//All relations will share the tablesapce if no specified
 SELECT tablename, indexname, indexdef, tablespace
 FROM pg_indexes WHERE tablename = 'spazio';
 
-//It can be defined in create table or index.
+//If not defined, tablename returns NULL while referring to pg_default location
+//Multiple relations on teh same table can be stored on different tablespaces
 CREATE TABLE my_table (...) TABLESPACE new_disk;
 CREATE INDEX my_index ON my_table (col) TABLESPACE faster_disk;
 ```
 
 The **pg\_stat\_all\_tables()** function provides the table's **runtime statistics**.                                                        It includes the **row operation** counts, the number and types of **scans**, the number of live and dead **tuples**, and **timestamps** of the last maintenance operation.                                                                       The **statistics collector** provides the exact table activity paramethers from a dedicated runtime **directory**, enabling the efficient monitoring and validation of maintenance processes without requiring a full table scan.
 
-```sql
-//It represent how the table has been used, not its structure
-//Unlike pg_class that provides estimates updated ON maintenance operations
-SELECT relname, n_live_tup, n_dead_tup    //Tuples count
-    , n_tup_ins, n_tup_upd, n_tup_del     //Rows table operations, of tuples
-    , seq_scan, idx_scan                  //Table scans, sequential or by index
+<pre class="language-sql"><code class="lang-sql"><strong>//It returns the table usage, not its structure
+</strong><strong>SELECT relname, n_live_tup, n_dead_tup    //Tuples count
+</strong>    , n_tup_ins, n_tup_upd, n_tup_del     //Rows table operations
+    , seq_scan, idx_scan                  //Table scans, sequential or index
     , last_vacuum, last_autovacuum, last_analyze, last_autoanalyze
 FROM pg_stat_all_tables 
 WHERE relname = 'spazio';
-```
+</code></pre>
 
 The **pg\_stat\_all\_indexes()** provides similar statistics specific to the index, like the number of index entry reads.
 
 The **pg\_relation\_size()** function returns the exact size of a database relation.                                                        It doesn't rely on the pg\_class metadata estimates, it queries operating system functions to access the **physical disk location** of the relation.
 
 ```sql
-//It returns it in bytes, unless we pretty it, includeinf index and tables, 
-select pg_relation_size('spazio_idx'), 
-    pg_size_pretty(pg_relation_size('spazio_idx'));
+//It returns the size in bytes, and works on index too
+select pg_relation_size('spazio_idx');
 ```
 
-The **pg\_total\_relation\_size()** function queries the same operating system functions as pg\_relation\_size() but includes the table's **additional structures**, like TOAST while excluding any associated indexes. A TOAST table stores column values that are too large to fit on a standard data page.
+The **pg\_total\_relation\_size()** function queries the same operating system functions as pg\_relation\_size() but includes the table's **additional structures**, like TOAST and its associated indexes. A TOAST table stores column values that are too large to fit on a standard data page.
 
 ```sql
-// Some code
-//It doesnt work on indexes
-select pg_total_relation_size('spazio'), 
-    pg_size_pretty(pg_total_relation_size('spazio'));
+//It can accept any relation name in its argument.
+//A table will return the size of all its associated relations.
+select pg_total_relation_size('spazio');
 ```
 
 The **pg\_table\_size()** function queries the same operating system functions as pg\_total\_relation\_size(), it accesses the table physical file to return the exact table size and its associated structures.                                                                                                                                                 The **pg\_indexes\_size()** shares the same queries but accesses different physical file locations, as it returns the combined sizes of all **indexes associated** with the specified table.
 
 ```sql
-// Some code
+//It includes the TOAST table but not the index
 select pg_table_size('spazio'), pg_size_pretty(pg_table_size('spazio'));
-
-select pg_indexes_size('spazio');
+//It can include teh size of multiple indexes
+select pg_indexes_size('spazio'), pg_size_pretty(pg_indexes_size('spazio'));
 ```
 
 </details>
 
-1
+<figure><img src="../../.gitbook/assets/viewANDfunctions.png" alt="" width="563"><figcaption><p>The physical properties accessed by the system views and functions </p></figcaption></figure>
 
-1
+The system views and functions outside of pg\_class provide a better view into a table's physical storage.\
+They can reveal properties not directly visible in pg\_class, like the TABLESPACE (physical directory), and include the size of associated relations, like the TOAST (The Oversized Attribute Storage Technique) tables.
 
 1
 

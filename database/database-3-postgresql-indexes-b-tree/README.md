@@ -60,9 +60,20 @@ It configures the **index access method** but offers a more limited set of avail
 CREATE INDEX my_index ON my_table (my_column) WITH (FILLFACTOR = 90);
 ```
 
-1
+The **placement** of the CREATE INDEX command influences the effect of certain options, as they are applied differently depending on whether the index is created on **existing data** or is filled later by INSERT **operations**.
 
-1
+```sql
+//If placed after the INSERTs it will apply the FILLFACTOR option 
+create table spazio( uno INT, due TEXT)
+
+//It will populate the leaf nodes leaving a 30% empty dedicated for updates
+create index spazio_idx on spazio(due) with (FILLFACTOR = 70);
+insert into spazio select i, (md5(i::text),10) from GENERATE_SERIES(1,100) as i;  
+
+//If before, it creates an empty index and treats any INSERT as a no FILLFACTOR update
+create index spazio_idx on spazio(due) with (FILLFACTOR = 70);  
+insert into spazio select i, (md5(i::text), 10) from GENERATE_SERIES(1,100) as i;
+```
 
 1
 
