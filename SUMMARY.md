@@ -83,6 +83,7 @@
   * [FOREIGN KEY constraint: rules and methods](database/database-2-sql-constraints/foreign-key-constraint-rules-and-methods.md)
 * [Database 3:PostgreSQL Indexes, B-tree](database/database-3-postgresql-indexes-b-tree/README.md)
   * [B-tree, properties and](database/database-3-postgresql-indexes-b-tree/b-tree-properties-and.md)
+  * [Gist indexing method.](database/database-3-postgresql-indexes-b-tree/gist-indexing-method..md)
 * [Node-Postgres Module](database/node-postgres-module.md)
 
 ## OTHER

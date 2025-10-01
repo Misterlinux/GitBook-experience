@@ -75,9 +75,18 @@ create index spazio_idx on spazio(due) with (FILLFACTOR = 70);
 insert into spazio select i, (md5(i::text), 10) from GENERATE_SERIES(1,100) as i;
 ```
 
-1
+The CREATE UNIQUE INDEX command creates a B-tree that enforces uniqueness on its indexed column values. Some constraints, like UNIQUE, work by implicitly creating a B-tree index; the index command just explicitly creates the same structure to enforce the same rules.
 
-1
+A partial index is an index that contains only a subset of its indexed column values, created by adding a WHERE clause to the CREATE INDEX command.\
+It's applied similarly to a CHECK constraint, but instead of blocking invalid data from entering the table, it limits which rows are included in the index, while allowing all data into the table itself.\
+The smaller index allows for faster query scans and is affected by fewer table updates.
+
+```sql
+//ADD example here
+//Only teh first value of teh indexes columns is allwed.
+//Its usefull to limit teh valkues as non commons
+
+```
 
 1
 
