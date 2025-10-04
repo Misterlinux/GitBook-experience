@@ -54,6 +54,42 @@ insert into multi (name, nomin, cognomen, age) values
 
 We can create **named** CHECK conditions using the CONSTRAINT keyword. These names will identify the constraint in the error messages and allow us to **add** or **drop** that specific constraint from the table columns.
 
+We can include **custom functions** within a CHECK constraint to enforce complex data integrity rules.
+
+<details>
+
+<summary>Validating CHECK constraints using PL/pgSQL functions </summary>
+
+The CHECK constraint function **validates** any row value being inserted or updated in the table. We can use a **procedural** language, such as PL/pgSQL, which allows the function to build complex validation logic using the constraint's arguments as **variables**.                                                                  It validates data only within the **single row** for its specified column values and is isolated from other rows, unlike an EXCLUDE GIST constraint which is designed to compare them.
+
+```sql
+//The function returns a BOOLEAN for the CHECK validation
+//It compares the tsranges difference to the interval value
+create or replace function durata(tsrange, interval)
+returns boolean as 
+$$ 
+BEGIN
+    return (upper($1) - lower($1)) <= $2;
+END;
+$$ language plpgsql immutable;
+//An code-only IMMUTABLE functiongets optimized by the database.
+
+select durata('[2021-01-01 12:00, 2021-01-01 13:00]', '2 hours'::interval);//T 
+
+create table lista(
+    user_id TEXT, palline tsrange,
+    CONSTRAINT palline_durata CHECK (durata(palline, INTERVAL '3 hours'))
+)
+
+insert into lista(user_id, palline) values 
+  ('primo', '[2024-05-12 12:00, 2024-05-12 14:00]'),
+  ('primo', '[2024-05-12 12:00, 2024-05-12 15:30]');  //Error, tsrange> 2 hours
+
+select * from lista;
+```
+
+</details>
+
 SQL uses the **three-valued logic** in its Boolean expressions, allowing them to return TRUE, FALSE, or UNKNOWN, often when NULL values are involved in a comparison.
 
 <details>

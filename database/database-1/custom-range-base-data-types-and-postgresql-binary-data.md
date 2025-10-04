@@ -1,7 +1,7 @@
-# Custom Range and base data types and PostgreSQL binary data
+# Custom Range, base data types and PostgreSQL binary data
 
-* [PostgreSQL base custom data type](page.md#postgresql-base-custom-data-type)
-* [PostgreSQL binary data storage and SQL standard syntax](page.md#postgresql-binary-data-storage-and-sql-standard-syntax)
+* [PostgreSQL base custom data type](custom-range-base-data-types-and-postgresql-binary-data.md#postgresql-base-custom-data-type)
+* [PostgreSQL binary data storage and SQL standard syntax](custom-range-base-data-types-and-postgresql-binary-data.md#postgresql-binary-data-storage-and-sql-standard-syntax)
 
 The RANGE custom data type allows us to define an **interval of values** for a specified **subtype**. It offers options to specify the data type's behavior.\
 The **subtype\_diff** function calculates the distance between two values of quantifiable subtypes, which helps optimize indexing. The **canonical** function standardizes the range boundaries, ensuring a consistent representation of borders.

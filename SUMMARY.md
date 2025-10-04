@@ -78,7 +78,7 @@
 * [Database 1: SQL Databases with DBeaver, SQL Scripts, and the Node-Postgres Module](database/database-1/README.md)
   * [SQL Scalar table Data Types](database/database-1/sql-table-data-types.md)
   * [Range, Multiranges and composite data types](database/database-1/range-multiranges-and-composite-data-types.md)
-  * [Custom Range and base data types and PostgreSQL binary data](database/database-1/page.md)
+  * [Custom Range, base data types and PostgreSQL binary data](database/database-1/custom-range-base-data-types-and-postgresql-binary-data.md)
 * [Database 2: SQL constraints](database/database-2-sql-constraints/README.md)
   * [FOREIGN KEY constraint: rules and methods](database/database-2-sql-constraints/foreign-key-constraint-rules-and-methods.md)
 * [Database 3:PostgreSQL Indexes, B-tree](database/database-3-postgresql-indexes-b-tree/README.md)

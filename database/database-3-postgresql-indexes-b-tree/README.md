@@ -82,7 +82,7 @@ It's applied similarly to a CHECK constraint, but instead of blocking invalid da
 The smaller index allows for faster query scans and is affected by fewer table updates.
 
 ```sql
-//ADD example here
+//ADD example here, not all values must be form the index for clause
 //Only teh first value of teh indexes columns is allwed.
 //Its usefull to limit teh valkues as non commons
 
