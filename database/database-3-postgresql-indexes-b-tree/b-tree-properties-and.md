@@ -122,7 +122,7 @@ The database management system contains the rules for the HOT update. The **quer
 The **version bloat** forms when the index or the table heap gets full of outdated values.\
 A tuple is marked as dead on DELETE or UPDATE and will be removed after a **visibility check** during maintenance. An index entry isn't explicitly marked; its TID is checked to see if it points to a dead tuple.
 
-— MAYBE image about TUPLE bloat and index outdated --
+<figure><img src="../../.gitbook/assets/tupleupdateIndex.png" alt="" width="434"><figcaption><p>Outdated values in Table heap and Index, both handled in VACUUM</p></figcaption></figure>
 
 The REINDEX command is a global maintenance operation. It performs a complete table scan to **rebuild** the index from the **current tuples** in the table heap, which is then used to replace and update the old index.\
 It relies on a prior VACUUM visibility check to detect the live tuples; if not, it defaults to indexing all tuples, even outdated ones.
@@ -388,7 +388,7 @@ The structure of a composite index is defined by its first CREATE INDEX column.
 The B-tree uses the first **column's value** to define the ranges and distribution of its nodes.  All the following **columns' positions** within the composite key will depend on the placement of the first column value.\
 A **query** must include the **first column** in its WHERE condition to effectively **navigate** a composite index. A **latter column** would have to scan every entry to find a its value, resulting in an operation similar to a full table scan.
 
-— IMMAGGINE OF COMPOSITE INDEX WITH FIRST KEY ordering --
+<figure><img src="../../.gitbook/assets/CompositeTree.png" alt="" width="563"><figcaption><p>A B-tree composite index ordered by its first column</p></figcaption></figure>
 
 We follow the "**left sort rule**" when creating a composite index to optimize its queries.                                                   We decice the **order of the columns** based on the type of data they contain and the **query** operations they're involved in.\
 It prioritizes columns with the highest **cardinality** (most unique values) as they allow the index to quickly filter a large number of rows.\
@@ -490,6 +490,8 @@ The **ordering relations** are the fundamental mathematical properties necessary
 The **operator functions** handle the five comparison operations (<, >, =, ≤, and ≥) used for index **queries**.\
 A single-value query uses the (<) and (>) operators to **navigate** the B-tree index positions, then confirms the matching value using the (=) operator.\
 A range-value query uses the (≤) and (≥) operators to locate the start of the range and includes all entries until it finds the last key value that satisfies the condition.
+
+<figure><img src="../../.gitbook/assets/OperatorClass.png" alt="" width="375"><figcaption><p>The structure of a data type Operation class</p></figcaption></figure>
 
 **Operation families** group multiple operation **classes** for data types with equivalent **sorting rules**, like `int4` and `int8`, and allow for **cross-data type comparison** queries on the B-tree.
 
