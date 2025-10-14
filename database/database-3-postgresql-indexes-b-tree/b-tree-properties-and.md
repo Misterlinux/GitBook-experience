@@ -430,7 +430,9 @@ Multiple operations can maintain data concurrency, but not all of them employ th
 
 The UPDATE operation employs the MVCC by not physically changing a tuple in the table heap.\
 It creates a **new version** of the tuple while keeping the old version available for any ongoing operation that started before the transaction was **commited**.\
-The process is a local read/write operation that leaves the outdated tuple for later maintenance operations like VACUUM.
+The process is a local read/write operation that manages data using the xmin and xmax transactions IDs in the tuple header, leaving the outdated tuple for later maintenance operations like VACUUM.
+
+1
 
 The CONCURRENCY option applied to the CREATE INDEX operation doesn't use the MVCC.\
 It's a **schema-level operation** that maintains the concurrency of the table by avoiding a lock during index creation, allowing other operations to proceed.\
