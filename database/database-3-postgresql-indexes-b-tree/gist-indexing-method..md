@@ -68,7 +68,38 @@ CONFLICT AND GIST EXCLUE PROPERTIES
 
 1
 
-1
+(to fix)
+
+The GIST index can replicate the structure, and use, and data types contain from other indeing methds, like B-tre, into nstalled the system catalog, adat the structure, add teh excluve features, allows for linear data indexing in a GIST, to index linear data types,
+
+//Not included by deafutl.
+
+btree\_gist. mosty used for exclusion constraints\
+Allows for implement a linear order ino the
+
+The index is lossy, it can retusn false positives, it requires extra scan to filter those, each entry gets\
+translated into a bit sized string signature.\
+It includes multiple extentions liek\
+btree\_gist\
+B-tree equivalent functionality for several data types\
+cube\
+Indexing for multidimensional cubes\
+hstore\
+Module for storing (key, value) pairs\
+intarray\
+RD-Tree for one-dimensional array of int4 values\
+ltree\
+Indexing for tree-like structures\
+pg\_trgm\
+Text similarity using trigram matching\
+seg\
+Indexing for “float ranges”
+
+TSVECTOR operation on TSQUERY
+
+The simplest way to build a GiST index is just to insert all the entries, one by one. This tends to be slow for large indexes, because if the index tuples are scattered across the index and the index is large enough to not fit in cache, a lot of random I/O will be needed. PostgreSQL supports two alternative methods for initial build of a GiST index: sorted and buffered modes.
+
+The sorted method is only available if each of the opclasses used by the index provides a sortsupport function, as described in Section 65.2.3. If they do, this method is usually the best, so it is used by default.
 
 1
 

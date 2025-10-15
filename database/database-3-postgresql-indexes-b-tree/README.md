@@ -97,6 +97,16 @@ Its core algorithm acts as a flexible **framework**. It uses the operator class 
 
 The GIST index **access method** stores **multi-dimensional** data types, such as geometric data, images, arrays, timestamps, and full-text search strings. Its tree structure organizes the data based on **shared properties** specific to the indexed data type, resulting in a more complex index with slower operations.
 
+```sql
+//It can't be declared within a CREATE TABLE
+//It provides multiple operator classes, each designed to index a specific data type
+CREATE INDEX index_name ON table_name
+USING gist (column_name);
+
+CREATE INDEX text_search_idx ON documents
+USING gist (to_tsvector('english', document_text));
+```
+
 It supports a wide range of specialized **comparison operators** for queries that access its indexed data types:
 
 > Overlap (**&&**) and **containment** (**<@**, **@>**) for ranges values> \
@@ -117,7 +127,6 @@ The **selectivity** property estimates the number of returned rows from a WHERE 
 The query planner uses the selectivity **estimation function**, specific to the comparison **operator**, to calculate the percentage of rows that will be returned by the query based on the column's cardinality.
 
 ```sql
-//The GIST index can't be declared within a CREATE TABLE statement, 
 //If multiple indexed columns, it will choose teh one with higher cardinality
 //It wont accept the B-tree linear data types, for teh index creation, 
 //If the specified daterange contains teh specified range, not just overlap,
