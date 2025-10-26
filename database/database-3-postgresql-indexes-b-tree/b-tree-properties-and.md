@@ -438,15 +438,13 @@ The process is a local read/write operation that manages data using the xmin and
 It's a **schema-level operation** that maintains the concurrency of the table by avoiding a lock during index creation, allowing other operations to proceed.\
 It's not part of the MVCC approach because it **physically** creates and replaces an entire index instead of just **managing** local operations.
 
-— Immaggine for MVCC maybe --
-
 The first scan creates the **initial version** of the index by reading all the current table rows.\
 The second scan, triggered after the first is complete, verifies any **changes** made to the table during the initial index build, adding any new or updated tuples to the temporary index.\
 The final **data consistency** check validates the **atomic swap**, which is a single, indivisible action that replaces the old index with the new one.\
 The deleted tuples are handled by the standard VACUUM process, which marks their space as available.\
 An index created with the CONCURRENCY option will still contain entries that point to outdated tuples, they will be removed by later maintenance operations.
 
-\--IMMAGGINE for concurrent triple scan --
+<figure><img src="../../.gitbook/assets/MVCCupdate.png" alt="" width="563"><figcaption><p>The MVCC method on a CONCURRENCY index</p></figcaption></figure>
 
 We can apply a **constraint** directly to the values within an **index**.\
 The index's structure optimizes the constraint validation check on the current values, without having to scan the entire table. It's aplied only on constraint that implicitly create and use indexes, like UNIQUE and PRIMARY KEY.
@@ -479,8 +477,6 @@ CREATE INDEX sales_2024_idx ON sales (sale_date)
 The B-tree assigns an **operation class** to each **data type** allowed within the index.\
 It contains the functions that set and maintain the linear sorting order of the index values, such as _sorting_ and _operator functions_.
 
-— Immagine for operator classes --
-
 The **sorting function** uses the **trichotomy rule** to determine the mathematical relationship between two values.&#x20;It establishes the **initial sorted order** of the index and maintains it for every new entry added.
 
 The **ordering relations** are the fundamental mathematical properties necessary for the **B-tree's linear order**.&#x20;These rules are implicitly enforced by the sorting function.
@@ -496,8 +492,6 @@ A range-value query uses the (≤) and (≥) operators to locate the start of th
 <figure><img src="../../.gitbook/assets/OperatorClass.png" alt="" width="375"><figcaption><p>The structure of a data type Operation class</p></figcaption></figure>
 
 **Operation families** group multiple operation **classes** for data types with equivalent **sorting rules**, like `int4` and `int8`, and allow for **cross-data type comparison** queries on the B-tree.
-
-— MAYBE IMAGES FOR operator families, including and crossword --
 
 The database identifies the different data types in the index query and checks if their operation classes are part of the same operation family. This allows it to **implicitly convert** one of the data types during the cross-data type comparison.
 
@@ -593,6 +587,6 @@ Both follow the N keys for N+1 child pointers rule for their internal nodes.
 The B+ tree is used for a table's primary key index. Its TID works as a unique row identifier.\
 It's created by default on CREATE TABLE when a primary key is included in a column definition, it optimizes data retrieval on the table's heap.
 
-— Immaggine B+Tree --
+<figure><img src="../../.gitbook/assets/b+tree2.jpg" alt="" width="493"><figcaption><p>The B+tree internal nodes can contain more pointers, as they don't store the entries</p></figcaption></figure>
 
 1
