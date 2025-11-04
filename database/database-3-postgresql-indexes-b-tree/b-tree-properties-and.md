@@ -405,7 +405,7 @@ CREATE INDEX (col_a, col_b DESC)
 WHERE col_a= ORDER BY col_DESC
 ```
 
-1
+A composite index applies the left-prefix rule to its columns using their **operation classes**.                                                  It stores its multiple columns in the **pg\_index** catalog as an **array**. Each column has its own associated operation class, defined in pg\_opclass, which provides its comparison and **sorting functions** from pg\_amop and **pg\_amproc**, respectively.                                                                                                                              The columns' operation classes act independently of each other. They only need to be compatible with the index's access method to be indexed togheter.                                                                                                              The index's sort order is defined by the first column's operation class, with subsequent columns applying their sorting functions only when needed to **differentiate rows** with identical values.
 
 ### Table LOCK and CONCURRENCY option and MVCC
 
