@@ -8,6 +8,18 @@
 
 1
 
+1
+
+1
+
+1
+
+1
+
+1
+
+1
+
 The GIST insdex is uyse for speed processes, it uses its operator classes to create a tree to fast searches, all teh functins are internal, operation class that trigger after teh SQL commands that set the GIST tree, the operator class functions incldueteh inherent functins triggered that hadl ethe @@ and @> comparison for teh GIST tree values comparisons,
 
 Adapts to its multiple allowed data types, query types, an extensive framework, which doesnt depend on comparison values or linear properties for its values like B-tree, it defies specific rules to order its, Operators used to navigate the query, and secific rules define with. Multiple operation classes contrary to teh B-tree that includes a linear ordering, aplies, for all the data types allowed within the index. The GIST aplies containment, insersection ad proiximity rules to order its data types. as it includes multiple operaator classes, for multiple data types, more, and with each defineing its rules and operators used to access the tree struture, based on teh data type. It provides its set own interface to build, a strcutrue for custom data types with defining their own rules, the framework allows.
