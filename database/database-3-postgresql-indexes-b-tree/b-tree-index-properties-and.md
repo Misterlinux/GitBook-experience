@@ -1,4 +1,4 @@
-# B-tree, properties and
+# B-tree index properties and
 
 * 1
 * 1
@@ -37,13 +37,13 @@ A B-tree node can contain data equivalent to multiple disk pages (e.g., 4KB, 8KB
 
 The maximum size of a B-tree entry is 1/3 of the node it's placed in. This rule ensures that every node can branch out to a minimum number of child nodes, which helps maintain a wide, **horizontal index** structure.
 
-The **order** (m) of a B-tree determines the maximum number of children an internal node can have.           It also defines the maximum number  (m−1) and the minimum number of keys (m/2) .an index can have.
+The **order** (m) of a B-tree determines the maximum number of children an internal node can have.           It also defines the maximum number  (m−1) and the minimum number of keys (m/2) an index can have.
 
 In an internal node, pointers act as **dividers** that create **ranges** between their **key values**, which are then represented by the child nodes. In a leaf node, the the `m−1` key rule doesn't apply because each key-pointer pair points to the **single physical location** of its data.
 
 An incomplete child node will only fill its empty spaces with entries that fall within the specific range implicitly defined by its parent node's pointers.
 
-<figure><img src="../../.gitbook/assets/domanda.jpg" alt="" width="362"><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/domanda.jpg" alt="" width="362"><figcaption><p>B-tree with incomplete child nodes and m-1 pointers </p></figcaption></figure>
 
 Once the number of **keys** in a node exceeds the index's order (m), the node **splits**.\
 A new parent internal node is created containing the **lowest median key** value. The original node's entries are split between the newly created **child nodes**, using the internal node's median key as the **divider**.
@@ -81,6 +81,15 @@ They can cause unpredictable page splits and lead to inefficient leaf-node entry
 
 The PostgreSQL SERIAL and MySQL AUTO\_INCREMENT constructs create **efficient sequences** of column values in the index. They generate values in a linear order, allowing for an efficient leaf-node storage and reducing the node splits.
 
+```sql
+//The database optimizes index inserts for SERIAL column values.
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY, name TEXT
+)
+//The id column is included in the insert
+INSERT INTO users (name) VALUES ('jsmith');
+```
+
 The database loads copies of frequently accessed data pages into its RAM cache, allowing it to update the pages without I/O operations. It then pushes the changes to the physical disk before the page split.
 
 The database uses a sequential **Write-Ahead Log** (WAL) on the disk to prevent data loss.\
@@ -95,7 +104,7 @@ An INT 32-bit integer has 2.1 billion possible values, while a BIGINT 64-bit int
 
 <figure><img src="../../.gitbook/assets/WALrambuffer.png" alt="" width="563"><figcaption><p>All RAM changes are stored in as binary code for recoverability</p></figcaption></figure>
 
-### INDEX MAINTENANCE on Update operation, for outdated entries.
+### Insert and Update Procedures for Table Heap and Index Units
 
 The database stores a table's rows in a collection of **disk pages**, which is called a **table heap**.\
 It's optimized for size, and organized into unordered tuples, with each containing the column data for a single table row.
@@ -117,7 +126,7 @@ The database management system contains the rules for the HOT update. The **quer
 
 <figure><img src="../../.gitbook/assets/HOTupdate.png" alt="" width="521"><figcaption><p>The t_ctid tuple property gets updated with a forward pointer on HOT update</p></figcaption></figure>
 
-### Maintenance
+### Index and table heap maintenance operations for outdated values
 
 The **version bloat** forms when the index or the table heap gets full of outdated values.\
 A tuple is marked as dead on DELETE or UPDATE and will be removed after a **visibility check** during maintenance. An index entry isn't explicitly marked; its TID is checked to see if it points to a dead tuple.
@@ -140,7 +149,7 @@ The VACUUM operation uses the **transaction IDs** to determine the visibility st
 Every transaction is assigned a unique **XID**, which is assigned to the XMIN property of the new tuples it creates and the XMAX property of any tuples it updates or deletes.\
 The VACUUM sets its cleanup cutoff point based on the XID of the **oldest currently active transaction**. It will remove tuples with an XMAX value lower than the XID, as they are no longer visible to any ongoing transactions.
 
-### The B-tree index property ??
+### Accessing Index and Table Heap Statistics with Extensions and System Catalogs
 
 The **pgstattuple** extension provides **functions** that reveal low-level details about the database's **physical storage**. It returns properties like **bloat** and **unused space**, which are invisible to high-level commands like SELECT.                                                                                                                                                              It's included in the PostgreSQL, but must be first activated with the CREATE EXTENSION command.
 
@@ -186,7 +195,7 @@ FROM pgstatindex('spazio_idx');
 
 <figure><img src="../../.gitbook/assets/pgstats.png" alt="" width="534"><figcaption><p>The low-level physical values of the relations</p></figcaption></figure>
 
-The pgstattuple extension functions access the low-level data to measure the **bloat** and **fragmentation** caused by row operations. We can use it to track the effectiveness of the **maintenance operations**.
+The **pgstattuple** extension functions access the low-level data to measure the **bloat** and **fragmentation** caused by row operations. We can use it to track the effectiveness of the **maintenance operations**.
 
 <details>
 
@@ -197,16 +206,16 @@ We used the pgstattuple and pgstatindex extensions to gather data on **table** a
 We create two identical tables, one with autovacuum disabled, and populate each with 10,000 rows. We then create an index on the id column for both tables before we performed five consecutive **HOT updates** on a non-indexed column.
 
 ```sql
-//For both pgstattuple() and pgstatindex()
+//It includes both pgstattuple() and pgstatindex()
 CREATE EXTENSION IF NOT EXISTS pgstattuple;
 
 CREATE TABLE no_vacuum (id INT, nome TEXT) WITH (autovacuum_enabled = false);
 CREATE TABLE table_vacuum (id INT, nome TEXT);
 
 INSERT INTO no_vacuum SELECT i, MD5(i::TEXT) FROM GENERATE_SERIES(1,10000) i;
-INSERT INTO table_vacuum SELECT i, MD5(i::TEXT) FROM GENERATE_SERIES(1,10000) i
+INSERT INTO table_vacuum SELECT i,MD5(i::TEXT)FROM GENERATE_SERIES(1,10000) i 
 
-//index andupdate on different columns id/name
+//We index the ID column while we update the name column
 CREATE index idx_no_vacuumed ON no_vacuum(id);
 CREATE index idx_table_vacuumed ON table_vacuum(id);
 
@@ -306,7 +315,7 @@ The database provides many specialized **system views** and **functions** that r
 
 <details>
 
-<summary>The additional system views and functions for database relations</summary>
+<summary>The additional pg system views and functions for database relations</summary>
 
 We query system views or functions using the **relation's name**; PostgreSQL's internal process automatically retrieves the linked pg\_class **OID**, which is the actual value used internally by the **operating system functions** to access the metadata.
 
@@ -319,8 +328,8 @@ The TABLESPACE keyword defines the table's **directory physical location**. It c
 SELECT tablename, indexname, indexdef, tablespace
 FROM pg_indexes WHERE tablename = 'spazio';
 
-//If not defined, tablename returns NULL while referring to pg_default location
-//Multiple relations on teh same table can be stored on different tablespaces
+//If not defined,tablename returns NULL while referring to pg_default location
+//Multiple relations on the same table can be stored on different tablespaces
 CREATE TABLE my_table (...) TABLESPACE new_disk;
 CREATE INDEX my_index ON my_table (col) TABLESPACE faster_disk;
 ```
@@ -369,9 +378,7 @@ select pg_indexes_size('spazio'), pg_size_pretty(pg_indexes_size('spazio'));
 The system views and functions outside of pg\_class provide a better view into a table's physical storage.\
 They can reveal properties not directly visible in pg\_class, like the TABLESPACE (physical directory), and include the size of associated relations, like the TOAST (The Oversized Attribute Storage Technique) tables.
 
-1
-
-### COMPOSITE
+### The B-tree Composite Index and its Left-Prefix Rule structure
 
 A B-tree **composite index** includes multiple columns in its CREATE INDEX statement.\
 Each composite key is a combination of the indexed column values, and it points to a single TID.
@@ -379,7 +386,7 @@ Each composite key is a combination of the indexed column values, and it points 
 ```sql
 //A single index with each key includes the 2 columns values
 CREATE table multi( uno INT, due TEXT, tre INT );
-insert into multi (uno, due, tre) values (12,'base', 22), (7,'pen',43), (17,'cup',19);
+insert into multi (uno, due, tre) values (12,'base', 22), (7,'pen',43),(17,'cup',19);
 
 create index multi_idx on multi(uno, due);
 ```
@@ -397,7 +404,7 @@ It doesn't prioritize columns used in the ORDER BY clause as they are used to so
 We can include the ASC and DESC keywords in the CREATE INDEX statement to match the sort order of an ORDER BY clause. This allows the database to skip the sorting step in the query.
 
 ```sql
-//Being the default sorting index as ASC
+//ASC is the default sorting for indexes
 CREATE INDEX idx_products_price_desc ON products(price DESC);
 SELECT * FROM products ORDER BY price DESC;
 
@@ -405,9 +412,22 @@ CREATE INDEX (col_a, col_b DESC)
 WHERE col_a= ORDER BY col_DESC
 ```
 
-A composite index applies the left-prefix rule to its columns using their **operation classes**.                                                  It stores its multiple columns in the **pg\_index** catalog as an **array**. Each column has its own associated operation class, defined in pg\_opclass, which provides its comparison and **sorting functions** from pg\_amop and **pg\_amproc**, respectively.                                                                                                                              The columns' operation classes act independently of each other. They only need to be compatible with the index's access method to be indexed togheter.                                                                                                              The index's sort order is defined by the first column's operation class, with subsequent columns applying their sorting functions only when needed to **differentiate rows** with identical values.
+A composite index applies the left-prefix rule to its columns using their **operation classes**.                                                  It stores its multiple columns in the **pg\_index** catalog as an **array**. Each column has its own associated operation class, defined in **pg\_opclass**, which provides its comparison and **sorting functions** from pg\_amop and **pg\_amproc**, respectively.                                                                                                                              The columns' operation classes act independently of each other. They only need to be compatible with the index's access method to be indexed togheter.                                                                                                              The index's sort order is defined by the first column's operation class, with subsequent columns applying their sorting functions only when needed to **differentiate rows** with identical values.
 
-### Table LOCK and CONCURRENCY option and MVCC
+```sql
+//We need teh pg_class to identify teh relation name.
+CREATE TABLE employees ( depart INT, name TEXT );
+CREATE INDEX composite_idx ON employees (depart, name);
+
+SELECT c.relname, i.indkey, i.indclass 
+FROM pg_class AS c
+JOIN pg_index AS i ON i.indexrelid = c.oid
+WHERE c.relname = 'composite_idx';
+```
+
+<figure><img src="../../.gitbook/assets/arrayIndex.jpg" alt="" width="382"><figcaption><p>oidvector data type is symilar to an array structure</p></figcaption></figure>
+
+### Comparing the MVCC method for tuple updates and the CONCURRENCY option for table LOCK index operations.
 
 The database applies a **table lock** when creating an index, which prevents any other **operations** on the table's data.
 
@@ -469,8 +489,6 @@ CREATE INDEX sales_2023_idx ON sales (sale_date)
 CREATE INDEX sales_2024_idx ON sales (sale_date) 
     WHERE sale_date BETWEEN '2024-01-01' AND '2024-12-31';
 ```
-
-1
 
 ### Operation Familes and class
 
