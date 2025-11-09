@@ -615,15 +615,11 @@ They optimize the B-tree's **core operations**, like the sorting function that s
 > The **in\_range** support function optimizes the index's range operations.> \
 > On select queries, it helps the database quickly find specific ranges without a full table scan.                                  On insert, it speeds up the top-down B-tree navigation to the correct child node by efficiently matching the inserted value to the ranges defined by the internal nodes.
 >
-> >
-
-1
-
-The **equalimage** support function is an optional helper for **index deduplication**.\
-It allows a B-tree index to store multiple table rows values in a single key, using a **posting list** of TIDs, and avoids the use of multiple keys for the same values.
-
-The equalimage function is triggered for all **repeated values** within the index keys.\
-It applies a **semantic check** to validate the key deduplication, which allows the database to create a **canonical image** of the values. It also includes NULL entries, which, unlike in standard SQL, aren't considered unique and can be grouped together.
+> The **equalimage** support function is an optional helper for **index deduplication**.> \
+> It allows a B-tree index to store multiple table rows values in a single key, using a **posting list** of TIDs, and avoids the use of multiple keys for the same values.
+>
+> > The equalimage function is triggered for all **repeated values** within the index keys.> > \
+> > It applies a **semantic check** to validate the key deduplication, which allows the database to create a **canonical image** of the values. It also includes NULL entries, which, unlike in standard SQL, aren't considered unique and can be grouped together.
 
 The database deduplicates values during the CREATE INDEX and REINDEX operations, automatically checking for equal values within the index. On INSERT and UPDATE it acts as a **conditioned lazy process**.
 
@@ -636,7 +632,7 @@ Columns added to an index using the `INCLUDE` clause can't be deduplicated. They
 CREATE INDEX my_index ON my_table(indexed_col) INCLUDE (included_col);
 ```
 
-The function only applies to a single column and requires a deterministic collation to consistently create a semantic image for values.
+The equalimage function only applies to a single column and requires a **deterministic collation** to consistently create a semantic image for values.
 
 <details>
 
