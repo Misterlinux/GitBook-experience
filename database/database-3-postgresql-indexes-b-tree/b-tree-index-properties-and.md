@@ -1,8 +1,10 @@
 # B-tree index properties and
 
-* 1
-* 1
-* 1
+* Insert and Update Procedures for Table Heap and Index Units
+* Index and table heap maintenance operations for outdated values
+* Accessing Index and Table Heap Statistics with Extensions and System Catalogs
+* The B-tree Composite Index and its Left-Prefix Rule structure
+* Comparing the MVCC method for tuple updates and the CONCURRENCY option for table LOCK index operations.
 * 1
 
 A B-tree index is designed to store **sequential data,** and it uses its **operation classes** to organize entries in a **linear** order.

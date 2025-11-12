@@ -231,6 +231,44 @@ select * from lista;
 
 1
 
-1
+?? CLEAN\
+The GiST index algorithm used for the index tree navigation is not fixed; it varies based on the clauses and their specific operators.
+
+The query planner defines a specific execution plan based on the query's operations, which are differentiated as 'indexing' or 'sorting' operators (defined in the pg\_amop amoppurpose column) and correspond to specific SQL clauses.
+
+Indexing operators, like && (overlap) and @> (contains), return a boolean value from their internal predicate comparisons; they are used in WHERE clauses to filter and exclude non-matching branches from the search.\
+Sorting operations, like <-> distance, return a value from their internal predicate comparisons, which is used by the ORDER BY clause to build a priority queue from the branches defined in the root node, instead of excluding them.\
+??\
+The clause reflects the logical properties of its compatible operators. Indexing operators are binary, which means they can't ORDER BY measure a "more" or "less" overlap or containment state, as they return true/false values. Both operators are capable of retrieving entries from multiple GIST tree branches.
+
+The commands included in the execution plan are determined by the query's clauses and operators.\
+They determine which instance of the pg\_am handler function will be used for the plan, defining the internal functions needed to execute its included commands.
+
+The GIST framework's structure adapts each execution plan to the query's data types.\
+Each pg\_am handler instance uses the internal functions provided by the data type's operation class, which will specify how the plan's commands are executed and ensure they are compatible with that data type's specific GIST structure.\
+??\
+The execution plan specifies the GIST tree navigation function used for the query search.\
+The GIST generic framework allows its handler function to include additional code for specific high-level search strategies, which implements the specific query logic of its data type and clause.
+
+The consistency function is the specific implementation of the indexing operator's binary logic. It navigates the tree by filtering the branches based on the query search value.\
+??
+
+The database uses a K-Nearest Neighbor (K-NN) tree navigation strategy for distance operators (<->) applied to an ORDER BY query on a geometric or trigram data type.
+
+The pg\_am handler function instance, used to execute the K-NN strategy, includes extra support functions which allow it to sort the query result values by distance, effectively enabling the unordered GIST entries to be ordered.\
+??\
+The query planner includes the arguments used to specify which pg\_am handler function is used for the execution plan.
+
+The IndexScanDesc is a runtime object created during plan execution; it's a pointer that references the index's Relation, which was created by the CREATE INDEX command and contains the operation class and its associated support functions (defined in the pg\_amproc system catalog)
+
+The ScanKey is a separate object which specifies the query instructions.\
+It's extracted by the query planner and includes the strategy value, representing the query operator, and the value used in the query operation.\
+!!
+
+??\
+The GiST framework applies its additional support functions for the implementation of the GiST-based EXCLUDE constraint, which, similar to the K-NN strategy for an ORDER BY clause, requires a more complex logic to execute its specific WHERE query.
+
+The EXCLUDE constraint applies its conflict search during INSERT and UPDATE commands.\
+The additional support function in the execution plan change the default behavior of the WHERE clause. The optimized conflict check operation will navigate the GIST tree only to find the first matching value in order to validate teh exclusion constraint.
 
 1
