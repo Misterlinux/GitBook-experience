@@ -223,6 +223,157 @@ select * from lista;
 
 1
 
+### GIST, GENERALIZED STRUCTURE AND DATA TYPES ALLOWED properties
+
+The Generalized GIST tree adapts its internal organization based on the data type.\
+It creates a hierarchical structure where lossy predicates are used to define internal nodes, acting as summaries that represent all the data contained within their child nodes.
+
+The GIST framework uses different internal node structures depending on the specific data type, using bounding boxes for spatial data or summarized ranges for ranged data types (like int4range, daterange, or tsrange).\
+It can define lossy predicates for data types that are part of the same logical, contiguous space, where the sequential space (like an area or a number line) that separates every value can be summarized. It's not suitable for distinct and unrelated sets of values, like arrays, that are not part of a defined logical space and can't be grouped into a summary.
+
+The GIST extensions can implement lossy structures for data types that don't natively support it, like text values using bitmask predicates, or for data types whose operation class rules aren't included in GIST, like integers needing the btree\_gist extension.
+
+A lossy predicate allows a query search to skip entire branches, as its summary contains all the possible values from its child nodes. Any matching value requires extra steps to validate, since the summary only indicates a possible match.
+
+The internal nodes are not designed to constantly update their lossy predicates.\
+The GIST index inserts new entries into child nodes that already include them in their summary or modifies the node requiring the least change to fit the new entry; predicates do not change upon child entry deletions, as they are included in the summary lossiness, but a node split requires the predicates to be fully recalculated based on the entries in the new nodes.
+
+A GIST index structure relies on different types of functions than a B-Tree; while a B-Tree creates the same linear order using the sorting functions specific to its data type, the GIST structure applies overlap and containment rules to its entries.
+
+The operation class functions manage the creation and navigation of the lossy predicate nodes, handling multiple structures specific to the indexed data types.
+
+The Combine function creates the internal node lossy summary; it combines its child node predicates into a new data type-specific structure.\
+The Consistent function manages the GiST tree navigation by comparing the query search value with the node's data-type-specific predicate. It's a binary function; if it returns false, the GiST framework ignores the entire branch.
+
+The Consistent function contains all the possible data-type-specific operations.\
+The query planner analyzes its query values and operator to retrieve its corresponding pg\_amop strategy value, which is used by the Consistent function to validate the query search for the specific values.
+
+```sql
+//The proof of the operator strategies can be included when creation custom 
+//operation classes.
+CREATE OPERATOR CLASS gist__int_ops ... USING gist AS
+  OPERATOR 3 &&,
+  OPERATOR 6 =,
+  OPERATOR 7 @,
+  OPERATOR 8 ~,
+```
+
+The GiST index organizes the spatial POINT data type using bounding boxes.\
+The boxes define the internal node predicates, summarizing the spatial area that contains all points in their child nodes. The Consistent function navigates the structure by checking if the query value is contained within these boxes, to then retrieve the actual data row's point position from the matching leaf node.
+
+```sql
+//It uses two coordinates, X/Y to hanlde the representation.
+//Different from a one dimentional range
+CREATE TABLE points (
+    id SERIAL PRIMARY KEY, p  POINT
+);
+
+INSERT INTO points (p) VALUES
+    (point '(1,1)'),
+    (point '(3,2)'),
+    (point '(6,3)'),
+    (point '(5,5)'),
+    (point '(7,8)'),
+    (point '(8,6)');
+
+CREATE INDEX points_p_gist_idx ON points USING GIST (p);
+
+SELECT * FROM points WHERE p <@ box '(2,1),(7,4)';
+
+EXPLAIN SELECT * FROM points WHERE p <@ box '(2,1),(7,4)';
+   p  
+-------
+ (3,2)
+ (6,3)
+
+QUERY PLAN                                                                     |
+-------------------------------------------------------------------------------+
+Index Scan using points_p_gist_idx on points  (cost=0.13..8.15 rows=1 width=20)|
+  Index Cond: (p <@ '(7,4),(2,1)'::box)   |
+```
+
+The GiST index applies an extra recheck step to query results. It's based on the data type, not the query operation, and depends on how the operation class defines that data type.\
+A "lossy" data type, like POLYGGON, is complex, so the GiST tree stores it as a summarized bounding box to save space. A recheck step is required to ensure a query result is not a false positive. It fetches the actual polygon value from the table and compares it to the query to confirm the match.\
+An "exact" data type, like POINT, is stored by the GiST index as its actual value. A query search match represents the actual value, so no additional recheck is needed.\
+The GiST recheck is based on lossy data types and is used to handle false positives in the resulting values. It's different from the recheck in B-Trees (like with bitmap scans), which has to confirm which rows on the matching 'lossy' disk pages actually contain the query values.
+
+There is a difference between accessing teh logical defintion and the rules associated to the GISYT index and its internal physical structure.
+
+1
+
+<details>
+
+<summary>ACCESSING THE GIST STRUCTURE GEVEL EXTENTION and difference</summary>
+
+The pageinspect extention can't return any readable property about the GIST index structure. The extension uses its bt\_page\_items function to analyze the B-tree index, accessing its fixed, one-dimensional structure regardless of the data types currently being indexed. The GiST's structure varies based on its operation classes, which include custom ones. As a result, pageinspect can't feasibly store functions for all possible layouts to adapt to each GiST structure.
+
+We access the internal structure properties of a GIST index using the GEVEL extension. The GEVEL is a contrib debugger module for GIST and GIN indexes in PostgreSQL. It provides functions to visualize high-level statistics, print the index's tree structure, and dump the individual keys stored in the index pages.
+
+```sql
+// Some code
+select * from gist_stat('airports_coordinates_idx');
+https://github.com/BetaRavener/Gevel-Extension
+```
+
+The gist\_stat(index\_oid) function returns high-level statistics for each level of the GiST index. It starts at the leaf nodes (represented as 0) and reports the combined properties of all entries at each level, aggregating them from all the different branches.
+
+The num\_pages column returns the total number of physical disk pages used to store the entries at that level. The num\_tuples column returns the total number of index entries (called "tuples" by the extension) stored at that specific tree level. It includes leaf entries (at level 0) and internal node predicates on higher-level pages. The num\_dead\_tuples column returns the number of outdated entries in the index, which will be cleaned up by the VACUUM process. The free\_space column returns the free space (in bytes) left on all pages at that specific level. The avg\_tuple\_len column returns the average size (in bytes) of a single index entry at that level.
+
+```sql
+// Some code
+SELECT * FROM gist_stat(16393);
+level | num_pages | num_tuples | num_dead_tuples | free_space | avg_tuple_len
+-------+-----------+------------+-----------------+------------+---------------
+     0 |       150 |       2500 |              85 |      45120 |            32
+     1 |        10 |        149 |               0 |       1024 |            36
+```
+
+The gist\_tree(oid, max\_depth) function visualizes the index's structure from the top down. Its output returns a text summary of each index node's properties, using indentation to represent the different levels. Each line includes the node's level (Level), its physical page number (Page), the number of children in that page (nchildren), and the key (or predicate) that leads to that node.
+
+```sql
+// Some code
+//It starts from teh root level, and teh level 0 means teh leaf node level, final, bottom.
+SELECT * FROM gist_tree(12345, 3);
+
+(Root Page, Level 2) Page 5, nchildren=2, key=BOX(0 0, 100 100)
+    (Internal Page, Level 1) Page 10, nchildren=3, key=BOX(0 0, 50 50)
+        (Leaf Page, Level 0) Page 15, nchildren=20, key=BOX(10 10, 20 20)
+        (Leaf Page, Level 0) Page 16, nchildren=15, key=BOX(30 30, 40 40)
+        (Leaf Page, Level 0) Page 17, nchildren=12, key=BOX(5 5, 25 25)
+    (Internal Page, ...)
+```
+
+The gist\_print(oid) function returns a set of all keys stored in the index.\
+Each row in the output includes the entry's tree level (level), its boolean valid status (false means outdated), and the actual key value for that specific entry.
+
+```sql
+// Some code
+//The set can be queries for specific values
+//depending on teh level its a entry or a internla nod epredicate.
+SELECT * FROM gist_print(12345);
+
+-- You can even filter the results like a regular table
+SELECT * FROM gist_print(12345)
+WHERE level = 0; -- Show me only the leaf keys
+
+level | valid |             key
+-------+-------+-----------------------------
+     1 | t     | BOX(0 0, 50 50)
+     1 | t     | BOX(50 50, 100 100)
+     0 | t     | POINT(10 15)
+     0 | t     | POINT(30 25)
+```
+
+1
+
+</details>
+
+1
+
+1
+
+1
+
 1
 
 1
@@ -254,6 +405,36 @@ The consistency function is the specific implementation of the indexing operator
 ??
 
 The database uses a K-Nearest Neighbor (K-NN) tree navigation strategy for distance operators (<->) applied to an ORDER BY query on a geometric or trigram data type.
+
+```sql
+//The order by being present in the inside of the, index scan, signifies that 
+//the sca retrieval is being aplied to already sorted elements of the index tree, 
+//whih ar ethe table rows retrund by teh query.
+//The retrieval of one by one influences teh high cost, has to be compared to teh table size.
+SET enable_seqscan = off;
+CREATE TABLE locations ( location POINT );
+
+INSERT INTO locations (location) VALUES
+    (point(20, 20)), (point(2, 2)), (point(5.1, 5.1)), (point(5, -10)), 
+    (point(5, 5)),   (point(4.9, 4.9)), (point(5, 10)), (point(6, 5)),
+    (point(-15, 5)), (point(5, 4));
+
+CREATE INDEX idx_locations_gist ON locations USING gist (location);
+
+-- Your example query:
+SELECT 
+  location,
+  location <-> point(5,5) AS distance
+FROM locations
+ORDER BY location <-> point(5,5) LIMIT 5;
+
+QUERY PLAN
+Limit  (cost=0.13..4.23 rows=5 width=246) (actual time=0.131..0.134 rows=5 loops=1)
+  -> Index Scan using idx_locations_gist on locations (cost=0.13..8.33 rows=10 width=246)                           |
+        Order By: (location <-> '(5,5)'::point) |
+Planning Time: 0.092 ms                         |
+Execution Time: 0.152 ms                        
+```
 
 The pg\_am handler function instance, used to execute the K-NN strategy, includes extra support functions which allow it to sort the query result values by distance, effectively enabling the unordered GIST entries to be ordered.\
 ??\
