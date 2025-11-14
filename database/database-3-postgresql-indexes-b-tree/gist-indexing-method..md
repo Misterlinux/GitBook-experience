@@ -223,6 +223,56 @@ select * from lista;
 
 1
 
+The GiST index uses the tsvector data type for full-text queries. The tsvector organizes the text document's content into a list of lexemes (normalized words) and their document positions. The tsquery data type stores the lexeme search terms, including the logical operators used in the query search operation. They are built-in components from PostgreSQL's full-text search (FTS) system, which provides conversion functions like to\_tsvector() and to\_tsquery(). The text conversion includes setting to lowercase (normalized), removing common words (stop words), and reducing words into their root form (stemming).
+
+```sql
+// Some code
+//Th root form is referredas includes verbs losing their verbal form and wordsbeingset to singluar.
+select to_tsvector('There was a crooked man, and he walked a crooked mile');
+select to_tsquery('man & (walking | running)');
+select to_tsvector('There was a crooked man, and he walked a crooked mile') @@ to_tsquery('man & (walking | running)');
+```
+
+A full-text search query using the match operator (@@) can be executed by both a GiST index, which creates a more general-purpose index, and a GIN index, which is more specific and contains more details.\
+The GiST tree organizes the lexemes into lossy predicates and requires a recheck step for each query result, which results in a smaller index size and faster updates.\
+The summary structure used for lexemes is defined as a bitmask signature, which uses the BITWISE OR operation to combine the smaller bitmasks defined by the child node entry values; these leaf signatures are created by hashing each lexeme to a bit position and setting it to 1. It is a lossy structure because of the limited number of available bit positions, as multiple lexemes can flip the same bit.
+
+The GIST index stores its indexed tsvector columns as converted, lossy bitmasks.\
+Each leaf node entry contains the signature of a single tsvector value, while the internal nodes are created using the BITWISE OR operation, which represents the combine function provided by the tsvector operator class.\
+The insertion logic mantains the'minimize enlargement' behavior for any insert operation.
+
+The tsquery (@@) query requires two matching operations: a faster one navigating and comparing the bitmask predicates, and a second, slower one comparing the tsvector values with the actual tsquery value.\
+It first uses the consistency function to quickly filter the branches that don't contain the hashed lexeme bits in their signatures. The recheck step consists of retrieving the actual tsvector values from their TID table row and re-applying the tsquery matching condition, to exclude any false positives from the query results.
+
+The tsquery data type applies the same tsvector operations to its text value, but it also includes the logical operators that define the search rules.\
+It is converted into a signature bitmask to navigate the GIST tree, while its internal logic is applied only during the final recheck step. This set of rules is used by the query search operator (@@) to confirm the final results.
+
+```sql
+// Some code
+//Combining words (lexemes) with logical operators like & (AND), | (OR), and ! (NOT).
+to_tsquery('english', 'quick & (cat | dog) & !fox')
+
+//while plainto_tsquery(), just automatically adds AND for all words
+//The tsvector_ops operator class functon will handle the tsvector tsquery queries
+//The tsquery_ops is used to comprae tsquery betwene each other conditions
+```
+
+The GIST can add more data types compatible with its indexing method using extensions.
+
+cube data, https://postgrespro.com/docs/postgresql/9.6/cube\
+the ltree https://postgrespro.com/docs/postgresql/9.6/ltree\
+intarray https://postgrespro.com/docs/postgresql/9.6/intarray\
+seg https://postgrespro.com/docs/postgresql/9.6/seg\
+And the pg\_trgm used for trigrams text searches https://postgrespro.com/docs/postgresql/9.6/pgtrgm
+
+1
+
+1
+
+1
+
+1
+
 ### GIST, GENERALIZED STRUCTURE AND DATA TYPES ALLOWED properties
 
 The Generalized GIST tree adapts its internal organization based on the data type.\
