@@ -54,7 +54,7 @@ It can define lossy predicates for data types that are part of the same **logica
 
 The GIST extensions can implement lossy structures for data types that don't natively support it, like text values using **bitmask predicates**, or for data types whose operation class rules aren't included in GIST, like integers needing the btree\_gist extension.
 
-IMMAGGINE for example of LOSSY PREDICATES
+<figure><img src="../../.gitbook/assets/GISTlossy.png" alt="" width="375"><figcaption><p>GIST internal nodes for different data types</p></figcaption></figure>
 
 A lossy predicate allows a query search to skip entire branches, as its **summary** contains all the **possible values** from its child nodes. Any matching value requires extra steps to validate, since the summary only indicates a possible match.
 
@@ -218,7 +218,7 @@ The **clause** reflects the **logical properties** of its compatible operators. 
 
 The **set of commands** included in the **execution plan** are determined by the query's clauses and operators.&#x20;They determine which instance of the **pg\_am handler function** will be used for the **plan**, defining the **internal functions** needed to execute its included commands.
 
-MAYBE IMAGE FOR TEH TABLES system catalog retrieved
+MAYBE IMAGE FOR TEH TABLES system catalog retrieved, as the strategy value (defined by values and specially operator purpose in pg\_amop, implies its valid clause.)
 
 The GIST framework's structure adapts each execution plan to the query's data types.\
 Each pg\_am handler instance uses the **internal functions** provided by the **data type's operation class**, which will specify how the plan's commands are executed and ensure they are compatible with that data type's specific **GIST structure**.\
@@ -259,8 +259,9 @@ Planning Time: 0.092 ms                         |
 Execution Time: 0.152 ms                        
 ```
 
-The pg\_am handler function instance, used to execute the K-NN strategy, includes **extra support functions** which allow it to sort the query result values by distance, effectively enabling the unordered GIST entries to be ordered.\
+The pg\_am handler function instance, used to execute the K-NN strategy, includes **extra support functions** which allow it to sort the query result values by distance, effectively enabling the unordered GIST entries to be ordered.
 
+<figure><img src="../../.gitbook/assets/GISTdistance.png" alt="" width="375"><figcaption><p>K-NN query ordering TID entries by distance</p></figcaption></figure>
 
 The query planner includes the **arguments** used to specify which **pg\_am handler function** is used for the execution plan.
 
@@ -303,7 +304,7 @@ The GIST index stores its indexed tsvector columns as converted, lossy bitmasks.
 Each **leaf node entry** contains the **signature** of a single tsvector value, while the internal nodes are created using the BITWISE OR operation, which represents the combine function provided by the tsvector operator class.\
 The insertion logic mantains the'minimize enlargement' behavior for any insert operation.
 
-IMMAGGINE PER HASH e contain in GIST nodes
+<figure><img src="../../.gitbook/assets/GISThash.png" alt="" width="563"><figcaption><p>Hashed table rows for bitmask signatures </p></figcaption></figure>
 
 The tsquery (@@) query **requires two matching operations**: a faster one navigating and comparing the bitmask predicates, and a second, slower one comparing the tsvector values with the actual tsquery value.\
 It first uses the **consistency function** to quickly filter the branches that don't contain the hashed lexeme bits in their signatures. The **recheck step** consists of retrieving the actual **tsvector values** from their **TID** table row and re-applying the tsquery matching condition, to exclude any false positives from the query results.
