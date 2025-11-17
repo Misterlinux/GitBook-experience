@@ -61,7 +61,7 @@ All nodes are sorted horizontally in a linear order.
 The database can perform an **index-only scan** on queries that use only **indexed columns** for all of their elements, including the SELECT list and all clauses (WHERE, ORDER BY, etc.).
 
 ```sql
-//It skips the leaf pointer data retrieval and it returns the key values
+--It skips the leaf pointer data retrieval and it returns the key values
 create table dritto( uno INT, due TEXT )
 
 insert into dritto(uno, due) values (12, 'penna'),(7, 'mano'),(3, 'foglio');
@@ -176,8 +176,8 @@ This condition is correlated with how the index handles **page splits**. The pro
 These functions provide a low-level view of tuples and index entries by accessing their **physical location** within the database.
 
 ```sql
-//We increase the string size by repeating the md5 string 10 times
-//Longer strings and the FILLFACTOR multiply the leaf nodes for a multi level b-tree
+--We increase the string size by repeating the md5 string 10 times
+--Longer strings and the FILLFACTOR multiply the leaf nodes for a multi level b-tree
 CREATE EXTENSION IF NOT EXISTS pgstattuple;
 create table spazio( uno INT, due TEXT )
 
@@ -188,7 +188,7 @@ create index spazio_idx on spazio(due) with (FILLFACTOR = 70);
 SELECT 'space' as table_name, PG_SIZE_PRETTY(table_len), tuple_count, free_percent
 FROM pgstattuple('spazio');
 
-//The index tree_level includes the root level as 1
+--The index tree_level includes the root level as 1
 SELECT 'space' as index_name, tree_level, 
   leaf_pages, internal_pages, PG_SIZE_PRETTY(index_size), avg_leaf_density
 FROM pgstatindex('spazio_idx');
@@ -299,8 +299,8 @@ The **view** includes the following key columns:
 > **reloptions**: The storage options specified when the relation was created
 
 ```sql
-//On the same spazio table as before
-//The 'r' and 'i' relkind are for tables and indexes respetevly.
+--On the same spazio table as before
+--The 'r' and 'i' relkind are for tables and indexes respetevly.
 SELECT  relname, relkind, relpages, reltuples
   , PG_SIZE_PRETTY(PG_RELATION_SIZE(oid)), reloptions
 FROM pg_class
@@ -386,7 +386,7 @@ A B-tree **composite index** includes multiple columns in its CREATE INDEX state
 Each composite key is a combination of the indexed column values, and it points to a single TID.
 
 ```sql
-//A single index with each key includes the 2 columns values
+--A single index with each key includes the 2 columns values
 CREATE table multi( uno INT, due TEXT, tre INT );
 insert into multi (uno, due, tre) values (12,'base', 22), (7,'pen',43),(17,'cup',19);
 
@@ -406,7 +406,7 @@ It doesn't prioritize columns used in the ORDER BY clause as they are used to so
 We can include the ASC and DESC keywords in the CREATE INDEX statement to match the sort order of an ORDER BY clause. This allows the database to skip the sorting step in the query.
 
 ```sql
-//ASC is the default sorting for indexes
+--ASC is the default sorting for indexes
 CREATE INDEX idx_products_price_desc ON products(price DESC);
 SELECT * FROM products ORDER BY price DESC;
 
@@ -417,7 +417,7 @@ WHERE col_a= ORDER BY col_DESC
 A composite index applies the left-prefix rule to its columns using their **operation classes**.                                                  It stores its multiple columns in the **pg\_index** catalog as an **array**. Each column has its own associated operation class, defined in **pg\_opclass**, which provides its comparison and **sorting functions** from pg\_amop and **pg\_amproc**, respectively.                                                                                                                              The columns' operation classes act independently of each other. They only need to be compatible with the index's access method to be indexed togheter.                                                                                                              The index's sort order is defined by the first column's operation class, with subsequent columns applying their sorting functions only when needed to **differentiate rows** with identical values.
 
 ```sql
-//We need teh pg_class to identify teh relation name.
+--We need teh pg_class to identify teh relation name.
 CREATE TABLE employees ( depart INT, name TEXT );
 CREATE INDEX composite_idx ON employees (depart, name);
 
@@ -438,7 +438,7 @@ We can avoid the inaccessibility period by using the CONCURRENCY keyword in the 
 The CONCURRENCY keyword builds the index in a temporary space, requiring **multiple scans** to include any tuple updates and maintain data consistency with the table heap. Once it's complete, the database applies the new **index** to the table.
 
 ```sql
-//It keeps the table open for operation during long inserts like GENERATE_SERIES()
+--It keeps the table open for operation during long inserts like GENERATE_SERIES()
 create table bloc( uno INT, due TEXT )
 
 insert into bloc select i, md5(i::text) from generate_series(1, 10000) as i;
@@ -484,7 +484,7 @@ The query planner has access to the index conditions but can't determine if they
 Instead we use the **declarative partitioning**, which is designed to handle this exact scenario.
 
 ```sql
-//The query planner can't make any high-level logical partitionig analysis.
+--The query planner can't make any high-level logical partitionig analysis.
 CREATE INDEX sales_2023_idx ON sales (sale_date) 
     WHERE sale_date BETWEEN '2023-01-01' AND '2023-12-31';
 
@@ -519,7 +519,63 @@ Some compatible data types, like NUMERIC and FLOAT, are not suitable for cross-d
 
 The metadata for the operation class functions is stored in the **pg\_amop** and **pg\_amoproc** system catalogs.
 
-— Maybe I can check for real examples on teh postgresql output --
+— MAYBE NEW TITLE --
+
+A query search including an indexed column requires additional catalog lookups.                                                           The **query plan** must determine if the query **operator** is **compatible** with the **index** included in the search and if the resulting index scan is more efficient than a default sequential scan.
+
+The system determines the index's **operation family** by referencing its **relation name** in **pg\_class**, its properties in **pg\_index**, and the metadata from its associated access method in **pg\_opclass**.
+
+```sql
+--Different data types compatible for a cross-type operation
+CREATE TABLE demo(
+    val_int4 INT, val_bigi BIGINT
+);
+CREATE INDEX idx_int4 ON demo USING btree (val_int4);
+CREATE INDEX idx_bigi ON demo USING btree (val_bigi);
+
+--Their indexes are built using different operation classes
+SELECT
+  c.relname AS index_name,
+  opc.opcname AS operator_class_name,
+  opc.opcfamily AS operator_family_oid
+FROM 
+  pg_class AS c                              --c.oid | 770103| 770104
+JOIN  pg_index AS i ON i.indexrelid = c.oid  --i.indclass | 1978| 3124
+JOIN  pg_opclass AS opc ON opc.oid = i.indclass[0]
+WHERE c.relname = 'idx_int4' or c.relname = 'idx_bigi';
+--They are part of the same operation family
+--opcmethod|opcname |opcfamily|
+--      403|int4_ops|     1976|
+--      403|int8_ops|     1976|
+```
+
+The planner analyzes the query's WHERE clause to extract the **operator** and its **data types**, which the **pg\_operator** system catalog then uses to identify the specific OID of the query operation.                                                    It then searches for a pg\_amop rule that **validates** the **operation OID** for the **operation family** of its indexed column.
+
+```sql
+--It stores Every possible combination of data types and operators and its OID
+--The int4 and bigint data type OID are 23 and 20
+select * where val_int4 = val_bigi;
+      
+select oid, oprcode, oprrest from pg_operator 
+      where oprleft=23 and oprright=20 and oprname='='
+--oid|oprcode|oprrest|
+-- 15|int48eq|eqsel  |
+```
+
+The **pg\_amop** acts as a bridge, translating the high-level SQL operator into a specific strategy number used by the index's internal low-level code.
+
+The **strategy number** represents a specific action, used by the pg\_am handler function to execute the correct index operation.
+
+<pre class="language-sql"><code class="lang-sql">--It contains every valid pairing of a query operation and an index family.
+<strong>select OID, amopstrategy, amopmethod from pg_amop 
+</strong>    where amopopr=15 and amopfamily=1976;
+--oid  |amopstrategy|amopmethod|
+--10027|           3|       403|
+</code></pre>
+
+The query planner calculates the total **cost of an index scan** using the pg\_am system catalog metadata. It calls the amcostestimate handler function associated with the index, which first determines the query's selectivity by calling the **pg\_operator** specific **oprest** function. It then combines the selectivity with table statistics to estimate the I/O cost for the index scan.                                                                                             The planner compares this cost to the cost of a sequential scan to decide its **execution plan**.
+
+1
 
 <details>
 
@@ -530,50 +586,50 @@ A query search including an indexed column requires additional catalog lookups. 
 The system determines the index's operation family by referencing its relation name in pg\_class, its properties in pg\_index, and the metadata from its associated access method in pg\_opclass.
 
 ```sql
-//Different data types compatible for a cross-type operation
+--Different data types compatible for a cross-type operation
 CREATE TABLE demo(
     val_int4 INT, val_bigi BIGINT
 );
 CREATE INDEX idx_int4 ON demo USING btree (val_int4);
 CREATE INDEX idx_bigi ON demo USING btree (val_bigi);
 
-//Their indexes are built using different operation classes
+--Their indexes are built using different operation classes
 SELECT
   c.relname AS index_name,
   opc.opcname AS operator_class_name,
   opc.opcfamily AS operator_family_oid
 FROM 
-  pg_class AS c                              //c.oid | 770103| 770104
-JOIN  pg_index AS i ON i.indexrelid = c.oid  //i.indclass | 1978| 3124
+  pg_class AS c                              --c.oid | 770103| 770104
+JOIN  pg_index AS i ON i.indexrelid = c.oid  --i.indclass | 1978| 3124
 JOIN  pg_opclass AS opc ON opc.oid = i.indclass[0]
 WHERE c.relname = 'idx_int4' or c.relname = 'idx_bigi';
-//They are part of the same operation family
-//opcmethod|opcname |opcfamily|
-//      403|int4_ops|     1976|
-//      403|int8_ops|     1976|
+--They are part of the same operation family
+--opcmethod|opcname |opcfamily|
+--      403|int4_ops|     1976|
+--      403|int8_ops|     1976|
 ```
 
 The planner analyzes the query's WHERE clause to extract the operator and its data types, which the pg\_operator system catalog then uses to identify the specific OID of the query operation. It then searches for a pg\_amop rule that validates the operation OID for the operation family of its indexed column.
 
 ```sql
-//Every possible combination of data types and operators has its OID
+--Every possible combination of data types and operators has its OID
 select * where val_int4 = val_bigi;
       
 select oid, oprcode, oprrest from pg_operator 
       where oprleft=23 and oprright=20 and oprname='='
-//oid|oprcode|oprrest|
-// 15|int48eq|eqsel  |
+--oid|oprcode|oprrest|
+-- 15|int48eq|eqsel  |
 ```
 
 The pg\_amop acts as a bridge, translating the high-level SQL operator into a specific strategy number used by the index's internal low-level code.
 
 The strategy number represents a specific action, used by the pg\_am handler function to execute the correct index operation.
 
-<pre class="language-sql"><code class="lang-sql">//It contains every valid pairing of a query operation and an index family.
+<pre class="language-sql"><code class="lang-sql">--It contains every valid pairing of a query operation and an index family.
 <strong>select OID, amopstrategy, amopmethod from pg_amop 
 </strong>    where amopopr=15 and amopfamily=1976;
-//oid  |amopstrategy|amopmethod|
-//10027|           3|       403|
+--oid  |amopstrategy|amopmethod|
+--10027|           3|       403|
 </code></pre>
 
 The query planner calculates the total cost of an index scan using the pg\_am system catalog metadata. It calls the amcostestimate handler function associated with the index, which first determines the query's selectivity by calling the pg\_operator specific oprest function. It then combines the selectivity with table statistics to estimate the I/O cost for the index scan. The planner compares this cost to the cost of a sequential scan to decide its execution plan.
