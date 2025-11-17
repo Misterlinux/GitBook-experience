@@ -210,12 +210,7 @@ The GIST generic framework allows its handler function to include **additional c
 The database uses a **K-Nearest Neighbor** (K-NN) tree navigation strategy for distance operators (<->) applied to an ORDER BY query on a geometric or trigram data type.
 
 ```sql
-//The order by being present in the inside of the, index scan, signifies that 
-//the sca retrieval is being aplied to already sorted elements of the index tree, 
-//whih ar ethe table rows retrund by teh query.
-//The retrieval of one by one influences teh high cost, has to be compared to teh table size.
-
-//
+//The GIST indexes the Point entries into lossy bounding box predicates
 SET enable_seqscan = off;
 CREATE TABLE locations ( location POINT );
 
@@ -223,22 +218,18 @@ INSERT INTO locations (location) VALUES
     (point(20, 20)), (point(2, 2)), (point(5.1, 5.1)), (point(5, -10)), 
     (point(5, 5)),   (point(4.9, 4.9)), (point(5, 10)), (point(6, 5)),
     (point(-15, 5)), (point(5, 4));
-
 CREATE INDEX idx_locations_gist ON locations USING gist (location);
 
--- Your example query:
+//The query <-> distance operator instructs the database to trigger a K-NN operation
+//It performs a SORTED SCAN, which can retrieve already sorted entries for their TID
 SELECT 
   location,
   location <-> point(5,5) AS distance
-FROM locations
-ORDER BY location <-> point(5,5) LIMIT 5;
+FROM locations ORDER BY location <-> point(5,5) LIMIT 5;
 
-QUERY PLAN
-Limit  (cost=0.13..4.23 rows=5 width=246) (actual time=0.131..0.134 rows=5 loops=1)
-  -> Index Scan using idx_locations_gist on locations (cost=0.13..8.33 rows=10 width=246)                           |
-        Order By: (location <-> '(5,5)'::point) |
-Planning Time: 0.092 ms                         |
-Execution Time: 0.152 ms                        
+//QUERY PLAN
+Index Scan using idx_locations_gist on locations (cost=0.13..8.33 rows=10 width=246)
+  Order By: (location <-> '(5,5)'::point)
 ```
 
 The pg\_am handler function instance, used to execute the K-NN strategy, includes **extra support functions** which allow it to sort the query result values by distance, effectively enabling the unordered GIST entries to be ordered.
@@ -267,14 +258,12 @@ TSVECTOR USE ON GIST
 
 The GiST index uses the **tsvector** data type for full-text queries. The tsvector organizes the text document's content into a list of **lexemes** (normalized words) and their **document positions**.
 
-The **tsquery** data type stores the lexeme search terms, including the **logical operators** used in the query search operation. They are **built-in** components from PostgreSQL's **full-text search** (FTS) system, which provides **conversion functions** like **to\_tsvector()** and **to\_tsquery()**.                                                                    The text conversion includes setting to lowercase (normalized), removing common words (stop words), and reducing words into their root form (stemming).
+The **tsquery** data type stores the lexeme search terms, including the **logical operators** used in the query search operation. They are **built-in** components from PostgreSQL's **full-text search** (FTS) system, which provides **conversion functions** like **to\_tsvector()** and **to\_tsquery()**.                                                                    The text conversion includes setting to lowercase (**normalized**), removing common words (**stop words**), and reducing words into their root form (**stemming**).
 
 ```sql
-// Some code
-//Th root form is referredas includes verbs losing their verbal form and wordsbeingset to singluar.
-select to_tsvector('There was a crooked man, and he walked a crooked mile');
-select to_tsquery('man & (walking | running)');
-select to_tsvector('There was a crooked man, and he walked a crooked mile') @@ to_tsquery('man & (walking | running)');
+//We use ts_vector for the query value and ts_query for the query condition
+select to_tsvector('There was a crooked man, and he walked a crooked mile') @@
+    to_tsquery('man & (walking | running)');
 ```
 
 A full-text search query using the **match operator** (@@) can be executed by both a GiST index, which creates a more general-purpose index, and a GIN index, which is more specific and contains more details.
@@ -295,13 +284,12 @@ The tsquery data type converts its text value using the same tsvector operations
 It's **converted** into a signature bitmask to navigate the GIST tree, while its **internal logic** is applied only during the final **recheck step**. This set of rules is used by the query search operator (@@) to confirm the final results.
 
 ```sql
-// Some code
-//Combining words (lexemes) with logical operators like & (AND), | (OR), and ! (NOT).
+//It includes logical operators (&(AND), |(OR), !(NOT)) in the lexemes
 to_tsquery('english', 'quick & (cat | dog) & !fox')
 
-//while plainto_tsquery(), just automatically adds AND for all words
-//The tsvector_ops operator class functon will handle the tsvector tsquery queries
-//The tsquery_ops is used to comprae tsquery betwene each other conditions
+//The plainto_tsquery() automatically adds AND for all lexemes
+//The tsvector_ops operator class handles the tsvector queries
+//The tsquery_ops is used to handle comparison between tsqueries.
 ```
 
 The GIST can add more data types compatible with its indexing method using extensions, like for [cube ](https://postgrespro.com/docs/postgresql/9.6/cube), [ltree](https://postgrespro.com/docs/postgresql/9.6/ltree), [intarray](https://postgrespro.com/docs/postgresql/9.6/intarray), [seg](https://postgrespro.com/docs/postgresql/9.6/seg) and pg\_trgm used for [trigrams](https://postgrespro.com/docs/postgresql/9.6/pgtrgm) data type.
