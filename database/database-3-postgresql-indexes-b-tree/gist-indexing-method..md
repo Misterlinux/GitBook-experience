@@ -14,7 +14,7 @@ An EXCLUDE constraint uses its GiST index during INSERT and UPDATE operations to
 The new data is held in the RAM memory for the duration of the operation, and if the check passes, the data is committed to both the table and the index in an atomic operation that maintains table consistency.
 
 ```sql
-//The returned value extends the ends of the tsrange value by the interval argument
+//We fill the GIST with tsrange extended intervals 
 create or replace FUNCTION sessione(tsrange, interval)
   RETURNS tsrange AS
 $$
@@ -22,16 +22,17 @@ $$
 $$ 
 LANGUAGE 'sql' IMMUTABLE;
 
-//Example of the tsrange function returns: [11:45, 14:02]
+//The function returns the extended tsrange [11:45, 14:02]
 select sessione('[15-09-2023 12:00, 15-09-2023 13:47]', '15 minutes'::interval);
 
-//We limit the rows in the exclude GIST to the ones with sepcific user_id values
+//We apply the WHERE condition to specify the rows in the GIST subset
 create table lista(
   user_id TEXT, pal tsrange,
-  exclude using GIST(lower(user_id) with =, sessione(pal,'2 hours'::interval) with &&)
+  exclude using GIST(lower(user_id)with =, sessione(pal,'2 hours'::interval) with &&)
     where ( lower(user_id) in ('freeuser', 'trialuser', 'bonususer') )
 )
 
+//All user_id text get lower() before beinf used in the constraint
 insert into lista(user_id, pal) values 
  ('freeuser','[2021-05-12 12:00, 2021-06-07 05:00 ]'), 
  ('Freeuser','[2021-06-07 07:00, 2021-06-07 12:00 ]'), //Error, same user and overlay
@@ -72,13 +73,9 @@ The **Consistent** function contains all the possible data-type-specific operati
 The query planner analyzes its query values and operator to retrieve its corresponding pg\_amop strategy value, which is used by the Consistent function to validate the query search for the specific values.
 
 ```sql
-//The proof of the operator strategies can be included when creation custom 
-//operation classes.
+//Operation strategies are explicitaly included when creating a new operation class
 CREATE OPERATOR CLASS gist__int_ops ... USING gist AS
-  OPERATOR 3 &&,
-  OPERATOR 6 =,
-  OPERATOR 7 @,
-  OPERATOR 8 ~,
+  OPERATOR 3 &&, OPERATOR 6 =, OPERATOR 7 @, OPERATOR 8 ~
 ```
 
 MAYBE TITLE CONJUNTO
@@ -87,34 +84,21 @@ The GiST index organizes the spatial POINT data type using **bounding boxes**.\
 The boxes define the internal node predicates, summarizing the **spatial area** that contains all **points** in their child nodes. The Consistent function navigates the structure by checking if the query value is contained within these boxes, to then retrieve the actual **data row's point position** from the matching leaf node.
 
 ```sql
-//It uses two coordinates, X/Y to hanlde the representation.
-//Different from a one dimentional range
+//Each Point(x,y) represents a two-dimentional value, unlike the one-dimentional range
 CREATE TABLE points (
     id SERIAL PRIMARY KEY, p  POINT
 );
 
 INSERT INTO points (p) VALUES
-    (point '(1,1)'),
-    (point '(3,2)'),
-    (point '(6,3)'),
-    (point '(5,5)'),
-    (point '(7,8)'),
-    (point '(8,6)');
-
+  (point '(1,1)'),(point '(3,2)'),(point '(6,3)'),(point '(5,5)'),(point '(7,8)');
 CREATE INDEX points_p_gist_idx ON points USING GIST (p);
 
-SELECT * FROM points WHERE p <@ box '(2,1),(7,4)';
-
 EXPLAIN SELECT * FROM points WHERE p <@ box '(2,1),(7,4)';
-   p  
--------
- (3,2)
- (6,3)
+//(3, 2), (6, 3)
 
-QUERY PLAN                                                                     |
--------------------------------------------------------------------------------+
-Index Scan using points_p_gist_idx on points  (cost=0.13..8.15 rows=1 width=20)|
-  Index Cond: (p <@ '(7,4),(2,1)'::box)   |
+//QUERY PLAN
+//Index Scan using points_p_gist_idx on points  (cost=0.13..8.15 rows=1 width=20)
+//  Index Cond: (p <@ '(7,4),(2,1)'::box)
 ```
 
 The GiST index applies an extra **recheck step** to query results. It's **based on the data type**, not the query operation, and depends on how the operation class defines that data type.
@@ -134,9 +118,8 @@ The **pageinspect** extention can't return any readable property about the GIST 
 We access the internal structure properties of a GIST index using the GEVEL extension.                   The GEVEL is a **contrib debugger module** for GIST and GIN indexes in PostgreSQL. It provides functions to visualize high-level statistics, print the index's tree structure, and dump the individual keys stored in the index pages.
 
 ```sql
-// Some code
+//https://github.com/BetaRavener/Gevel-Extension
 select * from gist_stat('airports_coordinates_idx');
-https://github.com/BetaRavener/Gevel-Extension
 ```
 
 The **gist\_stat(index\_oid)** function returns high-level statistics for each **level** of the GiST index.  It starts at the leaf nodes (represented as 0) and reports the combined **properties** of **all entries** at each level, aggregating them from all the different branches.
@@ -152,19 +135,18 @@ The **gist\_stat(index\_oid)** function returns high-level statistics for each *
 > The **avg\_tuple\_len** column returns the average size (in bytes) of a single index entry at that level.
 
 ```sql
-// Some code
+//All nodes stats get summed and grouped by their level
 SELECT * FROM gist_stat(16393);
 level | num_pages | num_tuples | num_dead_tuples | free_space | avg_tuple_len
--------+-----------+------------+-----------------+------------+---------------
-     0 |       150 |       2500 |              85 |      45120 |            32
-     1 |        10 |        149 |               0 |       1024 |            36
+-------+-----------+------------+-----------------+------------+-------------
+    0 |       150 |       2500 |              85 |      45120 |            32
+    1 |        10 |        149 |               0 |       1024 |            36
 ```
 
 The **gist\_tree(oid, max\_depth)** function visualizes the index's structure from the **top down**.      Its output returns a **text summary** of each index node's properties, using **indentation** to represent the **different levels**.                                                                                                                             Each line includes the node's level (Level), its physical page number (Page), the number of children in that page (nchildren), and the key (or predicate) that leads to that node.
 
 ```sql
-// Some code
-//It starts from teh root level, and teh level 0 means teh leaf node level, final, bottom.
+//It starts from the root level untill it reaches the leaf nodes (level 0)
 SELECT * FROM gist_tree(12345, 3);
 
 (Root Page, Level 2) Page 5, nchildren=2, key=BOX(0 0, 100 100)
@@ -179,14 +161,12 @@ The **gist\_print(oid)** function returns a set of all keys stored in the index.
 Each row in the output includes the entry's tree level (level), its boolean valid status (false means outdated), and the actual key value for that specific entry.
 
 ```sql
-// Some code
-//The set can be queries for specific values
-//depending on teh level its a entry or a internla nod epredicate.
+//The most recent GEVEL forks use the OID instead of the index name
 SELECT * FROM gist_print(12345);
 
--- You can even filter the results like a regular table
+//The results can be filtered like a table query
 SELECT * FROM gist_print(12345)
-WHERE level = 0; -- Show me only the leaf keys
+WHERE level = 0; //The leaf node entries
 
 level | valid |             key
 -------+-------+-----------------------------
@@ -234,6 +214,8 @@ The database uses a **K-Nearest Neighbor** (K-NN) tree navigation strategy for d
 //the sca retrieval is being aplied to already sorted elements of the index tree, 
 //whih ar ethe table rows retrund by teh query.
 //The retrieval of one by one influences teh high cost, has to be compared to teh table size.
+
+//
 SET enable_seqscan = off;
 CREATE TABLE locations ( location POINT );
 
