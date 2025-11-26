@@ -517,7 +517,7 @@ The database identifies the different data types in the index query and checks i
 
 Some compatible data types, like NUMERIC and FLOAT, are not suitable for cross-data type comparisons. Their **different precision levels** would result in a converted NUMERIC value being different from the original, which breaks the transitive rule (A != A).
 
-The metadata for the operation class functions is stored in the **pg\_amop** and **pg\_amoproc** system catalogs.
+The metadata for the operation class functions is stored in the **pg\_amop** and **pg\_amoproc** system catalogs \<LINK FOR IT IN TEH databse 3 section>.
 
 — MAYBE NEW TITLE --
 
