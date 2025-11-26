@@ -417,7 +417,7 @@ WHERE col_a= ORDER BY col_DESC
 A composite index applies the left-prefix rule to its columns using their **operation classes**.                                                  It stores its multiple columns in the **pg\_index** catalog as an **array**. Each column has its own associated operation class, defined in **pg\_opclass**, which provides its comparison and **sorting functions** from pg\_amop and **pg\_amproc**, respectively.                                                                                                                              The columns' operation classes act independently of each other. They only need to be compatible with the index's access method to be indexed togheter.                                                                                                              The index's sort order is defined by the first column's operation class, with subsequent columns applying their sorting functions only when needed to **differentiate rows** with identical values.
 
 ```sql
---We need teh pg_class to identify teh relation name.
+--We need the pg_class to identify the relation name.
 CREATE TABLE employees ( depart INT, name TEXT );
 CREATE INDEX composite_idx ON employees (depart, name);
 
@@ -711,7 +711,7 @@ The deduplicated key's posting list must fit within its **single node**. It can'
 Columns added to an index using the `INCLUDE` clause can't be deduplicated. They are stored in the node as part of the index's posting list and can't be further deduplicated.&#x20;
 
 ```sql
-//They are called covering indexes and the INCLUDE column is not part of the key.
+--They are called covering indexes and the INCLUDE column is not part of the key.
 CREATE INDEX my_index ON my_table(indexed_col) INCLUDE (included_col);
 ```
 

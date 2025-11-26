@@ -12,7 +12,7 @@ The CREATE INDEX command creates an index for its specified **table columns**.\
 The <mark style="background-color:orange;">B-tree</mark> indexing method defines an index structure optimized for **equality** and **range** queries.
 
 ```sql
-//Indexes are most effective on large datasets
+--Indexes are most effective on large datasets
 CREATE TABLE tavole (
     id  SERIAL PRIMARY KEY, codice  INT
 );
@@ -20,14 +20,14 @@ CREATE TABLE tavole (
 INSERT INTO tavole (codice, nome)
     SELECT FLOOR(RANDOM() * 10000) FROM GENERATE_SERIES(1, 10000);
 
-//If no specified the database creates a B-tree index
+--If no specified the database creates a B-tree index
 CREATE INDEX indice ON tavole(codice);
 
-//We disable the sec. scan to make the index be used by the query planner.
+--We disable the sec. scan to make the index be used by the query planner.
 SET enable_seqscan = off;
 SET enable_seqscan = on;
 
-//Explain Analyze returns the scan stats
+--Explain Analyze returns the scan stats
 explain analyze select * from tavole where codice > 5000;
 ```
 
@@ -39,13 +39,13 @@ It also depends on the query clauses (e.g., LIKE or JOIN), as some are not suppo
 An index can be **implicitly created** by a constraint and is **automatically deleted** when its associated table is dropped.
 
 ```sql
-//The unique constraint implicitly creates a b-tree index
+--The unique constraint implicitly creates a b-tree index
 CREATE TABLE intervalli (
     inizio INTEGER, fine INTEGER,
     UNIQUE (inizio, fine)
 );
 
-//Equivalent to an EXCLUDE with extendable comparison conditions
+--Equivalent to an EXCLUDE with extendable comparison conditions
 CREATE TABLE intervalli1 (
     inizio INTEGER, fine INTEGER,
     EXCLUDE USING btree (inizio WITH =, fine with =)
@@ -56,41 +56,59 @@ The CREATE INDEX includes the **option** argument using the WITH keyword.\
 It configures the **index access method** but offers a more limited set of available options compared to other index types.
 
 ```sql
-//FILLFACTOR sets the percentage of a node that can be filled with entries.
+--FILLFACTOR sets the percentage of a node that can be filled with entries.
 CREATE INDEX my_index ON my_table (my_column) WITH (FILLFACTOR = 90);
 ```
 
 The **placement** of the CREATE INDEX command influences the effect of certain options, as they are applied differently depending on whether the index is created on **existing data** or is filled later by INSERT **operations**.
 
 ```sql
-//If placed after the INSERTs it will apply the FILLFACTOR option 
+--If placed after the INSERTs it will apply the FILLFACTOR option 
 create table spazio( uno INT, due TEXT)
 
-//It will populate the leaf nodes leaving a 30% empty dedicated for updates
+--It will populate the leaf nodes leaving a 30% empty dedicated for updates
 create index spazio_idx on spazio(due) with (FILLFACTOR = 70);
 insert into spazio select i, (md5(i::text),10) from GENERATE_SERIES(1,100) as i;  
 
-//If before, it creates an empty index and treats any INSERT as a no FILLFACTOR update
+--If before, it creates an empty index and treats any INSERT as a no FILLFACTOR update
 create index spazio_idx on spazio(due) with (FILLFACTOR = 70);  
 insert into spazio select i, (md5(i::text), 10) from GENERATE_SERIES(1,100) as i;
 ```
 
-The CREATE UNIQUE INDEX command creates a B-tree that enforces uniqueness on its indexed column values. Some constraints, like UNIQUE, work by implicitly creating a B-tree index; the index command just explicitly creates the same structure to enforce the same rules.
+The CREATE UNIQUE INDEX command creates a **B-tree** that enforces **uniqueness** on its **indexed column values**. Some constraints, like UNIQUE, work by implicitly creating a B-tree index; the index command just explicitly creates the same structure to enforce the same rules.
 
-A partial index is an index that contains only a subset of its indexed column values, created by adding a WHERE clause to the CREATE INDEX command.\
-It's applied similarly to a CHECK constraint, but instead of blocking invalid data from entering the table, it limits which rows are included in the index, while allowing all data into the table itself.\
+A **partial index** is an index that contains only a **subset** of its indexed column values, created by adding a WHERE clause to the CREATE INDEX command.\
+It's applied similarly to a CHECK constraint, but instead of blocking invalid data from entering the table, it **limits which rows are included** in the index, while **allowing** all data into the **table** itself.\
 The smaller index allows for faster query scans and is affected by fewer table updates.
 
 ```sql
-//ADD example here, not all values must be form the index for clause
-//Only teh first value of teh indexes columns is allwed.
-//Its usefull to limit teh valkues as non commons
-
+-- The index structure is reserved only for rows with uncommon values
+CREATE TABLE orders (
+    customer integer, status text
+);
+insert into orders(customer, status) values 
+    (12, 'SERVED'), (1, 'PENDING'), (9, 'PENDING')
+    
+CREATE INDEX pending_clients ON orders (status) WHERE status = 'PENDING';
 ```
 
 1
 
 1
+
+1
+
+1
+
+1
+
+1
+
+1
+
+1
+
+### GIST INDEXING
 
 A GiST (Generalized Search Tree) index organizes **complex** and **non-linear data** into a balanced tree.\
 Its core algorithm acts as a flexible **framework**. It uses the operator class of the data type being indexed to define its internal logic and node structure.
@@ -98,8 +116,8 @@ Its core algorithm acts as a flexible **framework**. It uses the operator class 
 The GIST index **access method** stores **multi-dimensional** data types, such as geometric data, images, arrays, timestamps, and full-text search strings. Its tree structure organizes the data based on **shared properties** specific to the indexed data type, resulting in a more complex index with slower operations.
 
 ```sql
-//It can't be declared within a CREATE TABLE
-//It provides multiple operator classes, each designed to index a specific data type
+--It can't be declared within a CREATE TABLE
+--It provides multiple operator classes, each designed to index a specific data type
 CREATE INDEX index_name ON table_name
 USING gist (column_name);
 
