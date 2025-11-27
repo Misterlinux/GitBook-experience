@@ -343,6 +343,9 @@ Bitmap Heap Scan on tavole
         Index Cond: (codice < 30000)      
 Planning Time: 0.107 ms Execution Time: 7.951 ms */
 ```
+
+The Bitmap Scan is a **single logical operation strategy** consisting of multiple I/O accesses (the **index scan** and the **heap scan**). Its EXPLAIN ANALYZE output returns a loops value of 1 because the **multi-step bitmap access** is a single, non-repeated operation, with a higher value typically indicating a nested loop join.\
+The bitmap index scan's **width** property returns 0 because the retrieved TIDs used to create the bitmap are not considered table columns.
 {% endtab %}
 
 {% tab title="Index scan" %}
@@ -398,7 +401,10 @@ Execution Time: 0.189 ms
 {% endtab %}
 {% endtabs %}
 
-1
+The EXPLAIN ANALYZE output describes the properties of the table scan.\
+They are divided into **estimated cost** values, calculated by EXPLAIN, and **actual** performance metrics, returned by ANALYZE after the query execution.\
+The **loops** value represents the number of times the [node ](#user-content-fn-1)[^1]was **executed**; a higher count indicates a complex join structure used for the scan.\
+The **width** value represents the average **byte size** of the table rows used in the scan. It's a static property used for the cost estimation and is not included in the runtime metrics of the actual cost.
 
 1
 
@@ -535,3 +541,5 @@ The BitmapAnd process can combine exact and lossy bitmaps; it uses the page valu
 1
 
 1
+
+[^1]: Logical operations that include I/O accesses
