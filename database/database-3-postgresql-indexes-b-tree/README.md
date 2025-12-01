@@ -24,8 +24,7 @@ INSERT INTO tavole (codice, nome)
 CREATE INDEX indice ON tavole(codice);
 
 --We disable the sec. scan to make the index be used by the query planner.
-SET enable_seqscan = off;
-SET enable_seqscan = on;
+SET enable_seqscan = off/on;
 
 --Explain Analyze returns the scan stats
 explain analyze select * from tavole where codice > 5000;
@@ -92,7 +91,7 @@ insert into orders(customer, status) values
 CREATE INDEX pending_clients ON orders (status) WHERE status = 'PENDING';
 ```
 
-1
+### The SYSTEM CATALOG query planner access
 
 A query search including an indexed column requires additional catalog lookups.                                                           The **query plan** must determine if the query **operator** is **compatible** with the **index** included in the search and if the resulting index scan is more efficient than a default sequential scan.
 
@@ -257,7 +256,7 @@ oid  |amname|amhandler           |amtype|
 
 The **pg\_amproc** (Access Method Process) system catalog contains the indexes' **sorting functions**.                    The database retrieves and automatically triggers the specific support function for the **data type** being used during the CREATE INDEX command. This registry is shared among all of the database's indexes.
 
-The query planner on indexed etc, title
+### The query panner EXPLAIN OUTPUT
 
 The **query planner'**&#x73; EXPLAIN output is based on the **estimated number** of matching query values:
 
@@ -351,7 +350,7 @@ The bitmap index scan's **width** property returns 0 because the retrieved TIDs 
 {% tab title="Index scan" %}
 An **Index Scan** is used for highly selective queries thst use the index structure to **minimize random I/O accesses** for its matching table rows.\
 Its query can include multiple separate indexed columns, as the planner will use the index with the highest selectivity for the **initial scan**, then apply the remaining conditions as a filter after retrieving the matching rows.\
-This process differs from an Index-Only Scan because it requires a random I/O access to themain table
+This process differs from an Index-Only Scan because it requires a random I/O access to the main table
 
 ```sql
 -- The query planner chooses the index based on its selectivity
@@ -380,33 +379,33 @@ Index Scan using padding on tavole
 Planning Time: 1.781 ms Execution Time: 0.179 ms */
 ```
 
-The Index-Only Scan retrieves all the requested query values directly from the index.\
-It applies I/O access to the optimized index disk pages instead of the main table disk pages accessed by the standard Index Scan.
+The **Index-Only Scan** retrieves all the requested **query values** directly from the index.\
+It applies I/O access to the **optimized index disk pages** instead of the main table disk pages accessed by the standard Index Scan.
 
 ```sql
-// Some code
-//The trade off being resulting in a more bigger index that results n more disk pages being occuped, needed asteh index entries become bigger and requires more maintenance.
+-- It's used for query conditions with only columns from a composte index
+-- Its larger structure requires more maintenance
 create index paddinx on tavole(codice, padding);
 
 EXPLAIN ANALYZE
-SELECT * FROM tavole WHERE codice = 82425 and padding = 'b67ba9302c73e0e4c82762cae9905add';
-
-Index Only Scan using paddinx on tavole  (cost=0.42..4.44 rows=1 width=37) (actual time=0.164..0.164 rows=0 loops=1)
-  Index Cond: ((codice = 82425) AND (padding = 'b67ba9302c73e0e4c82762cae9905add'::text))                           
-  Heap Fetches: 0                                                                                                   
-Planning Time: 1.557 ms                                                                                            
-Execution Time: 0.189 ms
-
+SELECT * FROM tavole WHERE codice = 82425 and padding = 'b67ba...';
+/*
+Index Only Scan using paddinx on tavole  
+  (cost=0.42..4.44 rows=1 width=37) (actual time=0.164..0.164 rows=0 loops=1)
+  Index Cond: ((codice = 82425) AND (padding = 'b67ba...'::text))     
+  Heap Fetches: 0                                 
+Planning Time: 1.557 ms                                          
+Execution Time: 0.189 ms  */
 ```
 {% endtab %}
 {% endtabs %}
 
-The EXPLAIN ANALYZE output describes the properties of the table scan.\
+The EXPLAIN ANALYZE output describes the **properties** of the **table scan**.\
 They are divided into **estimated cost** values, calculated by EXPLAIN, and **actual** performance metrics, returned by ANALYZE after the query execution.\
 The **loops** value represents the number of times the [node ](#user-content-fn-1)[^1]was **executed**; a higher count indicates a complex join structure used for the scan.\
 The **width** value represents the average **byte size** of the table rows used in the scan. It's a static property used for the cost estimation and is not included in the runtime metrics of the actual cost.
 
-1
+### The EXPLAIN ANALYZE propeties
 
 1
 
@@ -446,6 +445,8 @@ It supports a wide range of specialized **comparison operators** for queries tha
 
 The database first uses the **indexed columns** from the WHERE clause to retrieve the corresponding table rows. It then applies the remaining conditions to that resulting set of data.
 
+— -------------
+
 The query planner creates its **excution plan** by estimating the most efficient WHERE clause condition.\
 The ANALYZE command accesses the column data statistics from the **pg\_statistics** system catalog.
 
@@ -460,9 +461,6 @@ The query planner uses the selectivity **estimation function**, specific to the 
 //If the specified daterange contains teh specified range, not just overlap,
 -- Enable the trigram extension, which is needed for similarity searches
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
-
--- Clean up previous table if it exists
-DROP TABLE IF EXISTS festivals;
 
 -- Create the table, we are not searching for prefix searches, adapt to the B-tree
 -- But for fuzzy name matching, we works with teh GIST or GIN and the extention.
@@ -516,7 +514,7 @@ The BitmapAnd process can combine exact and lossy bitmaps; it uses the page valu
 
 1
 
-\\
+### DOUBLE LOSSY scan
 
 \\
 
