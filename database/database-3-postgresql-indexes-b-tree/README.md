@@ -1,6 +1,8 @@
 # Database 3:PostgreSQL Indexes, B-tree
 
-1
+* 1
+* [The system catalog query plan access](./#the-system-catalog-query-planner-access)
+* 1
 
 1
 

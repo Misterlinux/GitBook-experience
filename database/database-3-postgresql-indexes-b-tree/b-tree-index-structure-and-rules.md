@@ -1,11 +1,13 @@
-# B-tree index properties and
+# B-tree index: structure and rules
 
-* Insert and Update Procedures for Table Heap and Index Units
-* Index and table heap maintenance operations for outdated values
-* Accessing Index and Table Heap Statistics with Extensions and System Catalogs
-* The B-tree Composite Index and its Left-Prefix Rule structure
-* Comparing the MVCC method for tuple updates and the CONCURRENCY option for table LOCK index operations.
-* 1
+* [Insert and Update Procedures for Table Heap and Index Units](b-tree-index-structure-and-rules.md#insert-and-update-procedures-for-table-heap-and-index-units)
+* [Index and table heap maintenance operations for outdated values](b-tree-index-structure-and-rules.md#index-and-table-heap-maintenance-operations-for-outdated-values)
+* [Accessing Index and Table Heap Statistics with Extensions and System Catalogs](b-tree-index-structure-and-rules.md#accessing-index-and-table-heap-statistics-with-extensions-and-system-catalogs)
+* [The B-tree Composite Index and its Left-Prefix Rule structure](b-tree-index-structure-and-rules.md#the-b-tree-composite-index-and-its-left-prefix-rule-structure)
+* [Comparing the MVCC method for tuple updates and the CONCURRENCY option for table LOCK index operations.](b-tree-index-structure-and-rules.md#comparing-the-mvcc-method-for-tuple-updates-and-the-concurrency-option-for-table-lock-index-operatio)
+* [Data type indexing with Operation class and family](b-tree-index-structure-and-rules.md#data-type-indexing-with-operation-class-and-family)
+* [B-tree support functions and EQUALIMAGE index deduplication](b-tree-index-structure-and-rules.md#b-tree-support-functions-and-equalimage-index-deduplication)
+* [The B+tree rules and structure](b-tree-index-structure-and-rules.md#the-btree-rules-and-structure)
 
 A B-tree index is designed to store **sequential data,** and it uses its **operation classes** to organize entries in a **linear** order.
 
@@ -492,7 +494,7 @@ CREATE INDEX sales_2024_idx ON sales (sale_date)
     WHERE sale_date BETWEEN '2024-01-01' AND '2024-12-31';
 ```
 
-### Operation Familes and class
+### Data type indexing with Operation class and family
 
 The B-tree assigns an **operation class** to each **data type** allowed within the index.\
 It contains the functions that set and maintain the linear sorting order of the index values, such as _sorting_ and _operator functions_.
@@ -517,13 +519,9 @@ The database identifies the different data types in the index query and checks i
 
 Some compatible data types, like NUMERIC and FLOAT, are not suitable for cross-data type comparisons. Their **different precision levels** would result in a converted NUMERIC value being different from the original, which breaks the transitive rule (A != A).
 
-The metadata for the operation class functions is stored in the **pg\_amop** and **pg\_amoproc** system catalogs \<LINK FOR IT IN TEH databse 3 section>.
+The metadata for the operation class functions is stored in the **pg\_amop** and **pg\_amoproc** [system catalogs](./#the-system-catalog-query-planner-access).
 
-— MAYBE NEW TITLE --
-
-1
-
-### B-TREE SUPPORT FUNCTIONS
+### B-tree support functions and EQUALIMAGE index deduplication
 
 The **support functions** are specialized methods contained within each _operator class_.\
 They optimize the B-tree's **core operations**, like the sorting function that sets and maintains the index's internal structure.
@@ -554,8 +552,8 @@ Columns added to an index using the `INCLUDE` clause can't be deduplicated. They
 CREATE INDEX my_index ON my_table(indexed_col) INCLUDE (included_col);
 ```
 
-The equalimage function retrieves the comparison function for the indexed data type and checks if PostgreSQL has assigned it a deterministic OID argument.\
-The deterministic rule sets the equalimage boolean flag to true, which validates any equality operation defined by the query condition as safe and allows the deduplication structure by PostgreSQL.
+The **equalimage** function retrieves the comparison function for the indexed data type and checks if PostgreSQL has assigned it a deterministic OID argument.\
+The **deterministic rule** sets the equalimage boolean flag to true, which validates any equality operation defined by the query condition as safe and allows the deduplication structure by PostgreSQL.
 
 <details>
 
@@ -580,9 +578,9 @@ If an indexed column can hold multiple compatible data types (e.g., VARCHAR and 
 
 </details>
 
-1
+<figure><img src="../../.gitbook/assets/image (4).png" alt="" width="563"><figcaption><p>The EQUALIMAGE aplied during the index deduplication process</p></figcaption></figure>
 
-### THE B+TREE
+### The B+tree rules and structure
 
 The B+tree is a streamlined version of the B-tree data structure.
 
@@ -602,5 +600,3 @@ The B+ tree is used for a table's primary key index. Its TID works as a unique r
 It's created by default on CREATE TABLE when a primary key is included in a column definition, it optimizes data retrieval on the table's heap.
 
 <figure><img src="../../.gitbook/assets/b+tree2.jpg" alt="" width="493"><figcaption><p>The B+tree internal nodes can contain more pointers, as they don't store the entries</p></figcaption></figure>
-
-1
