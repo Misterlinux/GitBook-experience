@@ -84,6 +84,7 @@
 * [Database 3:PostgreSQL Indexes, B-tree](database/database-3-postgresql-indexes-b-tree/README.md)
   * [B-tree index: structure and rules](database/database-3-postgresql-indexes-b-tree/b-tree-index-structure-and-rules.md)
   * [Gist indexing method.](database/database-3-postgresql-indexes-b-tree/gist-indexing-method..md)
+  * [EXPLAIN command and ANALYZE](database/database-3-postgresql-indexes-b-tree/explain-command-and-analyze.md)
 * [Node-Postgres Module](database/node-postgres-module.md)
 
 ## OTHER

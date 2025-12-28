@@ -15,10 +15,7 @@ The <mark style="background-color:orange;">B-tree</mark> indexing method defines
 
 ```sql
 --Indexes are most effective on large datasets
-CREATE TABLE tavole (
-    id  SERIAL PRIMARY KEY, codice  INT
-);
-
+CREATE TABLE tavole ( id  SERIAL PRIMARY KEY, codice  INT );
 INSERT INTO tavole (codice, nome)
     SELECT FLOOR(RANDOM() * 10000) FROM GENERATE_SERIES(1, 10000);
 
@@ -27,7 +24,6 @@ CREATE INDEX indice ON tavole(codice);
 
 --We disable the sec. scan to make the index be used by the query planner.
 SET enable_seqscan = off/on;
-
 --Explain Analyze returns the scan stats
 explain analyze select * from tavole where codice > 5000;
 ```
@@ -409,7 +405,7 @@ The **width** value represents the average **byte size** of the table rows used 
 
 ### The EXPLAIN ANALYZE propeties
 
-1
+ACTUAL COMMAND
 
 1
 
