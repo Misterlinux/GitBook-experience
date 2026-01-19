@@ -418,21 +418,19 @@ It occupies one-quarter of the total RAM, leaving the rest to be utilized by oth
 **Local Backend Memory**: It's dedicated to the current connected backend process, handling its session-specific data like the connection state or the private memory structure used for its query operations.
 {% endhint %}
 
-The Shared Buffer Cache contains **copies** of the accessed **disk pages** used in **previous queries** so as to minimize the I/O disk operations. It stores pages for **both tables** and **indexes**.\
-It can be filled by sequential read operations like VACUUM or VACUUM FREEZE, which perform a full table scan and remove dead rows. This process is called **cache warming**, which increases the probability of the next ANALYZE command to access **values** that are already present **in memory**.
+The Shared Buffer Cache stores **copies** of frequently accessed **disk pages** for both **tables** and **indexes** to minimize disk I/O. It tracks modified pages and writes them to disk during **buffer eviction** or a **checkpoint**.\
+It optimizes the ANALYZE command's performance by minimizing slow disk I/O accesses and allowing it to retrieve the data needed for the operation directly from RAM.
 
-It **optimizes** the ANALYZE comman&#x64;**'**&#x73; performance by minimizing slow disk I/O accesses and allowing it to retrieve the data needed for the operation directly from RAM.
+Sequential read operations, such as VACUUM or VACUUM FREEZE, utilize the Shared Buffer Cache to retrieve and process pages, marking them as dirty when dead rows are removed. These operations protect the current set of active disk pages by relying on a specialized **Ring Buffer,** which uses a small, dedicated memory space to process the disk pages **without polluting the main** Shared Buffer Cache.
 
-The Shared Buffer Cache relies on an **eviction mechanism** to manage **new disk pages** when it's full.\
-The **LRU** (Least Recently Used) mechanism requires the dirty pages to be written on disk before being evicted.\
-It differs from the **FIFO** (First-In, First-Out) policy applied by the ring buffer strategy during the ANALYZE command, which recycles pages without requiring any checks outside of the page's entry time.
+The Ring Buffer is a **Buffer Access Strategy** created by the Buffer Manager for **bulk operations** like ANALYZE.&#x20;It functions as a temporary, fixed-size **sub-cache** for operations that need to process many disk pages, like the _reservoir sampling_ for ANALYZE.\
+It **differs** from the main Shared Buffer Cache in both **size** and **purpose**. Instead of preserving frequently accessed pages for long-term reuse, the Ring Buffer is designed to process pages and immediately evict them.\
+Both mechanisms follow the same data persistence rule: a dirty page must be written to disk before it can be evicted. The difference lies in their **eviction algorithm**.
 
-The **ring buffer** is a specialized **Buffer Access Strategy** created by the Buffer Manager for **bulk operations** like ANALYZE.\
-It's dedicated to a fixed-size set of disk pages retrieved during the ANALYZE sequential scan, where the data is then processed for reservoir sampling.\
-It acts as a **temporary memory space** and includes its own eviction mechanism, preventing cache pollution in the shared buffer cache.
+The Shared Buffer Cache relies on a Clock Sweep algorithm (an approximation of Least Recently Used/**LRU**) for its eviction mechanism. It tracks page access counts to identify and evict pages that are rarely used by database operations.\
+It differs from the **FIFO** (First-In, First-Out) policy applied by the Ring Buffer strategy during commands like ANALYZE, which strictly recycles pages based on their entry order without checking usage frequency.
 
-The ANALYZE command accesses the table disks by first aiming for a **cache hit**, searching the disk page within the shared buffer; if the page is not found, a **cache miss** occurs, requiring it to retrieve the **disk page data** from the **I/O access**.\
-The **ring buffer strategy** defines **where to load** **the retrieved data** so as not to modify the shared buffer cache.
+The ANALYZE operation first attempts a **Cache Hit** by searching for the disk page within the Shared Buffer Cache. If the page is not found (**Cache Miss**), it retrieves the data from disk via I/O using a Ring Buffer strategy to avoid polluting the main Shared Buffer Cache.
 
 The ring buffer is a **circular data structure**, which effectively frees space by evicting (overwriting) the oldest already processed disk pages.\
 It purges all the remaining values at the end of the reservoir sampling, ensuring they are not pushed into the main cache.
