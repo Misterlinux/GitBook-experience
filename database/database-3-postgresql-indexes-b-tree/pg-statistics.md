@@ -95,13 +95,7 @@ It multiplies the **individual selectivity** of each column, assuming they are *
 
 — EXTENDED STATISTICS
 
-The CREATE STATISTICS command builds a **statistical object** for its specified table columns.                     It's not part of the standard pg\_stats view; instead it consists of multi-party entry distributed across two primary system catalogs:
-
-{% hint style="info" %}
-**pg\_statistic\_ext**: It stores the object definition and metadata, which is used to identify the columns or expressions being tracked in the pg\_stats\_ext view.
-
-**pg\_statistic\_ext\_data**: It stores the actual statistical results that populate the pg\_stats\_ext\_data view.
-{% endhint %}
+The CREATE STATISTICS command builds a **statistical object** for its specified table columns.                     It's not part of the standard pg\_stats view; instead it consists of multi-party entry distributed across two primary system catalogs **pg\_statistic\_ext** and **pg\_statistic\_ext\_data.**
 
 The extended statistics metadata differ from the pg\_statistics. They cover **multivariate functional dependencies** and use them to enhance the standard query planner **estimation process**:&#x20;
 
@@ -221,6 +215,8 @@ We add the IF NOT EXISTS clause to the CREATE STATISTICS command to prevent erro
 
 The CREATE STATISTICS command creates **multivariate dependencies** when applied to multiple columns. The statistical object, stored in **pg\_statistic\_ext**, acts as a **flag**. It instructs the ANALYZE command to calculate **additional statistics** for those specific columns.                                                          The ANALYZE process maintains a **single scan** of the table data from the disk. It adds a simultaneous **second track** that analyzes the relationships between **column combinations** rather than treating them as separate and independent.
 
+The **pg\_statistic\_ext** system catalog contains the columns **definition** of the statistics that appear in the pg\_stats\_ext view.
+
 {% hint style="info" %}
 **OID**: It's an unique identifier of the statistics object within the database\
 **stxrelid**: The OID value of the **pg\_class** table described by the statistics object.\
@@ -233,9 +229,179 @@ The CREATE STATISTICS command creates **multivariate dependencies** when applied
 **stxstattarget**: It defines the detail level of extended statistics compared to the individual columns they are composed of. A value of -1 inherits the highest **statistics\_target** from its component columns, while a value of 0 disables statistics collection for the object. A positive integer sets an **explicit limit** on the number of Multivariate MCV entries, regardless of individual column settings.
 {% endhint %}
 
-1
+<pre class="language-sql"><code class="lang-sql">-- The null represents the default's -1 value
+select * from pg_statistic_ext where stxname = 'shop_dependency';
+--oid   |stxrelid|stxnamespace|stxowner|stxkeys|stxstattarget|stxkind|stxexprs|
+<strong>--966703|  958515|        2200|      10|1 2    |             |{m}    |        |
+</strong></code></pre>
+
+The **pg\_statistic\_ext\_data** system catalog contains the statistical results of the extended statistical objects that appear in teh pg\_stats\_ext view.
+
+{% hint style="info" %}
+**stxoid**: The pg\_statistic\_ext OID value that originated the data.&#x20;
+
+**stxdinherit**: A boolean value (default false) indicating the scope of the statistics, it's true for statistics that apply to an entire **inheritance tree** (the table plus all its children/partitions).&#x20;
+
+**stxdndistinct**: It stores a serialized map of **N-distinct coefficents** for each unique column combination. It uses positive integers for the unique values and negative integers as a ratio relative to the total rows.&#x20;
+
+**stxdependencies**: It stores the functional dependency score for all the current **column values combinations**.&#x20;
+
+**stxdmcv**: It stores the MCV list, which tracks the most common columns combination values. It uses an **internal binary format** to store combinations that include multiple data types, which requires a set-returning function like pg\_mcv\_list\_items() to be accesses.&#x20;
+
+**stxdexpr**: It's an array of pg\_statistic objects. It stores the complete statistics set for the objects defined on columns expressions, using a serialized format.
+{% endhint %}
+
+```sql
+-- The populated columns depend on the types defined in the CREATE STATISTICS command.
+-- Close the output viewer after acessing the extended data, as it might get stuck
+select * from pg_statistic_ext_data where stxoid = 966703;
+--stxoid|stxdinherit|stxdndistinct|stxddependencies    |stxdmcv|stxdexpr|
+--966703|false      |{"1, 2": 46} |{"1 => 2": 0.056100}|\xc25..|NULL    |
+```
+
+We can use the **pg\_mcv\_list\_items()** function to acccess the pg\_statistics\_ext\_data mcv values in a **virtual table**.
+
+<details>
+
+<summary>JOIN LATERAL DETAILED ACCESS, CROSS JOIN mathematical operator unnest vertical logial</summary>
+
+The **inspection functions** convert binary pg\_statistics\_ext\_data into a structured, **multi-row format**. It provides more detailed, readable data than the standard pg\_stats\_ext view.
+
+The LATERAL JOIN allows the inspection function to unnest filtered binary data that matches specific WHERE conditions. It references data dynamically from **preceding tables**, unlike a standard JOIN which connects static data between independent columns.
+
+The function unnests a single row into multiple table rows to create a detailed dataset. The **cardinality expansion** transforms binary data into vertical rows of structured output. We apply this method to complex data types to create a visible output for analysis.
+
+```sql
+-- The LATERAL keyword accesses the previos columns for the function argument (d)
+-- The CROSS JOIN manages the vertical expansion that creates the virtual table
+-- It accesses the multiple entries returned by the set-returning function 
+-- It creates multiple table rows to store the different results
+
+SELECT m.values, m.frequency, m.base_frequency 
+FROM pg_statistic_ext_data d    -- The pg_statistic_ext identifies the mcv data
+JOIN pg_statistic_ext s ON s.oid = d.stxoid
+CROSS JOIN LATERAL pg_mcv_list_items(d.stxdmcv) m
+WHERE s.stxname = 'shop_full_stats';
+
+stxname        |values|frequency           |
+---------------+------+--------------------+
+shop_dependency|{1,1} |              0.0561|
+shop_dependency|{9,4} |0.029133333333333334|
+shop_dependency|{5,2} |0.028933333333333332|
+shop_dependency|{3,4} |              0.0289|
+shop_dependency|{9,2} |              0.0289|
+shop_dependency|{2,2} |              0.0289|
+shop_dependency|{9,3} |0.028833333333333332|
+shop_dependency|{5,4} |              0.0288|
+shop_dependency|{6,2} |              0.0288|
+...
+```
+
+</details>
 
 1
+
+The **pg\_stats\_ext** view presents the binary content of pg\_statistic\_ext\_data in a readable format.      Its columns distinguish between the statistics object’s **identification** metadata and the processed **statistical payload**.
+
+{% hint style="info" %}
+**schemaname** / **tablename**: The logical schema and the specific table name referenced by the statistics object.                                                                                                                                               **statistics\_schemaname** / **statistics\_owner**: The schema and the database user who owns the statistics object.                                                                                                                                                          **statistics\_name**: It provides the unique object name assigned during the CREATE STATISTICS process. **attnames**: This array lists the specific table column names included in the statistics object definition. **exprs**: It contains the SQL expressions used for functional or expression-based statistics.                          **inherited**: A boolean value indicating if the statistics include data from child tables or partitions.                     **kinds**: This char\[] array lists the enabled statistic types: n-distinct (d), functional dependencies (f), most-common-values (m), or expressions (e).
+{% endhint %}
+
+```sql
+-- The database fills the unusued statistics coluns with NULL
+select 
+    tablename, statistics_name,
+    attnames, kinds, n_distinct,
+    dependencies, 
+    most_common_vals, most_common_freqs, most_common_base_freqs
+FROM pg_stats_ext 
+WHERE tablename = 'correlated_lab';
+```
+
+The extended statistics don't include histograms. They provide multi-column metadata, like **dependencies**, **mcv**, and **n\_distinct**.\
+Multi-dimensional histograms aren't supported because they are too complex to generate during the ANALYZE process; extended statistics aren't designed to estimate selectivity for range operations, (like < or >).
+
+{% hint style="info" %}
+**n\_distinct**: It returns the estimated number of distinct **value combinations** for the specified columns, expressed as either a fixed integer or a ratio.&#x20;
+
+**dependencies**: It lists the column **attribute index numbers** and a **score** between 0 and 1 that represents the level of correlation between its columns.&#x20;
+
+**most\_common\_vals** / **most\_common\_val\_nulls**: These arrays contain the most **frequent combinations** of values for the specified columns and identify the NULL combinations.
+
+**most\_common\_freqs** / **most\_common\_base\_freqs**: These columns report the **actual frequency** of each common value combination and the expected **frequency assumed** if the columns were independent. The **query planner** compares these values to detect real-world correlations.
+{% endhint %}
+
+<figure><img src="../../.gitbook/assets/statview1.png" alt="" width="563"><figcaption><p>The allora</p></figcaption></figure>
+
+The **stxkind** **array** column identifies the different **types** of statistical processes run during ANALYZE. It acts as a 'multi-tool' map, indicating which **payload columns** are populated within the pg\_stats\_ext view.
+
+Each statistic type has a specific role: **functional dependencies** estimate **selectivity** for equality operators, **n\_distinct** calculates **cardinality** for GROUP BY and ORDER BY clauses, and **MCV** is used for operations within **query conditions**.
+
+1
+
+### The statistical object types&#x20;
+
+The functional **dependency** (stxkind 'd') measures the **logical correlation** between the **columns** defined in a&#x20;**statistics object**. It ranges from 0 to 1 and is derived from the data sample collected during ANALYZE.\
+It's a value-agnostic score that tracks the **global dependency level** between columns, rather than specific value combinations like an MCV. It represents a functional rule that measures how consistently a value in the first column determines the value in the second.
+
+The dependency score factors in **dataset 'noise'**, which represents value pairs that **contradict** the logical dependencies. The planner uses the score to weight its total selectivity estimate for the query condition, accounting for both **correlated** and **coincidental** table rows.
+
+The total multi-column **selectivity formula** uses the **dependency score** to weight the functional dependency against the independent 'noise'.&#x20;It uses the _single-column selectivities_ from the pg\_stats mcv column.
+
+```
+//A dependency (d) of 0 means all columns are P(A)*P(B selectivity as independet)
+//A dependency (d) of 1 signifies total correlation of columns between values as min(P(A), P(B))
+
+The logical formula for the weighted slectivity calculation with the dependency is 
+
+//The linear interpolation view of teh formulareflext the planner strategy
+//It shows teh different selectivies the dependency creates a weighted average from
+
+d * min(P(A), P(B)) + [(1-d) * P(A) * P(B)] //(Funtional dependnecy + indipendent assumptiopn)
+
+//The factored formula used by teh postgreSQL uses P(A) as the common value
+//The min(P(A), P(B)) is simplified as P(A) as in a functional dependency its teh first column to define the second column value
+//This is the reason of the included overstimation in the formula which is preferredby teh planner to avoid the most complex retrieval processes in teh query plan reserved for smaller query executios
+P(A) * (d + (1-d) * P(B))
+```
+
+The query planner uses the dependency formula only if the _MCV statistics are excluded_ from the extended statistics definition. The planner ignores the dependency estimation if the specific query value combinations appear in the MCV list.
+
+```sql
+-- A statistics object with more than 2 columns uses a greedy algorithm
+-- Which lists the correlations and only uses the highest one in the formula
+DROP STATISTICS shop_full_stats;
+
+CREATE STATISTICS shop_full_stats (dependencies) 
+ON category_id, sub_category_id FROM correlated_lab;
+ANALYZE correlated_lab;
+
+SELECT dependencies FROM pg_stats_ext s
+WHERE tablename = 'correlated_lab' and statistics_name = 'shop_full_stats';
+-- dependencies | {"1 => 2": 0.059133}|
+
+-- The extract the single pg_stats columns selectivities
+select most_common_vals, most_common_freqs
+from pg_stats where tablename = 'correlated_lab';
+--most_common_vals      | most_common_freqs
+{3,2,5,9,7,6,4,8,1,10}|{0.11336,0.111,0.111,0.111,0.110,0.11076,0.1094,0.1091,0.0591,0.052}
+{3,2,4,1,5}           |{0.2367,0.2330,0.2319,0.1775,0.12076}
+-- The values being 0.11336666, 0.23193334 respectevly
+
+-- It includes both the multi-column and the indipendent columns in its estimate
+EXPLAIN analyze 
+select * from correlated_lab where category_id = 3 and sub_category_id = 4;
+
+-- The weighted selectivity formula
+P(A) * (D + (1-d) * P(B))
+(0.1133) * (0.0591 + (1-0.0591) * 0.2319) = 0.03141 * 100000 = 3141
+-- Which is very close to the value estimated by the query planner
+-- Seq Scan on correlated_lab  (rows=3144 width=8) (rows=2797 loops=1)|
+--   Filter: ((category_id = 3) AND (sub_category_id = 4))
+```
+
+The functional dependency value describes the **structure**, not the content. Its formula, unlike MCV, doesn't depend on the query values combination.\
+It instead acts as a **mathematical generalization** applied to the existing single-column statistics.        It eliminates the need to store a large list of common combinations, allowing the planner to estimate selectivity for less common values that do not appear in the MCV statistics.
 
 1
 
