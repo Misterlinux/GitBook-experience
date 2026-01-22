@@ -697,9 +697,3 @@ AND attname IN ('category_id', 'sub_category_id');
 ```
 
 1
-
-1
-
-1
-
-1
