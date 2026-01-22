@@ -625,23 +625,76 @@ The sum of the matching MCVs and the estimated rare values is used by the query 
 
 </details>
 
-1
+The reason GROUP BY requires extra data structures (like hash tables) compared to the WHERE clause is their different relationship with the data. The HashAggregate node stores the data state in memory to track unique combinations, while the WHERE stream filters the rows and pushes them directly to teh output node.\
+Both operations rely on statistics to estimate the query execution plan and the required work\_mem respectively-
+
+The HashAggregate node is similar to a EXCLUDE GiST constraint in that both manage column uniqueness, but they differ in their role and storage. The GiST index is a permanent structure on disk used to enforce uniqueness, while the HashAggregate builds a temporary hash table in memory. The hash table doesn't exclude values, it uses the work\_mem space to group and count unique combinations before sending them to the output.
 
 1
 
-1
+### Statistical target
 
-1
+The **statistics target** property is a single **value** (by default 100) that controls the **statistics size** (the number of histogram bins and MCV slots) and defines the **resolution** of the ANALYZE data columns.\
+An increased target increases the **rows** required for the **sampling set** and calculates more **complex correlations**. It slows the ANALYZE command used to collect the general table statistics, but it doesn't affect the EXPLAIN ANALYZE commands applied to queries, as they only utilize the **relevant statistics** for their **query output**.\
+A small statistics target for a much larger table risks creating false statistics, where small samples indicate non-existent correlations.
 
-1
+We **modify** the statistics target for **specific columns** using the ALTER TABLE ... ALTER COLUMN ... command, which overrides the default target value.\
+The ANALYZE process operates **table-wide** and uses the **highest target** between its columns for the sample size, which will include all other columns with a lower statistical target. This allows it to read the disk data only once while calculating the **single columns**' **pg\_stats** based on their **individual targets**.\
+The **multi-column statistics** objects don't inherit targets from their underlying columns; they require a separate configuration using ALTER STATISTICS ... SET STATISTICS ... .
 
-1
+```sql
+-- It modifies a specific table colunn target statistic
+alter table correlated_lab
+alter column category_id set statistics 10;
 
-1
+-- It only needs the extended statistic name and to be set before ANALYZE
+ALTER STATISTICS shop_full_stats SET STATISTICS 25;
+ANALYZE correlated_lab1;
+```
 
-1
+The statistics target acts as a **proportional value** representing both the **sampling size** and **storage capacity**, as a large sampling paired with small storage capacity would waste read time, while a small sample size with large storage would simply result in empty space.\
+The **target** acts as a **selectivity threshold** for statistics like histograms and MCVs, as it modifies the frequency required to add more **value combinations** and increases the number of histogram **bounds**.\
+It only **affects** columns that **physically list** their specific combinations, like MCVs; it doesn't limit the value returned by calculated estimates, like n\_distinct, that represent a count where a cap would provide incorrect information to the query planner.
 
-1
+The target determines how differently the statistics columns can be used to represent the same table data; a low target produces a small less precise MCV list and a large histogram needed to represent the remaining data, while a high target generates a large MCV list that includes all unique value combinations, removing the need for a histogram.
+
+```sql
+-- We create a table with many different values in both columns
+CREATE TABLE correlated_lab2 ( category_id int, sub_category_id int );
+
+INSERT INTO correlated_lab2 (category_id, sub_category_id)
+SELECT (random() * 200 + 1)::int, (random() * 200 + 1)::int 
+FROM generate_series(1, 10000);
+
+-- We set a lower than defaultstatistic and a higher than rows one 
+alter table correlated_lab2 alter column category_id set statistics 10;
+alter table correlated_lab2 alter column sub_category_id set statistics 300;
+ANALYZE correlated_lab2;
+
+-- It will also cap the number of most_common_freqs values
+-- While also transfering the the statistics to histogram_bounds
+select attname, most_common_vals, most_common_freqs, histogram_bounds
+from pg_stats where tablename = 'correlated_lab2';
+--attname        |most_common_vals                             
+--category_id    |{95,98,71,199,38,155,175,65,127,156}         
+--sub_category_id|{154,69,148,158,127,169,25,12,54,161,176,193, ...}
+--histogram_bounds                       |
+--{1,20,39,58,79,100,119,139,160,180,201}|
+--                                       |
+```
+
+We access the **columns statistics target** in the **pg\_attribute** system catalog.
+
+```sql
+-- We use a path including the schema where the table is located
+-- The regclass type casting acts as a input converter for the table ID
+-- It's used to find the matching table in teh pg_class without additional subqueries
+SELECT attname, attstattarget FROM pg_attribute 
+WHERE attrelid = 'public.correlated_lab'::regclass 
+AND attname IN ('category_id', 'sub_category_id');
+--attname        |attstattarget|
+--category_id    |           10| sub_category_id|          300|
+```
 
 1
 
