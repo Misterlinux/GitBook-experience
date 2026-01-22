@@ -405,6 +405,240 @@ It instead acts as a **mathematical generalization** applied to the existing sin
 
 1
 
+The **multivariate MCV** statistics (stxkind "m") provide the query planner with a list of specific column value combinations and their combined selectivities. The ANALYZE command scans the sampled data for **unique value combinations** and ranks them by **frequency**. It creates the most\_common\_vals, most\_common\_freqs, and most\_common\_base\_freqs columns within the pg\_stats\_ext view.
+
+It **lists** the most common column value combinations, ignoring the 'noise' of rare or irregular pairs that don't form a significant part of the dataset. It provides a precise **cardinality estimate**.
+
+<pre class="language-sql"><code class="lang-sql">-- We check the mcv frequancies
+DROP STATISTICS shop_full_stats;
+
+CREATE STATISTICS shop_full_stats (mcv) 
+ON category_id, sub_category_id FROM correlated_lab;
+ANALYZE correlated_lab;
+
+-- Instead of the generic unnest() that requires additional inputs
+-- We use the specialized pg_mcv_list_items() to access the binary data 
+SELECT 
+    m.values, m.frequency, m.base_frequency
+FROM pg_statistic_ext s
+JOIN pg_statistic_ext_data d ON s.oid = d.stxoid,
+     pg_mcv_list_items(d.stxdmcv) m
+WHERE s.stxname = 'shop_full_stats' AND m.values = '{3,4}';
+<strong>--values|frequency           |base_frequency      |
+</strong>--{3,4} |0.027866666666666668|0.025757316666666665|
+
+-- The estimated selectivity returns teh cardinality being 0.0278 * 100000 = 2787
+EXPLAIN analyze 
+select * from correlated_lab
+where category_id = 3 and sub_category_id = 4;
+--Seq Scan on correlated_lab (rows=2787 width=8) (rows=2797 loops=1)|
+--  Filter: ((category_id = 3) AND (sub_category_id = 4))
+</code></pre>
+
+1
+
+The multivariate **n\_distinct** statistics (stxtype 'n') provide the query planner with the **total number** of **unique combinations** for the columns defined in the statistic object. It is a **summary statistic** that differs from MCV because it **doesn't list exact column-value combinations** and counts them regardless of their frequency. It prevents the planner from relyng on the independence assumption during GROUP BY, DISTINCT, and JOIN queries, though it does not affect filtering in WHERE clauses.
+
+The single-column statistics include an n\_distinct pg\_stats column. The query planner uses these values for the independence assumption in multi-column queries, where it multiplies the individual n\_distinct values to estimate the total number of unique combinations. The ANALYZE command doesn't automatically fill the multi-column n\_distinct column because it can expensive to calculate for actual independent columns. It relies on the **user** to specify the statistic type when they **identify a correlation**.
+
+```sql
+-- The query planner first calculates the n_distinct using the indipendence assumption
+DROP STATISTICS shop_full_stats;
+
+CREATE STATISTICS shop_full_stats (ndistinct) 
+ON category_id, sub_category_id FROM correlated_lab;
+ANALYZE correlated_lab;
+
+-- It would return 10*5 = 50 n_distinct values
+SELECT attname, n_distinct
+FROM pg_stats where tablename = 'correlated_lab';
+--attname        |n_distinct|
+--category_id    |      10.0| sub_category_id|       5.0|
+
+-- It includes the columns index attributes
+SELECT n_distinct FROM pg_stats_ext s
+WHERE tablename = 'correlated_lab' and statistics_name = 'shop_full_stats';
+-- In the table creation we defined a functional dependency for a column value
+-- The category_id 1 would always include a sub_category_id values of 1
+-- Only 9 values of the first column are indipendent, resulting in 9*5 +1 = 46
+-- n_distinct  | {"1, 2": 46}|
+```
+
+1
+
+The example on the GROUP BY requires additional explenation as its based on memory allocation and. maybe expandible.
+
+The GROUP BY clause uses table **column attribute** values. It's not limited to the ones found in the n\_distinct JSON field in pg\_stats\_ext, as the planner can achieve a **partial optimization** even with columns outside the statistics. The **n\_distinct** extended statistics allow the query planner to avoid relying on the independence assumption when calculating the total number of unique column value combinations for the table's rows.
+
+The query planner uses statistics to define the **aggregation strategy** for the GROUP BY clause.          It calculates the **required memory** by multiplying the estimated number of **unique groups** by the **row width** of the involved columns. This calculation determines if the Hash Aggregate or the Group Aggregate is used for the query execution.
+
+The **Hash Aggregate** strategy is designed for query plans where the estimated number of unique groups (n\_distinct) is small enough to fit within the **work\_mem**. The **hash table** is a temporary structure that resides in **local memory** and is active only for the duration of the query. It stores the counts for all unique column combinations found during the scan, but it requires an additional ORDER BY clause as it doesnt sort the data for the query output.
+
+The **Group Aggregate** strategy sorts and groups data directly from the table rows. It is designed for situations where the estimated number of n\_distinct groups is **too large** to fit within work\_mem. The process is divided into two operations: an **initial Sort** of the sequentially read table rows, followed by a **Grouping step** which sorts the data for the query output.
+
+The **total number** of table rows **doesn't affect** the memory usage of the GROUP BY operation; it only affects the **execution speed**. The hash table is reserved for the unique combination values found during the table scan. The work\_mem usage details are returned in the query output.
+
+```sql
+-- It first processes the sequential scan due to the lack of WHERE clause
+CREATE STATISTICS shop_full_stats (ndistinct) 
+ON category_id, sub_category_id FROM correlated_lab;
+ANALYZE correlated_lab;
+
+-- The planner includes the aggregate node in the query ouput
+explain ANALYZE
+SELECT category_id, sub_category_id FROM correlated_lab GROUP BY 1, 2;
+
+-- It uses the extended statistics n_distinct for a better estimate
+HashAggregate (... rows=46 width=8) (... rows=46 loops=1) |
+  Group Key: category_id, sub_category_id                 |
+  Batches: 1  Memory Usage: 24kB                          |
+  ->  Seq Scan on correlated_lab  (... rows=100000 width=8) (... rows=100000 loops=1)|
+-- It returns all 46 column combinations
+--category_id|sub_category_id|
+--          7|              3|
+--          4|              3|
+--        ...|            ...|
+```
+
+1
+
+The **hash table** stores key-value **pairs** with the **hash codes** and the count value in the table rows.\
+The **hashing** is a **one-way process**, which requires the table to store the **actual column values** for each **entry**. This is necessary to verify the key's identity and resolve **hash collisions** (where different values produce the same hash).\
+The amount of **work\_mem** occupied depends on the **size** of these **stored combinations**. If the table size exceeds the estimated memory limit, it creates a 'spill to disk' that slows down the operation.
+
+<details>
+
+<summary>EXPLAIN SELECTIVITY AND GROUP BY FOMULAS</summary>
+
+The **Cardenas's** Formula describes how the query planner estimates the number of **unique groups** that will remain after a **WHERE** clause. This estimation is necessary to determine a more precise **work\_mem allocation**.\
+The formula uses both the **n\_distinct** statistics and the number of rows returned by the WHERE condition.
+
+```sql
+//The query planner calcukaes the work_mem allocartion by using 
+--teh estimated n_distint values and teh cololumns width of teh 
+--columns involved in the combinations.
+-- N 
+
+The D(n) As the n_distinct values estimated form a n number of returned 
+--rows from teh clause.
+= D * (1- (1- 1/D)^n)
+
+Relative to a single row, the 1/d is the probability the filtered row is part of a single specified unique.
+then 1-1/d is the probability its NOT part of its group
+then (1-1/d))^n is the probability NONE of the filtered rows are not part of it
+then 1 - (1-(1/d))^n is the probability that AT LEAST ONE of the filtered rows is part of the unique groups.
+then D * (1 - (1-(1/d))^n) is the probability returns how many esmates of teh total unique groups are being included in teh filtered form teh rows where clause.
+
+1071 * (1 - ((1 - (1/1071))^3000)) = 1006
+
+In large datasets the formula gets siplied to a poussian distribution
+D*(1-e^(-n/D))
+
+1071*(1-e^(-3000/1071)) = 1005.94
+
+as simplifing the (1-1/D)^D into 1/E
+As we force teh D so we can use the e and do (1-1/D)^(D*(n/D))
+to obtain teh eurel limit as e^-1 and then thats when we add the n/D to teh esponent
+```
+
+1
+
+```sql
+// Some code
+CREATE TABLE correlated_lab1 (
+    category_id int, sub_category_id int
+);
+
+-- Remember that the ::int type cionvertons rounds to the nearest integer, we +1 to avoid 0 values
+INSERT INTO correlated_lab1 (category_id, sub_category_id)
+WITH source_data AS (
+    -- Step 1: Generate the primary column first
+    SELECT (random() * 50 + 1)::int AS cat_id 
+    FROM generate_series(1, 100000)
+)
+SELECT 
+    cat_id, -- The first column
+    CASE 
+        WHEN cat_id <= 10 THEN cat_id  -- first 5
+        ELSE (random() * 20 + 1)::int -- The random fallback
+    END
+FROM source_data;
+
+ANALYZE correlated_lab1;
+
+-- EVENR if two columns are the statistcs we only need the selectivity of the 
+-- WHRERE clause conditions, from teh mcv, 51mcv values
+select most_common_vals, histogram_bounds
+from pg_stats
+where tablename = 'correlated_lab1' and attname = 'category_id';
+most_common_vals               |histogram_bounds|
+-------------------------------+----------------+
+{19,11,6,15,48,36,46,47,38, ...!                |
+
+-- histogram null coz MCV includes, can include all combinations
+SELECT sum(s.freq) as total_selectivity
+FROM pg_stats,
+     unnest(most_common_vals::text::int[], most_common_freqs) AS s(val, freq)
+WHERE tablename = 'correlated_lab1' 
+  AND attname = 'category_id'
+  AND s.val < 3; -- Your scalar condition here
+-- 0.03156
+
+-- 51 and 21 distinct possible values for the columns: 1071
+-- While for teh GROUP BY clause that follows teh WHERE we need 2 n_distinct vaues for teh.
+SELECT attname, n_distinct
+FROM pg_stats
+where tablename = 'correlated_lab1';
+
+-- 1067 without, 870
+EXPLAIN ANALYZE
+SELECT 
+    category_id, sub_category_id 
+FROM correlated_lab1 
+WHERE category_id < 3  -- <--- The Trigger
+GROUP BY 1, 2;
+
+HashAggregate  (rows=1017 width=8) (rows=2 loops=1)                   |
+  Group Key: category_id, sub_category_id, Batches: 1  Memory Usage: 73kB                                                                                       |
+  ->  Seq Scan on correlated_lab1  (rows=3157 width=8) (rows=3065 loops=1)|
+        Filter: (category_id < 3)
+        Rows Removed by Filter: 96935
+        
+-- 
+drop statistics shop_full_stats1;
+
+CREATE STATISTICS shop_full_stats1 (ndistinct) 
+ON category_id, sub_category_id FROM correlated_lab1;
+
+ANALYZE correlated_lab1;
+HashAggregate  (cost=1708.50..1716.98 rows=848 width=8) (actual time=12.650..12.654 rows=2 loops=1)                    |
+  Group Key: category_id, sub_category_id, Batches: 1  Memory Usage: 49kB
+  ->  Seq Scan on correlated_lab1 (rows=3100 width=8) (rows=3065 loops=1)
+        Filter: (category_id < 3)
+```
+
+1
+
+The Cardenas's formula **doesn't include** any factor to track functionally **correlated columns**; instead, it relies on the **n\_distinct** value provided by user-created **extended statistics**.\
+The query planner can also utilize the MCV list for multi-column statistics.                                               It uses the WHERE clause to **filter** the **MCV combinations** and identify exactly which ones will remain. It then subtracts these instances from the **n\_distant**, using the Cardenas's formula for the more rare values.\
+The sum of the matching MCVs and the estimated rare values is used by the query executor to allocate the **work\_mem** space for the hash table.
+
+</details>
+
+1
+
+1
+
+1
+
+1
+
+1
+
+1
+
+1
+
 1
 
 1
