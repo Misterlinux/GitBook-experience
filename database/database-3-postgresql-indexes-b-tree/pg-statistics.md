@@ -159,6 +159,60 @@ WHERE category_id = 1 AND sub_category_id = 1;
 
 -— Find a way to cerate teh doubfle colun explenation
 
+We need specific queries to extract the frequencies for specific MCV entries from columns part of the same pg\_stats.
+
+{% tabs %}
+{% tab title="Tab 1" %}
+The tuple conditions are a set of column-value checks representing a single, isolated logical unit.\
+The unnest() set returning function expands the MCV entries into a virtual table, which we reference in the SELECT using the m() table alias.\
+We apply an implicit LATERAL JOIN using the comma (,) syntax, which iterates over each entry to generate rows for the virtual table (m).\
+The WHERE clause filters the resulting dataset using its tuple conditions.
+
+```sql
+-- The tuples are an alternaitve to specifi a series of OR query values conditions
+SELECT 
+    attname AS column_name,
+    m.mcv AS val, m.mcf AS frequency
+FROM pg_stats, 
+     unnest(most_common_vals::text::int[], most_common_freqs) AS m(mcv, mcf)
+WHERE tablename = 'correlated_lab'
+  AND (attname, mcv) in (
+    ('category_id', 1), ('sub_category_id', 1)
+  );
+```
+
+1
+{% endtab %}
+
+{% tab title="Tab 2" %}
+We create a scalable query that separates the search data from the logical structure.\
+The lookup table (v) uses the VALUES clause to define its dynamic dataset instead of hardcoding multiple conditions into a WHERE clause.\
+The JOIN ... ON ... conditions apply to different tables in their query positions; they apply to pg\_stats (s) to specify the columns for the unnest function, and to the virtual table (m) created by the unnest() set-returning function, to include only the MCV entries that match the lookup table.
+
+The Predicate Pushdown is the query optimitation that alters the sequence of the execution plan. it forces the database to evaluate JOIN conditions earlier, filtering the data before the expensive unnest() step occurs.\
+The query no longer relies on the WHERE clause to filter data after the unnest() expansion, It uses its specific tuples conditions to directly restrict the virtual lookup table (v) search space to only include the requested data.
+
+```sql
+-- We use the CROSS JOIN LATERAL syntax instead of the comma.
+-- It allows faster execution strategies liek HASH JOIN
+SELECT 
+    s.attname AS column_name,
+    m.mcv AS val, m.mcf AS frequency
+FROM pg_stats s
+CROSS JOIN LATERAL unnest(s.most_common_vals::text::int[], s.most_common_freqs) AS m(mcv, mcf)
+JOIN (VALUES 
+    ('category_id', 1), ('sub_category_id', 1)
+) AS v(target_col, target_val) 
+  ON s.attname = v.target_col AND m.mcv = v.target_val
+WHERE s.tablename = 'correlated_lab';
+```
+
+1
+{% endtab %}
+{% endtabs %}
+
+1
+
 The query planner is **data-blind** when calculating the total selectivity of the query's condition.               Both pg\_stats and pg\_stats\_ext rely on directly **matching raw query values** against MCV lists or histogram buckets.                                                                                                                                                The planner can't process **math operations**, **function calls**, or **type casting** within a query condition, as it would be too expensive to transform the values to match the pg\_stats metadata. It instead falls back on generic selectivity estimates, such as 0.005 for equality and 0.33 for scalar operations.
 
 — It can work for single colun exprs --
