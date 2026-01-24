@@ -210,7 +210,7 @@ We used the pgstattuple and pgstatindex extensions to gather data on **table** a
 We create two identical tables, one with autovacuum disabled, and populate each with 10,000 rows. We then create an index on the id column for both tables before we performed five consecutive **HOT updates** on a non-indexed column.
 
 ```sql
-//It includes both pgstattuple() and pgstatindex()
+--It includes both pgstattuple() and pgstatindex()
 CREATE EXTENSION IF NOT EXISTS pgstattuple;
 
 CREATE TABLE no_vacuum (id INT, nome TEXT) WITH (autovacuum_enabled = false);
@@ -219,7 +219,7 @@ CREATE TABLE table_vacuum (id INT, nome TEXT);
 INSERT INTO no_vacuum SELECT i, MD5(i::TEXT) FROM GENERATE_SERIES(1,10000) i;
 INSERT INTO table_vacuum SELECT i,MD5(i::TEXT)FROM GENERATE_SERIES(1,10000) i 
 
-//We index the ID column while we update the name column
+--We index the ID column while we update the name column
 CREATE index idx_no_vacuumed ON no_vacuum(id);
 CREATE index idx_table_vacuumed ON table_vacuum(id);
 
@@ -235,16 +235,16 @@ END; $$;
 On the table without autovacuum, pgstattuple shows a **dead\_tuple\_count** of 5 and a high **dead\_tuple\_percent**. This reflects the five outdated **tuple versions** left in the table heap.         The table with autovacuum has both properties at 0, as the background process has already cleaned up the outdated tuples.
 
 ```sql
-//The AS table_name doesn't influence the pgstattuple() 
+--The AS table_name doesn't influence the pgstattuple() 
 SELECT 'no_vacuum' as table_name, dead_tuple_count, dead_tuple_percent
 FROM pgstattuple('no_vacuum');
 
-//It returns the index bloat
+--It returns the index bloat
 SELECT 'idx_no_vacuumed' as index_name, 
           leaf_fragmentation, avg_leaf_density, index_size
 FROM pgstatindex('idx_no_vacuumed');
 
-//Table heap/Index properties of the AUTOVACUUM table
+--Table heap/Index properties of the AUTOVACUUM table
 SELECT 'table_vacuum' as table_name, dead_tuple_count, dead_tuple_percent
 FROM pgstattuple('table_vacuum');
 
@@ -253,7 +253,7 @@ SELECT 'idx_table_vacuumed' as index_name,
 FROM pgstatindex('idx_table_vacuumed');
 
 VACUUM table_without_autovacuum;
-//Once aplied to the "no_vacuum" table, it equates its properties
+--Once aplied to the "no_vacuum" table, it equates its properties
 ```
 
 The AUTOVACUUM only affects the internal fragmentation of the table it runs on.                    The GENERATE\_SERIES() INSERTs uses all **available space** on the disk pages because of the default FILLFACTOR of 100.                                                                                                                                             A Heap-Only Tuple (HOT) update requires free space on the page to store the new version of a row. Without any available space, the HOT **optimization fails**, and the system performs a standard update, creating a **new index** entry for every updated row.&#x20;
