@@ -1,11 +1,14 @@
-# PG statistics
+# The database statistics objects data and pg\_stats view
 
-* 1
-* 1
-* 1
-* 1
+* [The planner selectivity estimation for query operators](the-database-statistics-objects-data-and-pg_stats-view.md#the-planner-selectivity-estimation-for-query-operators)
+* [Calculating the execution plan cost from the query clauses](the-database-statistics-objects-data-and-pg_stats-view.md#calculating-the-execution-plan-cost-from-the-query-clauses)
+* [The statistical object column metadata and pg\_stats view](the-database-statistics-objects-data-and-pg_stats-view.md#the-statistical-object-column-metadata-and-pg_stats-view)
+* [The Extended statistics object for multi-columns metadata](the-database-statistics-objects-data-and-pg_stats-view.md#the-extended-statistics-object-for-multi-columns-metadata)
+* [The extended statistics object types (d, m, n).](the-database-statistics-objects-data-and-pg_stats-view.md#the-extended-statistics-object-types-d-m-n)
+* [The different aggregation strategies for GROUP BY queries](the-database-statistics-objects-data-and-pg_stats-view.md#the-different-aggregation-strategies-for-group-by-queries)
+* [The Postgresql statistics target](the-database-statistics-objects-data-and-pg_stats-view.md#the-postgresql-statistics-target)
 
-The ANALYZE command updates the **pg\_statistic** and **pg\_class** system catalogs, which are used by the Query Planner to determine the **cost** of the chosen **execution plan**. The table rows processed by the _reservoir sampling_ store their column metrics in pg\_statistic to represent the table statistical properties:
+The ANALYZE command updates the **pg\_statistic** and **pg\_class** system catalogs, which are used by the Query Planner to determine the **cost** of the chosen **execution plan**. The table rows processed by the _reservoir sampling_ store their column metrics in **pg\_stats** to represent the table statistical properties:
 
 {% hint style="info" %}
 **Null\_Frac**: A value between 0 and 1 representing the proportion of NULL values present in the sampled table set.&#x20;
@@ -39,13 +42,13 @@ SELECT
 FROM pg_stats WHERE tablename = 'tavole' AND attname = 'codice';
 ```
 
-— IMMAGGINE
+— IMMAGGINE output query
 
 Database statistics utilize specific system columns depending on the **data type** of the column being analyzed, like most\_common\_vals and most\_common\_elems.
 
 <details>
 
-<summary>VALUES ADN ELEMETS IN PG_STATISTICS and more pg_statiscst</summary>
+<summary>Different pg_stats columns for VALUES and ELEMENTS data types</summary>
 
 Statistics for **values**, as scalar data types (like integers and text), are based on how frequently the entire **data cell** appears in the column. The statistics for **elements**, as complex data types (like ARRAY or JSONB), track how often the **internal items** appear inside the data structures across the table rows.
 
@@ -59,8 +62,6 @@ An **equi-height** **histogram** contains a fixed number of values across all **
 
 </details>
 
-— CREATE TABS FOR PG\_CLASS AND
-
 The ANALYZE command updates the metadata columns in the **pg\_class** catalog:
 
 {% hint style="info" %}
@@ -71,29 +72,35 @@ The ANALYZE command updates the metadata columns in the **pg\_class** catalog:
 
 The **pg\_statistic** data is stored in **binary** code. It's designed to be read by the **query planner** and requires an interpreter to be accessed. The **pg\_stats** is not a system catalog but a **system view**, a _virtual table_ created by a query. It formats the pg\_statistic data into a readable structure and joins columns from other catalogs, like **tablename** and **attname** (column name).
 
-1
+### The planner selectivity estimation for query operators
 
 A single-value **equality clause** (=) calculates its **selectivity** by first checking the most\_common\_vals for the query value; if found, it returns the corresponding mcv frequency.                                                            The query planner estimates the **non-MCV** query value using the **residual frequancy** (using the formula 1 - the sum of all mcv frequencies), it then divides it by the number of remaining distinct values (subtracting the **mcv values** form the total **n\_distinct**), assuming a **uniform distribution**.                                                                               A **scalar range** (<, >) query analyzes the boundaries of the **histogram buckets** to detect which ones include the query values. The planner defines the specific range by using **linear interpolation** to "cut" the histogram bounds, in order to estimate the total frequency for the selected range.
 
+— mini immage --
+
 The **frequency** and **selectivity** can share the same mathematical value, but they represent different data sources and stages within the **query planner process**.\
-The frequency is a **raw value** stored in the **pg\_statistic** metadata columns. It represents the **physical proportion** of specific values within the table rows.\
-The selectivity defines the **fraction** of rows selected by the **query clause**. The query planner calculates this value based on the frequency, but the result changes depending on the specific **query conditions** being estimated.\
-The probability is the conceptual term we use to interpret the selectivity value.
+The <mark style="background-color:blue;">frequency</mark> is a **raw value** stored in the **pg\_statistic** metadata columns. It represents the **physical proportion** of specific values within the table rows.\
+The <mark style="background-color:blue;">selectivity</mark> defines the **fraction** of rows selected by the **query clause**. The query planner calculates this value based on the frequency, but the result changes depending on the specific **query conditions** being estimated.\
+The <mark style="background-color:blue;">probability</mark> is the conceptual term we use to interpret the selectivity value.
 
 1
+
+### Calculating the execution plan cost from the query clauses
 
 The **query planner** compares all **paths** in the **plan tree**, calculating the cost of each physical operation based on its **selectivity**, **correlation**, and **average row size**.\
 The **total cost** of an **execution plan** is determined by **data volume** and I/O efficiency. The planner calculates the volume by multiplying **selectivity row count** by the **avg\_width**. The **correlation** (ranging from -1 to 1) represents the **I/O cost**: high absolute values indicate ordered data suitable for index scans, while values near zero indicate scattered data that requires Bitmap or Sequential scans to avoid the random I/O cost.
 
-The SELECT columns define the **output payload** and infleunce the query plan **cost** with their **avg\_width** value, while the WHERE clauses define the **estimation process** for the columns **selectivities**.\
+The SELECT columns define the **output payload** and influence the query plan **cost** with their **avg\_width** value, while the WHERE clauses define the **estimation process** for the columns **selectivities**.\
 The planner retrieves the selectivies for multiple query conditions (equality or scalar) from the MCV list and the histogram bins as non-overlapping data sources. It **multiples** the selctivities values for 'AND' conditions while it **sums** it for 'OR'.
+
+— IMMA --
 
 The query planner uses the conditional **independence assumption** when evaluating plans involving **multiple columns**.\
 It multiplies the **individual selectivity** of each column, assuming they are **unrelated**.                                    **Extended statistics** estimate the **functional dependencies** between correlated column values, which provides the ANALYZE process with additional data for a more accurate execution plan.
 
 1
 
-— EXTENDED STATISTICS
+### The statistical object column metadata and pg\_stats view
 
 The CREATE STATISTICS command builds a **statistical object** for its specified table columns.                     It's not part of the standard pg\_stats view; instead it consists of multi-party entry distributed across two primary system catalogs **pg\_statistic\_ext** and **pg\_statistic\_ext\_data.**
 
@@ -157,6 +164,8 @@ WHERE category_id = 1 AND sub_category_id = 1;
 -- Seq Scan on correlated_lab (rows=5700 width=8) (rows=5642)
 ```
 
+\--query image --
+
 We need specific queries to extract the **frequencies** for specific **MCV entries** from **columns** part of the same pg\_stats.
 
 {% tabs %}
@@ -213,7 +222,7 @@ The query planner is **data-blind** when calculating the total selectivity of th
 
 <details>
 
-<summary>Single column expression.</summary>
+<summary>Statistical objects for columns expressions</summary>
 
 The CREATE STATISTICS command can generate **functional statistics** for **columns expressions**. The ANALYZE applies the expression to **every table row** and **maps** the results to a **virtual column**, which provides the planner with the actual data distribution and removes the need for guesses.
 
@@ -238,8 +247,6 @@ EXPLAIN ANALYZE SELECT * FROM expression_test WHERE (id % 100) = 42;
 --  Filter: ((id % 100) = 42), Rows Removed by Filter: 99000
 ```
 
-1
-
 </details>
 
 ```sql
@@ -257,12 +264,12 @@ singlecol_expr |(sub_category_id < 3)|      0.0|        1|       2.0|{f,t}      
 
 We add the IF NOT EXISTS clause to the CREATE STATISTICS command to prevent errors if an **object** with that **name** already exists. The clause triggers a **silent skip** based solely on the name, regardless of the columns or expressions used in the definition.
 
-1
-
-### Multi column dependency
+### The Extended statistics object for multi-columns metadata
 
 The CREATE STATISTICS command creates **multivariate dependencies** when applied to multiple columns. The statistical object, stored in **pg\_statistic\_ext**, acts as a **flag**. It instructs the ANALYZE command to calculate **additional statistics** for those specific columns.                                                          The ANALYZE process maintains a **single scan** of the table data from the disk. It adds a simultaneous **second track** that analyzes the relationships between **column combinations** rather than treating them as separate and independent.
 
+{% tabs %}
+{% tab title="pg_statistic_ext " %}
 The **pg\_statistic\_ext** system catalog contains the columns **definition** of the statistics that appear in the pg\_stats\_ext view.
 
 {% hint style="info" %}
@@ -282,7 +289,9 @@ select * from pg_statistic_ext where stxname = 'shop_dependency';
 --oid   |stxrelid|stxnamespace|stxowner|stxkeys|stxstattarget|stxkind|stxexprs|
 <strong>--966703|  958515|        2200|      10|1 2    |             |{m}    |        |
 </strong></code></pre>
+{% endtab %}
 
+{% tab title="pg_statistic_ext" %}
 The **pg\_statistic\_ext\_data** system catalog contains the statistical results of the extended statistical objects that appear in teh pg\_stats\_ext view.
 
 {% hint style="info" %}
@@ -306,12 +315,14 @@ select * from pg_statistic_ext_data where stxoid = 966703;
 --stxoid|stxdinherit|stxdndistinct|stxddependencies    |stxdmcv|stxdexpr|
 --966703|false      |{"1, 2": 46} |{"1 => 2": 0.056100}|\xc25..|NULL    |
 ```
+{% endtab %}
+{% endtabs %}
 
 We can use the **pg\_mcv\_list\_items()** function to acccess the pg\_statistics\_ext\_data mcv values in a **virtual table**.
 
 <details>
 
-<summary>JOIN LATERAL DETAILED ACCESS, CROSS JOIN mathematical operator unnest vertical logial</summary>
+<summary>The <strong>pg_mcv_list_items()</strong> inspection function on pg_statistics_ext_data</summary>
 
 The **inspection functions** convert binary pg\_statistics\_ext\_data into a structured, **multi-row format**. It provides more detailed, readable data than the standard pg\_stats\_ext view.
 
@@ -324,7 +335,6 @@ The function unnests a single row into multiple table rows to create a detailed 
 -- The CROSS JOIN manages the vertical expansion that creates the virtual table
 -- It accesses the multiple entries returned by the set-returning function 
 -- It creates multiple table rows to store the different results
-
 SELECT m.values, m.frequency, m.base_frequency 
 FROM pg_statistic_ext_data d    -- The pg_statistic_ext identifies the mcv data
 JOIN pg_statistic_ext s ON s.oid = d.stxoid
@@ -347,8 +357,6 @@ shop_dependency|{6,2} |              0.0288|
 
 </details>
 
-1
-
 The **pg\_stats\_ext** view presents the binary content of pg\_statistic\_ext\_data in a readable format.      Its columns distinguish between the statistics object’s **identification** metadata and the processed **statistical payload**.
 
 {% hint style="info" %}
@@ -366,6 +374,8 @@ FROM pg_stats_ext
 WHERE tablename = 'correlated_lab';
 ```
 
+<figure><img src="../../.gitbook/assets/statview1.png" alt="" width="563"><figcaption><p>The pg_stats_ext metadata columns</p></figcaption></figure>
+
 The extended statistics don't include histograms. They provide multi-column metadata, like **dependencies**, **mcv**, and **n\_distinct**.\
 Multi-dimensional histograms aren't supported because they are too complex to generate during the ANALYZE process; extended statistics aren't designed to estimate selectivity for range operations, (like < or >).
 
@@ -379,15 +389,11 @@ Multi-dimensional histograms aren't supported because they are too complex to ge
 **most\_common\_freqs** / **most\_common\_base\_freqs**: These columns report the **actual frequency** of each common value combination and the expected **frequency assumed** if the columns were independent. The **query planner** compares these values to detect real-world correlations.
 {% endhint %}
 
-<figure><img src="../../.gitbook/assets/statview1.png" alt="" width="563"><figcaption><p>The allora</p></figcaption></figure>
-
 The **stxkind** **array** column identifies the different **types** of statistical processes run during ANALYZE. It acts as a 'multi-tool' map, indicating which **payload columns** are populated within the pg\_stats\_ext view.
 
 Each statistic type has a specific role: **functional dependencies** estimate **selectivity** for equality operators, **n\_distinct** calculates **cardinality** for GROUP BY and ORDER BY clauses, and **MCV** is used for operations within **query conditions**.
 
-1
-
-### The statistical object types&#x20;
+### The extended statistics object types (d, m, n).
 
 The functional **dependency** (stxkind 'd') measures the **logical correlation** between the **columns** defined in a&#x20;**statistics object**. It ranges from 0 to 1 and is derived from the data sample collected during ANALYZE.\
 It's a value-agnostic score that tracks the **global dependency level** between columns, rather than specific value combinations like an MCV. It represents a functional rule that measures how consistently a value in the first column determines the value in the second.
@@ -451,8 +457,6 @@ P(A) * (D + (1-d) * P(B))
 The functional dependency value describes the **structure**, not the content. Its formula, unlike MCV, doesn't depend on the query values combination.\
 It instead acts as a **mathematical generalization** applied to the existing single-column statistics.        It eliminates the need to store a large list of common combinations, allowing the planner to estimate selectivity for less common values that do not appear in the MCV statistics.
 
-1
-
 The **multivariate MCV** statistics (stxkind "m") provide the query planner with a list of specific column value combinations and their combined selectivities. The ANALYZE command scans the sampled data for **unique value combinations** and ranks them by **frequency**. It creates the most\_common\_vals, most\_common\_freqs, and most\_common\_base\_freqs columns within the pg\_stats\_ext view.
 
 It **lists** the most common column value combinations, ignoring the 'noise' of rare or irregular pairs that don't form a significant part of the dataset. It provides a precise **cardinality estimate**.
@@ -483,8 +487,6 @@ where category_id = 3 and sub_category_id = 4;
 --  Filter: ((category_id = 3) AND (sub_category_id = 4))
 </code></pre>
 
-1
-
 The multivariate **n\_distinct** statistics (stxtype 'n') provide the query planner with the **total number** of **unique combinations** for the columns defined in the statistic object. It is a **summary statistic** that differs from MCV because it **doesn't list exact column-value combinations** and counts them regardless of their frequency. It prevents the planner from relyng on the independence assumption during GROUP BY, DISTINCT, and JOIN queries, though it does not affect filtering in WHERE clauses.
 
 The single-column statistics include an n\_distinct pg\_stats column. The query planner uses these values for the independence assumption in multi-column queries, where it multiplies the individual n\_distinct values to estimate the total number of unique combinations. The ANALYZE command doesn't automatically fill the multi-column n\_distinct column because it can expensive to calculate for actual independent columns. It relies on the **user** to specify the statistic type when they **identify a correlation**.
@@ -512,9 +514,7 @@ WHERE tablename = 'correlated_lab' and statistics_name = 'shop_full_stats';
 -- n_distinct  | {"1, 2": 46}|
 ```
 
-1
-
-The example on the GROUP BY requires additional explenation as its based on memory allocation and. maybe expandible.
+### The different aggregation strategies for GROUP BY queries
 
 The GROUP BY clause uses table **column attribute** values. It's not limited to the ones found in the n\_distinct JSON field in pg\_stats\_ext, as the planner can achieve a **partial optimization** even with columns outside the statistics. The **n\_distinct** extended statistics allow the query planner to avoid relying on the independence assumption when calculating the total number of unique column value combinations for the table's rows.
 
@@ -548,17 +548,15 @@ HashAggregate (... rows=46 width=8) (... rows=46 loops=1) |
 --        ...|            ...|
 ```
 
-1
-
 The **hash table** stores key-value **pairs** with the **hash codes** and the count value in the table rows.\
 The **hashing** is a **one-way process**, which requires the table to store the **actual column values** for each **entry**. This is necessary to verify the key's identity and resolve **hash collisions** (where different values produce the same hash).\
 The amount of **work\_mem** occupied depends on the **size** of these **stored combinations**. If the table size exceeds the estimated memory limit, it creates a 'spill to disk' that slows down the operation.
 
 <details>
 
-<summary>EXPLAIN SELECTIVITY AND GROUP BY FOMULAS</summary>
+<summary>Using the Cadensas' formula to estimate the n_distinct on WHERE clauses</summary>
 
-The **Cardenas's** Formula describes how the query planner estimates the number of **unique groups** that will remain after a **WHERE** clause. This estimation is necessary to determine a more precise **work\_mem allocation**.\
+The **Cardenas'** Formula describes how the query planner estimates the number of **unique groups** that will remain after a **WHERE** clause. This estimation is necessary to determine a more precise **work\_mem allocation**.\
 The formula uses both the **n\_distinct** statistics and the number of rows returned by the WHERE condition.
 
 ```sql
@@ -673,14 +671,12 @@ The sum of the matching MCVs and the estimated rare values is used by the query 
 
 </details>
 
-The reason GROUP BY requires extra data structures (like hash tables) compared to the WHERE clause is their different relationship with the data. The HashAggregate node stores the data state in memory to track unique combinations, while the WHERE stream filters the rows and pushes them directly to teh output node.\
-Both operations rely on statistics to estimate the query execution plan and the required work\_mem respectively-
+The reason GROUP BY requires **extra data structures** (like hash tables) compared to the WHERE clause is their different relationship with the data. The **HashAggregate node** **stores the data** state in memory to **track unique combinations**, while the WHERE stream filters the rows and pushes them directly to the output node.\
+Both operations rely on statistics to estimate the query execution plan and the required work\_mem respectively.
 
-The HashAggregate node is similar to a EXCLUDE GiST constraint in that both manage column uniqueness, but they differ in their role and storage. The GiST index is a permanent structure on disk used to enforce uniqueness, while the HashAggregate builds a temporary hash table in memory. The hash table doesn't exclude values, it uses the work\_mem space to group and count unique combinations before sending them to the output.
+The HashAggregate node is similar to a EXCLUDE GiST constraint in that both manage **column uniqueness**, but they differ in their role and storage. The GiST index is a **permanent structure** on disk used to enforce uniqueness, while the HashAggregate builds a **temporary hash table** in memory. The hash table doesn't exclude values, it uses the work\_mem space to group and count unique combinations before sending them to the output.
 
-1
-
-### Statistical target
+### The Postgresql statistics target
 
 The **statistics target** property is a single **value** (by default 100) that controls the **statistics size** (the number of histogram bins and MCV slots) and defines the **resolution** of the ANALYZE data columns.\
 An increased target increases the **rows** required for the **sampling set** and calculates more **complex correlations**. It slows the ANALYZE command used to collect the general table statistics, but it doesn't affect the EXPLAIN ANALYZE commands applied to queries, as they only utilize the **relevant statistics** for their **query output**.\
@@ -743,5 +739,3 @@ AND attname IN ('category_id', 'sub_category_id');
 --attname        |attstattarget|
 --category_id    |           10| sub_category_id|          300|
 ```
-
-1

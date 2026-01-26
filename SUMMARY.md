@@ -81,11 +81,11 @@
   * [Custom Range, base data types and PostgreSQL binary data](database/database-1/page.md)
 * [Database 2: SQL constraints](database/database-2-sql-constraints/README.md)
   * [FOREIGN KEY constraint: rules and methods](database/database-2-sql-constraints/foreign-key-constraint-rules-and-methods.md)
-* [Database 3:PostgreSQL Indexes, B-tree](database/database-3-postgresql-indexes-b-tree/README.md)
-  * [B-tree index: structure and rules](database/database-3-postgresql-indexes-b-tree/b-tree-index-structure-and-rules.md)
-  * [Gist indexing method.](database/database-3-postgresql-indexes-b-tree/gist-indexing-method..md)
-  * [EXPLAIN command and ANALYZE](database/database-3-postgresql-indexes-b-tree/explain-command-and-analyze.md)
-  * [PG statistics](database/database-3-postgresql-indexes-b-tree/pg-statistics.md)
+* [Database 3:PostgreSQL Indexes, B-tree and GIST](database/database-3-postgresql-indexes-b-tree-and-gist/README.md)
+  * [B-tree index: structure and rules](database/database-3-postgresql-indexes-b-tree-and-gist/b-tree-index-structure-and-rules.md)
+  * [Gist indexing method.](database/database-3-postgresql-indexes-b-tree-and-gist/gist-indexing-method..md)
+  * [The query plan EXPLAIN output and the ANALYZE work\_mem data sampling](database/database-3-postgresql-indexes-b-tree-and-gist/the-query-plan-explain-output-and-the-analyze-work_mem-data-sampling.md)
+  * [The database statistics objects data and pg\_stats view](database/database-3-postgresql-indexes-b-tree-and-gist/the-database-statistics-objects-data-and-pg_stats-view.md)
 * [Node-Postgres Module](database/node-postgres-module.md)
 
 ## OTHER

@@ -1,4 +1,4 @@
-# Database 3:PostgreSQL Indexes, B-tree
+# Database 3:PostgreSQL Indexes, B-tree and GIST
 
 * 1
 * [The system catalog query plan access](./#the-system-catalog-query-planner-access)
@@ -89,7 +89,7 @@ insert into orders(customer, status) values
 CREATE INDEX pending_clients ON orders (status) WHERE status = 'PENDING';
 ```
 
-### The SYSTEM CATALOG query planner access
+### The Pg\_amop operator famiy validating query operations for indexed columns data types
 
 A query search including an indexed column requires additional catalog lookups.                                                           The **query plan** must determine if the query **operator** is **compatible** with the **index** included in the search and if the resulting index scan is more efficient than a default sequential scan.
 
@@ -97,27 +97,27 @@ The system determines the index's **operation family** by referencing its **rela
 
 ```sql
 --Different data types compatible for a cross-type operation
-CREATE TABLE demo(
-    val_int4 INT, val_bigi BIGINT
-);
-CREATE INDEX idx_int4 ON demo USING btree (val_int4);
-CREATE INDEX idx_bigi ON demo USING btree (val_bigi);
+CREATE TABLE demo1( val_int4 INT, val_bigi BIGINT );
+-- Their indexes are built using different operation classes
+CREATE INDEX idx_int4 ON demo1 USING btree (val_int4);
+CREATE INDEX idx_bigi ON demo1 USING btree (val_bigi);
 
---Their indexes are built using different operation classes
+-- We retrieve the pg_class oid for their index relnames
+-- We use it to retrieve their pg_index indexrelid 
+-- It returns their operation family from pg_opclass
 SELECT
   c.relname AS index_name,
+  opc.opcmethod as index_method,
   opc.opcname AS operator_class_name,
   opc.opcfamily AS operator_family_oid
 FROM 
-  pg_class AS c                              --c.oid | 770103| 770104
+  pg_class AS c                              --c.oid    | 770103| 770104
 JOIN  pg_index AS i ON i.indexrelid = c.oid  --i.indclass | 1978| 3124
 JOIN  pg_opclass AS opc ON opc.oid = i.indclass[0]
 WHERE c.relname = 'idx_int4' or c.relname = 'idx_bigi';
---They are part of the same operation family
---opcmethod|opcname |opcfamily|
---      403|int4_ops|     1976|
---      403|int8_ops|     1976|
 ```
+
+<figure><img src="../../.gitbook/assets/SAMEpgopclass.jpg" alt=""><figcaption><p>The different operator classes sharing the same operator family</p></figcaption></figure>
 
 The planner analyzes the query's WHERE clause to extract the **operator** and its **data types**, which the **pg\_operator** system catalog then uses to identify the specific OID of the query operation.                                                    It then searches for a pg\_amop rule that **validates** the **operation OID** for the **operation family** of its indexed column.
 
@@ -143,16 +143,19 @@ The **strategy number** represents a specific action, used by the pg\_am handler
 --10027|           3|       403|
 </code></pre>
 
-The query planner calculates the total **cost of an index scan** using the pg\_am system catalog metadata. It calls the amcostestimate handler function associated with the index, which first determines the query's selectivity by calling the **pg\_operator** specific **oprest** function. It then combines the selectivity with table statistics to estimate the I/O cost for the index scan.                                                                                             The planner compares this cost to the cost of a sequential scan to decide its **execution plan**.
+### The pg\_am index execution plan cost and the operator family system catalogs
+
+The query planner **execution plan** combines the **table statistics** with the **index cost estimations**. The **pg\_operator** provides the **oprrest** function for the specific query operator, this function is aplied to **all scan types** and defines the [logic used to calculate the **query selectivity**](the-database-statistics-objects-data-and-pg_stats-view.md#the-planner-selectivity-estimation-for-query-operators) from the pg\_statistics data. The **pg\_am** system contains the index-specific **amcostestimate handler function**. This function estimates the **I/O cost** required to retrieve the **table data** volume estimated by the resulting selectivity. The query planner compares the costs of the different scan paths to select the most efficient one.
 
 {% tabs %}
 {% tab title="Pg_amop" %}
-The **pg\_amop** (Access Method Operator) system catalog stores all available **indexing rules,** which links the high-level comparison operators to their index strategies.                                          Each rule contains **metadata** that **describes** how the **index** access method **implements** a specific **query operation**. They are organized based on their operation **families**, with operation classes being a specific **subset of rules** that apply to an index access method.                                                            The pg\_amop defines the rules for using existing indexes, while **pg\_amproc** provides the **support functions** needed to build the index. Its columns include:
+The **pg\_amop** (Access Method Operator) system catalog stores all available **indexing rules,** which links the high-level comparison operators to their index strategies.                                          Each rule contains **metadata** that **describes** how the **index** access method **implements** a specific **query operation**. They are organized based on their operation **families**, with operation classes being a specific **subset of rules** that apply to an index access method.                                                            The pg\_amop defines the rules for using existing indexes, while **pg\_amproc** provides the **support functions** needed to build the index. The pg\_amop columns include:
 
 > **amopfamily**: It identifies the operator family the rule belongs to.                                                      **amopopr**: The **pg\_operator** OID of the query operator the rules applies to.                                                            **amoplefttype** / **amoprighttype**: The pg\_operator OID of the data types of the operator's left and right inputs.                                                                                                                         **amopstrategy**: The number that defines the **operator's concept** (e.g., "equality"). It's implemented within the access method's C-level code, which is called when the execution plan is run.                                                                                                                                                                                   **amopurpose**: It defines the rule's **role**, 's' for search (used in WHERE clauses) or 'o' for ordering (used in ORDER BY clauses).                                                                                                **amoppsortfamily**: It aplies only to ordering rules. It specifies the operator family that provides the sort logic. It's used by index types that rely on extensions to sort their entries.
 
 ```sql
 --The operation family that includes the val_int4 = val_bigi operation
+-- It incluides metadata about the query's data types and operators
 select * from pg_amop where amopopr=15 and amopfamily=1976;
 amopfamily|amopopr|amoplefttype|amoprighttype|
       1976|     15|          23|           20|
@@ -167,6 +170,7 @@ The **pg\_operator** system catalog stores every **operator implementation** in 
 
 > **oprname**: The operator's symbol as text.                                                                                                               **oprleft/oprright**: The **data types OID** of the operator's left and right arguments.                    **oprcode**: The name of the **C function that implements** the **operator's logic** for the specified data types.                                                                                                                                                 **oprcom**: The OID of its corresponding **commutator operator**, which maintains the same logical result when the **arguments swap** positions.                                                                                       **oprnegate**: The OID of its corresponding **negator operator**. The operator that returns the **logical opposite result** while using the **same data type** arguments.                                                                **oprest** and **opjoin**: The **selectivity estimation functions**. The query planner uses them to estimate the percentage of matching rows and to evaluate the efficiency of the **index query plan**.
 
+{% code fullWidth="false" %}
 ```sql
 --All metadata properties of a int4 = bigit data type operation
 --The opr prefix stands for operator
@@ -178,6 +182,7 @@ oid|oprname|oprnamespace|oprowner|oprkind|oprcanmerge|oprcanhash|
 oprleft|oprright|oprresult|oprcom|oprnegate|oprcode|oprrest|oprjoin  |
      23|      20|       16|   416|       36|int48eq|eqsel  |eqjoinsel|
 ```
+{% endcode %}
 
 **Selectivity functions** are differentiated by the **query clause** they handle.                                                The **oprest** function is used for single-table WHERE clauses, while **opjoin** for JOIN clauses.      The **query planner** uses these estimates to compare the **cost of an index scan** against a sequential scan before executing the query.
 
@@ -188,8 +193,8 @@ The **negator operator** maintains the **arguments' positions** but returns the 
 An operator OID can be associated with multiple operator families in the pg\_amop catalog.   The same operator can be used in different index access methods, and the query planner uses the listed compatible families to determine if the existing index actually supports the operator used in the query.
 
 ```sql
---The different failies and indexes that can handle the int4=bigint operation
-SELECT opfname, opfmethod,amopfamily 
+--The different families and indexes that can handle the int4=bigint operation
+SELECT opfname, opfmethod, amopfamily 
 FROM pg_amop as amop
 join pg_opfamily as opf on amop.amopfamily = opf.OID
 WHERE amopopr = 15;
@@ -254,9 +259,9 @@ oid  |amname|amhandler           |amtype|
 
 The **pg\_amproc** (Access Method Process) system catalog contains the indexes' **sorting functions**.                    The database retrieves and automatically triggers the specific support function for the **data type** being used during the CREATE INDEX command. This registry is shared among all of the database's indexes.
 
-### The query panner EXPLAIN OUTPUT
+### The RAM usage and DMA I/O costs for different indexes scan types
 
-The **query planner'**&#x73; EXPLAIN output is based on the **estimated number** of matching query values:
+The **query planner'**&#x73; [EXPLAIN output](the-query-plan-explain-output-and-the-analyze-work_mem-data-sampling.md#the-explain-command-options) is based on the **estimated number** of matching query values:
 
 >> It selects a **Sequential Scan** for a high number of matching table rows, as this avoids the overhead cost of an index lookup across numerous pages.> \
 > It selects an **Index Scan** for a precise query with few returning rows, as the index overhead cost is lower than reading the entire table.> \
@@ -277,9 +282,11 @@ The **query planner** chooses its bitmap based on its RAM and CPU **costs**: an 
 The DMA (**Direct Memory Access**) manages the cost of an **I/O operation**, which includes the **seek cost** (time to find the disk page) and the **transfer cost** (time to load data into RAM).                                                      The seek cost is the highest component because it's based on **physical navigation**, and it's the same for retrieving either a **single matching row** or an **entire disk page**.\
 Although the query plan may include random I/O retrievals, their limited number maintains efficiency, as a single I/O operation can retrieve multiple matching entries.
 
-The **query planner** estimates its cost by analyzing the **physical table heap structure**.                                              The **Clustering Factor** quantifies the **correlation** between the **logical order** of the index and the **physical storage order** of its correlated table rows. The database calculates it by sequentially reading a set of index entries and tracking the number of **unique disk pages accessed** using their TID.                                              A **low** clustering factor means the entries point to table rows stored in shared, **close disk pages**, while a **high** value indicates that the table rows are scattered and require more expensive random I/O accesses to **multiple disk page**s.                                                                                                                                                                   The index's logical order, created by its sorting function, is used to calculate the estimated cost for any query scan that **utilizes the index**.
+### The execution plan scan types and the clustering factor
 
-The query planner defines its **execution plan** using the **table statistics** and its **data distribution**.                                It accesses the **pg\_class** catalog to retrieve the **reltuples** total row count and the **relpages** for the total disk pages occupied by the table, while the ANALYZE command collects data into **pg\_statistics** to determine the **selectivity** of the query condition, which is essential for estimating the cost of every possible **data retrieval scan**.
+The query planner includes **data distribution statistics** to define its execution plan.                                       The **clustering factor**, stored in the **pg\_statistic correlation** column, quantifies the relationship between the **physical table's heap** data and the **logical index structure**.                                                              It measures how many unique disk pages are accessed by the index's entry **TIDs**. A high correlation indicates that sequential index entries are stored on the same shared disk pages, while a low correlation indicates index TIDs that point to scattered disk pages, which requires a higher number of expensive random **I/O accesses**.
+
+The **pg\_class** catalog provides the total row count (**reltuples**) and total disk pages (**relpages**) for the table, while pg\_statistic determines the selectivity of the specific query condition.                                            The statistical **correlation** acts as a **cost multiplier** for the pg\_am amcostestimate handler, that can cause the planner to choose a Bitmap Index Scan, which is better designed to handle multiple scattered disk page accesses.
 
 {% tabs %}
 {% tab title="Sec scan" %}
@@ -288,9 +295,7 @@ It's efficient for queries that retrieve a large **percentage** of table's data 
 
 ```sql
 -- It doesn't follow any index structure logic as it reads the entire page
-CREATE TABLE tavole (
-    codice integer, padding text         
-);
+CREATE TABLE tavole ( codice integer, padding text );
 
 -- The CPU cost is based on the table row size
 -- The I/O accesses depend on the number of disk pages used by the table.
@@ -304,8 +309,7 @@ CREATE INDEX indice ON tavole (codice);
 ANALYZE tavole;
 
 EXPLAIN ANALYZE SELECT * FROM tavole WHERE codice < 80000;
-/*
-Seq Scan on tavole 
+/*Seq Scan on tavole 
   (cost=... rows=80139 width=17) (actual time=... rows=79952 loops=1)
   Filter: (codice < 80000)     
   Rows Removed by Filter: 20048    
@@ -330,11 +334,9 @@ CREATE INDEX indice ON tavole (codice);
 ANALYZE tavole;
 
 EXPLAIN ANALYZE SELECT * FROM tavole WHERE codice < 30000;
-/*
-Bitmap Heap Scan on tavole 
-  (cost=... rows=29942 width=17) (actual time=2.537..6.614 rows=29949 loops=1)
-  Recheck Cond: (codice < 30000)
-  Heap Blocks: exact=636
+/*Bitmap Heap Scan on tavole 
+  (cost=... rows=29942 width=17) (actual time=... rows=29949 loops=1)
+  Recheck Cond: (codice < 30000) Heap Blocks: exact=636
   ->  Bitmap Index Scan on indice 
         (cost=... rows=29942 width=0) (actual time=2.439 rows=29949 loops=1)
         Index Cond: (codice < 30000)      
@@ -398,22 +400,12 @@ Execution Time: 0.189 ms  */
 {% endtab %}
 {% endtabs %}
 
-The EXPLAIN ANALYZE output describes the **properties** of the **table scan**.\
+The [EXPLAIN ANALYZE output](the-query-plan-explain-output-and-the-analyze-work_mem-data-sampling.md#the-explain-analyze-options) describes the **properties** of the **table scan**.\
 They are divided into **estimated cost** values, calculated by EXPLAIN, and **actual** performance metrics, returned by ANALYZE after the query execution.\
 The **loops** value represents the number of times the [node ](#user-content-fn-1)[^1]was **executed**; a higher count indicates a complex join structure used for the scan.\
 The **width** value represents the average **byte size** of the table rows used in the scan. It's a static property used for the cost estimation and is not included in the runtime metrics of the actual cost.
 
-### The EXPLAIN ANALYZE propeties
-
-ACTUAL COMMAND
-
-1
-
-1
-
-1
-
-1
+To access the complete explanation for the [EXPLAIN and ANALYZE commands](the-query-plan-explain-output-and-the-analyze-work_mem-data-sampling.md) or the [database statistics](the-database-statistics-objects-data-and-pg_stats-view.md) check theirs specific sections.
 
 ### GIST INDEXING
 
@@ -454,9 +446,6 @@ The **selectivity** property estimates the number of returned rows from a WHERE 
 The query planner uses the selectivity **estimation function**, specific to the comparison **operator**, to calculate the percentage of rows that will be returned by the query based on the column's cardinality.
 
 ```sql
-//If multiple indexed columns, it will choose teh one with higher cardinality
-//It wont accept the B-tree linear data types, for teh index creation, 
-//If the specified daterange contains teh specified range, not just overlap,
 -- Enable the trigram extension, which is needed for similarity searches
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 

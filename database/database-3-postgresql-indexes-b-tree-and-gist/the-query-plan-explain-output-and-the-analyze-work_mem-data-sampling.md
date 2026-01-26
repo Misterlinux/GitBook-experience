@@ -1,13 +1,10 @@
-# EXPLAIN command and ANALYZE
+# The query plan EXPLAIN output and the ANALYZE work\_mem data sampling
 
-* 1
-* 1
-* 1
-* 1
-
-1
-
-### QUERY PLANNER, QUERY TREE AND EXECUTION PLAN creating
+* [The SQL query EXPLAIN command](the-query-plan-explain-output-and-the-analyze-work_mem-data-sampling.md#the-sql-query-explain-command)
+* [The EXPLAIN command options](the-query-plan-explain-output-and-the-analyze-work_mem-data-sampling.md#the-explain-command-options)
+* [The EXPLAIN ANALYZE options](the-query-plan-explain-output-and-the-analyze-work_mem-data-sampling.md#the-explain-analyze-options)
+* [The ANALYZE reservoir sampling VITTER algorithm](the-query-plan-explain-output-and-the-analyze-work_mem-data-sampling.md#the-analyze-reservoir-sampling-vitter-algorithm)
+* [The Shared Buffer Cache and its ring access strategy optimitation](the-query-plan-explain-output-and-the-analyze-work_mem-data-sampling.md#the-shared-buffer-cache-and-its-ring-access-strategy-optimitation)
 
 The PostgreSQL parses the SQL query to create the **logical structure** that defines the execution plan.\
 The query planner uses the **query tree** and **table statistics** to find the most suitable **strategy** for its resulting query plan.
@@ -44,7 +41,7 @@ The query plan is a **tree structure** that represents the **execution strategy*
 
 1
 
-### Explain command
+### The SQL query EXPLAIN command
 
 The EXPLAIN command is an **estimation tool** not an execution tool.\
 It returns the **execution plan** used by the **query planner**, but it doesn't run the query, nor does it include the actual execution time or operation properties.
@@ -88,9 +85,7 @@ Index Scan using paddinx on tavole  (cost=0.29..8.30 rows=1 width=37)|
   Filter: (codice = 4348)   
 ```
 
-1
-
-### OPTIONS RESUMING
+### The EXPLAIN command options
 
 The EXPLAIN command **OPTIONs** control the **properties** of the **query planner**'s output, and can modify the displayed results' level of detail.
 
@@ -201,7 +196,7 @@ Index Scan using paddinx on tavole  (cost=0.29..8.30 rows=1 width=37)
 Planning Time: 0.115 ms, Execution Time: 0.694 ms
 ```
 
-### The ANALYZE command
+### The EXPLAIN ANALYZE options
 
 The **ANALYZE** option **executes the query plan** defined by the EXPLAIN command.                                        It collects the **runtime metrics** of the execution process and compares the estimated cost and time to the actual query results.
 
@@ -323,7 +318,7 @@ Insert on tavole  (cost=0.00..0.01 rows=0 width=0) (actual time=2.576..2.577 row
 Planning Time: 0.026 ms, Execution Time: 7.931 ms  
 ```
 
-### The ANALUYZE command
+### The SQL query ANALYZE command
 
 The EXPLAIN ANALYZE command provides the **runtime statistics** of the executed **query plan**.\
 The separate ANALYZE command is a **maintenance operation** that **collects** and **updates** the **table statistics**. It's a **read-only** process that neither executes nor modifies any data in the table.
@@ -347,7 +342,7 @@ The ANALYZE command executes a **sequential scan** of the table's disk pages to 
 
 The algoritm used by ANALYZE, the **Reservoir sampling**, ensures that every row scanned by the ANALYZE command has an equal chance of being included in the final sampled set.
 
-### EXPLENATION RESERVOIR sampling and VITTER
+### The ANALYZE reservoir sampling VITTER algorithm
 
 The Reservoir algorithm stores its samples values in the **reservoir array** of a fixed K size.
 
@@ -402,12 +397,12 @@ The Algorithm R maintains the slow randomness check for every single value of th
 
 The Vitter's Algorithm Z optimizes the sampling process by removing the need to generate the random replacement index J and perform the selection check for each item in the ANALYZE data stream. It implements **skip logic** that allows it to use a single random value (often the logarithmic representation of a uniform random number) that is plugged into a formula to calculate the skip distance (S) to the next item selected for the reservoir.
 
-### Shared buffer cache
+### The Shared Buffer Cache and its ring access strategy optimitation
 
 The **Shared Buffer Cache** is a section of RAM used for read operations involving disk pages.
 
 ```sql
-// Some code
+-- It's used by the ANALYZE command
 ANALYZE (BUFFER_USAGE_LIMIT 2MB) tavole;
 ```
 
@@ -427,6 +422,8 @@ The Ring Buffer is a **Buffer Access Strategy** created by the Buffer Manager fo
 It **differs** from the main Shared Buffer Cache in both **size** and **purpose**. Instead of preserving frequently accessed pages for long-term reuse, the Ring Buffer is designed to process pages and immediately evict them.\
 Both mechanisms follow the same data persistence rule: a dirty page must be written to disk before it can be evicted. The difference lies in their **eviction algorithm**.
 
+— IMMAINE --
+
 The Shared Buffer Cache relies on a Clock Sweep algorithm (an approximation of Least Recently Used/**LRU**) for its eviction mechanism. It tracks page access counts to identify and evict pages that are rarely used by database operations.\
 It differs from the **FIFO** (First-In, First-Out) policy applied by the Ring Buffer strategy during commands like ANALYZE, which strictly recycles pages based on their entry order without checking usage frequency.
 
@@ -438,24 +435,3 @@ It purges all the remaining values at the end of the reservoir sampling, ensurin
 The ring buffer size optimizes the data management during ANALYZE, as it allows it to store more disk pages and reduces the need to use the eviction mechanism, minimizing stalling.
 
 The ring buffer is not used for tables that are smaller than the shared buffer cache, as the database can read the data directly into the shared buffer cache without causing many LRU evictions.
-
-```sql
-// Some code
-ANALYZE (BUFFER_USAGE_LIMIT 2MB) tavole;
-```
-
-1
-
-1
-
-1
-
-1
-
-1
-
-1
-
-1
-
-1
