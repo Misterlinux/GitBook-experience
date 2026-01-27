@@ -422,6 +422,20 @@ USING gist (column_name);
 
 CREATE INDEX text_search_idx ON documents
 USING gist (to_tsvector('english', document_text));
+
+-- It can't be declared within a CREATE TABLE
+-- The column stores normalized lexemes for teh tsvector GIST structure
+CREATE TABLE articles ( search_vector tsvector );
+CREATE INDEX idx_articles ON articles USING gist(search_vector);
+
+-- Using the tsvector() for the table column insert
+INSERT INTO articles (search_vector)
+VALUES (to_tsvector('english', 'The mile')), (to_tsvector('english', 'Secondo'));
+
+-- We can navigate the GIST index structure using the match(@@) operator
+SELECT * FROM articles 
+WHERE search_vector @@ to_tsquery('english', 'The & (mile | meter)');
+-- search_vector| 'mile':2 |, It returns the normalized text
 ```
 
 It supports a wide range of specialized **comparison operators** for queries that access its indexed data types:
@@ -433,50 +447,44 @@ It supports a wide range of specialized **comparison operators** for queries tha
 > Strictly position (**<<** & **>>**): Checks if an object is positioned entirely to one side of another.> \
 > Text Match (**@@**): Performs a full-text search on a document
 
-The database first uses the **indexed columns** from the WHERE clause to retrieve the corresponding table rows. It then applies the remaining conditions to that resulting set of data.
+1 TITOLO
 
-— -------------
+The GiST **index framework** is designed to adapt to complex, non-linear data types. It supports **extensions**, like the **pg\_trgm**, which implements trigram indexing for text similarity searches.
 
-The query planner creates its **excution plan** by estimating the most efficient WHERE clause condition.\
-The ANALYZE command accesses the column data statistics from the **pg\_statistics** system catalog.
-
-The **cardinality** property represents the number of unique values in a column. We calculate it using the **n\_distinct** and **MCV**(Most Common Values) statistics.
-
-The **selectivity** property estimates the number of returned rows from a WHERE clause.\
-The query planner uses the selectivity **estimation function**, specific to the comparison **operator**, to calculate the percentage of rows that will be returned by the query based on the column's cardinality.
+The planner optimizes queries involving **multiple indexed columns** using their index seelctivities.\
+The **index scan + filter** is applied when one index is highly selective. The planner performs a standard index scan on the primary column and applies the remaining conditions as filters to the table's heap results, without using the second index.\
+The **Bitmap optimitation** is applied when multiple indexes have meaningful selectivity. The database independently generates bitmaps for each condition and performs a **BitmapAND** operation to create a final bitmap containing the intersection of Row IDs (TIDs) present in both.
 
 ```sql
--- Enable the trigram extension, which is needed for similarity searches
+-- We use Btree for prefix search while GIST/GIN for fuzzy name matching
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
+CREATE TABLE festivals ( nome TEXT, dates daterange );
 
--- Create the table, we are not searching for prefix searches, adapt to the B-tree
--- But for fuzzy name matching, we works with teh GIST or GIN and the extention.
-CREATE TABLE festivals (
-    id SERIAL PRIMARY KEY,
-    nome TEXT, dates daterange
-);
-
--- The difference between teh extention anme and teh specific operation class form it being aplied to teh GIST creation.
+-- The GIST index uses the operation class from column data type included by default
+-- We explicitly include teh operation class for data type extentions
 CREATE INDEX idx_festivals ON festivals USING gist (dates);
 CREATE INDEX idx_nome ON festivals USING gist (nome gist_trgm_ops);
 
--- Insert data with some similar names
+-- The trgm works on normal TEXT insert values
 INSERT INTO festivals (nome, dates) VALUES
 ('Festive Summer', daterange('2025-08-01', '2025-08-10')),
 ('Summer Festival ',    daterange('2025-07-30', '2025-08-02', '[]')),
 ('Somber Festival', daterange('2025-08-03', '2025-08-05', '[]')),
 ('Sun Fest', daterange('2025-08-02', '2025-08-05', '[]'));
-
 -- Analyze the table for up-to-date statistics
 ANALYZE festivals;
 
--- symilar name, condition and overlap.for daterange
+-- We force a bitmapAND optimitation
+SET enable_seqscan = off;
+set enable_indexscan = off;
+
+-- The query applies text similarity and date overlap
 EXPLAIN ANALYZE
 SELECT * FROM festivals
 WHERE nome % 'Summer Fest' AND dates @> daterange('2025-08-02', '2025-08-05', '[]');
 ```
 
-#### IMMAGGINE
+<figure><img src="../../.gitbook/assets/bitmapANDresults.png" alt="" width="563"><figcaption><p>The trgm data type output and bitmapAND query optimitation</p></figcaption></figure>
 
 //The combined bitmap scan of multiple indexed columns doesnt return the bitmap for each scan, nly the bitmap of the final bitmpa after the BITMAPAND operation.
 
