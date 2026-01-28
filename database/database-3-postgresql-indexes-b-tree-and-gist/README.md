@@ -456,58 +456,60 @@ The **index scan + filter** is applied when one index is highly selective. The p
 The **Bitmap optimitation** is applied when multiple indexes have meaningful selectivity. The database independently generates bitmaps for each condition and performs a **BitmapAND** operation to create a final bitmap containing the intersection of Row IDs (TIDs) present in both.
 
 ```sql
--- We use Btree for prefix search while GIST/GIN for fuzzy name matching
-CREATE EXTENSION IF NOT EXISTS pg_trgm;
-CREATE TABLE festivals ( nome TEXT, dates daterange );
-
--- The GIST index uses the operation class from column data type included by default
--- We explicitly include teh operation class for data type extentions
-CREATE INDEX idx_festivals ON festivals USING gist (dates);
-CREATE INDEX idx_nome ON festivals USING gist (nome gist_trgm_ops);
-
 -- The trgm works on normal TEXT insert values
-INSERT INTO festivals (nome, dates) VALUES
-('Festive Summer', daterange('2025-08-01', '2025-08-10')),
-('Summer Festival ',    daterange('2025-07-30', '2025-08-02', '[]')),
-('Somber Festival', daterange('2025-08-03', '2025-08-05', '[]')),
-('Sun Fest', daterange('2025-08-02', '2025-08-05', '[]'));
--- Analyze the table for up-to-date statistics
-ANALYZE festivals;
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+CREATE TABLE personnel ( first_name TEXT, last_name TEXT );
 
+-- We use Btree for prefix search while GIST/GIN for fuzzy name matching
+CREATE INDEX idx_fname ON personnel USING gin (first_name gin_trgm_ops);
+CREATE INDEX idx_lname ON personnel USING gin (last_name gin_trgm_ops);
+
+-- The bitmap will extract the query values from the series of random values
+INSERT INTO personnel (first_name, last_name)
+SELECT 'John', md5(random()::text) FROM generate_series(1, 100000);
+
+INSERT INTO personnel (first_name, last_name)
+SELECT md5(random()::text), 'Doe' FROM generate_series(1, 100000);
+
+-- The set the actual values the query is searching for
+INSERT INTO personnel (first_name, last_name) VALUES 
+('John', 'Doe'), ('John', 'Doe'), ('John', 'Doe'), ('John', 'Doe'), ('John', 'Doe');
+
+ANALYZE personnel;
 -- We force a bitmapAND optimitation
-SET enable_seqscan = off;
-set enable_indexscan = off;
+SET enable_seqscan = off; set enable_indexscan = off;
 
--- The query applies text similarity and date overlap
+-- The bitmapAND merging is faster than fetching a bitmap and aplying the other as filter
 EXPLAIN ANALYZE
-SELECT * FROM festivals
-WHERE nome % 'Summer Fest' AND dates @> daterange('2025-08-02', '2025-08-05', '[]');
+SELECT * FROM personnel WHERE first_name % 'John' AND last_name % 'Doe';
 ```
 
-<figure><img src="../../.gitbook/assets/bitmapANDresults.png" alt="" width="563"><figcaption><p>The trgm data type output and bitmapAND query optimitation</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/bitmapANDoutput.jpg" alt="" width="548"><figcaption><p>The EXPLAIN output for a bitmapAND execution plan</p></figcaption></figure>
 
-//The combined bitmap scan of multiple indexed columns doesnt return the bitmap for each scan, nly the bitmap of the final bitmpa after the BITMAPAND operation.
+The **BitmapAnd** row count is based on the query planner selectivity estimate for the two columns, assumed as indipendent for the lack of an extended statistics object.\
+Its actual row output count (rows=0) depends on the returned bitmapAND structure not being considered as table rows, leaving the actual count of retrieved rows for the Bitmap Heap Scan.
 
-The query uses a **combined bitmap** to find rows that match both the **trigram** and the date **contain** conditions. It merges the separate bitmaps created by the columns index scans and uses the result to scan the table heap.
+The **Bitmap Heap scan** is necessary for **inherent lossy index structure** like GIN and GIST. These indexes often use hashing or trigram signatures, which can result in hash collisions or false positives. The **recheck** ensures that the rows retrieved from the heap actually match the query criteria.\
+The execution plan includes the I/O costs for the two child Bitmap index scans and the bitmap heap scan, which, like the bitmapAND, is performed entirely in RAM.
 
 <details>
 
-<summary>1111</summary>
+<summary>The GIN and GIST difference in creating bitmapAND execution plans</summary>
 
-The combined bitmap is the product of the BitmapAnd operation and is processed in memory (RAM).
+The GIN indexes have a higher chance of resulting in a BitmapAnd plan compared to GiST.\
+The GIST indexes are often more **expensive for bulk retrieval operations** like bitmaps. Its balanced-tree index structure requires traversing multiple branches to retrieve the multiple matching rows, as its **predicate nodes** conditions might be based on a different data from the query values. Resulting in the query planner creating a single bitmap and using the other query condition as a filter.\
+The GIN index uses **Posting Lists for its structure**, which allows the database to retrieve specific values in a singular I/0 operation, and results in less expensive bitmaps and the bitmapAND operation.
 
-The database performs a logical AND operation between the bitmap location pointers.\
-Both maps reference the same physical table, a pointer to a specific row or page identifies the exact same location in both. These shares locations are used to populate the combined bitmap.
+```sql
+-- For GIST indexes not using a built-in data type (like the trgm)
+-- We have to include its operation class, needed for the GIST index structure
+CREATE INDEX idx_fname ON personnel USING gist (first_name gist_trgm_ops);
+CREATE INDEX idx_lname ON personnel USING gist (last_name gist_trgm_ops);
+```
 
-The query planner creates the Recheck Condition directly from the original columns WHERE clauses. It aplies it for every row retieved by the combined bitmap.
-
-The process still requires 2 series of I/O operations, the first for the index scans and the second for the table heap using the combined bitmap.
-
-The BitmapAnd process can combine exact and lossy bitmaps; it uses the page value from the exact row pointers to confirm the lossy pages. The state of the combined bitmap will still depend on the total size of the shared pointers.
+The GIN index is efficent for reading but it's slower to update than GiST and can't handle unique constraints.&#x20;It's also not suitable for certain complex operators, like spatial overlaps or validity ranges.
 
 </details>
-
-1
 
 ### DOUBLE LOSSY scan
 
