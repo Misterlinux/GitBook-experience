@@ -447,7 +447,7 @@ It supports a wide range of specialized **comparison operators** for queries tha
 > Strictly position (**<<** & **>>**): Checks if an object is positioned entirely to one side of another.> \
 > Text Match (**@@**): Performs a full-text search on a document
 
-1 TITOLO
+1 TITOLO BITMAPAND operation scan type
 
 The GiST **index framework** is designed to adapt to complex, non-linear data types. It supports **extensions**, like the **pg\_trgm**, which implements trigram indexing for text similarity searches.
 
@@ -513,28 +513,57 @@ The GIN index is efficent for reading but it's slower to update than GiST and ca
 
 ### DOUBLE LOSSY scan
 
-\\
+The EXPLAIN output of a Bitmap Scan can be flagged as a '**Lossy Heap Scan**' due to lossiness in either the bitmap memory management or the **index logical structure**.
 
-\\
+The **Bitmap Lossiness** is related to **work\_mem** management. When the number of bitmap entries exceeds available memory, the database optimizes the structure by using 'lossy' TIDs that **point to the disk page** containing the match, rather than the row itself. This requires more CPU due to the necessary '**Recheck Condition**' applied to all rows within the disk page to determine which ones satisfy the query.
 
-1
+The **Index Lossiness** refers to the data type used for the index entries. The **pg\_trgm extension** creates GIN/GIST indexes made of **trigram values**, which are inherently lossy due to their **low selectivity** and are designed for specific operations like fuzzy matching (%). This results in a bitmap scan that produces a high number of potential matches but does not guarantee precision, requiring an additional verification step with the actual table values.
 
-### 1
+The combined lossiness from both data structures forces the database to process the EXPLAIN output as a **lossy heap block**. The database dynamically sets TIDs as 'exact' or 'lossy' depending on available work\_mem. If it runs out of allocated memory, it switches to storing lossy pointers while keeping the previous ones as exact. The number of false positives found during data retrieval is shown in the line Rows Removed by Index Recheck.
 
-### 1
+```sql
+-- We set a lower work_mem to force the memory lossiness structure
+SET work_mem = '64kB';
+SHOW work_mem;	-- To check the edited value
 
-### 1
+-- The trgm works on normal TEXT insert values
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+CREATE TABLE personnel ( first_name TEXT, last_name TEXT );
 
-1
+-- We use Btree for prefix search while GIST/GIN for fuzzy name matching
+CREATE INDEX idx_fname ON personnel USING gin (first_name gin_trgm_ops);
+CREATE INDEX idx_lname ON personnel USING gin (last_name gin_trgm_ops);
 
-### 1
+-- The bitmap will extract the query values from the series of random values
+INSERT INTO personnel (first_name, last_name)
+SELECT 'John', md5(random()::text) FROM generate_series(1, 200000);
 
-### 1
+INSERT INTO personnel (first_name, last_name)
+SELECT md5(random()::text), 'Doe' FROM generate_series(1, 200000);
 
-1
+-- The set the actual values the query is searching for
+INSERT INTO personnel (first_name, last_name) VALUES 
+('John', 'Doe'), ('John', 'Doe'), ('John', 'Doe'), ('John', 'Doe'), ('John', 'Doe');
 
-1
+ANALYZE personnel;
+-- We force a bitmap optimitation
+SET enable_seqscan = off; set enable_indexscan = off;
 
-1
+-- The query conditions are applied to the index trigrams values representing the table rows
+EXPLAIN ANALYZE
+SELECT * FROM personnel WHERE first_name % 'John' AND last_name % 'Doe';
+```
+
+<figure><img src="../../.gitbook/assets/lossyheapscan.jpg" alt="" width="536"><figcaption><p>The EXPLAIN output of the lossy Heap Blocks</p></figcaption></figure>
+
+The data structures involved are:&#x20;
+
+{% hint style="info" %}
+The **GIN/GiST Index**: It's stored on disk, it uses the gist\_trgm\_ops operator class to create an index structure made of trigrams.
+
+The **Bitmap**: A temporary work\_mem data structure that exists only during query execution. It stores the TID pointers indicating the index entries that match the query condition.
+
+The **Heap Blocks**: The physical disk pages where the actual table data is stored. They are accessed during the Bitmap Heap Scan to confirm the final output values.
+{% endhint %}
 
 [^1]: Logical operations that include I/O accesses
