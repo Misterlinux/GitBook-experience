@@ -191,6 +191,51 @@ The **set of commands** included in the **execution plan** are determined by the
 
 MAYBE IMAGE FOR TEH TABLES system catalog retrieved, as the strategy value (defined by values and specially operator purpose in pg\_amop, implies its valid clause.)
 
+```
+
+-- We use Btree for prefix search while GIST/GIN for fuzzy name matching
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+CREATE TABLE festivals ( nome TEXT, dates daterange );
+
+-- The GIST index uses the operation class from column data type included by default
+-- We explicitly include teh operation class for data type extentions
+CREATE INDEX idx_festivals ON festivals USING gist (dates);
+CREATE INDEX idx_nome ON festivals USING gist (nome gist_trgm_ops);
+
+-- The trgm works on normal TEXT insert values
+INSERT INTO festivals (nome, dates) VALUES
+('Festive Summer', daterange('2025-08-01', '2025-08-10')),
+('Summer Festival ',    daterange('2025-07-30', '2025-08-02', '[]')),
+('Somber Festival', daterange('2025-08-03', '2025-08-05', '[]')),
+('Sun Fest', daterange('2025-08-02', '2025-08-05', '[]'));
+
+select * from festivals;
+
+SELECT
+  c.relname AS index_name,
+  opc.opcmethod as index_method,
+  opc.opcname AS operator_class_name,
+  opc.opcfamily AS operator_family_oid
+FROM 
+  pg_class AS c                             
+JOIN  pg_index AS i ON i.indexrelid = c.oid
+JOIN  pg_opclass AS opc ON opc.oid = i.indclass[0]
+WHERE c.relname = 'idx_festivals';
+
+select relname from pg_class where relname = 'idx_festivals';
+-- idx_festivals|         783|range_ops          |               3919|
+
+SELECT opfname, opfmethod, amopfamily 
+FROM pg_amop as amop
+join pg_opfamily as opf on amop.amopfamily = opf.OID
+WHERE amopopr = 15;
+
+select * from pg_amop where amopfamily=3919;
+
+select * from pg_operator where oprname='@>';
+
+```
+
 \-
 
 ### Query clauses operators allowed for GIST indexes and the K-NN navigation strategy

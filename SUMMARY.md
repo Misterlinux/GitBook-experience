@@ -86,6 +86,9 @@
   * [Gist indexing method.](database/database-3-postgresql-indexes-b-tree-and-gist/gist-indexing-method..md)
   * [The query plan EXPLAIN output and the ANALYZE work\_mem data sampling](database/database-3-postgresql-indexes-b-tree-and-gist/the-query-plan-explain-output-and-the-analyze-work_mem-data-sampling.md)
   * [The database statistics objects data and pg\_stats view](database/database-3-postgresql-indexes-b-tree-and-gist/the-database-statistics-objects-data-and-pg_stats-view.md)
+* [The HASH and the BRIN](database/the-hash-and-the-brin/README.md)
+  * [Hash index in depth](database/the-hash-and-the-brin/hash-index-in-depth.md)
+  * [Other index](database/the-hash-and-the-brin/other-index.md)
 * [Node-Postgres Module](database/node-postgres-module.md)
 
 ## OTHER

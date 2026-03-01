@@ -1,10 +1,11 @@
 # Database 3:PostgreSQL Indexes, B-tree and GIST
 
-* 1
-* [The system catalog query plan access](./#the-system-catalog-query-planner-access)
-* 1
-
-1
+* [The Pg\_amop operator family validating query operations for indexed columns data types](./#the-pg_amop-operator-famiy-validating-query-operations-for-indexed-columns-data-types)
+* [The pg\_am index execution plan cost and the operator family system catalogs](./#the-pg_am-index-execution-plan-cost-and-the-operator-family-system-catalogs)
+* [The RAM usage and DMA I/O costs for different indexes scan types](./#the-ram-usage-and-dma-i-o-costs-for-different-indexes-scan-types)
+* [The GIST index data types and query operators](./#the-gist-index-data-types-and-query-operators)
+* [The multi-columns index scan and the bitmapAND optimitation](./#the-multi-columns-index-scan-and-the-bitmapand-optimitation)
+* [The Lossy Heap Scan EXPLAIN output](./#the-lossy-heap-scan-explain-output)
 
 An index is an additional **database structure** built with the specified columns of an existing table.
 
@@ -89,7 +90,7 @@ insert into orders(customer, status) values
 CREATE INDEX pending_clients ON orders (status) WHERE status = 'PENDING';
 ```
 
-### The Pg\_amop operator famiy validating query operations for indexed columns data types
+### The Pg\_amop operator family validating query operations for indexed columns data types
 
 A query search including an indexed column requires additional catalog lookups.                                                           The **query plan** must determine if the query **operator** is **compatible** with the **index** included in the search and if the resulting index scan is more efficient than a default sequential scan.
 
@@ -407,7 +408,7 @@ The **width** value represents the average **byte size** of the table rows used 
 
 To access the complete explanation for the [EXPLAIN and ANALYZE commands](the-query-plan-explain-output-and-the-analyze-work_mem-data-sampling.md) or the [database statistics](the-database-statistics-objects-data-and-pg_stats-view.md) check theirs specific sections.
 
-### GIST INDEXING
+### The GIST index data types and query operators
 
 A GiST (Generalized Search Tree) index organizes **complex** and **non-linear data** into a balanced tree.\
 Its core algorithm acts as a flexible **framework**. It uses the operator class of the data type being indexed to define its internal logic and node structure.
@@ -447,7 +448,7 @@ It supports a wide range of specialized **comparison operators** for queries tha
 > Strictly position (**<<** & **>>**): Checks if an object is positioned entirely to one side of another.> \
 > Text Match (**@@**): Performs a full-text search on a document
 
-1 TITOLO BITMAPAND operation scan type
+### The multi-columns index scan and the bitmapAND optimitation
 
 The GiST **index framework** is designed to adapt to complex, non-linear data types. It supports **extensions**, like the **pg\_trgm**, which implements trigram indexing for text similarity searches.
 
@@ -511,7 +512,7 @@ The GIN index is efficent for reading but it's slower to update than GiST and ca
 
 </details>
 
-### DOUBLE LOSSY scan
+### The Lossy Heap Scan EXPLAIN output
 
 The EXPLAIN output of a Bitmap Scan can be flagged as a '**Lossy Heap Scan**' due to lossiness in either the bitmap memory management or the **index logical structure**.
 
