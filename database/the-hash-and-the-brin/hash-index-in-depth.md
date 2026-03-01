@@ -10,7 +10,11 @@
 The **Hash Index** doesn't implement any data-type-specific linear order, unlike B-tree or GiST indexes. Its **lossy structure** requires a **double equality operation** to find matching query values.\
 The database hashes the query values and compares them to their corresponding hash index entries; it then follows the TID pointer to the table heap to verify the actual data. This second check is necessary to confirm that the table row has not been deleted and to avoid including collision values in the query output.
 
-1
+The Hash Index is organized into a **single-level** series of **bucket pages**. Its array structure allows for **direct access** to the data instead of traversing a tree structure like a B-tree or GiST.
+
+All hash indexes include a **Metadata page** that tracks index statistics and manages the bucket data structures. It tracks the current number of bucket pages (**maxbuckets**), the number of entries in each bucket (**ntuples**), and the number of available **empty pages** used to handle overfilled buckets (the overflow free pages).
+
+The Hash Index doesn't store a Free Space Map (FSM) file to map empty space within index nodes. It creates a **map of storage addresses** for all available overflow pages, used to handle the avaiable bucket space.
 
 The **Hash Split** instead refers to a **global process** triggered when the overall **index density** exceeds the defined **fillfactor**. The database determines the initial **number of buckets** using ANALYZE **statistics**, specifically the estimated row count (**reltuples**) and the average column width (**avg\_width**).&#x20;When the average number of hash entries exceeds the estimated **Load Factor**, the index doubles its bucket count by splitting existing buckets into two.
 
@@ -27,24 +31,22 @@ The **Page** represents the **physical 8KB storage unit** containing the hash en
 The Buckets define the logical location of entries. The database applies the **MOD algorithm** to the entry's hash value and the current number of buckets to define the entry's bucket location.\
 The **Linked List** represents the physical structure of how data is stored within the buckets; it includes all overflow pages appended to the bucket along with their values and entries.
 
-1
-
-The Hash Index is organized into a **single-level** series of **bucket pages**. Its array structure allows for **direct access** to the data instead of traversing a tree structure like a B-tree or GiST.
-
-All hash indexes include a **Metadata page** that tracks index statistics and manages the bucket data structures. It tracks the current number of bucket pages (**maxbuckets**), the number of entries in each bucket (**ntuples**), and the number of available **empty pages** used to handle overfilled buckets (the overflow free pages).
-
-The Hash Index doesn't store a Free Space Map (FSM) file to map empty space within index nodes. It creates a **map of storage addresses** for all available overflow pages, used to handle the avaiable bucket space.
+11
 
 1
+
+### size comparison indexes for separate chainingstrategy hash.
 
 The **separate chaining** **strategy** defines how the hash index buckets handle entry inserts that **exceed** their **storage capacity**; this differs from how leaf nodes split to handle index growth.\
 The 8KB hash bucket appends an **overflow page** to include new entries. It uses a **pointer** to the physical location of the new page, which the database uses to **insert and retrieve data** during query executions. The **overflow pages** are part of a **local process** that handles a single bucket exceeding its storage capacity.
 
-1
-
 (esempio)
 
 The Hash and B-tree index structures adapt differently to **queries** that include **repeated values** or **long entry values**.
+
+<details>
+
+<summary>1111 Overflow pages overhead for repeated values in Btee and hash values overflow pages</summary>
 
 The Hash index uses a single-level structure for its **direct data mapping**.\
 It's not designed to handle a series of repeated values, as duplicates generate identical hash entries which must share the same bucket. The **Hash index can't distribute** these values between **different buckets** because the mathematical algorithm governing the logical bucket order is fixed; this creates an inefficient linked list of overflow pages for execution scans.\
@@ -55,7 +57,7 @@ It includes optimization strategies to handle **repeated values**, such as **key
 The leaf node entries are limited to 1/3 of the disk page size, which makes the B-tree inefficent for storing large entries. An index that exceeds the available RAM **spills its nodes onto the disk**; causing every additional levels of the tree stored on the disk require an additional I/O access, making traversal less efficient.
 
 ```sql
-// why we define handle, does it refer to both insert and retreave repeated values
+// long posting lists slows doen both INSERT and SELECT
 -- we compare the timing they require to insetrs require for both to insert 
 -- teh different type of table column data.
 -- The function generating the long TEXT table column values
@@ -103,7 +105,7 @@ END;$$;
 -- Btree index on C3 TEXT values returns 4.346s
 ```
 
-1
+</details>
 
 The Hash Index is **optimized** to store **large data values** because it converts all entries into a uniform 32-bit format.\
 It's efficient for equality operations but, due to its lack of a tree-based structure (like nodes and branches), it can't enforce uniqueness. It would require accessing multiple TID pointers to verify existing values.\
@@ -112,6 +114,10 @@ The Hash Index logic is similar to a **HashAggregate**, as both use a hashing fu
 1
 
 We test the Hash and B-Tree **index growth rates** using a serial query loop that INSERTS both unique (UUID) and duplicated values.
+
+<details>
+
+<summary>1111 Btree and hash indexadat to long insetr values</summary>
 
 The **B-Tree** index structure **grows linearly**; the B-Tree adapts to increased data by adapting its node structure through splitting. It also optimizes for repeated values by using key deduplication.                        The **Hash** index presents a **'stair-step' growth** rate as it increases in size when a specific data threshold is met and the **buckets double**. The hash structure isn't optimized for repeated values; the size increases represent the creation of overflow page linked lists for buckets containing duplicate entries.
 
@@ -165,9 +171,13 @@ END;
 $$;
 ```
 
-1
+</details>
+
+<1111- immaggine showing -->
 
 1
+
+### maintenance operations hash indexes
 
 The **database** applies **maintenance operations** during both the hash index scan and the VACUUM operation.\
 **Hash entries** pointing to **deleted table heap values** are marked as LP\_DEAD, which allows subsequent execution scans to **ignore** the entry.\

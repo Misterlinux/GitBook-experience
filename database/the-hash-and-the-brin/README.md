@@ -53,7 +53,15 @@ The **Nested Loop Join** triggers a hash index scan for each value returned by t
 SELECT * FROM my_table WHERE column1 IN (SELECT column2 FROM other_table);
 ```
 
+()
+
 1
+
+1
+
+1
+
+
 
 The **Hash Index** doesn't implement any data-type-specific linear order, unlike B-tree or GiST indexes. Its **lossy structure** requires a **double equality operation** to find matching query values.\
 The database hashes the query values and compares them to their corresponding hash index entries; it then follows the TID pointer to the table heap to verify the actual data. This second check is necessary to confirm that the table row has not been deleted and to avoid including collision values in the query output.
