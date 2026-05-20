@@ -187,12 +187,15 @@ The **clause** reflects the **logical properties** of its compatible operators. 
 
 The **set of commands** included in the **execution plan** are determined by the query's clauses and operators.&#x20;They determine which instance of the **pg\_am handler function** will be used for the **plan**, defining the **internal functions** needed to execute its included commands.
 
-\-
+<details>
 
-MAYBE IMAGE FOR TEH TABLES system catalog retrieved, as the strategy value (defined by values and specially operator purpose in pg\_amop, implies its valid clause.)
+<summary>How the query planner accesses the pg_amop for strategies compatible with the query conditions</summary>
 
-```
+The query execution plan is based on the **index access method strategies**.\
+The query planner parses the query to identify the **comparison operator** and the involved **data types**, it then checks the avaiable index, along with its operator class and **operator family**.\
+The [pg\_amop system catalog](./#the-pg_am-index-execution-plan-cost-and-the-operator-family-system-catalogs) contains the strategies avaiable for each operation family.
 
+```sql
 -- We use Btree for prefix search while GIST/GIN for fuzzy name matching
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 CREATE TABLE festivals ( nome TEXT, dates daterange );
@@ -200,40 +203,51 @@ CREATE TABLE festivals ( nome TEXT, dates daterange );
 -- The GIST index uses the operation class from column data type included by default
 -- We explicitly include teh operation class for data type extentions
 CREATE INDEX idx_festivals ON festivals USING gist (dates);
-CREATE INDEX idx_nome ON festivals USING gist (nome gist_trgm_ops);
+```
 
--- The trgm works on normal TEXT insert values
-INSERT INTO festivals (nome, dates) VALUES
-('Festive Summer', daterange('2025-08-01', '2025-08-10')),
-('Summer Festival ',    daterange('2025-07-30', '2025-08-02', '[]')),
-('Somber Festival', daterange('2025-08-03', '2025-08-05', '[]')),
-('Sun Fest', daterange('2025-08-02', '2025-08-05', '[]'));
+The pg\_opclass **opcintype** column returns the data type of the indexed column.\
+The PostgreSQL uses **pseudo-data type** for **polymorphic data** types like _ranges_ and _arrays_, complex&#x20;data types that share a **common structure** and **access logic**.\
+The **generic operator class** provides support functions compatible with all ranges, regadless of the&#x20;contained data types.
 
-select * from festivals;
+```sql
+-- It avoids creating multiple operation classes based on different data type contained in teh range
+-- that share teh same support functions
+select relkind, oid from pg_class where relname = 'idx_festivals'; -- i      |1073199|
+select * from pg_index where indexrelid = 1073199;                 -- 10078  |
+select opcintype, opcmethod, opcname, opcfamily from pg_opclass where oid = 10078;
 
-SELECT
-  c.relname AS index_name,
-  opc.opcmethod as index_method,
-  opc.opcname AS operator_class_name,
-  opc.opcfamily AS operator_family_oid
-FROM 
-  pg_class AS c                             
-JOIN  pg_index AS i ON i.indexrelid = c.oid
-JOIN  pg_opclass AS opc ON opc.oid = i.indclass[0]
-WHERE c.relname = 'idx_festivals';
+opcintype|opcmethod|opcname  |opcfamily|
+---------+---------+---------+---------+
+     3831|      783|range_ops|     3919|
+```
 
-select relname from pg_class where relname = 'idx_festivals';
--- idx_festivals|         783|range_ops          |               3919|
+We select the **pg\_amop** startegies that match the query condition operator and data type.\
+The pg\_amop can include **multi-dimentional strategies**, where a single index access method can use different operator families to handle various combinations of data types for the same logical operation.
 
-SELECT opfname, opfmethod, amopfamily 
-FROM pg_amop as amop
-join pg_opfamily as opf on amop.amopfamily = opf.OID
-WHERE amopopr = 15;
+</details>
 
-select * from pg_amop where amopfamily=3919;
+```sql
+-- this is the same process of teh querhy planner for the execution pan
+-- we need to access the pg_operator as to limit the startegies for teh contain operator, 
+as the pg_amop only cntains tehstrategy umber and not teh operator
+-- Both contain teh same as amoprighttype and oprright are the same form teh amoplefttype inthe pg_amop
+-- The amop containing the indexing rules for the query operations allowed.
+-- strategy number 
+-- sorting startegies the comparison opertor
+select am.oid, amopfamily, amopopr, amopstrategy, amoppurpose, op.oprleft, op.oprright
+from pg_operator as op
+join pg_amop as am on op.oid = am.amopopr
+where (op.oprleft = 3831 or op.oprright = 3831) and op.oprname = '@>' and am.amopmethod = 783;
 
-select * from pg_operator where oprname='@>';
-
+-- range contain element
+-- range contain range
+-- range contain multirange
+oid  |amopfamily|amopopr|amopstrategy|amoppurpose|oprleft|oprright|
+-----+----------+-------+------------+-----------+-------+--------+
+10396|      3919|   3889|          16|s          |   3831|    2283|
+10392|      3919|   3890|           7|s          |   3831|    3831|
+10411|      6158|   2870|           7|s          |   4537|    3831|
+10393|      3919|   4539|           7|s          |   3831|    4537|
 ```
 
 \-

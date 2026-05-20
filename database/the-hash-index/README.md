@@ -1,4 +1,4 @@
-# The HASH and the BRIN
+# The HASH index
 
 * 1
 * 1
@@ -41,11 +41,13 @@ The database applies the hashing function to the **condition values** and it use
 
 1
 
-— This processincludes hashing , not hash index
+— This process includes hashing , not hash index
 
-The database uses different memory data structures to handle **subquery operations**.                                 The **Hash Semi-Join** process collects and hashes the **subquery results** into a temporaru **work\_mem structure**, it's a 'semi-join' hash table because it **stores** only the **unique values** between the results. The database then **hashes** every **query column** value from the **main table** and compares it to the work\_mem hash table to **find matches** for the query output. This operation ignores the hash index and it's designed for **subqueries** returning a **large number** of values.
+The database uses different memory data structures to handle **subquery operations**.                                 The **Hash Semi-Join** process collects and hashes the **subquery results** into a temporaru **work\_mem structure**, it's a 'semi-join' hash table because it **stores** only the **unique values** between the results. The database then **hashes** every **query column** value from the **main table** and compares it to the work\_mem hash table to **find matches** for the query output.
 
-The **Nested Loop Join** triggers a hash index scan for each value returned by the subquery, it's suitable for subqueries that return a small number of results, as they dont justify the overhead cost of creating a temporary hash table. (so it creates a hash index for the subquery results?)
+A **hash table** uses the same **hashing functions** and **bucket** structure as a hash index, but differs in its storage. It's stored temporarily in **memory** and stores the **actual row data** needed for the query, rather than the index's disk pointers. It's used for subqueries returning a large number of values.
+
+The **Nested Loop Join** triggers the **subquery condition** for every single main table row. It is suitable for subqueries that return a small number of results, as they dont justify the overhead cost of creating a temporary hash table.
 
 ```sql
 // Some code
@@ -56,12 +58,6 @@ SELECT * FROM my_table WHERE column1 IN (SELECT column2 FROM other_table);
 ()
 
 1
-
-1
-
-1
-
-
 
 The **Hash Index** doesn't implement any data-type-specific linear order, unlike B-tree or GiST indexes. Its **lossy structure** requires a **double equality operation** to find matching query values.\
 The database hashes the query values and compares them to their corresponding hash index entries; it then follows the TID pointer to the table heap to verify the actual data. This second check is necessary to confirm that the table row has not been deleted and to avoid including collision values in the query output.

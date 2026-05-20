@@ -171,11 +171,11 @@ We can **bs-dismiss** the current **modal** and **bs-toggle** a new one.
 
 {% tabs %}
 {% tab title="First Modal" %}
-![First modal with grid form and image](../.gitbook/assets/Complete.PNG)
+<img src="../.gitbook/assets/Complete.PNG" alt="First modal with grid form and image" width="262">
 {% endtab %}
 
 {% tab title="Second modal" %}
-![Here the second modal with link ](../.gitbook/assets/Cattumodulera.PNG)
+<img src="../.gitbook/assets/Cattumodulera.PNG" alt="Here the second modal with link " width="375">
 {% endtab %}
 {% endtabs %}
 

@@ -165,7 +165,7 @@ With inline-block, we can use width/height and keep the boxes in a new line:
 {% endtab %}
 {% endtabs %}
 
-![Even if used a div tag, we overwrite it with CSS](../../.gitbook/assets/inlineblocked.PNG)
+<img src="../../.gitbook/assets/inlineblocked.PNG" alt="Even if used a div tag, we overwrite it with CSS" width="321">
 
 {% tabs %}
 {% tab title="HTML block " %}
