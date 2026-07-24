@@ -120,7 +120,8 @@ The CREATE INDEX command includes both options and storage parameters that defin
 
 ```sql
 -- The index also includes default operation classes for non-linear data types 
--- The WITH() indicates the storage parameters
+-- The WITH() indicates the storage parameters 
+-- Only multi-minmax and bloom operation classes include storage parameters
 CREATE INDEX brin_minmax ON t 
 USING brin (happened_at) WITH (pages_per_range = 10); -- 32kb
 
@@ -233,8 +234,8 @@ Planning Time: 0.114 ms Execution Time: 35.586 ms
 The PostgreSQL multi-range operator classes are designed to handle outlier values in the BRIN ranges.&#x20;It creates more complex ranges, made of multiple ranges and single values, which provide precise min/max bounds
 
 ```sql
--- The multi-range operation class needs to be explicitly ste in the options
--- It results in a bigger index (24kb vs 120kb)
+-- The multi-range operation class needs to be explicitly set in the options
+-- It results in a bigger index (24kb vs 120kb) 
 CREATE INDEX t_outliers_minmax ON t_outliers
 USING brin(happened_at timestamptz_minmax_multi_ops)
 WITH (pages_per_range=10);
@@ -309,7 +310,56 @@ ORDER BY 1 LIMIT 3;
 
 1
 
+The multi-range structure depends on maxvalues and the INSERT order of the table row values. The values\_per\_range option limits the number of available slots to describe each BRIN range. The PostgreSQL follows a lazy approach and triggers a merging process only when the total number of subranges and single values exceeds maxvalues/2, which allows the range to maintain available space for successive large inserts.
+
+The multi-ranges entry follows a specific pipeline for its values, which is completely dependent on their INSERT order. The PostgreSQL first checks for BRIN ranges that include the new value. If the value is adjacent to the current range min/max value, it includes it in the range and expands its bounds. If the value is not part of any range, it puts it into the values array. Once merging is triggered, it checks the distance between subranges to merge. In case of a tie, it follows the scanning direction.
+
+```sql
+-- The multi-range entries structure follows the values_per_range option
+-- The RAISE NOTICE message returns the current range structure for each array value
+-- The TRUNCATE command is aplied once and deletes all previous table rows before the loop
+-- It follows the scans direction to form 3..4 range before the 1..2 range
+CREATE TABLE t_brin (n int);
+
+CREATE INDEX t_brin_index ON t_brin
+USING brin(n int4_minmax_multi_ops(values_per_range=8)) WITH (pages_per_range=2);
+
+DO $$
+DECLARE
+    n integer; page_items text := '';
+BEGIN
+    TRUNCATE t_brin;
+    FOREACH n IN ARRAY array[5, 1, 10, 4, 2, 8, 3, 7, 9, 6] LOOP
+        INSERT INTO t_brin(n) VALUES (n);
+        SELECT value INTO page_items
+        FROM brin_page_items(get_raw_page('t_brin_index', 2), 't_brin_index');
+        RAISE NOTICE 'inserted=% --> %', n, page_items;
+    END LOOP;
+END $$;
+```
+
+\--> PUT THE TWO IMAGES
+
 1
+
+1
+
+1
+
+```sql
+-- The index sizes and query execution times for teh different indexes
+EXPLAIN (ANALYZE) SELECT * FROM t WHERE happened_at 
+BETWEEN '2023-01-12 13:45:00 UTC' AND '2023-01-12 13:46:00 UTC';
+
+CREATE INDEX brin_minmax ON t USING brin(happened_at);
+-- Size: 24kb Planning Time: 0.119 ms  Execution Time: 1.731 ms
+CREATE INDEX btree_tindex ON t(happened_at);
+-- Size: 21Mb Planning Time: 0.112 ms  Execution Time: 0.034 ms 
+create index gist_minmax on t using GIST(happened_at)
+-- Size: 60Mb Planning Time: 0.091 ms  Execution Time: 0.094 ms
+create index hash_minmax on t using hash(happened_at)
+-- Size: 32Mb Planning Time: 0.076 ms Execution Time: 203.140 ms  
+```
 
 1
 
