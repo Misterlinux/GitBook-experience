@@ -12,6 +12,13 @@ The BRIN (**Block Range INdex**) organizes its data into a series of block range
 
 The number of **table rows** included within each BRIN entry depends on the disk page data summarized by the **min-max range**. The BRIN **pages\_per\_range** attribute sets the number of disk pages represented by each range, and the entry's range **bound values** depend only on the **current table values** contained within that specific set of pages.
 
+```sql
+-- The BRIN storage paramethers apply to all OPclasses
+-- They set how many disk pags are included in each entry range and how they are mantained
+CREATE INDEX brin_minmax ON t USING brin(happened_at)
+with (pages_per_range: _integer_value_, autosummarize: _on/off_);
+```
+
 The database defines the BRIN index entries by **sequentially scanning** the table disk pages; it does not provide a built-in sorting support function, nor does it create an index structure that sorts the values into specific index page units like B-Tree or GiST.                                                                                     It is optimized for **data types that inherently follow a linear increase** and for tables whose data possesses a high statistical correlation.
 
 The table's **correlation value** represents the relationship between the **physical position** and the **logical values** of the column data; this allows the BRIN index to define sequential and **non-overlapping ranges**, resulting in a more efficient scan during query execution.                                              The query planner uses the statistical correlation value to estimate the cost of a BRIN index scan, as it compares the **index overhead cost** against the number of disk pages that need to be scanned compared to a **sequential scan**.
@@ -204,13 +211,14 @@ SELECT
         ELSE happened_at
     END
 FROM t ORDER BY id;
-SELECT count(*), max(happened_at) FROM t;	-- 1000000	2023-01-12 13:46:40+00
+SELECT count(*), max(happened_at) FROM t;	-- 1000000	2023-01-12 13:46:40+00+
+
 -- The outlier values mostly don't affect the correlation
 ANALYZE t_outliers;
 SELECT correlation FROM pg_stats
 WHERE tablename = 't_outliers' AND attname = 'happened_at'; -- correlation|  0.97056246|
 
-CREATE INDEX t_outliers_minmax ON t_outliers
+CREATE INDEX t_outliers_minmax ON t_outliers 
 USING brin(happened_at) WITH (pages_per_range=10);
 
 -- It results in a much slower query execution output (35ms)
@@ -231,7 +239,7 @@ Planning Time: 0.114 ms Execution Time: 35.586 ms
 
 1
 
-The PostgreSQL multi-range operator classes are designed to handle outlier values in the BRIN ranges.&#x20;It creates more complex ranges, made of multiple ranges and single values, which provide precise min/max bounds
+The PostgreSQL **multi-range operator classes** are designed to handle **outlier values** in the BRIN ranges.&#x20;It creates more **complex ranges**, made of multiple ranges and single values, which provide precise min/max bounds.
 
 ```sql
 -- The multi-range operation class needs to be explicitly set in the options
@@ -252,8 +260,8 @@ Bitmap Heap Scan on t_outliers (actual time=3.470..3.686 rows=60 loops=1)
 Planning Time: 1.817 ms Execution Time: 3.723 ms 
 ```
 
-The minmax-multi operator class adds multiple fields to the range definitions.\
-The nranges value is the number of ranges needed to represent the data contained within a BRIN entry summary.&#x20;The nvalues is the number of outlier values stored within the range, while maxvalues\
+The **minmax-multi** operator class adds multiple fields to the **range definitions**.\
+The **nranges** value is the number of ranges needed to represent the data contained within a BRIN entry summary.&#x20;The **nvalues** is the number of outlier values stored within the range, while maxvalues\
 represents the reserved slots used to store the range boundaries.
 
 ```sql
@@ -282,14 +290,14 @@ ORDER BY 1 LIMIT 3;
 }}
 ```
 
-The values\_per\_ranges parameter is exclusive to multi-range operation classes. It defines the maxvalues value which controls the precision level with the ranges.
+The **values\_per\_ranges** parameter is **exclusive** to multi-range operation classes. It defines the maxvalues value which controls the precision level with the ranges.
 
 ```sql
--- Its part of the CREATE INDEX operation class options
+-- Its part of the CREATE INDEX operation class options, it creates a smaller index (72kb)
 -- The maxvalues can have a minimun of 8 and maximum of 256
--- It creates a smaller index (72kb)
 DROP index t_outliers_minmax;
 
+-- The default minmax opclass doesn't have any opclass paramether
 CREATE INDEX t_outliers_minmax ON t_outliers
 USING brin(happened_at timestamptz_minmax_multi_ops(values_per_range=8))
 WITH (pages_per_range=10);
@@ -310,20 +318,19 @@ ORDER BY 1 LIMIT 3;
 
 1
 
-The multi-range structure depends on maxvalues and the INSERT order of the table row values. The values\_per\_range option limits the number of available slots to describe each BRIN range. The PostgreSQL follows a lazy approach and triggers a merging process only when the total number of subranges and single values exceeds maxvalues/2, which allows the range to maintain available space for successive large inserts.
+The multi-range structure depends on maxvalues and the INSERT order of the table row values.              The values\_per\_range option limits the number of **available slots** to describe each **BRIN range**. The PostgreSQL follows a **lazy approach** and triggers a **merging process** only when the total number of subranges and single values exceeds maxvalues/2, which allows the range to maintain available space for successive large inserts.
 
-The multi-ranges entry follows a specific pipeline for its values, which is completely dependent on their INSERT order. The PostgreSQL first checks for BRIN ranges that include the new value. If the value is adjacent to the current range min/max value, it includes it in the range and expands its bounds. If the value is not part of any range, it puts it into the values array. Once merging is triggered, it checks the distance between subranges to merge. In case of a tie, it follows the scanning direction.
+The **multi-ranges entry** follows a specific **pipeline** for its values, which is completely dependent on their **INSERT order**. The PostgreSQL first checks for BRIN ranges that include the new value. If the value is adjacent to the current range min/max value, it includes it in the range and expands its bounds. If the value is not part of any range, it puts it into the **values array**. Once **merging** is triggered, it checks the distance between subranges to merge. In case of a tie, it follows the scanning direction.
 
 ```sql
 -- The multi-range entries structure follows the values_per_range option
--- The RAISE NOTICE message returns the current range structure for each array value
--- The TRUNCATE command is aplied once and deletes all previous table rows before the loop
--- It follows the scans direction to form 3..4 range before the 1..2 range
 CREATE TABLE t_brin (n int);
 
 CREATE INDEX t_brin_index ON t_brin
 USING brin(n int4_minmax_multi_ops(values_per_range=8)) WITH (pages_per_range=2);
 
+-- The TRUNCATE command is aplied once and deletes all previous table rows before the loop
+-- The RAISE NOTICE message returns the current range structure for each array value
 DO $$
 DECLARE
     n integer; page_items text := '';
@@ -336,11 +343,10 @@ BEGIN
         RAISE NOTICE 'inserted=% --> %', n, page_items;
     END LOOP;
 END $$;
+-- It follows the scans direction to form 3..4 range before the 1..2 range
 ```
 
 \--> PUT THE TWO IMAGES
-
-1
 
 1
 
