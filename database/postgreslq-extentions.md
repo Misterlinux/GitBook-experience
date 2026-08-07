@@ -156,9 +156,29 @@ userid|dbid|toplevel|queryid            |
 
 1
 
-1
+### PLAN columns
 
 1
+
+These columns record the time spent by the query planner converting SQL statements into execution trees.
+
+> **plans**: The number of query plans created for the queries part of the normalized group. **total\_plan\_time**: The total time (in milliseconds) used to create the query plans. **min\_plan\_time**: The minimum time required to create a query plan.                                     **max\_plan\_time**: The maximum time required to create a query plan.                                                                    **mean\_plan\_time**: The average time used to create a single query plan.                                                 **stddev\_plan\_time**: The standard deviation in the queries. It tracks the planning time differences between the different queries condition values aplied to the same table data.
+
+```sql
+-- Every new query increases the plans column once
+-- The postgresql doesn't count repeated cached queries
+-- The deviation represents a data skew, a difference in table data distribution
+-- It detects short but inconsistent planning times that require optimitation.
+plans|total_plan_time|min_plan_time|max_plan_time|mean_plan_time|stddev_plan_time|
+-----+---------------+-------------+-------------+--------------+----------------+
+    1|         5.8999|       5.8999|       5.8999|        5.8999|             0.0|
+-- It's more precise than the flat mean_exec_time value
+-- It returns 0 for repeated queries
+```
+
+We collect the SQL statement timing statistics with a node-level implementation or postgresql hooks.
+
+The EXPLAIN ANALYZE attaches a measurement engine to the query executor, it triggers a timer call for every query execution node. It generates a high timing overhead.                                                       The pg\_stat\_statements registers C functions on the PostgreSQL's internal hooks to record query execution timestamps. It avoids any query node-level tracking.
 
 1
 
@@ -200,7 +220,81 @@ max_exec_time |mean_exec_time   |stddev_exec_time  |rows|
 0.0           |              0.0|               0.0|   0|
 ```
 
-&#x20;1
+1
+
+1
+
+### The blks
+
+1
+
+The SQL statements are **declarative**: they define what data is requested, not how to access it.\
+The **client backend process** translates high-level SQL commands into a physical execution plan.
+
+It follows the Write-Ahead Logging (WAL) protocol, it creates a **WAL file** which records the byte level changes&#x20;described by the query. It then modifies the **target tuples**, both column values and header metadata, within&#x20;the shared buffers.
+
+The SQL commands apply their changes differently in the e**xecution layer**:\
+The SELECT is a **read/hit** operation, it can include a **write** when it updates the target tuple hint bits,&#x20;marking the disk page as **dirty**.\
+The INSERT **reads** the Free Space Map (FSM) to locate an existing page with available space or\
+allocates a new page. It then **writes** the new tuple into shared\_buffers.\
+The DELETE **reads** the shared\_buffers to locate the target tuple, it **writes** on the header the **xmax**\
+value to the current transaction ID.\
+The UPDATE is implemented as a combined DELETE and INSERT. It updates the existing tuple header\
+with an xmax value, then reads the FSM to locate space and writes a new tuple version with an xmin value.
+
+The blks columns track the disk pages involved by the SQL query they are categorized by their location and role during the query execution.&#x20;
+
+> **shared\_blks\_hit**: The disk pages accessed from the shared\_buffers memory cache. **shared\_blks\_read**: The disk pages that have to be loaded from disk, they are then cached in the shared buffer for future queries.                                                                                  **shared\_blks\_dirtied**: The disk pages modified in shared\_buffers by the query. It includes the header metadata changes (xmin, xmax, hint bits).                                                       **shared\_blks\_written**: The number of dirty disk pages physically written to disk directly by the client backend process. It's usually not part of the SQL command.
+
+1
+
+```sql
+-- Accessed form shared buffer, extracted form disk pages or dirtied
+-- a hint wot generate a wal unless we change teh setting wal_log_hints = on
+SELECT
+    query, shared_blks_hit, shared_blks_read, shared_blks_dirtied, shared_blks_written
+FROM pg_stat_statements;
+
+query                                 |shared_blks_hit|shared_blks_read|shared_blks_dirtied
+SELECT * FROM bloom_test WHERE id = $1|            219|              28|                 11
+SELECT test_query($1)                 |            257|              30|                 11
+$1                                    |              0|               0|                  0
+num_iters                             |              0|               0|                  0
+-- The shared_blks_written is 0 because the dirty pages stay in memory and donìt 
+-- affect the disk data.
+
+```
+
+1
+
+The client backend processes are not designed to modify the data blocks stored in disk, it relies on the background processes. The CHECKPOINTER scans the shared\_buffers for the disk pages and overwrites them to the disk. It's an asynchronous and physical-level process that doesn't modify the set row data or xmin/xmax values.                                                                                                                                           The checkpointer can be triggered by its checkpoint\_timeout, by its CHECKPOINT sql command, by the WAL\_buffer exceeding the max\_wal\_size or by a database shutdown.
+
+1
+
+The VACUUM is a background process that cleans up dead tuples. It scans the xmin/xmax\
+header values to find the outdated tuples, it updates the Free Space Map (FSM) and Visibility Map (VM)&#x20;for future queries to use. The standard VACUUM doesn't change the total number of disk pages occupied by the table data.
+
+1
+
+The tuple header stores the metadata. The xmin field is a permanent XID 32-bit value of the transaction that created the tuple. The xmax field is set to 0 by default; it's updated with the XID of the transaction that locks, updates, or deletes the tuple.
+
+The SQL statement changes both the tuple payload and its header, it records them into a wal buffer. It then flushes the wal buffer files into the pg\_wal disk directory, to ensure data recoverability.
+
+The postgreSQL can't wait for VACUUM to physically clean up outdated tuples. It relies on Multi-Version Concurrency Control (MVCC) visibility checks in shared buffers, allowing queries to dynamically skip dead tuples based on transaction hits.
+
+The Commit Log is an array disk file mapping each 32-bit Transaction ID with a 2-bit status flag: IN\_PROGRESS, COMMITTED, ABORTED, or SUBCOMMITTED. It provides a sequential, permanent record updated when transactions finalize.
+
+A SQL statement reads the xID value of its tuple's xmin/xmax fields, it then triggers a I/O disk check for the commit log to determine if their transaction was already commited.
+
+The PostgreSQL includes a series of hint bits in the tuple header to cache teh xmin/xmax xID state. It uses a 16-bits flag (t\_infomask) with specific values (HEAP\_XMIN\_COMMITTED, HEAP\_XMIN\_INVALID, HEAP\_XMAX\_COMMITTED, HEAP\_XMAX\_INVALID) to avoid the I/O overhead of the commit log check.
+
+The xmin hint bit is set by the first SQL statement that reads the tuple value. It runs a I/O commit log access to check if the transaction that included the query that created the tuple is commited, it then sets the corresponding hint bit, marking the tuple as visible and skipping any xmin checks in the commit log. The xmax hint bit is set when a SQL statement reads a modified tuple. It checks the xID of the xmax in the commit log, if the transaction that contained the query that deleted or updated the tuple is commited, it sets the hint bit to make the tuple invisible for teh next queries, vaiting for teh VACUUM to physically delete it.
+
+The VACUUM scans all the tuples in the disk pages marked as dirty and sets their hint bits by checking the commit log for every single one.
+
+1
+
+1
 
 1
 
