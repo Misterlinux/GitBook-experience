@@ -260,7 +260,7 @@ SELECT * FROM bloom_test WHERE id = $1|            219|              28|        
 SELECT test_query($1)                 |            257|              30|                 11
 $1                                    |              0|               0|                  0
 num_iters                             |              0|               0|                  0
--- The shared_blks_written is 0 because the dirty pages stay in memory and donìt 
+-- The shared_blks_written is 0 because the dirty pages stay in memory and don't 
 -- affect the disk data.
 
 ```
@@ -291,6 +291,68 @@ The PostgreSQL includes a series of hint bits in the tuple header to cache teh x
 The xmin hint bit is set by the first SQL statement that reads the tuple value. It runs a I/O commit log access to check if the transaction that included the query that created the tuple is commited, it then sets the corresponding hint bit, marking the tuple as visible and skipping any xmin checks in the commit log. The xmax hint bit is set when a SQL statement reads a modified tuple. It checks the xID of the xmax in the commit log, if the transaction that contained the query that deleted or updated the tuple is commited, it sets the hint bit to make the tuple invisible for teh next queries, vaiting for teh VACUUM to physically delete it.
 
 The VACUUM scans all the tuples in the disk pages marked as dirty and sets their hint bits by checking the commit log for every single one.
+
+1
+
+### The LOCAL, TEMP and TIME BLKS columns&#x20;
+
+1
+
+The local\_blks columns track the runtime statistics of pages created by the CREATE TEMP TABLE command. Temporary tables are private to individual client connections and lack the locking overhead required for permanent tables accessed across all sessions. They are automatically dropped when the connection closes and don't generate Write-Ahead Logging (WAL) records.
+
+The temp\_buffers setting in the configuration file defines the size of the memory allocated for temporary tables. The hit and dirtied columnms indicate temporary data blocks processed directly in RAM, while the read and written metrics represent blocks that exceeded temp\_buffers and were created on disk.
+
+The TEMP\_BLKS columns track the implicit temporary disk pages created by query execution nodes. The work\_mem setting in the configuration file sets the memory allocated for handling query execution. Complex operations (such as GROUP BY, ORDER BY, DISTINCT, or merges) that exceed work\_mem implicitly write temporary data blocks to disk. These files are deleted as soon as the query finishes executing.
+
+The temporray blocks differ from the temporary tables, they skip the shared\_buffers memory space and can't record buffer cache hits or dirty pages. The temp\_blks\_written column returns the number of disk pages pushed to storage, while temp\_blks\_read returns the number of disk pages read back during execution.
+
+1
+
+```sql
+-- They differ form teh tempo bloks because they dont need to spill form teh defined work_mem property, set
+-- temp_buffer =/= work mme
+query                                         |local_blks_hit|local_blks_read|local_blks_dirtied|
+------------------------------------------------------------------------------------------------+
+SELECT * FROM bloom_test WHERE id = 'c81e...' |             0|              0|                 0|
+SELECT test_query($1)                         |             0|              0|                 0|
+
+local_blks_written|temp_blks_read|temp_blks_written|
+------------------+--------------+-----------------+
+                 0|             0|                0|
+                 0|             0|                0|
+```
+
+1
+
+All BLKS categories include associated TIME columns that track execution intervals. The timing metrics don't cover the memory accesses, which are almost instant, but only the disk I/O operations; the time columns are available exclusively for read and written metrics. They require the track\_io\_timing configuration setting to be explicitly set to on.
+
+1
+
+```sql
+-- AQll columns juts ass _time to tehir name
+-- we need to restart teh entirepostgresql system to reset teh shared buffer, a disconect wont be enought.
+-- using teh windows-r shortcut
+- the data is stil recorded, it will jst return 0
+ALTER SYSTEM SET track_io_timing = on; 
+SELECT pg_reload_conf();
+
+SELECT
+	query, shared_blk_read_time, shared_blk_write_time, 
+	local_blk_read_time, local_blk_write_time, temp_blk_read_time, temp_blk_write_time
+FROM pg_stat_statements;
+
+query                                  |shared_blk_read_time|shared_blk_write_time|local_blk_read_time|
+---------------------------------------+--------------------+---------------------+-------------------+
+SELECT * FROM bloom_test WHERE id = $1 |             15.6444|                  0.0|                0.0|
+SELECT test_query($1)                  |             25.1179|                  0.0|                0.0|
+
+local_blk_write_time|temp_blk_read_time|temp_blk_write_time|
+--------------------+------------------+-------------------+
+                 0.0|               0.0|                0.0|
+                 0.0|               0.0|                0.0|
+```
+
+1
 
 1
 
