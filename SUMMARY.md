@@ -92,7 +92,9 @@
 * [The BRIN index](database/the-brin-index/README.md)
   * [The BRIN bloom index filter opclass paramethers](database/the-brin-index/the-brin-bloom-index-filter-opclass-paramethers.md)
   * [Page 1](database/the-brin-index/page-1.md)
-* [PostgreSLQ extentions](database/postgreslq-extentions.md)
+* [PostgreSLQ extentions](database/postgreslq-extentions/README.md)
+  * [JIT intro](database/postgreslq-extentions/jit-intro.md)
+* [DOCKER use anbd inbtrioduction](database/docker-use-anbd-inbtrioduction.md)
 * [Node-Postgres Module](database/node-postgres-module.md)
 
 ## OTHER
