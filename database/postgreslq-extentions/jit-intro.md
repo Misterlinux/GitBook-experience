@@ -80,13 +80,72 @@ The other JIT columns settings handle the processes outside bthe cost threshold.
 
 1
 
-1
+### The LLVM librray and its code
 
 1
 
-1
+The LLVM library components are stored in a separate directory within the PostgreSQL file structure. It's an external framework that provides an assembly-like, system-independent language that represents code and can be easily converted into machine code. It differs from the default PostgreSQL library made of generic C functions; the LLVM library consists of a series of bitcode (.bc) files that store precompiled, logical representations of the underlying C functions, it adapts to all execution steps part of the query initialization.
+
+The JIT engine triggers based on query planner estimates. It compares jit\_above\_cost with the total query tree cost, which includes disk I/O access and CPU query condition operations. The PostgreSQL assumes that any query with a cost above the JIT threshold is inefficient and requires JIT compilation. It uses distinct thresholds to determine the specific LLVM pipeline steps to apply (such as inlining or optimization).
+
+The executor then inspects individual plan nodes for repetitive, JIT-compatible operations to optimize. The optimization strictly reduces the CPU cycles required to process data; it doesn't reduce the underlying disk I/O.
 
 1
+
+### Different execution between C and LLVM IR code, steps by jit engine
+
+1
+
+The query initialization step generates the execution code necessary to run the query plan,\
+which describes two core processes.\
+The data access defines the parsing process used for the query table datasets stored on disk\
+as binary code. The query expression evaluation covers the logical query conditions included in\
+the query request.
+
+The LLVM IR code follows the same steps as the generic C functions. It optimizes and streamlines the process,&#x20;but it doesn't affect the sequence of I/O disk page accesses described by the plan. It compiles the&#x20;execution logic to reduce CPU overhead, but it doesn't modify or optimize the query operations defined by&#x20;the query planner.
+
+1
+
+The standard PostgreSQL query initialization relies on precompiled generic C functions stored in dynamic&#x20;shared libraries (.dll/.so files) and invoked via function pointers.
+
+The data access C function includes a series of switch statements applied to the table catalog metadata;&#x20;it detect the specific columns that are part of the query condition.\
+The expression evaluation C function processes the query tree node by node; it sequentially applies each&#x20;operation to every row while continually updating an execution state object.\
+The generic C functions are fixed and contain precompiled functions that define the necessary processes,&#x20;but they lack tools to detect the context of the specific query condition.\
+They rely on a series of checker conditions which are aplied for every table row; it creates\
+CPU branching overhead when applied to large datasets.
+
+1
+
+The LLVM library enables the JIT engine to read the table metadata and the query execution tree once, replacing&#x20;generic C execution loops with a single query-specific execution path during query initialization.
+
+The library generates a custom LLVM IR function designed to tuple deform the query tables.\
+It extracts the column offset values from the table metadata and uses them as arguments in specific\
+LLVM IR functions designed to access the compiled disk page data.\
+The LLVM API reads the node tree operations as part of the expression evaluation step.\
+It checks the switch statements in the generic C function and uses their corresponding LLVM IR code\
+to create a custom LLVM IR function specific to the expression.\
+The JIT engine applies lazy compilation; it only uses the bitcode files specified in the query condition\
+and eliminates the CPU branching overhead.
+
+1
+
+### The INLINE, OPTIMZIE STEPS BY TEH LLVM LIBRRAY&#x20;
+
+1
+
+The LLVM IR library processes the raw generated IR code using the Static Single Assignment (SSA) form across&#x20;three sequential steps:
+
+The inline step aggregates all individual LLVM IR functions into a single&#x20;continuous code block. It eliminates function-call overhead&#x20;and consolidates multiple return points into a unified executable block.                                                          &#x20;
+
+The optimization step triggers after inlining, it applies a series of optimization passes\
+to the inlined IR code. It eliminates dead code, unrolls loops, and strips safety state checks inherited from&#x20;the original C function that are no longer required in a single continuous code block.
+
+The emission step translates the optimized LLVM IR directly into native machine code, storing\
+it in RAM where it is ready for the query executor.
+
+1
+
+### An actual example of teh JIT columns
 
 1
 
