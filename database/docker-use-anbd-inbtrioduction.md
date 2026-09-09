@@ -48,6 +48,31 @@ The different levels of virtualization depend on how the hypervisor processes Gu
 
 1
 
+The hypervisor acts as a traffic controller for guest OS commands. The virtualization methods describe how the hypervisor intercepts, translates, or passes operations for each VM component:
+
+* Software-Based Full Virtualization: It's the default process for guest OS commands.  \
+  The hypervisor intercepts and binary-translates the instructions at runtime into compatible  \
+  hardware operations, generating high CPU overhead.
+* Hardware-Assisted Virtualization: The guest OS instructions execute directly on physical host processors  \
+  equipped with dedicated virtualization circuits.  \
+  It offers lower overhead but requires specific processors with virtualization support.
+* Paravirtualization: The Guest OS sends direct requests to the hypervisor called hypercalls, which are  \
+  compatible with the host. This allows the virtualization layer to skip heavy emulation steps but requires  \
+  a Guest OS specifically designed to work in a virtualized environment.
+
+1
+
+Virtual machines and WSL2-based Docker containers both rely on a hypervisor environment to\
+execute their commands.
+
+Virtual Machines: They rely on software-abstracted hardware. Each VM runs its own independent kernel&#x20;with a full, isolated operating system.                                                                                                      Docker Containers: These are software-isolated processes running on real hardware. They share a single&#x20;host-provided WSL2 kernel, making them faster in their Windows-compatible implementation.
+
+1
+
+1
+
+1
+
 1
 
 1
